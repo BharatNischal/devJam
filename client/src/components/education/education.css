@@ -1,0 +1,53 @@
+.edCont{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+   
+    
+    padding:0;
+}
+.edCont>div{
+ 
+    
+    padding:15px;
+}
+
+.iconCont{
+    width:90px;
+    height: 90px;
+    border-radius: 50%;
+   
+    background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+    text-align: center;
+    font-size: 60px;
+    color: white;
+    box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    right:5%;
+}
+.edHeading{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 23px;
+}
+.edSubHeading{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 23px;
+}
+
+
+@media (max-width:500px){
+    .edCont{
+        grid-template-columns: 1fr;
+        grid-column-gap: 0;
+    }
+    .edHeading{
+        font-size: 15px;
+    }
+}

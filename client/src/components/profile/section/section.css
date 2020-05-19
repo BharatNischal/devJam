@@ -24,7 +24,7 @@
     bottom: 0;
     height: 20px;
     width: 100%;
-    background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+    background: linear-gradient(137.9deg, rgba(101, 43, 115, 0.479) 13.76%, rgba(198, 66, 110, 0.829) 85.26%);
 }
 .section>*{
     padding:0px 25px 25px 25px;
