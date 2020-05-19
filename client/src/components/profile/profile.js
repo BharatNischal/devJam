@@ -20,7 +20,7 @@ class Profile extends Component{
             }
             
             
-            if(window.scrollY> 170){
+            if(window.scrollY> 150){
                 this.setState({showNav:true});
             }else{
                 this.setState({showNav:false});
@@ -32,7 +32,7 @@ class Profile extends Component{
         
         return (
             <div>
-                <Nav show={this.state.showNav}></Nav>
+                <Nav show={this.state.showNav} dp={this.state.dp} name="Manjot Singh"  ></Nav>
                 <header id="hero" className={this.state.dim?"header dim":"header"}>
                     <div className="profileImg">
                         <div style={{backgroundImage:this.state.dp}}></div>
@@ -41,9 +41,9 @@ class Profile extends Component{
                     <h4 className="sub"> Full Stack Developer </h4>
                 </header>
                 <main>
-                    <div className="container">
-                        <Section  heading="About Me" />
-                        <Section  heading="Personal Details" type="personalDetails" />
+                    <div className="container" >
+                        <Section  heading="Experience"  style={{gridColumnStart:"1",gridColumnEnd:"3"}} />
+                        <Section  heading="Rating" type="rating" rating="3" />
                     </div>
                 </main>
             </div>
