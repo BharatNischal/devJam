@@ -35,15 +35,15 @@ const LoginForm = (props)=>{
               <div className="col-4"></div>
             </div>
             <div className="card-body">
-              <div className="row mb-2">
-                <div className="col-6 text-left"><h6 className={reset?"pointer m-0 text-primary":"pointer active-cls m-0"} onClick={()=>{setReset(false)}}>Login</h6></div>
-                <div className="col-6 text-right"><h6 className={reset? "pointer active-cls m-0":" pointer m-0 text-primary"} onClick={()=>{setReset(true)}}>Reset</h6></div>
+              <div className="row mb-2 tab-head-div" >
+                <div className="col-6 text-left  tab-head"><h6 className={reset?"pointer m-0 ":"pointer active-cls m-0"} onClick={()=>{setReset(false)}}>Login</h6></div>
+                <div className="col-6 text-right tab-head"><h6 className={reset? "pointer active-cls m-0":" pointer m-0 "} onClick={()=>{setReset(true)}}>Reset</h6></div>
               </div>
               <form onSubmit={handleSubmit}>
-                <div className={reset?"form-group tool-tip2":"form-group tool-tip"}>
+                <div className={reset?"form-group tool-tip2 tool-tip":"form-group tool-tip"}>
                   <input type="email" className="form-control form-control-lg text-center" value={email} onChange={e=>{setEmail(e.target.value)}} id="email" placeholder="Email"/>
                 </div>
-                <div className={reset?"fade-out form-group":"fade-in form-group"}>
+                <div className={reset?" d-none form-group":" form-group"}>
                   <input type="password" className="form-control form-control-lg text-center" value={password} onChange={e=>{setPassword(e.target.value)}} id="password" placeholder="Password"/>
                 </div>
                 {button}
