@@ -2,6 +2,7 @@ import React,{Component} from "react";
 import "./profile.css"
 import Section from "./section/section";
 import Nav from "./Nav/Nav";
+import Rating from "../ui/rating/rating";
 
 class Profile extends Component{
     state={
@@ -41,9 +42,11 @@ class Profile extends Component{
                     <h4 className="sub"> Full Stack Developer </h4>
                 </header>
                 <main>
-                    <div className="container" >
-                        <Section  heading="Experience"  style={{gridColumnStart:"1",gridColumnEnd:"3"}} />
-                        <Section  heading="Rating" type="rating" rating="3" />
+                    <div className="cont" >
+                        <Section  heading="Education"  style={{gridColumnStart:"1",gridColumnEnd:"3"}} >
+                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat autem rerum molestias aut modi labore, excepturi reiciendis asperiores! Rerum nesciunt quia nostrum porro sequi animi soluta optio quam facilis consectetur?</p>
+                        </Section>
+                        <Section  heading="Rating" ><Rating val="3" /></Section>
                     </div>
                 </main>
             </div>
