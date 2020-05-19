@@ -1,0 +1,75 @@
+body{
+  background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+}
+
+html{
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.shadow-pink{
+  box-shadow: 10px 10px 5px 0px #4a1d4a8f;
+}
+
+.gradient-background{
+  background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+}
+
+.color-pink-shade{
+  background-color: #de3d5a;
+}
+
+.width-fixed{
+  min-height: 50vh;
+}
+
+.vertical-allign{
+  margin-top: 25vh;
+}
+
+.tool-tip{
+  position: relative;
+}
+
+@keyframes slider {
+    0%:{left:5%;}
+    50%:{left:50%;}
+    100%:{left:95%;}
+}
+
+.tool-tip::before{
+  content:"";
+  position: absolute;
+  left: 5%;
+  bottom: 100%;
+  border-width: 0 10px 12px 10px;
+  border-style: solid;
+  border-color:transparent transparent #ced4da transparent;
+  animation-name: slider;
+  animation-duration: 2s;
+}
+
+.tool-tip2::before{
+  content:"";
+  position: absolute;
+  left: 95%;
+  bottom: 100%;
+  border-width: 0 10px 12px 10px;
+  border-style: solid;
+  border-color:transparent transparent #ced4da transparent;
+}
+
+.position-img{
+  position: relative;
+  top: -50%;
+}
+
+.active-cls{
+  font-size: 2em;
+  color: #de3d5a;
+}
+
+.loader{
+  max-width: 30px;
+  height: auto;
+}
