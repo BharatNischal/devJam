@@ -5,7 +5,8 @@ console.log(process.env.DATABASEURL);
 const databaseURL=process.env.DATABASEURL||"mongodb://localhost/ProfileCreator";
 console.log(databaseURL);
 mongoose.connect(databaseURL,{
-    useNewUrlParser:true
+    useNewUrlParser:true,
+    useUnifiedTopology: true
 })
 .then(() => console.log(`Database connected`))
 .catch(err => console.log(`Database connection error: ${err.message}`));
