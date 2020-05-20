@@ -153,11 +153,11 @@ app.post("/register",(req,res)=>{
     db.User.register(new db.User({username:req.body.username}),req.body.password,(err,user)=>{
         if(err){
             console.log(err);
-            res.json({err:err.message,success:"false"});
+            res.json({err:err.message,success:false});
         }
         passport.authenticate("local")(req,res,()=>{
             res.json({
-                success:"true",
+                success:true,
                 user:req.user,
             });
         });
@@ -179,10 +179,24 @@ app.post("/login",passport.authenticate("local",{
       });
 });
 
+
+// To get all the admins for super-admin Dashboard
+app.get("/admins",(req,res)=>{
+  db.User.find({})
+    .then(admins=>{
+      res.json(admins);
+    })
+    .catch(err=>{
+      console.log("error",err);
+      res.json({success:false,msg:err.message});
+    })
+})
+
 // To get the current user
 app.get("/curUser",(req,res)=>{
   res.json({user:req.user});
 })
+
 
 
 app.get("/api/err",(req,res)=>{

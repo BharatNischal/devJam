@@ -5,6 +5,7 @@ import Profile from "./components/profile/profile";
 import LoginForm from "./components/loginForm/loginForm";
 import ProfileList from "./components/ProfileList";
 import CreateProfile from "./components/createProfile";
+import Dashboard from "./components/Dashboard";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
@@ -15,6 +16,7 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/profiles" exact component={ProfileList}/>
+          <Route path="/adminDashboard" exact component={Dashboard}/>
           <Route path="/profile/:name/:id" exact component={Profile}/>
           <Route path="/login" exact component={LoginForm}/>
           <Route path="/createProfile" exact component={CreateProfile}/>

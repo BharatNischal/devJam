@@ -18,7 +18,7 @@ const LoginForm = (props)=>{
       axios.post("http://localhost:8080/login",{username,password})
         .then(res=>{
 
-          if(res.success){
+          if(res.success||res.data.success){
             setTimeout(()=>{
                 setBtnClick(false);
                 props.history.push("/profiles");
@@ -51,7 +51,7 @@ const LoginForm = (props)=>{
     return (
         <div className="row vertical-allign">
           <div className="col-lg-4 col-1"></div>
-          <div className="col-lg-4 col-10 card width-fixed  shadow-pink">
+          <div className="col-lg-4 col-10 card height-fixed  shadow-pink">
             <div className="row">
               <div className="col-4"></div>
               <div className="col-4 position-img">
