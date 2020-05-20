@@ -4,17 +4,17 @@ import axios from "axios";
 
 const ProfileList = (props)=>{
 
-      const [profiles,setProfiles] = useState([{id:1},{id:2},{id:3}]);
+      const [profiles,setProfiles] = useState([]);
 
-      // useEffect(()=>{
-      //   const fetchProfiles = async () => {
-      //      const response = await axios.get(`http://localhost:8080/profiles`);
-      //      if(response.data){
-      //        setProfiles(response.data);
-      //      }
-      //   }
-      //   fetchProfiles();
-      // },[]);
+      useEffect(()=>{
+        const fetchProfiles = async () => {
+           const response = await axios.get(`http://localhost:8080/profiles`);
+           if(response.data){
+             setProfiles(response.data);
+           }
+        }
+        fetchProfiles();
+      },[]);
 
     const list = profiles.map(profile=>(
                     <IndividualProfile key={profile._id} data={profile}/>
