@@ -104,11 +104,27 @@ main{
 .text-gray{
     color:#525252;
 }
+
+.superHeading{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 50px;
+    text-transform: uppercase;
+    letter-spacing: 7px;
+    line-height: 55px;
+    text-align: left;
+    color:#9d3870;
+}
 @media (max-width:500px){
     .cont{
         display: grid;
         grid-template-columns: 1fr ;
         grid-column-gap:0 ;
+    }
+    .superHeadingCont{
+        grid-column: 1/2 !important;
+        font-size: 6.5px;
     }
     
 }
