@@ -36,7 +36,7 @@ html{
 .tool-tip::before{
   content:"";
   position: absolute;
-  left: 5%;
+  left: 20%;
   bottom: 100%;
   border-width: 0 10px 12px 10px;
   border-style: solid;
@@ -49,7 +49,7 @@ html{
 .tool-tip2::before{
   content:"";
   position: absolute;
-  left: 85%;
+  left: 75%;
   bottom:100%;
   border-width: 0 10px 12px 10px;
   border-style: solid;
@@ -77,6 +77,7 @@ html{
   padding:5px 10px 0px 10px;
   transition: font-size 0.7s ease-in-out,box-shadow 0.5s ease-in-out;
   border-radius:10px;
+  vertical-align: baseline;
 }
 
 .tab-head h6.active-cls{
@@ -89,5 +90,5 @@ html{
 
 .tab-head-div{
   height: 50px;
-  
+
 }

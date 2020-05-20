@@ -1,19 +1,44 @@
 import React,{useState} from "react";
 import "./loginForm.css";
+import axios from "axios";
 
 const LoginForm = (props)=>{
 
     const [reset,setReset] = useState(false);
-    const [email,setEmail] = useState("");
+    const [err,setErr] = useState("");
+    const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
     const [btnclick,setBtnClick] = useState(false);
 
     const handleSubmit = (e)=>{
       e.preventDefault();
       setBtnClick(true);
-      console.log(email,password);
-      setEmail("");
-      setPassword("");
+      setErr("");
+      console.log(username,password);
+      axios.post("http://localhost:8080/login",{username,password})
+        .then(res=>{
+
+          if(res.success){
+            setTimeout(()=>{
+                setBtnClick(false);
+                props.history.push("/profiles");
+            },1000);
+          }else{
+            // Show message
+            setTimeout(()=>{
+                setBtnClick(false);
+                setErr("Invalid Username or Password");
+            },1000);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+          setBtnClick(false);
+          // Show the message
+          setErr("Server Error");
+        })
+        setUsername("");
+        setPassword("");
     }
 
     let button;
@@ -36,18 +61,19 @@ const LoginForm = (props)=>{
             </div>
             <div className="card-body">
               <div className="row mb-2 tab-head-div" >
-                <div className="col-6 text-left  tab-head"><h6 className={reset?"pointer m-0 ":"pointer active-cls m-0"} onClick={()=>{setReset(false)}}>Login</h6></div>
-                <div className="col-6 text-right tab-head"><h6 className={reset? "pointer active-cls m-0":" pointer m-0 "} onClick={()=>{setReset(true)}}>Reset</h6></div>
+                <div className="col-6 text-center  tab-head"><h6 className={reset?"pointer m-0 ":"pointer active-cls m-0"} onClick={()=>{setReset(false);setErr("")}}>Login</h6></div>
+                <div className="col-6 text-center tab-head"><h6 className={reset? "pointer active-cls m-0":" pointer m-0 "} onClick={()=>{setReset(true);setErr("")}}>Reset</h6></div>
               </div>
               <form onSubmit={handleSubmit}>
                 <div className={reset?"form-group tool-tip2 tool-tip":"form-group tool-tip"}>
-                  <input type="email" className="form-control form-control-lg text-center" value={email} onChange={e=>{setEmail(e.target.value)}} id="email" placeholder="Email"/>
+                  <input type="email" className="form-control form-control-lg text-center" value={username} onChange={e=>{setUsername(e.target.value)}} id="email" placeholder="Email"/>
                 </div>
                 <div className={reset?" d-none form-group":" form-group"}>
                   <input type="password" className="form-control form-control-lg text-center" value={password} onChange={e=>{setPassword(e.target.value)}} id="password" placeholder="Password"/>
                 </div>
                 {button}
               </form>
+              <p className="text-danger">{err}</p>
           </div>
         </div>
         <div className="col-lg-4 col-1">
