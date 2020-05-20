@@ -20,7 +20,7 @@ html{
   transition: 0.5s;
 }
 
-.width-fixed{
+.height-fixed{
   min-height: 50vh;
 }
 
@@ -87,7 +87,7 @@ html{
 
 .tab-head{
   padding: 0;
-  
+
 }
 
 .tab-head-div{
