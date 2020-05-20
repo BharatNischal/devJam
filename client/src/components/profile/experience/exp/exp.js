@@ -12,11 +12,7 @@ const Exp=(props)=>(
             </div>
             .<div className="col-lg-2"></div>
             <div className="col-12 col-lg-7 pl-2 pt-lg-3 ">
-              <p>Build and align aerial imagery taken with drones and
-                troubleshoot where automated processing failed. Also Track
-                image processing jobs using the web based platform and SQL.
-                End-to-End Tests: Created highly performant and extremely
-                stable end-to-end test suite using Cypress.</p> 
+                <p>{props.description}</p> 
             </div>
         </div>
         </div>
