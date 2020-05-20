@@ -40,3 +40,9 @@
     background: linear-gradient(180deg, #642B73 13.76%, #C6426E 85.26%);
    
 }
+
+@media (max-width:500px){
+    .section{
+        grid-column: 1/2 !important;
+    }
+}

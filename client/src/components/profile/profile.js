@@ -3,7 +3,8 @@ import "./profile.css"
 import Section from "./section/section";
 import Nav from "./Nav/Nav";
 import Rating from "../ui/rating/rating";
-import Education from "../education/education";
+import Education from "./education/education";
+import Experience from "./experience/experience";
 
 class Profile extends Component{
     state={
@@ -49,6 +50,9 @@ class Profile extends Component{
                             {/* <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat autem rerum molestias aut modi labore, excepturi reiciendis asperiores! Rerum nesciunt quia nostrum porro sequi animi soluta optio quam facilis consectetur?</p> */}
                         </Section>
                         <Section  heading="Rating" ><Rating val="3" /></Section>
+                        <Section heading="Experience" style={{gridColumnEnd:"4",gridColumnStart:"1" }}>
+                            <Experience/>
+                        </Section>
                     </div>
                 </main>
             </div>
