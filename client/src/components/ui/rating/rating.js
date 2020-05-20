@@ -8,15 +8,15 @@ const Rating = (props)=>{
     var fill= Number( props.val);
     for(let i=1;i<=5;i++ ){
         if(i<=fill){
-            stars.push(<span key={i} className="fill" > <Star/> </span>)
+            stars.push(<span key={i} className="fill" > <Star size={props.size} /> </span>)
         }else{
-            stars.push(<span key={i}> <Star/> </span>)
+            stars.push(<span key={i}> <Star size={props.size} /> </span>)
         }
     }
 
     return(
     <React.Fragment>
-        <div className="rating">
+        <div className="rating ml-2">
             {stars}
         </div>
         <p> This is an average star rating based on hard skills & soft skills.</p>

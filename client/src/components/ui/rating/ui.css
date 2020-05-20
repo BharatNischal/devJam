@@ -3,10 +3,7 @@
     margin-bottom: 7px;
     padding: 0;
 }
-.rating span svg{
-    width:28px;
-    margin-left:8px;
-}
+
 .rating span svg path{
     
     fill:  none ;

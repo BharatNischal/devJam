@@ -49,7 +49,7 @@ class Profile extends Component{
                             <Education/>
                             {/* <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat autem rerum molestias aut modi labore, excepturi reiciendis asperiores! Rerum nesciunt quia nostrum porro sequi animi soluta optio quam facilis consectetur?</p> */}
                         </Section>
-                        <Section  heading="Rating" ><Rating val="3" /></Section>
+                        <Section  heading="Rating" ><Rating val="3" size="28px" /></Section>
                         <Section heading="Experience" style={{gridColumnEnd:"4",gridColumnStart:"1" }}>
                             <Experience/>
                         </Section>
