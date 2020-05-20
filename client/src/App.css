@@ -42,3 +42,11 @@
   transition: 1s;
   opacity: 1;
 }
+
+.b-none{
+  border: none;
+}
+
+.bgd-gradient{
+  background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+}

@@ -16,10 +16,17 @@ const ProfileList = (props)=>{
         fetchProfiles();
       },[]);
 
+    const list = profiles.map(profile=>(
+                    <IndividualProfile key={profile._id} data={profile}/>
+                ))
+
     return (
-      profiles.map(profile=>(
-          <IndividualProfile key={profile._id} data={profile}/>
-      ))
+      <div className="container">
+        <h2 className="mt-5 text-white">Developers Profiles</h2>
+        <div className="row mt-5">
+          {list}
+        </div>
+      </div>
     );
 }
 
