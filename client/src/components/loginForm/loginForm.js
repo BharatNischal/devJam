@@ -35,7 +35,7 @@ const LoginForm = (props)=>{
               <div className="col-4"></div>
             </div>
             <div className="card-body">
-              <div className="row mb-2 tab-head-div" >
+              <div className="row mb-4 tab-head-div" >
                 <div className="col-6 text-left  tab-head"><h6 className={reset?"pointer m-0 ":"pointer active-cls m-0"} onClick={()=>{setReset(false)}}>Login</h6></div>
                 <div className="col-6 text-right tab-head"><h6 className={reset? "pointer active-cls m-0":" pointer m-0 "} onClick={()=>{setReset(true)}}>Reset</h6></div>
               </div>
