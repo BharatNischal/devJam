@@ -172,7 +172,7 @@ app.post("/login",passport.authenticate("local",{
       failureRedirect:"/api/err"
   }),(req,res)=>{
       res.json({
-        success:"true",
+        success:true,
         msg:"You logged in successfully with username "+req.user.username,
         user:req.user
       });
@@ -185,7 +185,7 @@ app.get("/curUser",(req,res)=>{
 
 
 app.get("/api/err",(req,res)=>{
-  res.json({success:"false"});
+  res.json({success:false});
 });
 
 
