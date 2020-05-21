@@ -113,7 +113,8 @@ app.post("/createProfile",upload,(req,res)=>{
 app.get("/profile/:id",(req,res)=>{
   db.Developer.findById(req.params.id)
     .then(profile=>{
-        res.json({...profile,success:true});
+        const d={data:profile,success:true};
+        res.json(d);
     })
     .catch(err=>{
       console.log("error",err);

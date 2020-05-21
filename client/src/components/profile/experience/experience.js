@@ -3,9 +3,11 @@ import Exp from "./exp/exp";
 
 const Experience =(props)=>(
     <div className="edCont">
-        <Exp position="Full Stack Engineer" company="Kaaptech" from="July,2017" present={true}  />
-        <Exp position="Full Stack Engineer" company="Kaaptech" from="July,2017" present={true}  />
-        <Exp position="Full Stack Engineer" company="Kaaptech" from="July,2017" present={true}  />
+        {props.data.map(ex=>(
+            <Exp position={ex.position} key={ex._id} company={ex.company} from={ex.from} present={ex.to.present} to={ex.to.date} description={ex.description} />
+        ))}
+        
+        
         
     </div>
 );

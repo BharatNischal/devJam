@@ -6,8 +6,10 @@ const Education = (props)=>{
     return (
     <div className="edCont">
         
-        <Degree degree="Bachelor of Technology" subject="Computer Engineering" university="Guru Nanak Dev University" from="July, 2018" present={true} to="June,2021" />
-       
+        {props.data.map(ed=>(
+            <Degree degree={ed.degree} key={ed._id} subject={ed.subject} university={ed.schoolName} from={ed.from} present={ed.to.present} to={ed.to.date} />
+        ))}
+               
         
     </div>
     );

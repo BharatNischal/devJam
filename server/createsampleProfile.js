@@ -1,4 +1,4 @@
-const Developer = require('./models/developer');
+const Db = require('./models/index');
 
 const developer = {
     personalInfo:{
@@ -75,10 +75,10 @@ const developer = {
     }
 }
 
-Developer.create(developer)
+Db.Developer.create(developer)
   .then(profile=>{
     console.log(profile);
   })
   .catch(err=>{
     console.log(err);
-  })
+  });
