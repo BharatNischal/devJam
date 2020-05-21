@@ -1,6 +1,6 @@
 .profile-nav{
-    background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
-    height:100px;
+    background: linear-gradient(80deg, rgb(196, 40, 92) 14% ,rgb(164, 52, 192) 85.26%);
+    /* height:100px; */
     position: fixed;
     top:0;
     left:0;
@@ -10,8 +10,8 @@
     z-index: 100;
     transform: translateY(-120%);
     transition: 0.7s ease-in-out;
-    display: flex;
-    align-items: center;
+    /* display: flex;
+    align-items: center; */
     will-change: transform;
     transition-delay: 0.3s ;
 }
