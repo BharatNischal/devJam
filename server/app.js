@@ -29,7 +29,11 @@ passport.serializeUser(db.User.serializeUser());
 passport.deserializeUser(db.User.deserializeUser());
 
 // Cors setup
-app.use(cors());
+app.use(cors({
+  origin:['http://localhost:3000'],
+  methods:['GET','POST','PUT','DELETE'],
+  credentials: true // enable set cookie
+}));
 
 // bodyParser
 app.use(bodyParser.urlencoded({extended:true}));
