@@ -5,6 +5,11 @@ var developerSchema=new mongoose.Schema({
       type:String,
       default: 'https://c8.alamy.com/comp/HBFR2F/male-profile-avatar-with-brown-hair-over-white-background-vector-illustration-HBFR2F.jpg'
     },
+    rating:{
+      type: Number,
+      required: [1,2,3,4,5],
+      default: 1
+    },
     personalInfo:{
         firstName: {
             type: String,
@@ -75,6 +80,10 @@ var developerSchema=new mongoose.Schema({
           type: Number,
           required: [1,2,3,4,5],
           default: 1
+        },
+        experience:{
+          type:Number,
+          required:true
         }
     }],
     frontend:[{
@@ -86,6 +95,10 @@ var developerSchema=new mongoose.Schema({
           type: Number,
           required: [1,2,3,4,5],
           default: 1
+        },
+        experience:{
+          type:Number,
+          required:true
         }
     }],
     backend:[{
@@ -97,6 +110,10 @@ var developerSchema=new mongoose.Schema({
           type: Number,
           required: [1,2,3,4,5],
           default: 1
+        },
+        experience:{
+          type:Number,
+          required:true
         }
     }],
     database:[{
@@ -108,6 +125,10 @@ var developerSchema=new mongoose.Schema({
           type: Number,
           required: [1,2,3,4,5],
           default: 1
+        },
+        experience:{
+          type:Number,
+          required:true
         }
     }],
     tools:[{
@@ -119,6 +140,10 @@ var developerSchema=new mongoose.Schema({
           type: Number,
           required: [1,2,3,4,5],
           default: 1
+        },
+        experience:{
+          type:Number,
+          required:true
         }
     }],
     softSkills:[{
@@ -130,7 +155,8 @@ var developerSchema=new mongoose.Schema({
           type: Number,
           required: [1,2,3,4,5],
           default: 1
-        }
+        },
+        description:String
     }],
     hobbies:[{
       type:String

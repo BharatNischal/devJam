@@ -12,6 +12,9 @@
 .f-20{
   font-size: 20px;
 }
+.mt-170{
+  margin-top:170px !important;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

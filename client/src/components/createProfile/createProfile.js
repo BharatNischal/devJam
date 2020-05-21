@@ -1,9 +1,12 @@
-import React,{useState,useEffect, useRef} from "react";
+import React,{useState,useEffect, useRef, useContext} from "react";
 import axios from "axios";
 import Education from "./Education";
 import Experience from "./Experience";
 import CreateSkill from "./createSkill";
 import CreateSoftSkill from "./createSoftSkill";
+import Nav from "../profile/Nav/Nav";
+import {CurUserContext} from "../../contexts/curUser";
+
 
 const languageOptions=["java","javascript","c++","python","c#","vb","swift"];
 const frontendOptions=["React","jquery","html","css","Bootstrap","Angular","Vue"];
@@ -17,6 +20,18 @@ const removeKey=(arr)=>{
 }
 
 const CreateProfile = (props)=>{
+  
+  //Authorization
+  const {setUser,user} = useContext(CurUserContext);
+
+  useEffect(()=>{
+    console.log("USER ",user);
+      if(!user.loggedIn){
+        props.history.push("/login");
+      }},[]);
+
+
+
     const [personalInfo,setPersonalInfo]= useState({firstName:props.firstName?props.firstName:"",lastName:"",title:""});
     const [contact,setContact] = useState({email:"",phone:"",github:"",youtube:""});  
     const [education,setEducation] = useState([]); 
@@ -31,6 +46,7 @@ const CreateProfile = (props)=>{
     const [softSkills,setSoftSkills] = useState([]);
     const [hobbies,setHobbies] = useState([]);
     const [hobby,setHobby] = useState("");
+    const [rating,setRating] = useState(1);
 
     const submitHandler=(e)=>{
       e.preventDefault();
@@ -53,6 +69,7 @@ const CreateProfile = (props)=>{
         formData.append('tools',removeKey(tools));
         formData.append('softSkills',removeKey(softSkills));
         formData.append('hobbies',JSON.stringify(hobbies));
+        formData.append('rating',JSON.stringify(rating));
         
       axios.post("http://localhost:8080/createProfile",formData)
       .then(res => {
@@ -99,7 +116,8 @@ const CreateProfile = (props)=>{
 
     return (
       <div>
-         <div className="m-4 p-4 bg-light rounded">
+        <Nav show={true} menu={true} />
+         <div className="mt-170 m-4 p-4 bg-light rounded" >
            <h1> Create Profile </h1>
            <form onSubmit={submitHandler} >
               <div className="row">
@@ -122,6 +140,11 @@ const CreateProfile = (props)=>{
                     <div className="form-group input-group">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-user" ></i></div>
                             <input type="text" name="title" placeholder="Enter Title" value={personalInfo.title} onChange={(e)=>setPersonalInfo({...personalInfo,title:e.target.value})} className="form-control" required />
+                    </div>
+                    <div className="text-left" >Rating</div>
+                    <div className="form-group input-group">
+                            <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fas fa-star" ></i></div>
+                            <input type="number" min="1" max="5" name="rating"  placeholder="Enter Rating" value={rating} onChange={(e)=>setRating(e.target.value)} className="form-control" />
                     </div>
                   </div>
 

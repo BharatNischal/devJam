@@ -35,7 +35,8 @@ class Profile extends Component{
             backend:[],
             database:[],
             tools:[],
-            softSkills:[]
+            softSkills:[],
+            rating:1
 
 
         },
@@ -93,7 +94,7 @@ class Profile extends Component{
                             <Education data={this.state.profileData.education} />
                             {/* <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat autem rerum molestias aut modi labore, excepturi reiciendis asperiores! Rerum nesciunt quia nostrum porro sequi animi soluta optio quam facilis consectetur?</p> */}
                         </Section>
-                        <Section  heading="Rating" ><Rating val="3" size="28px" showText={true} /></Section>
+                        <Section  heading="Rating" ><Rating val={this.state.profileData.rating} size="28px" showText={true} /></Section>
                         <Section heading="Experience" style={{gridColumnEnd:"4",gridColumnStart:"1" }}>
                             <Experience data={this.state.profileData.experience} />
                         </Section>
@@ -108,28 +109,28 @@ class Profile extends Component{
                         </div>
                         <Section heading="Languages" >
                             {this.state.profileData.languages.map(lang=>(
-                                <Skill icon={lang.name.toLowerCase()} experience="3" rating={lang.rating} key={lang._id} />
+                                <Skill icon={lang.name.toLowerCase()} experience={lang.experience} rating={lang.rating} key={lang._id} />
                             ))}
 
                         </Section>
                         <Section heading="Frontend">
                             {this.state.profileData.frontend.map(lang=>(
-                                <Skill icon={lang.name.toLowerCase()} experience="3" rating={lang.rating} key={lang._id} />
+                                <Skill icon={lang.name.toLowerCase()} experience={lang.experience} rating={lang.rating} key={lang._id} />
                             ))}
                         </Section>
                         <Section heading="Backend">
                             {this.state.profileData.backend.map(lang=>(
-                                <Skill icon={lang.name.toLowerCase()} experience="3" rating={lang.rating} key={lang._id} />
+                                <Skill icon={lang.name.toLowerCase()} experience={lang.experience} rating={lang.rating} key={lang._id} />
                             ))}
                         </Section>
                         <Section heading="Database">
                             {this.state.profileData.database.map(lang=>(
-                                <Skill icon={lang.name.toLowerCase()} experience="3" rating={lang.rating} key={lang._id} />
+                                <Skill icon={lang.name.toLowerCase()} experience={lang.experience} rating={lang.rating} key={lang._id} />
                             ))}
                         </Section>
                         <Section heading="Mobile / Tools">
                             {this.state.profileData.tools.map(lang=>(
-                                <Skill icon={lang.name.toLowerCase()} experience="3" rating={lang.rating} key={lang._id} />
+                                <Skill icon={lang.name.toLowerCase()} experience={lang.experience} rating={lang.rating} key={lang._id} />
                             ))}
                         </Section>
                         <div className="superHeadingCont text-left p-4 pr-0" style={{gridColumnEnd:"4",gridColumnStart:"1" }}>
@@ -144,7 +145,7 @@ class Profile extends Component{
 
                         {this.state.profileData.softSkills.map((lang,i)=>(
                              <Section key={i} heading={lang.name}>
-                                <Skill icon="softskills"  rating={lang.rating} key={lang._id}  description="lorem ipsum gnada svkjndkvhbsd" />
+                                <Skill icon="softskills"  rating={lang.rating} key={lang._id}  description={lang.description} />
                             </Section>
                         ))}
 
@@ -160,10 +161,10 @@ class Profile extends Component{
                     </div>
                     <div className="social-floating">
                         <ul>
-                            <li ><i className="fab fa-github"> </i><a href={this.state.profileData.contact.github}> <span> Github </span>   </a></li>
-                            <li ><i className="fa fa-phone-alt"> </i><a href={"tel:"+this.state.profileData.contact.phone}> <span> {this.state.profileData.contact.phone} </span>   </a></li>
-                            <li ><i className="fa fa-envelope"> </i><a href={"mailto:"+this.state.profileData.contact.email}> <span> {this.state.profileData.contact.email}</span>   </a></li>
-                            <li ><i className="fab fa-youtube"> </i><a href={this.state.profileData.contact.youtube}> <span> Youtube </span>   </a></li>
+                           {this.state.profileData.contact.github?(<li ><i className="fab fa-github"> </i><a href={this.state.profileData.contact.github} target="__blank"> <span> Github </span>   </a></li>):null}
+                           {this.state.profileData.contact.phone?(<li ><i className="fa fa-phone-alt"> </i><a href={"tel:"+this.state.profileData.contact.phone} target="__blank"> <span> {this.state.profileData.contact.phone} </span>   </a></li>):null}
+                           {this.state.profileData.contact.email?(<li ><i className="fa fa-envelope"> </i><a href={"mailto:"+this.state.profileData.contact.email} target="__blank"> <span> {this.state.profileData.contact.email}</span>   </a></li>):null}
+                           {this.state.profileData.contact.youtube?(<li ><i className="fab fa-youtube"> </i><a href={this.state.profileData.contact.youtube} target="__blank"> <span> Youtube </span>   </a></li>):null}
 
                         </ul>
                     </div>

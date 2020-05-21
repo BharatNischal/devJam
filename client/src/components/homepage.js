@@ -8,21 +8,12 @@ const Homepage = (props)=>{
   const {setUser,user} = useContext(CurUserContext);
 
   useEffect(()=>{
-      axios.get("http://localhost:8080/curUser")
-        .then(res=>{
-          console.log(res);
-          if(res.data.user){
-            setUser({loggedIn:true,superAdmin:res.data.user.superAdmin});
-            props.history.push("/profiles");
-          }else{
-            setUser({loggedIn:false,superAdmin:""});
-            props.history.push("/login");
-          }
-        })
-        .catch(err=>{
-          setUser({loggedIn:false,superAdmin:""});
-          props.history.push("/login");
-        })
+    console.log("USER ",user);
+      if(user.loggedIn){
+        props.history.push("/profiles");
+      }else{
+        props.history.push("/login");
+      }
   },[]);
 
     return (

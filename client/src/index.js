@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import CurUserContextProvider from "./contexts/curUser";
 
 ReactDOM.render(
   <React.StrictMode>
+    <CurUserContextProvider>
     <App />
+    </CurUserContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
