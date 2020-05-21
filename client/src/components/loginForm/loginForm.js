@@ -78,8 +78,8 @@ const LoginForm = (props)=>{
             </div>
             <div className="card-body">
               <div className="row mb-2 tab-head-div" >
-                <div className="col-6 text-center  tab-head"><h6 className={reset?"pointer m-0 ":"pointer active-cls m-0"} onClick={()=>{setReset(false);setErr("")}}>Login</h6></div>
-                <div className="col-6 text-center tab-head"><h6 className={reset? "pointer active-cls m-0":" pointer m-0 "} onClick={()=>{setReset(true);setErr("")}}>Reset</h6></div>
+                <div className={reset?"col-6 text-center":"col-6 text-center font-weight-bold"}><span className="pointer active-cls m-0" onClick={()=>{setReset(false);setErr("")}}>Login</span></div>
+                <div className={reset?"col-6 text-center font-weight-bold":"col-6 text-center"}><span className="pointer active-cls m-0" onClick={()=>{setReset(true);setErr("")}}>Reset</span></div>
               </div>
               <form onSubmit={handleSubmit}>
                 <div className={reset?"form-group tool-tip2 tool-tip":"form-group tool-tip"}>
