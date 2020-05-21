@@ -29,7 +29,7 @@ const LoginForm = (props)=>{
               }else{
                 setTimeout(()=>{
                   setBtnClick(false);
-                  setUser({loggedIn:true,username:res.data.username,superAdmin:res.data.superAdmin});
+                  setUser({loggedIn:true,superAdmin:res.data.superAdmin});
                   props.history.push("/profiles");
                 },1000);
               }

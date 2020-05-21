@@ -73,7 +73,7 @@ const Dashboard = (props)=>{
 
   return (
     <React.Fragment>
-    <Nav menu={true} isLogin={true} show={true}/>
+    <Nav show={true} menu={true}/>
     <div className="container" style={{marginTop:"10vh"}}>
       <h1 className="text-white">Super Admin Dashboard</h1>
       <div className="row mt-5">
