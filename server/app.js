@@ -29,7 +29,11 @@ passport.serializeUser(db.User.serializeUser());
 passport.deserializeUser(db.User.deserializeUser());
 
 // Cors setup
-app.use(cors());
+app.use(cors({
+  origin:['http://localhost:3000',"http://*"],
+  methods:['GET','POST','PUT','DELETE'],
+  credentials: true // enable set cookie
+}));
 
 // bodyParser
 app.use(bodyParser.urlencoded({extended:true}));
@@ -113,8 +117,7 @@ app.post("/createProfile",upload,(req,res)=>{
 app.get("/profile/:id",(req,res)=>{
   db.Developer.findById(req.params.id)
     .then(profile=>{
-        const d={data:profile,success:true};
-        res.json(d);
+        res.json({...profile,success:true});
     })
     .catch(err=>{
       console.log("error",err);
