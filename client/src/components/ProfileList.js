@@ -14,7 +14,7 @@ const ProfileList = (props)=>{
            if(response.data && !response.data.success){
               props.history.push("/login")
            }
-           if(response.data){
+           else if(response.data){
              setProfiles(response.data.profiles?response.data.profiles:[]);
            }
         }

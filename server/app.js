@@ -30,7 +30,7 @@ passport.deserializeUser(db.User.deserializeUser());
 
 // Cors setup
 app.use(cors({
-  origin:['http://localhost:3000',"http://*"],
+  origin:['http://localhost:3000'],
   methods:['GET','POST','PUT','DELETE'],
   credentials: true // enable set cookie
 }));
