@@ -44,14 +44,14 @@ class Profile extends Component{
 
     componentDidMount(){
         window.addEventListener("scroll",(e)=>{
-          
+
             if(window.scrollY>10){
                 this.setState({dim:true});
             }else{
                 this.setState({dim:false});
             }
-            
-            
+
+
             if(window.scrollY> 150){
                 this.setState({showNav:true});
             }else{
@@ -61,12 +61,12 @@ class Profile extends Component{
         axios.get(`http://localhost:8080/profile/${this.props.match.params.id}`)
         .then(res=>{
             if(res.data.success){
-                console.log(res.data.data);
+                console.log("data",res);
                 this.setState({profileData:res.data.data,loading:false});
             }else{
                 this.setState({notFound:true});
             }
-            
+
         }).catch(err=>{
             this.setState({notFound:true});
             console.log(err);
@@ -75,7 +75,7 @@ class Profile extends Component{
     }
 
     render(){
-        
+
         const Comp=(
             <React.Fragment>
                 <Nav show={this.state.showNav} dp={"url(" + this.state.profileData.profilePic +")"} name={this.state.profileData.personalInfo.firstName + " " +this.state.profileData.personalInfo.lastName  }  ></Nav>
@@ -85,7 +85,7 @@ class Profile extends Component{
                     </div>
                     <h1 className="heading"> {this.state.profileData.personalInfo.firstName + " " +this.state.profileData.personalInfo.lastName } </h1>
                     <h4 className="sub"> {this.state.profileData.personalInfo.title} </h4>
-                    
+
                 </header>
                 <main>
                     <div className="cont" >
@@ -99,8 +99,8 @@ class Profile extends Component{
                         </Section>
                         <div className="superHeadingCont text-left p-4 pr-0" style={{gridColumnEnd:"4",gridColumnStart:"1" }}>
                             <h1 className="superHeading " >Hard Skills</h1>
-                            
-                            <Rating val="1" size="16px" inline={true} /> &nbsp;&nbsp; Not confident<br/>                   
+
+                            <Rating val="1" size="16px" inline={true} /> &nbsp;&nbsp; Not confident<br/>
                             <Rating val="2" size="16px" inline={true} /> &nbsp;&nbsp; Need practice but understand concepts<br/>
                             <Rating val="3" size="16px" inline={true} /> &nbsp;&nbsp; Have some practice & can build tech with this skill<br/>
                             <Rating val="4" size="16px" inline={true} /> &nbsp;&nbsp; Fairly confident & have solid understanding of concepts<br/>
@@ -110,7 +110,7 @@ class Profile extends Component{
                             {this.state.profileData.languages.map(lang=>(
                                 <Skill icon={lang.name.toLowerCase()} experience="3" rating={lang.rating} key={lang._id} />
                             ))}
-                            
+
                         </Section>
                         <Section heading="Frontend">
                             {this.state.profileData.frontend.map(lang=>(
@@ -134,14 +134,14 @@ class Profile extends Component{
                         </Section>
                         <div className="superHeadingCont text-left p-4 pr-0" style={{gridColumnEnd:"4",gridColumnStart:"1" }}>
                             <h1 className="superHeading " >Soft Skills</h1>
-                            
-                            <Rating val="1" size="16px" inline={true} /> &nbsp;&nbsp; Not good, but trying<br/>                   
+
+                            <Rating val="1" size="16px" inline={true} /> &nbsp;&nbsp; Not good, but trying<br/>
                             <Rating val="2" size="16px" inline={true} /> &nbsp;&nbsp; Trying, but can be more consistent<br/>
                             <Rating val="3" size="16px" inline={true} /> &nbsp;&nbsp; Decent & manageable to work with<br/>
                             <Rating val="4" size="16px" inline={true} /> &nbsp;&nbsp; Fairly good & consistent<br/>
                             <Rating val="5" size="16px" inline={true} /> &nbsp;&nbsp; Excellent<br/>
                         </div>
-                        
+
                         {this.state.profileData.softSkills.map((lang,i)=>(
                              <Section key={i} heading={lang.name}>
                                 <Skill icon="softskills"  rating={lang.rating} key={lang._id}  description="lorem ipsum gnada svkjndkvhbsd" />
@@ -156,15 +156,15 @@ class Profile extends Component{
                             </ul>
                         </Section>
 
-                       
+
                     </div>
                     <div className="social-floating">
                         <ul>
-                            <li ><i className="fab fa-github"> </i><a href={this.state.profileData.contact.github}> <span> Github </span>   </a></li>   
-                            <li ><i className="fa fa-phone-alt"> </i><a href={"tel:"+this.state.profileData.contact.phone}> <span> {this.state.profileData.contact.phone} </span>   </a></li>   
-                            <li ><i className="fa fa-envelope"> </i><a href={"mailto:"+this.state.profileData.contact.email}> <span> {this.state.profileData.contact.email}</span>   </a></li>   
-                            <li ><i className="fab fa-youtube"> </i><a href={this.state.profileData.contact.youtube}> <span> Youtube </span>   </a></li>   
-                             
+                            <li ><i className="fab fa-github"> </i><a href={this.state.profileData.contact.github}> <span> Github </span>   </a></li>
+                            <li ><i className="fa fa-phone-alt"> </i><a href={"tel:"+this.state.profileData.contact.phone}> <span> {this.state.profileData.contact.phone} </span>   </a></li>
+                            <li ><i className="fa fa-envelope"> </i><a href={"mailto:"+this.state.profileData.contact.email}> <span> {this.state.profileData.contact.email}</span>   </a></li>
+                            <li ><i className="fab fa-youtube"> </i><a href={this.state.profileData.contact.youtube}> <span> Youtube </span>   </a></li>
+
                         </ul>
                     </div>
                 </main>

@@ -117,7 +117,7 @@ app.post("/createProfile",upload,(req,res)=>{
 app.get("/profile/:id",(req,res)=>{
   db.Developer.findById(req.params.id)
     .then(profile=>{
-        res.json({...profile,success:true});
+        res.json({data:profile,success:true});
     })
     .catch(err=>{
       console.log("error",err);
@@ -154,6 +154,21 @@ app.put("/editProfile/:id",(req,res)=>{
       res.json({err:"not logged in",success:false});
     }
 });
+
+
+// Search Profiles based on names
+app.post("/search",(req,res)=>{
+  const {name} = req.body;
+  const regex = new RegExp(escapeRegex(name), 'gi');
+  db.Developer.find({ $or: [ {'personalInfo.firstName': regex }, {'personalInfo.lastName':  regex} ] })
+  .then(profiles=>{
+      res.json({profiles:profiles,success:true});
+  })
+  .catch(err=>{
+    console.log("error",err);
+    res.send({success:false,msg:err.message})
+  })
+})
 
 
 
@@ -299,7 +314,10 @@ app.get("/api/err",(req,res)=>{
   res.json({success:false});
 });
 
-
+// Function to make regular expression
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
 
 app.listen(8080,()=>{
   console.log("Listening on port",8080);

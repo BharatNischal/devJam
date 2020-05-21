@@ -1,6 +1,7 @@
-import React,{useState} from "react";
+import React,{useState,useContext} from "react";
 import "./loginForm.css";
 import axios from "axios";
+import {CurUserContext} from "../../contexts/curUser";
 
 const LoginForm = (props)=>{
 
@@ -9,6 +10,7 @@ const LoginForm = (props)=>{
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
     const [btnclick,setBtnClick] = useState(false);
+    const{setUser} = useContext(CurUserContext);
 
     const handleSubmit = (e)=>{
       e.preventDefault();
@@ -27,6 +29,7 @@ const LoginForm = (props)=>{
               }else{
                 setTimeout(()=>{
                   setBtnClick(false);
+                  setUser({loggedIn:true,username:res.data.username,superAdmin:res.data.superAdmin});
                   props.history.push("/profiles");
                 },1000);
               }

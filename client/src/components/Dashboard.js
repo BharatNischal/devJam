@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from "react";
+import Nav from "./profile/Nav/Nav";
 import axios from "axios";
 
 const Dashboard = (props)=>{
@@ -71,7 +72,9 @@ const Dashboard = (props)=>{
 
 
   return (
-    <div className="container mt-5">
+    <React.Fragment>
+    <Nav menu={true} isLogin={true} show={true}/>
+    <div className="container" style={{marginTop:"10vh"}}>
       <h1 className="text-white">Super Admin Dashboard</h1>
       <div className="row mt-5">
         <div className="col-md-5 col-12 card shadow-pink px-3 py-3 mb-5">
@@ -108,6 +111,7 @@ const Dashboard = (props)=>{
       </div>
     </div>
   </div>
+</React.Fragment>
   );
 
 }
