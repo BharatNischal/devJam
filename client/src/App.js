@@ -4,7 +4,7 @@ import './App.css';
 import Profile from "./components/profile/profile";
 import LoginForm from "./components/loginForm/loginForm";
 import ProfileList from "./components/ProfileList";
-import CreateProfile from "./components/createProfile";
+import CreateProfile from "./components/createProfile/createProfile";
 import Dashboard from "./components/Dashboard";
 import ResetPassword from "./components/resetPassword";
 import axios from "axios";

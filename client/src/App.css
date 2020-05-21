@@ -6,6 +6,12 @@
   height: 40vmin;
   pointer-events: none;
 }
+.bg-grad{
+  background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+}
+.f-20{
+  font-size: 20px;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

@@ -65,7 +65,7 @@ cloudinary.config({
 // Profile Routes
 
 // To get all the developer profiles
-app.get("/profiles",(req,res)=>{
+app.get("/profiles", isAdmin ,(req,res)=>{
     if(req.user){
       db.Developer.find({})
         .then(profiles=>{
@@ -86,6 +86,15 @@ app.post("/createProfile",upload,(req,res)=>{
   if(req.user){
     console.log("file recieved",req.file,"body",req.body);
     const profile = req.body;
+    for(key in profile){
+      if(profile[key]==="undefined"){
+        delete profile[key];
+      }else{
+
+        profile[key]=JSON.parse(profile[key]);
+      }
+    }
+    
     if(req.file){
       cloudinary.uploader.upload(req.file.path, (result)=> {
         db.Developer.create({...profile,profilePic:result.secure_url})
@@ -304,4 +313,14 @@ app.get("/api/err",(req,res)=>{
 
 app.listen(8080,()=>{
   console.log("Listening on port",8080);
-})
+});
+
+
+// MIDDLEWARE DEFINATIONS
+function isAdmin(req,res,next){
+  if(req.user){
+    console.log("MIDDLEWARE logined");
+    return next();
+  }
+  return res.json({success:false,err:"NOt Logined From Middleware"});
+}
