@@ -7,10 +7,11 @@ const          express = require('express'),
             bodyParser = require("body-parser"),
                   cors = require("cors"),
                    app = express(),
-                multer = require("multer");
-                //  async = require("async"),
-                // crypto = require("crypto"),
-                // path   = require("path");
+                multer = require("multer"),
+          // mailFunction = require("./mail"),
+                 async = require("async"),
+                crypto = require("crypto"),
+                path   = require("path");
 
 
 // Session setup
@@ -28,11 +29,7 @@ passport.serializeUser(db.User.serializeUser());
 passport.deserializeUser(db.User.deserializeUser());
 
 // Cors setup
-app.use(cors({
-  origin:['http://localhost:3000'],
-  methods:['GET','POST','PUT','DELETE'],
-  credentials: true // enable set cookie
-}));
+app.use(cors());
 
 // bodyParser
 app.use(bodyParser.urlencoded({extended:true}));
@@ -65,25 +62,39 @@ cloudinary.config({
 
 // To get all the developer profiles
 app.get("/profiles",(req,res)=>{
-    db.Developer.find({})
-      .then(profiles=>{
-          res.json(profiles);
-      })
-      .catch(err=>{
-        console.log("error",err);
-        res.send({success:false,msg:err.message})
-      })
+    if(req.user){
+      db.Developer.find({})
+        .then(profiles=>{
+            res.json({profiles:profiles,success:true});
+        })
+        .catch(err=>{
+          console.log("error",err);
+          res.send({success:false,msg:err.message})
+        })
+    }else{
+      res.json({err:"not logged in",success:false});
+    }
 });
 
 
 // To create new profile
 app.post("/createProfile",upload,(req,res)=>{
-
-  console.log("file recieved",req.file,"body",req.body);
-  const profile = req.body;
-  if(req.file){
-    cloudinary.uploader.upload(req.file.path, (result)=> {
-      db.Developer.create({...profile,profilePic:result.secure_url})
+  if(req.user){
+    console.log("file recieved",req.file,"body",req.body);
+    const profile = req.body;
+    if(req.file){
+      cloudinary.uploader.upload(req.file.path, (result)=> {
+        db.Developer.create({...profile,profilePic:result.secure_url})
+          .then(newProfile=>{
+              res.json({...newProfile,success:true});
+          })
+          .catch(err=>{
+            console.log("error",err);
+            res.send({success:false,msg:err.message});
+          })
+      });
+    }else{
+      db.Developer.create(profile)
         .then(newProfile=>{
             res.json({...newProfile,success:true});
         })
@@ -91,16 +102,9 @@ app.post("/createProfile",upload,(req,res)=>{
           console.log("error",err);
           res.send({success:false,msg:err.message});
         })
-    });
+    }
   }else{
-    db.Developer.create(profile)
-      .then(newProfile=>{
-          res.json({...newProfile,success:true});
-      })
-      .catch(err=>{
-        console.log("error",err);
-        res.send({success:false,msg:err.message});
-      })
+    res.json({err:"not logged in",success:false});
   }
 });
 
@@ -119,10 +123,21 @@ app.get("/profile/:id",(req,res)=>{
 
 // To update profile of the developer
 app.put("/editProfile/:id",(req,res)=>{
-    const profile = req.body;
-    if(req.file){
-      cloudinary.uploader.upload(req.file.path, (result)=> {
-        db.Developer.findByIdAndUpdate(req.params.id,{...profile,profilePic:result.secure_url})
+    if(req.user){
+      const profile = req.body;
+      if(req.file){
+        cloudinary.uploader.upload(req.file.path, (result)=> {
+          db.Developer.findByIdAndUpdate(req.params.id,{...profile,profilePic:result.secure_url})
+            .then(updatedProfile=>{
+              res.json({...updatedProfile,success:true});
+            })
+            .catch(err=>{
+              console.log("error",err);
+              res.json({success:false,msg:err.message});
+            })
+        });
+      }else{
+        db.Developer.findByIdAndUpdate(req.params.id,profile)
           .then(updatedProfile=>{
             res.json({...updatedProfile,success:true});
           })
@@ -130,16 +145,9 @@ app.put("/editProfile/:id",(req,res)=>{
             console.log("error",err);
             res.json({success:false,msg:err.message});
           })
-      });
+      }
     }else{
-      db.Developer.findByIdAndUpdate(req.params.id,profile)
-        .then(updatedProfile=>{
-          res.json({...updatedProfile,success:true});
-        })
-        .catch(err=>{
-          console.log("error",err);
-          res.json({success:false,msg:err.message});
-        })
+      res.json({err:"not logged in",success:false});
     }
 });
 
@@ -191,11 +199,96 @@ app.get("/admins",(req,res)=>{
     })
 })
 
+
+// forgot password
+app.post('/forget', function(req, res, next) {
+  console.log("Inside forgot route");
+  async.waterfall([
+    function(done) {
+      crypto.randomBytes(20, function(err, buf) {
+        var token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    function(token, done) {
+      db.User.findOne({ username: req.body.username }, function(err, user) {
+        if (!user) {
+          res.json({msg:"No account with that email address exists.",success:false});
+        }
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        user.save(function(err) {
+          done(err, token, user);
+        });
+      });
+    },
+    function(token, user, done) {
+      var fullUrl = req.protocol +"://localhost:3000/reset/"+token ;
+      // const msg = {
+      //   from: '"Live Blog " <manjotsingh16july@gmail.com>', // sender address (who sends)
+      //   to: user.username, // list of receivers (who receives)
+      //   subject: 'Password Reset', // Subject line
+      //   text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+      //           Please click on the following link, or paste this into your browser to complete the process:\n\n ${fullUrl} \n\n
+      //           If you did not request this, please ignore this email and your password will remain unchanged.\n`
+      // };
+      //
+      // mailFunction(msg,(err,info)=>{
+      //   done(err,'done');
+      // });
+      res.json({success:true,msg:"Mail has been Sent"});
+
+    }
+  ], function(err) {
+    if (err)     res.json({msg:err.message,success:false});
+    res.json({success:true,msg:"Mail has been Sent"});
+  });
+});
+
+app.post('/reset/:token', function(req, res) {
+  async.waterfall([
+    function(done) {
+      db.User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+        if (!user) {
+          return res.json({msg:'Password reset token is invalid or has expired.'});
+        }
+          user.setPassword(req.body.password, function(err) {
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+
+            user.save(function(err) {
+              req.logIn(user, function(err) {
+                done(err, user);
+              });
+            });
+          })
+      });
+    },
+    function(user, done) {
+      // const msg = {
+      //   from: '"Live Blog " <manjotsingh16july@gmail.com>', // sender address (who sends)
+      //   to: user.username, // list of receivers (who receives)
+      //   subject: 'Your password has been changed', // Subject line
+      //   text: `This is a confirmation that the password for your account ${user.username} has just been changed. `
+      // };
+      // mailFunction(msg,(err,info)=>{
+      //   done(err,'done');
+      // });
+      res.json({msg:`Success! Your password for username has been changed.`,success:true});
+    }
+  ], function(err) {
+    if(err){return res.json({msg:err.message,success:false});}
+    res.json({msg:`Success! Your password for username has been changed.`,success:true});
+  });
+});
+
+
+
 // To get the current user
 app.get("/curUser",(req,res)=>{
   res.json({user:req.user});
 })
-
 
 
 app.get("/api/err",(req,res)=>{

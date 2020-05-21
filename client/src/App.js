@@ -6,6 +6,7 @@ import LoginForm from "./components/loginForm/loginForm";
 import ProfileList from "./components/ProfileList";
 import CreateProfile from "./components/createProfile";
 import Dashboard from "./components/Dashboard";
+import ResetPassword from "./components/resetPassword";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" exact component={LoginForm}/>
           <Route path="/createProfile" exact component={CreateProfile}/>
           <Route path="/editProfile/:name/:id" exact component={Profile}/>
+          <Route path="/reset/:token" exact component={ResetPassword}/>
         </Switch>
       </div>
     </BrowserRouter>

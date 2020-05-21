@@ -9,8 +9,13 @@ const ProfileList = (props)=>{
       useEffect(()=>{
         const fetchProfiles = async () => {
            const response = await axios.get(`http://localhost:8080/profiles`);
+           console.log(response);
+           if(response.data && !response.data.success){
+              props.history.push("/login")
+           }
            if(response.data){
-             setProfiles(response.data);
+
+             setProfiles(response.data.profiles?response.data.profiles:[]);
            }
         }
         fetchProfiles();

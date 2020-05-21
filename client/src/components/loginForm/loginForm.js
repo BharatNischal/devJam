@@ -14,31 +14,45 @@ const LoginForm = (props)=>{
       e.preventDefault();
       setBtnClick(true);
       setErr("");
-      console.log(username,password);
-      axios.post("http://localhost:8080/login",{username,password})
-        .then(res=>{
+      if(!reset){
+          console.log(username,password);
+          axios.post("http://localhost:8080/login",{username,password})
+            .then(res=>{
 
-          if(res.success||res.data.success){
-            setTimeout(()=>{
-                setBtnClick(false);
-                props.history.push("/profiles");
-            },1000);
-          }else{
-            // Show message
-            setTimeout(()=>{
-                setBtnClick(false);
-                setErr("Invalid Username or Password");
-            },1000);
-          }
-        })
-        .catch(err=>{
-          console.log(err.message);
-          setBtnClick(false);
-          // Show the message
-          setErr("Server Error");
-        })
-        setUsername("");
-        setPassword("");
+              if(!res.data.success){
+                setTimeout(()=>{
+                    setBtnClick(false);
+                    setErr("Invalid Username or Password");
+                },1000);
+              }else{
+                setTimeout(()=>{
+                  setBtnClick(false);
+                  props.history.push("/profiles");
+                },1000);
+              }
+            })
+            .catch(err=>{
+              console.log(err.msg);
+              setBtnClick(false);
+              // Show the message
+              setErr("Server Error");
+            })
+      }else{
+          axios.post("http://localhost:8080/forget",{username})
+            .then(res=>{
+                console.log(res);
+                setTimeout(()=>{
+                    setBtnClick(false);
+                    setErr(res.data.msg)
+                },1000);
+            })
+            .catch(err=>{
+              setBtnClick(false);
+              setErr(err.msg);
+            })
+      }
+      setUsername("");
+      setPassword("");
     }
 
     let button;
