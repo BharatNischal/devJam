@@ -35,7 +35,7 @@ const Nav =(props)=>{
 
     return(
         <nav className={props.show?"navbar navbar-dark navbar-expand-lg profile-nav show  " : "navbar navbar-dark navbar-expand-lg profile-nav"}>
-           {props.menu?(
+           {props.menu || user.loggedIn ?(
                <React.Fragment>
                    <Link className="navbar-brand" to="/">Profiles Generator</Link>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
