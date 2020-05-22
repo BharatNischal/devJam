@@ -1,7 +1,6 @@
-import React,{useState,useEffect,useContext} from "react";
+import React,{useState,useEffect} from "react";
 import Nav from "./profile/Nav/Nav";
 import axios from "axios";
-import {CurUserContext} from "../contexts/curUser";
 
 const Dashboard = (props)=>{
   const [err,setErr] = useState("");
@@ -9,20 +8,15 @@ const Dashboard = (props)=>{
   const [password,setPassword] = useState("");
   const [btnclick,setBtnClick] = useState(false);
   const [admins,setAdmins] = useState([]);
-  const {user} = useContext(CurUserContext);
 
   useEffect(()=>{
-    if(!user.superAdmin){
-      props.history.push("/profiles");
-    }else{
-      axios.get("http://localhost:8080/admins")
-        .then(res=>{
-          setAdmins(res.data);
-        })
-        .catch(err=>{
-          console.log(err.message);
-        })
-    }
+    axios.get("http://localhost:8080/admins")
+      .then(res=>{
+        setAdmins(res.data);
+      })
+      .catch(err=>{
+        console.log(err.message);
+      })
   },[])
 
   const handleSubmit = (e)=>{

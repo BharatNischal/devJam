@@ -9,7 +9,7 @@ const Degree = (props) => (
             <div className="col-8 p-1 pt-2">
                 <h4 className="edHeading m-0"> {props.degree} in <br /> <span className="text-gray" >{props.subject} </span></h4>
                 <h5 className="edSubHeading text-gray p-0 m-0"> {props.university} </h5>
-                <p className="text-gray p-0 m-0 "><i> {props.from.substr(0,10)} to {props.present?"present":props.to.substr(0,10)} </i></p>
+                <p className="text-gray p-0 m-0 "><i> {props.from} to {props.present?"present":props.to} </i></p>
             </div>
         </div>
     </div>
