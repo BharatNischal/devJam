@@ -20,11 +20,11 @@ const removeKey=(arr)=>{
 }
 
 const CreateProfile = (props)=>{
-  
+
     const [personalInfo,setPersonalInfo]= useState({firstName:"",lastName:"",title:""});
-    const [contact,setContact] = useState({email:"",phone:"",github:"",youtube:""});  
-    const [education,setEducation] = useState([]); 
-    const [experience,setExperience] = useState([]); 
+    const [contact,setContact] = useState({email:"",phone:"",github:"",youtube:""});
+    const [education,setEducation] = useState([]);
+    const [experience,setExperience] = useState([]);
     const profilePicRef=useRef(null);
     const [id,setID] = useState(0);
     const [language,setLanguage]=useState([]);
@@ -59,7 +59,7 @@ const CreateProfile = (props)=>{
         formData.append('softSkills',removeKey(softSkills));
         formData.append('hobbies',JSON.stringify(hobbies));
         formData.append('rating',JSON.stringify(rating));
-       
+
       if(props.edit){
         console.log("EDIT DATA SEND: ",formData.values());
         axios.put(`http://localhost:8080/editProfile/${props.match.params.id}`,formData,config)
@@ -73,8 +73,8 @@ const CreateProfile = (props)=>{
           }
         }).catch(err => {
           alert(err.message);
-         
-        });      
+
+        });
       }else{
 
         axios.post(`http://localhost:8080/createProfile/`,formData)
@@ -87,11 +87,11 @@ const CreateProfile = (props)=>{
           }
         }).catch(err => {
           alert(err.message);
-         
-        });      
-      }  
+
+        });
       }
-    
+      }
+
     //Authorization
     const {setUser,user} = useContext(CurUserContext);
 
@@ -119,17 +119,17 @@ const CreateProfile = (props)=>{
               setSoftSkills(res.data.data.softSkills);
             }else{
               props.history.push("/profiles");
-            } 
+            }
           }).catch(err=>{
             console.log(err);
-            
+
           })
         }
       },[]);
 
     const delEdHandler =(i)=>{
-      
-      
+
+
       setEducation(education.filter(ed=>{
         console.log("_id",ed._id," i: ",i,ed._id!==i);
        return ed._id!==i;
@@ -166,9 +166,9 @@ const CreateProfile = (props)=>{
                 <div className="col-12 col-lg-6 mb-3 p-3">
                   <div className="shadow h-100 p-3" >
                     <h3 className="mb-3">Personal Information</h3>
-                    
+
                     <div className="form-group input-group">
-                            <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-user" ></i></div>
+                            <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-user" ></i></div><span class="input-group-text" id="inputGroupFileAddon01">Profile Pic</span>
                             <input type="file" name="profilePic" ref={profilePicRef} placeholder="Upload Profile Pic" className="form-control"/>
                     </div>
                     <div className="form-group input-group">
@@ -194,7 +194,7 @@ const CreateProfile = (props)=>{
                 <div className="col-12 col-lg-6 mb-3 p-3">
                   <div className="shadow h-100 p-3" >
                     <h3 className="mb-3">Contact</h3>
-                    
+
                     <div className="form-group input-group">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-envelope" ></i></div>
                             <input type="email" name="email"  placeholder="Enter email" value={contact.email} onChange={(e)=>setContact({...contact,email:e.target.value})} className="form-control" />
@@ -214,11 +214,11 @@ const CreateProfile = (props)=>{
                   </div>
 
                 </div>
-              
+
               <div className="col-12 col-lg-6 mb-3 p-3">
                   <div className="shadow h-100 p-3" >
                   <h3 className="mb-3">Education</h3>
-                    
+
                     <Education addEd={(data)=>{setEducation([...education,{...data,_id:id}]);setID(id+1)}} ed={education} del={(i)=>delEdHandler(i)}  />
                   </div>
               </div>
@@ -226,49 +226,49 @@ const CreateProfile = (props)=>{
                   <div className="shadow h-100 p-3" >
                   <h3 className="mb-3">Experience</h3>
                     <Experience addEx={(data)=>{setExperience([...experience,{...data,_id:id}]);setID(id+1)}} ex={experience} del={(i)=>delExHandler(i)}  />
-                    
+
                   </div>
               </div>
               <div className="col-12 col-lg-6 mb-3 p-3">
                   <div className="shadow h-100 p-3" >
                   <h3 className="mb-3">Language</h3>
                   <CreateSkill addSk={(data)=>{setLanguage([...language,{...data,_id:id}]);setID(id+1)}} sk={language} del={(i)=>delLangHandler(i)} op={languageOptions} />
-                    
+
                   </div>
               </div>
               <div className="col-12 col-lg-6 mb-3 p-3">
                   <div className="shadow h-100 p-3" >
                   <h3 className="mb-3">Frontend</h3>
                   <CreateSkill addSk={(data)=>{setFrontend([...frontend,{...data,_id:id}]);setID(id+1)}} sk={frontend} del={(i)=>delFrontHandler(i)} op={frontendOptions} />
-                    
+
                   </div>
               </div>
               <div className="col-12 col-lg-6 mb-3 p-3">
                   <div className="shadow h-100 p-3" >
                   <h3 className="mb-3">Backend</h3>
                   <CreateSkill addSk={(data)=>{setBackend([...backend,{...data,_id:id}]);setID(id+1)}} sk={backend} del={(i)=>delBackHandler(i)} op={backendOptions} />
-                    
+
                   </div>
               </div>
               <div className="col-12 col-lg-6 mb-3 p-3">
                   <div className="shadow h-100 p-3" >
                   <h3 className="mb-3">Database</h3>
                   <CreateSkill addSk={(data)=>{setDatabase([...database,{...data,_id:id}]);setID(id+1)}} sk={database} del={(i)=>delDbHandler(i)} op={databaseOptions} />
-                    
+
                   </div>
               </div>
               <div className="col-12 col-lg-6 mb-3 p-3">
                   <div className="shadow h-100 p-3" >
                   <h3 className="mb-3">Tools / Mobile</h3>
                   <CreateSkill addSk={(data)=>{setTools([...tools,{...data,_id:id}]);setID(id+1)}} sk={tools} del={(i)=>delToolHandler(i)} op={toolsOptions} />
-                    
+
                   </div>
               </div>
               <div className="col-12 col-lg-6 mb-3 p-3">
                   <div className="shadow h-100 p-3" >
                   <h3 className="mb-3">Soft Skills</h3>
                   <CreateSoftSkill addSk={(data)=>{setSoftSkills([...softSkills,{...data,_id:id}]);setID(id+1)}} sk={softSkills} del={(i)=>delSoftSkillHandler(i)}  />
-                    
+
                   </div>
               </div>
               <div className="col-12 col-lg-6 mb-3 p-3">
@@ -277,10 +277,10 @@ const CreateProfile = (props)=>{
                     <ol className="ml-3 text-left">
                       {hobbies.map(hob=>(<li key={hob}>{hob}</li>))}
                     </ol>
-                    <div className="form-group input-group">       
+                    <div className="form-group input-group">
                               <input type="text" name="hobbie" placeholder="Enter Hobby Name" value={hobby} onChange={e=>setHobby(e.target.value)} className="form-control" />
                     </div>
-                    <button className="btn btn-primary" onClick={(e)=>{e.preventDefault(); setHobbies([...hobbies,hobby]);setHobby(""); }} >Add</button>          
+                    <button className="btn btn-primary" onClick={(e)=>{e.preventDefault(); setHobbies([...hobbies,hobby]);setHobby(""); }} >Add</button>
                   </div>
               </div>
               </div>

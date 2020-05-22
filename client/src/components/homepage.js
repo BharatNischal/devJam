@@ -1,19 +1,17 @@
-import React,{useContext,useEffect} from "react";
+import React,{useEffect,useContext} from "react";
 import axios from "axios";
 import {CurUserContext} from "../contexts/curUser";
 
 
 const Homepage = (props)=>{
 
-  const {setUser,user} = useContext(CurUserContext);
-
+  const{user} = useContext(CurUserContext);
   useEffect(()=>{
-    console.log("USER ",user);
-      if(user.loggedIn){
-        props.history.push("/profiles");
-      }else{
-        props.history.push("/login");
-      }
+    if(user.loggedIn){
+      props.history.push("/profiles");
+    }else{
+      props.history.push("/login");
+    }
   },[]);
 
     return (
