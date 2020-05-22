@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React,{useContext,useEffect} from "react";
 import "./Nav.css";
 import {Link,withRouter} from "react-router-dom";
 import {CurUserContext} from "../../../contexts/curUser";
@@ -7,6 +7,20 @@ import axios from "axios";
 const Nav =(props)=>{
 
     const {user,setUser} = useContext(CurUserContext);
+    useEffect(()=>{
+      axios.get("http://localhost:8080/curUser")
+        .then(res=>{
+            if(res.data.user){
+              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin});
+            }else{
+              setUser({loggedIn:false,superAdmin:false});
+            }
+        })
+        .catch(err=>{
+          setUser({loggedIn:false,superAdmin:false});
+          props.history.push("/login");
+        })
+    },[]);
 
     const handleLogout = ()=>{
         axios.get("http://localhost:8080/logout")

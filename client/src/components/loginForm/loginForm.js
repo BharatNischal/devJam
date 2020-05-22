@@ -1,4 +1,4 @@
-import React,{useState,useContext} from "react";
+import React,{useState,useContext,useEffect} from "react";
 import "./loginForm.css";
 import axios from "axios";
 import {CurUserContext} from "../../contexts/curUser";
@@ -11,6 +11,21 @@ const LoginForm = (props)=>{
     const [password,setPassword] = useState("");
     const [btnclick,setBtnClick] = useState(false);
     const{setUser} = useContext(CurUserContext);
+
+    useEffect(()=>{
+      axios.get("http://localhost:8080/curUser")
+        .then(res=>{
+            if(res.data.user){
+              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin});
+              props.history.push("/profiles");
+            }else{
+              setUser({loggedIn:false,superAdmin:false});
+            }
+        })
+        .catch(err=>{
+          setUser({loggedIn:false,superAdmin:false});
+        })
+    },[])
 
     const handleSubmit = (e)=>{
       e.preventDefault();
