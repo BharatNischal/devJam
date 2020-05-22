@@ -40,6 +40,7 @@ app.use(cors({
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
+
 //Muler upload
 
 const storage = multer.diskStorage({
@@ -57,8 +58,8 @@ const upload = multer({
 var cloudinary = require('cloudinary');
 cloudinary.config({
   cloud_name: 'bharatnischal',
-  api_key: process.env.api_key,
-  api_secret: process.env.api_secret
+  api_key: process.env.api,
+  api_secret: process.env.secret
 });
 
 
@@ -191,6 +192,7 @@ app.post("/search",(req,res)=>{
     res.send({success:false,msg:err.message})
   })
 })
+
 
 
 

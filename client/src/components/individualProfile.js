@@ -12,11 +12,11 @@ const IndividualProfile = (props)=>{
             <p className="card-text">{personalInfo.title}</p>
             <div className="row">
               <div className="col-5">
-                <a className="btn btn-primary float-left ml-1 text-white w-100" onClick={()=>{props.history.push(`/profile/${personalInfo.firstName}/${props.data._id}`)}}> View </a>
+                <a className="btn btn-primary float-left ml-1 text-white " onClick={()=>{props.history.push(`/profile/${personalInfo.firstName}/${props.data._id}`)}}> View </a>
               </div>
               <div className="col-2"></div>
               <div className="col-5">
-                <a className="btn float-right mr-1 text-white bgd-gradient b-none w-100" onClick={()=>{props.history.push(`/editProfile/${personalInfo.firstName}/${props.data._id}`)}}> Edit </a>
+                <a className="btn float-right mr-1 text-white bgd-gradient b-none" onClick={()=>{props.history.push(`/editProfile/${personalInfo.firstName}/${props.data._id}`)}}> Edit </a>
               </div>
             </div>
           </div>
