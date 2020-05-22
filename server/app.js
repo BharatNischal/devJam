@@ -135,7 +135,7 @@ app.get("/profile/:id",(req,res)=>{
 });
 
 // To update profile of the developer
-app.put("/editProfile/:id",(req,res)=>{
+app.put("/editProfile/:id",upload,(req,res)=>{
     if(req.user){
       console.log("file recieved",req.file,"body",req.body);
       const profile = req.body;

@@ -42,7 +42,7 @@ const CreateProfile = (props)=>{
       console.log({personalInfo:personalInfo,contact:contact,education},profilePicRef.current.files[0]);
       const config = {
         headers: {
-            'enctype': 'multipart/form-data'
+            'content-type': 'multipart/form-data'
         }
       };
       const formData = new FormData();
@@ -62,7 +62,7 @@ const CreateProfile = (props)=>{
        
       if(props.edit){
         console.log("EDIT DATA SEND: ",formData.values());
-        axios.put(`http://localhost:8080/editProfile/${props.match.params.id}`,formData)
+        axios.put(`http://localhost:8080/editProfile/${props.match.params.id}`,formData,config)
         .then(res => {
           if (res.data.success) {
             console.log(res);
