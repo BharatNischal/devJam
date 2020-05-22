@@ -94,7 +94,7 @@ app.post("/createProfile",upload,(req,res)=>{
         profile[key]=JSON.parse(profile[key]);
       }
     }
-    
+
     if(req.file){
       cloudinary.uploader.upload(req.file.path, (result)=> {
         db.Developer.create({...profile,profilePic:result.secure_url})
@@ -143,7 +143,7 @@ app.put("/editProfile/:id",upload,(req,res)=>{
         if(profile[key]==="undefined"){
           delete profile[key];
         }else{
-  
+
           profile[key]=JSON.parse(profile[key]);
         }
       }
@@ -228,7 +228,7 @@ app.post("/login",passport.authenticate("local",{
 
 
 // To get all the admins for super-admin Dashboard
-app.get("/admins",(req,res)=>{
+app.get("/admins",isSuperAdmin,(req,res)=>{
   db.User.find({})
     .then(admins=>{
       res.json(admins);
@@ -266,7 +266,7 @@ app.post('/forget', function(req, res, next) {
     function(token, user, done) {
       var fullUrl = req.protocol +"://localhost:3000/reset/"+token ;
       // const msg = {
-      //   from: '"Live Blog " <manjotsingh16july@gmail.com>', // sender address (who sends)
+      //   from: '"Profile Creator " <manjotsingh16july@gmail.com>', // sender address (who sends)
       //   to: user.username, // list of receivers (who receives)
       //   subject: 'Password Reset', // Subject line
       //   text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
@@ -307,7 +307,7 @@ app.post('/reset/:token', function(req, res) {
     },
     function(user, done) {
       // const msg = {
-      //   from: '"Live Blog " <manjotsingh16july@gmail.com>', // sender address (who sends)
+      //   from: '"Profile Creator " <manjotsingh16july@gmail.com>', // sender address (who sends)
       //   to: user.username, // list of receivers (who receives)
       //   subject: 'Your password has been changed', // Subject line
       //   text: `This is a confirmation that the password for your account ${user.username} has just been changed. `
@@ -352,4 +352,12 @@ function isAdmin(req,res,next){
     return next();
   }
   return res.json({success:false,err:"NOt Logined From Middleware"});
+}
+
+function isSuperAdmin(req,res,next){
+  if(req.user && req.user.superAdmin){
+    console.log("MIDDLEWARE logined");
+    return next();
+  }
+  return res.json({success:false,err:"Not Authorized"});
 }
