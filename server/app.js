@@ -196,7 +196,7 @@ app.post("/search",(req,res)=>{
 
 //Authentication routes
 
-app.post("/register",(req,res)=>{
+app.post("/register",isSuperAdmin,(req,res)=>{
     console.log("user",req.body);
     db.User.register(new db.User({username:req.body.username}),req.body.password,(err,user)=>{
         if(err){
@@ -349,7 +349,15 @@ app.listen(8080,()=>{
 // MIDDLEWARE DEFINATIONS
 function isAdmin(req,res,next){
   if(req.user){
-    console.log("MIDDLEWARE logined");
+    console.log("MIDDLEWARE logined",req.user);
+    return next();
+  }
+  return res.json({success:false,err:"NOt Logined From Middleware"});
+}
+
+function isSuperAdmin(req,res,next){
+  if(req.user&&req.user.superAdmin){
+    console.log("MIDDLEWARE logined",req.user);
     return next();
   }
   return res.json({success:false,err:"NOt Logined From Middleware"});
