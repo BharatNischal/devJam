@@ -29,12 +29,12 @@ const Experience = (props)=>{
                          <li><b>Company </b> {e.company} </li>
                          <li><b>Position:  </b> {e.position} </li>
                          <li><b>Description :  </b> {e.description} </li>
-                         <li><i> {e.from} to {e.to.present?"true": e.to.date} </i> </li>
-                     </ul>    
-                    <button className="btn btn-sm btn-danger" onClick={(ev)=>{ev.preventDefault(); props.del(e._id) }} > X </button> 
+                         <li><i> {e.from} to {e.to.present?"Present": e.to.date} </i> </li>
+                     </ul>
+                    <button className="btn text-danger" onClick={(ev)=>{ev.preventDefault(); props.del(e._id) }} ><i className="fa fa-close"></i> Remove </button> 
                  </li>
                 ))}
-               
+
             </ol>
             <div className="form-group input-group">
                     <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fas fa-university" ></i></div>
@@ -52,7 +52,7 @@ const Experience = (props)=>{
                     <input type="date" name="subject"  placeholder="Enter From" value={edData.from} onChange={(e)=>setedData({...edData,from:e.target.value})} className="form-control" />
             </div>
 
-            
+
             <div className="checkbox text-left">
                 To: <br/>
                 <label><input type="checkbox" value="present" onChange={(e)=>{setedData({...edData,to:{...edData.to,present:!edData.to.present}})}} checked={edData.to.present} /> Present </label>

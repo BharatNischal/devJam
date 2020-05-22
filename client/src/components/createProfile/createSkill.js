@@ -17,14 +17,14 @@ const CreateSkill=(props)=>{
         <React.Fragment>
             <ol className="text-left ml-3">
                 {props.sk.map(e=>(
-                    <li className="mb-1" key={e._id} ><b>{e.name} : </b>{e.rating} experience:  {e.experience} &nbsp;&nbsp; <button className="btn btn-sm btn-danger" onClick={(ev)=>{ev.preventDefault(); props.del(e._id) }} > X </button></li>
+                    <li className="mb-1" key={e._id} ><b>{e.name} : </b>{e.rating} experience:  {e.experience} &nbsp;&nbsp; <button className="btn text-danger" onClick={(ev)=>{ev.preventDefault(); props.del(e._id) }} ><i className="fa fa-close"></i> Remove </button></li>
                 ))}
             </ol>
             <div className="form-group input-group">
                     <select name="name" placeholder="select Language" value={skill.name} className="form-control" onChange={(e)=>setSkill({...skill,name:e.target.value})} >
                         {props.op.map(o=><option key={o} value={o}>{o}</option>)}
                     </select>
-                    
+
             </div>
             <div className="text-left" >Rating</div>
             <div className="form-group input-group">
@@ -40,7 +40,7 @@ const CreateSkill=(props)=>{
         </React.Fragment>
     );
 
-    
+
 };
 
 export default CreateSkill;

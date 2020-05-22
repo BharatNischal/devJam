@@ -14,6 +14,7 @@ const          express = require('express'),
                 path   = require("path");
 
 
+
 // Session setup
 app.use(session({
   secret:"JS is cool",
@@ -94,7 +95,7 @@ app.post("/createProfile",upload,(req,res)=>{
         profile[key]=JSON.parse(profile[key]);
       }
     }
-    
+
     if(req.file){
       cloudinary.uploader.upload(req.file.path, (result)=> {
         db.Developer.create({...profile,profilePic:result.secure_url})
@@ -143,7 +144,7 @@ app.put("/editProfile/:id",upload,(req,res)=>{
         if(profile[key]==="undefined"){
           delete profile[key];
         }else{
-  
+
           profile[key]=JSON.parse(profile[key]);
         }
       }
