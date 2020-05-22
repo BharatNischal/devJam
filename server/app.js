@@ -8,12 +8,14 @@ const          express = require('express'),
                   cors = require("cors"),
                    app = express(),
                 multer = require("multer"),
-          // mailFunction = require("./mail"),
+           mailFunction = require("./mail"),
                  async = require("async"),
                 crypto = require("crypto"),
                 path   = require("path");
 
-
+// Setting Up Dotenv for .env files environment variable               
+const dotenv = require('dotenv');
+dotenv.config();
 
 // Session setup
 app.use(session({
@@ -242,7 +244,6 @@ app.get("/admins",(req,res)=>{
     })
 })
 
-
 // forgot password
 app.post('/forget', function(req, res, next) {
   console.log("Inside forgot route");
@@ -267,21 +268,20 @@ app.post('/forget', function(req, res, next) {
       });
     },
     function(token, user, done) {
-      var fullUrl = req.protocol +"://localhost:3000/reset/"+token ;
-      // const msg = {
-      //   from: '"Live Blog " <manjotsingh16july@gmail.com>', // sender address (who sends)
-      //   to: user.username, // list of receivers (who receives)
-      //   subject: 'Password Reset', // Subject line
-      //   text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
-      //           Please click on the following link, or paste this into your browser to complete the process:\n\n ${fullUrl} \n\n
-      //           If you did not request this, please ignore this email and your password will remain unchanged.\n`
-      // };
-      //
-      // mailFunction(msg,(err,info)=>{
-      //   done(err,'done');
-      // });
-      res.json({success:true,msg:"Mail has been Sent"});
-
+      var fullUrl = `${req.protocol}://${req.get('host')}/reset/${token}`;
+      const msg = {
+        from: '"ProfileGenerator" <manjotsingh16july@gmail.com>', // sender address (who sends)
+        to: user.username, // list of receivers (who receives)
+        subject: 'Password Reset', // Subject line
+        text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+                Please click on the following link, or paste this into your browser to complete the process:\n\n ${fullUrl} \n\n
+                If you did not request this, please ignore this email and your password will remain unchanged.\n`
+      };
+      
+      mailFunction(msg,(err,info)=>{
+        done(err,'done');
+      });
+      
     }
   ], function(err) {
     if (err)     res.json({msg:err.message,success:false});
@@ -309,15 +309,15 @@ app.post('/reset/:token', function(req, res) {
       });
     },
     function(user, done) {
-      // const msg = {
-      //   from: '"Live Blog " <manjotsingh16july@gmail.com>', // sender address (who sends)
-      //   to: user.username, // list of receivers (who receives)
-      //   subject: 'Your password has been changed', // Subject line
-      //   text: `This is a confirmation that the password for your account ${user.username} has just been changed. `
-      // };
-      // mailFunction(msg,(err,info)=>{
-      //   done(err,'done');
-      // });
+      const msg = {
+        from: '"ProfileGenerator" <manjotsingh16july@gmail.com>', // sender address (who sends)
+        to: user.username, // list of receivers (who receives)
+        subject: 'Your password has been changed', // Subject line
+        text: `This is a confirmation that the password for your account ${user.username} has just been changed. `
+      };
+      mailFunction(msg,(err,info)=>{
+        done(err,'done');
+      });
       res.json({msg:`Success! Your password for username has been changed.`,success:true});
     }
   ], function(err) {
