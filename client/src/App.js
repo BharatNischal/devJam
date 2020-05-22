@@ -19,7 +19,7 @@ function App(props) {
     const [first,setFirst]=useState(true);
 
     useEffect(()=>{
-        axios.get("http://localhost:8080/curUser")
+        axios.get("/curUser")
           .then(res=>{
             if(res.data.user){
               setUser({loggedIn:true,superAdmin:res.data.user.superAdmin});

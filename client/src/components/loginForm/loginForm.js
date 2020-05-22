@@ -13,7 +13,7 @@ const LoginForm = (props)=>{
     const{setUser} = useContext(CurUserContext);
 
     useEffect(()=>{
-      axios.get("http://localhost:8080/curUser")
+      axios.get("/curUser")
         .then(res=>{
             if(res.data.user){
               setUser({loggedIn:true,superAdmin:res.data.user.superAdmin});
@@ -33,7 +33,7 @@ const LoginForm = (props)=>{
       setErr("");
       if(!reset){
           console.log(username,password);
-          axios.post("http://localhost:8080/login",{username,password})
+          axios.post("/login",{username,password})
             .then(res=>{
 
               if(!res.data.success){
@@ -56,7 +56,7 @@ const LoginForm = (props)=>{
               setErr("Server Error");
             })
       }else{
-          axios.post("http://localhost:8080/forget",{username})
+          axios.post("/forget",{username})
             .then(res=>{
                 console.log(res);
                 setTimeout(()=>{

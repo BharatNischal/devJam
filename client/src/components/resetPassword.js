@@ -11,7 +11,7 @@ const ResetPassword = (props)=>{
     e.preventDefault();
     setBtnClick(true);
     setErr("");
-    axios.post("http://localhost:8080/reset/"+props.match.params.token,{password})
+    axios.post("/reset/"+props.match.params.token,{password})
       .then(res=>{
           setErr(res.data.msg);
           setBtnClick(false);

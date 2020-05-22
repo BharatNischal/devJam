@@ -10,7 +10,7 @@ const ProfileList = (props)=>{
       const [search,setSearch] = useState(false);
 
       const fetchProfiles = async () => {
-         const response = await axios.get(`http://localhost:8080/profiles`);
+         const response = await axios.get(`/profiles`);
          console.log(response);
          if(response.data && !response.data.success){
             props.history.push("/login")
@@ -26,7 +26,7 @@ const ProfileList = (props)=>{
 
       const handleSubmit = (e)=>{
         e.preventDefault();
-        axios.post("http://localhost:8080/search",{name})
+        axios.post("/search",{name})
           .then(res=>{
               if(res.data.success){
                 setProfiles(res.data.profiles);

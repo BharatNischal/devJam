@@ -59,7 +59,7 @@ class Profile extends Component{
                 this.setState({showNav:false});
             }
         });
-        axios.get(`http://localhost:8080/profile/${this.props.match.params.id}`)
+        axios.get(`/profile/${this.props.match.params.id}`)
         .then(res=>{
             if(res.data.success){
                 console.log("data",res);

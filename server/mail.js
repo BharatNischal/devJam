@@ -4,11 +4,11 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 
-console.log(process.env.mail_user);
-console.log(process.env.mail_client_id);
-console.log(process.env.mail_client_secret);
-console.log(process.env.mail_refresh_token);
-console.log(process.env.mail_access_token);
+// console.log(process.env.mail_user);
+// console.log(process.env.mail_client_id);
+// console.log(process.env.mail_client_secret);
+// console.log(process.env.mail_refresh_token);
+// console.log(process.env.mail_access_token);
 
 var transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',

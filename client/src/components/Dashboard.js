@@ -14,7 +14,7 @@ const Dashboard = (props)=>{
   useEffect(()=>{
 
     if(user.superAdmin){
-      axios.get("http://localhost:8080/admins")
+      axios.get("/admins")
         .then(res=>{
           setAdmins(res.data);
         })
@@ -40,7 +40,7 @@ const Dashboard = (props)=>{
       setBtnClick(false);
     }else{
       const email = username;
-      axios.post("http://localhost:8080/register",{username,password})
+      axios.post("/register",{username,password})
         .then(res=>{
           console.log("res",res);
           if(res.success||res.data.success){

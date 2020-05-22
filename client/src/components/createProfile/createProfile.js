@@ -62,7 +62,7 @@ const CreateProfile = (props)=>{
        
       if(props.edit){
         console.log("EDIT DATA SEND: ",formData.values());
-        axios.put(`http://localhost:8080/editProfile/${props.match.params.id}`,formData,config)
+        axios.put(`/editProfile/${props.match.params.id}`,formData,config)
         .then(res => {
           if (res.data.success) {
             console.log(res);
@@ -77,7 +77,7 @@ const CreateProfile = (props)=>{
         });      
       }else{
 
-        axios.post(`http://localhost:8080/createProfile/`,formData)
+        axios.post(`/createProfile/`,formData)
         .then(res => {
           if (res.data.success) {
             props.history.push("/profiles");
@@ -101,7 +101,7 @@ const CreateProfile = (props)=>{
           props.history.push("/login");
         }
         else if(props.edit){
-          axios.get(`http://localhost:8080/profile/${props.match.params.id}`)
+          axios.get(`/profile/${props.match.params.id}`)
           .then(res=>{
             if(res.data.success){
               console.log(res.data);
