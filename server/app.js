@@ -137,7 +137,18 @@ app.get("/profile/:id",(req,res)=>{
 // To update profile of the developer
 app.put("/editProfile/:id",(req,res)=>{
     if(req.user){
+      console.log("file recieved",req.file,"body",req.body);
       const profile = req.body;
+      for(key in profile){
+        if(profile[key]==="undefined"){
+          delete profile[key];
+        }else{
+  
+          profile[key]=JSON.parse(profile[key]);
+        }
+      }
+      console.log("REACHED INSIDE PUT");
+      console.log(profile);
       if(req.file){
         cloudinary.uploader.upload(req.file.path, (result)=> {
           db.Developer.findByIdAndUpdate(req.params.id,{...profile,profilePic:result.secure_url})
@@ -152,6 +163,7 @@ app.put("/editProfile/:id",(req,res)=>{
       }else{
         db.Developer.findByIdAndUpdate(req.params.id,profile)
           .then(updatedProfile=>{
+            console.log(updatedProfile);
             res.json({...updatedProfile,success:true});
           })
           .catch(err=>{

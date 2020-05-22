@@ -47,7 +47,7 @@ function App(props) {
             <Route path="/profile/:name/:id" exact component={Profile}/>
             <Route path="/login" exact component={LoginForm}/>
             <Route path="/createProfile" exact component={CreateProfile}/>
-            <Route path="/editProfile/:name/:id" exact component={Profile}/>
+  <Route path="/editProfile/:name/:id" exact  render={(props) => <CreateProfile {...props} edit={true} />}/>
             <Route path="/reset/:token" exact component={ResetPassword}/>
           </Switch>
           )};

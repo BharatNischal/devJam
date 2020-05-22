@@ -21,18 +21,7 @@ const removeKey=(arr)=>{
 
 const CreateProfile = (props)=>{
   
-  //Authorization
-  const {setUser,user} = useContext(CurUserContext);
-
-  useEffect(()=>{
-    console.log("USER ",user);
-      if(!user.loggedIn){
-        props.history.push("/login");
-      }},[]);
-
-
-
-    const [personalInfo,setPersonalInfo]= useState({firstName:props.firstName?props.firstName:"",lastName:"",title:""});
+    const [personalInfo,setPersonalInfo]= useState({firstName:"",lastName:"",title:""});
     const [contact,setContact] = useState({email:"",phone:"",github:"",youtube:""});  
     const [education,setEducation] = useState([]); 
     const [experience,setExperience] = useState([]); 
@@ -70,20 +59,73 @@ const CreateProfile = (props)=>{
         formData.append('softSkills',removeKey(softSkills));
         formData.append('hobbies',JSON.stringify(hobbies));
         formData.append('rating',JSON.stringify(rating));
-        
-      axios.post("http://localhost:8080/createProfile",formData)
-      .then(res => {
-        if (res.data.success) {
-          props.history.push("/profiles");
-        }
-        else {
-          console.log(res.data);
-        }
-      }).catch(err => {
-        alert(err.message);
        
-      });      
+      if(props.edit){
+        console.log("EDIT DATA SEND: ",formData.values());
+        axios.put(`http://localhost:8080/editProfile/${props.match.params.id}`,formData)
+        .then(res => {
+          if (res.data.success) {
+            console.log(res);
+            props.history.push("/profiles");
+          }
+          else {
+            console.log(res.data);
+          }
+        }).catch(err => {
+          alert(err.message);
+         
+        });      
+      }else{
+
+        axios.post(`http://localhost:8080/createProfile/`,formData)
+        .then(res => {
+          if (res.data.success) {
+            props.history.push("/profiles");
+          }
+          else {
+            console.log(res.data);
+          }
+        }).catch(err => {
+          alert(err.message);
+         
+        });      
+      }  
       }
+    
+    //Authorization
+    const {setUser,user} = useContext(CurUserContext);
+
+    useEffect(()=>{
+      console.log("USER ",user);
+        if(!user.loggedIn){
+          props.history.push("/login");
+        }
+        else if(props.edit){
+          axios.get(`http://localhost:8080/profile/${props.match.params.id}`)
+          .then(res=>{
+            if(res.data.success){
+              console.log(res.data);
+              setPersonalInfo({...res.data.data.personalInfo});
+              setRating(res.data.data.rating);
+              setEducation(res.data.data.education);
+              setContact(res.data.data.contact);
+              setHobbies(res.data.data.hobbies);
+              setExperience(res.data.data.experience);
+              setLanguage(res.data.data.languages);
+              setBackend(res.data.data.backend);
+              setFrontend(res.data.data.frontend);
+              setDatabase(res.data.data.database);
+              setTools(res.data.data.tools);
+              setSoftSkills(res.data.data.softSkills);
+            }else{
+              props.history.push("/profiles");
+            } 
+          }).catch(err=>{
+            console.log(err);
+            
+          })
+        }
+      },[]);
 
     const delEdHandler =(i)=>{
       

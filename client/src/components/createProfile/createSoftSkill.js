@@ -17,7 +17,7 @@ const CreateSoftSkill=(props)=>{
         <React.Fragment>
             <ol className="text-left ml-3">
                 {props.sk.map(e=>(
-                    <li className="mb-1"><b>{e.name} : </b>{e.rating}  &nbsp;&nbsp; <button className="btn btn-sm btn-danger" onClick={(ev)=>{ev.preventDefault(); props.del(e._id) }} > X </button></li>
+                    <li className="mb-1" key={e._id}><b>{e.name} : </b>{e.rating}  &nbsp;&nbsp; <button className="btn btn-sm btn-danger" onClick={(ev)=>{ev.preventDefault(); props.del(e._id) }} > X </button></li>
                 ))}
             </ol>
             <div className="form-group input-group">
