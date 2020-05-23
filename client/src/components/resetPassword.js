@@ -15,6 +15,7 @@ const ResetPassword = (props)=>{
       .then(res=>{
           setErr(res.data.msg);
           setBtnClick(false);
+          props.history.push("/profiles");
       })
       .catch(err=>{
         setErr(err.data.msg);

@@ -13,7 +13,9 @@ const          express = require('express'),
                 crypto = require("crypto"),
                 path   = require("path");
 
-// Setting Up Dotenv for .env files environment variable               
+
+
+// Setting Up Dotenv for .env files environment variable
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -60,7 +62,7 @@ const upload = multer({
 var cloudinary = require('cloudinary');
 cloudinary.config({
   cloud_name: 'bharatnischal',
-  api_key: process.env.api,
+  api_key: process.env.api ,
   api_secret: process.env.secret
 });
 
@@ -207,11 +209,9 @@ app.post("/register",isSuperAdmin,(req,res)=>{
             console.log(err);
             res.json({err:err.message,success:false});
         }
-        passport.authenticate("local")(req,res,()=>{
-            res.json({
-                success:true,
-                user:req.user,
-            });
+        res.json({
+            success:true,
+            user:user,
         });
     });
 });
@@ -277,11 +277,11 @@ app.post('/forget', function(req, res, next) {
                 Please click on the following link, or paste this into your browser to complete the process:\n\n ${fullUrl} \n\n
                 If you did not request this, please ignore this email and your password will remain unchanged.\n`
       };
-      
+
       mailFunction(msg,(err,info)=>{
         done(err,'done');
       });
-      
+
     }
   ], function(err) {
     if (err)     res.json({msg:err.message,success:false});
