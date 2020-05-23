@@ -56,12 +56,14 @@ const ProfileList = (props)=>{
       <Nav show={true} menu={true}/>
       <div className="container"  style={{marginTop:"100px"}}>
         <h2 className="mt-5 text-white">Developer Profiles</h2>
+          <div>
           {remove}
           <form className="form-inline text-center float-right" onSubmit={handleSubmit}>
             <input name='titleSearch' type="search" placeholder="Search by name" value={name} onChange={(e)=>{setName(e.target.value)}} aria-label="Search" style={{background:'inherit',border:'none',borderBottom:'2px solid white',color:'white',outline:"none"}}/>
             <button type="submit" style={{backgroundColor:'transparent',border:'none',margin:'none',outline:"none"}}><i className="fa fa-search" aria-hidden="true" style={{cursor:'pointer',color:'white'}}></i></button>
           </form>
-          <h5 className="float-left text-white mb-2">Total profiles: {profiles.length}</h5>
+          <h6 className="text-left text-white mb-2">Total profiles: {profiles.length}</h6>
+          </div>
         <div className="row mt-5">
 
           {list}
