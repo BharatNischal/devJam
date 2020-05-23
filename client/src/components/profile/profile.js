@@ -40,7 +40,8 @@ class Profile extends Component{
 
 
         },
-        loading:true
+        loading:true,
+        copyAlert:false,
     }
 
     componentDidMount(){
@@ -73,6 +74,18 @@ class Profile extends Component{
             console.log(err);
 
         });
+    }
+
+    copyToClipBoard=()=>{
+        var textField = document.createElement('textarea')
+        textField.innerText =window.location.href ;
+        document.body.appendChild(textField);
+        textField.select();
+        document.execCommand('copy');
+        textField.remove();
+        console.log("Coppied");
+        this.setState({copyAlert:true});
+        setTimeout(()=>{this.setState({copyAlert:false});},2000);
     }
 
     render(){
@@ -165,10 +178,11 @@ class Profile extends Component{
                            {this.state.profileData.contact.phone?(<li ><i className="fa fa-phone-alt"> </i><a href={"tel:"+this.state.profileData.contact.phone} target="__blank"> <span> {this.state.profileData.contact.phone} </span>   </a></li>):null}
                            {this.state.profileData.contact.email?(<li ><i className="fa fa-envelope"> </i><a href={"mailto:"+this.state.profileData.contact.email} target="__blank"> <span> {this.state.profileData.contact.email}</span>   </a></li>):null}
                            {this.state.profileData.contact.youtube?(<li ><i className="fab fa-youtube"> </i><a href={this.state.profileData.contact.youtube} target="__blank"> <span> Youtube </span>   </a></li>):null}
-
+                           <li onClick={this.copyToClipBoard} className="mt-3" style={{cursor:"pointer"}} ><i className="fa fa-share"> </i> <span> Copy Link</span> </li>        
                         </ul>
                     </div>
                 </main>
+                {this.state.copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
             </React.Fragment>
         );
 

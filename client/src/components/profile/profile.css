@@ -160,7 +160,7 @@ main{
     -moz-transform: translate(150px, 0);
     -ms-transform: translate(150px, 0);
     -o-transform: translate(150px, 0);
-    transform: translate(-100px, 0);
+    transform: translate(-200px, 0);
   
     /*background: rgba(255, 255, 255, 0.4);*/
   }
@@ -209,4 +209,27 @@ main{
         font-size: 6.5px;
     }
     
+}
+
+.custom-alert{
+    position: fixed;
+    z-index: 1500;
+    bottom:0 ;
+    margin:20px;
+    color: #9d3870;
+    font-weight: 600;
+    width:300px;
+    background-color:rgba(243, 243, 243, 0.815);
+    border-radius: 18px;
+    padding:15px;
+    box-shadow: 0px 2px 40px rgba(26, 26, 26, 0.658);
+    animation: slide-up 2s;
+}
+@keyframes slide-up{
+    from{
+        bottom: 0;
+    }
+    to{
+        bottom:100px;
+    }
 }

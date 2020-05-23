@@ -69,7 +69,7 @@ cloudinary.config({
 // Profile Routes
 
 // To get all the developer profiles
-app.get("/profiles", isAdmin ,(req,res)=>{
+app.get("/Profiles", isAdmin ,(req,res)=>{
     if(req.user){
       db.Developer.find({})
         .then(profiles=>{
@@ -343,14 +343,14 @@ function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
-if (process.env.NODE_ENV === 'production') {
+// if (process.env.NODE_ENV === 'production') {
   // Set static folder
   app.use(express.static(__dirname+'/../client/build'));
 
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..' , 'client', 'build', 'index.html'));
   });
-}
+// }
 
 const port = process.env.PORT || 8080;
 app.listen(port,()=>{

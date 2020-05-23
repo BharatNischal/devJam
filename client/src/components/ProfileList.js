@@ -8,9 +8,10 @@ const ProfileList = (props)=>{
       const [profiles,setProfiles] = useState([]);
       const [name,setName] = useState("");
       const [search,setSearch] = useState(false);
+      const [copyAlert,setCopyAlert] = useState(false);
 
       const fetchProfiles = async () => {
-         const response = await axios.get(`/profiles`);
+         const response = await axios.get(`/Profiles`);
          console.log(response);
          if(response.data && !response.data.success){
             props.history.push("/login")
@@ -39,9 +40,14 @@ const ProfileList = (props)=>{
           setName("");
       }
 
+      const copyAlertHandler=()=>{
+        setCopyAlert(true);
+        setTimeout(()=>{setCopyAlert(false)},2000);
+      }
+
 
     const list = profiles.map(profile=>(
-                    <IndividualProfile key={profile._id} data={profile}/>
+                    <IndividualProfile key={profile._id} data={profile} showCopyAlert={copyAlertHandler}/>
                 ))
     const remove = search?<span className="text-center pointer text-white" onClick={()=>{fetchProfiles();setSearch(false)}} ><i class="fa fa-remove"></i> Remove Search result</span>:null;
 
@@ -60,7 +66,9 @@ const ProfileList = (props)=>{
 
           {list}
         </div>
+
       </div>
+      {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
       </React.Fragment>
     );
 }
