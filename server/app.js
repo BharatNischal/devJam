@@ -49,7 +49,7 @@ app.use(bodyParser.json());
 
 const storage = multer.diskStorage({
    filename: function(req, file, cb){
-      cb(null,"IMAGE-" + Date.now() + path.extname(file.originalname));
+      cb(null,"FILE-" + Date.now() + path.extname(file.originalname));
    }
 });
 const upload = multer({
@@ -57,15 +57,28 @@ const upload = multer({
    limits:{fileSize: 10000000000}
 }).single("image");
 
+const uploadVideo = multer({storage:storage}).single("video");
 
 // Cloud service to store images
-var cloudinary = require('cloudinary');
+var cloudinary = require('cloudinary').v2;
 cloudinary.config({
   cloud_name: 'bharatnischal',
   api_key: process.env.api ,
   api_secret: process.env.secret
 });
 
+// Video upload
+app.post("/video",uploadVideo,(req,res)=>{
+  if(req.file){
+    console.log("Video recieved",req.file);
+    cloudinary.uploader.upload(req.file.path,{ resource_type: "video"}, (err,result)=> {
+        console.log("err",err,"res",result);
+        return res.json(result);
+    });
+  }else{
+    res.json({success:false});
+  }
+})
 
 
 // Profile Routes
@@ -102,7 +115,7 @@ app.post("/createProfile",upload,(req,res)=>{
     }
 
     if(req.file){
-      cloudinary.uploader.upload(req.file.path, (result)=> {
+      cloudinary.uploader.upload(req.file.path, (err,result)=> {
         db.Developer.create({...profile,profilePic:result.secure_url})
           .then(newProfile=>{
               res.json({...newProfile,success:true});
