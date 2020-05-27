@@ -11,6 +11,10 @@ const VideoPage = (props)=>{
   const [uploading,setUploading] = useState(false);
   const videoRef = useRef(null);
 
+  const [loading,setLoading]= useState(true);
+  const [err,setErr] = useState(null); 
+  const [copyAlert,setCopyAlert] = useState(false);
+
   useEffect(()=>{
     console.log("component did mount");
     axios.get(`http://localhost:8080/video/${props.match.params.id}`)
@@ -19,10 +23,14 @@ const VideoPage = (props)=>{
           setDetails(res.data.video);
         }else{
           console.log(res.data.msg);
+          setErr(res.data.msg);
         }
+        setLoading(false);
       })
       .catch(err=>{
         console.log(err.msg);
+        setLoading(false);
+        setErr(err.msg);
       })
   },[])
 
@@ -60,17 +68,34 @@ const VideoPage = (props)=>{
   }
 
   const handleSave = ()=>{
+    setLoading(true);
     axios.put(`/video/${props.match.params.id}`,{details})
       .then(res=>{
           if(res.data.success){
               console.log("Success");
           }else{
+            setErr(res.data.msg);
             console.log(res.data.msg);
           }
+          setLoading(false);
       })
       .catch(err=>{
         console.log(err.message);
+        setErr(err.msg);
+        setLoading(false);
       })
+  }
+
+  const copyHandler = ()=>{
+    var textField = document.createElement('textarea')
+    textField.innerText = details.url.length>0?details.url:"empty";
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
+    console.log("Coppied");
+    setCopyAlert(true);
+    setTimeout(()=>{setCopyAlert(false)},2000);
   }
 
 
@@ -102,19 +127,19 @@ let videoMain =    <div>
             <div>
               <div className="px-lg-2 mt-2">
                   <p className="my-0" style={{fontSize:"0.8em",position:"relative",top:"5px",fontWeight:"bold",left:"-2px"}}>Video Url</p>
-                  <input type="text" name="title" value={details.url.length>0?details.url:"Empty"}  className="" readonly style={{border:"none",outline:"none",maxWidth:"80%",marginRight:"5px"}} />
-                  <i className="fa fa-clone pointer"></i>
+                  <input type="text" name="title" value={details.url.length>0?details.url:"Empty"}  className="" readOnly style={{border:"none",outline:"none",maxWidth:"80%",marginRight:"5px"}} />
+                  <i className="fa fa-clone pointer" onClick={copyHandler} ></i>
               </div>
               <div className="px-lg-2">
                   <p className="my-0" style={{fontSize:"0.8em",position:"relative",top:"5px",fontWeight:"bold",left:"-2px"}}>Filename</p>
-                  <input type="text" name="title" value={details.filename.length>0?details.filename:"Empty"} className="" readonly style={{border:"none",outline:"none"}} />
+                  <input type="text" name="title" value={details.filename.length>0?details.filename:"Empty"} className="" readOnly style={{border:"none",width:"95%", outline:"none"}} />
               </div>
             </div>
           </div>
         </div>
           {button}
       </div>
-    const err=false,loading=false;
+
   return (
     <React.Fragment>
     <Nav show={true} menu={true}/>
@@ -122,6 +147,7 @@ let videoMain =    <div>
         {loading?<div className="text-center"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /></div>
             :err?<p>{err}</p>:videoMain}
     </Modal>
+    {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
     </React.Fragment>
   );
 
