@@ -11,7 +11,7 @@ const VideoPage = (props)=>{
 
   useEffect(()=>{
     console.log("component did mount");
-    axios.post(`http://localhost:8080/video/${props.match.params.id}`)
+    axios.get(`http://localhost:8080/video/${props.match.params.id}`)
       .then(res=>{
         if(res.data.success){
           setDetails(res.data.video);

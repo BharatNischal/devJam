@@ -333,26 +333,6 @@ app.get("/curUser",(req,res)=>{
   res.json({user:req.user});
 })
 
-
-app.get("/api/err",(req,res)=>{
-  res.json({success:false});
-});
-
-// Function to make regular expression
-function escapeRegex(text) {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-}
-
-// if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  app.use(express.static(__dirname+'/../client/build'));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..' , 'client', 'build', 'index.html'));
-  });
-// }
-
-
 // Content Page routes
 
 // Video upload link to get the url from video
@@ -372,7 +352,7 @@ app.post("/video",uploadVideo,(req,res)=>{
 })
 
 //
-app.post("/video/:id",(req,res)=>{
+app.get("/video/:id",(req,res)=>{
   db.Video.findById(req.params.id)
     .then(video=>{
       res.json({success:true,video});
@@ -404,6 +384,28 @@ app.put("/video/:id",(req,res)=>{
       res.json({success:false,msg:err.message});
     })
 })
+
+
+
+app.get("/api/err",(req,res)=>{
+  res.json({success:false});
+});
+
+// Function to make regular expression
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
+
+// if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static(__dirname+'/../client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..' , 'client', 'build', 'index.html'));
+  });
+// }
+
+
 
 const port = process.env.PORT || 8080;
 app.listen(port,()=>{
