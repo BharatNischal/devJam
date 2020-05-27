@@ -12,9 +12,6 @@ const deliverableSchema=new mongoose.Schema({
     },
     dueDate:{
         type:Date
-    },
-    topic:{
-        type:mongoose.Schema.Types.ObjectId
     }
 });
 
