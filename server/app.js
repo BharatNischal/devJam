@@ -63,8 +63,8 @@ const uploadVideo = multer({storage:storage}).single("video");
 var cloudinary = require('cloudinary').v2;
 cloudinary.config({
   cloud_name: 'bharatnischal',
-  api_key: 494779956278864 ,
-  api_secret: "DwFFjVIX1-pakGQ9fcxi-7wCbLE"
+  api_key: process.env.api ,
+  api_secret: process.env.secret
 });
 
 
@@ -329,7 +329,7 @@ app.post('/reset/:token', function(req, res) {
 
 //----DELEVIRABLE ROUTES START----------------------------
 
-//--route to generate empty deliverable and passing empty object to frontend 
+//--route to generate empty deliverable and passing empty object to frontend
 app.get("/createDeliverable",(req,res)=>{
   db.Deliverable.create({})
   .then(del=>{
