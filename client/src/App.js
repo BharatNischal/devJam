@@ -12,6 +12,7 @@ import Homepage from "./components/homepage";
 
 import axios from "axios";
 import {CurUserContext} from "./contexts/curUser";
+import Deliverable from './components/content/deliverable';
 
 axios.defaults.withCredentials = true;
 
@@ -47,6 +48,7 @@ function App(props) {
             <Route path="/adminDashboard" exact component={Dashboard}/>
             <Route path="/profile/:name/:id" exact component={Profile}/>
             <Route path="/login" exact component={LoginForm}/>
+            <Route path="/deliverable/:id" exact component={Deliverable}/>
             <Route path="/video/:id" exact component={VideoPage}/>
             <Route path="/createProfile" exact component={CreateProfile}/>
   <Route path="/editProfile/:name/:id" exact  render={(props) => <CreateProfile {...props} edit={true} />}/>

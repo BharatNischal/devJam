@@ -327,6 +327,39 @@ app.post('/reset/:token', function(req, res) {
 });
 
 
+//----DELEVIRABLE ROUTES START----------------------------
+
+//--route to generate empty deliverable and passing empty object to frontend 
+app.get("/createDeliverable",(req,res)=>{
+  db.Deliverable.create({})
+  .then(del=>{
+    res.json({data:del,success:true,empty:true});
+  }).catch(err=>{
+    res.json({msg:err.message,success:false});
+  })
+});
+
+app.get("/deliverable/:id",(req,res)=>{
+  db.Deliverable.findById(req.params.id)
+  .then(deliverable=>{
+    res.json({data:deliverable,success:true});
+  }).catch(err=>{
+    res.json({msg:err.message,success:false});
+  })
+})
+//--route to edit deliverable
+app.put("/deliverable/:id",(req,res)=>{
+  db.Deliverable.findByIdAndUpdate(req.params.id,req.body)
+  .then(updatedDeliverable=>{
+    res.json({data:updatedDeliverable,success:true});
+  }).catch(err=>{
+    res.json({msg:err.message,success:false});
+  })
+
+});
+
+//------END OF DELIVERABLE ROUTES---------
+
 
 // To get the current user
 app.get("/curUser",(req,res)=>{
