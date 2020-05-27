@@ -61,11 +61,11 @@ const Deliverable =(props)=>{
                 
                 <div className="col-md-8 mt-3" style={{borderRight:"1px solid #aaa"}}>
                     <div className="form-group input-group px-lg-4">
-                        <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-user" ></i></div>
+                        <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
                         <input type="text" name="title" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Enter Title" className="form-control" required />
                     </div>
                     <div className="form-group input-group px-lg-4">
-                        <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-user" ></i></div>
+                        <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-align-justify" ></i></div>
                         <textarea name="instructions"  onChange={(e)=>setInstruction(e.target.value)} rows="5" placeholder="Enter Instructions" className="form-control" value={instruction} required ></textarea>
                     </div>
                 </div>
