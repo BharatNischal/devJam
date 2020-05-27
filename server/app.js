@@ -63,22 +63,9 @@ const uploadVideo = multer({storage:storage}).single("video");
 var cloudinary = require('cloudinary').v2;
 cloudinary.config({
   cloud_name: 'bharatnischal',
-  api_key: process.env.api ,
-  api_secret: process.env.secret
+  api_key: 494779956278864 ,
+  api_secret: "DwFFjVIX1-pakGQ9fcxi-7wCbLE"
 });
-
-// Video upload
-app.post("/video",uploadVideo,(req,res)=>{
-  if(req.file){
-    console.log("Video recieved",req.file);
-    cloudinary.uploader.upload(req.file.path,{ resource_type: "video"}, (err,result)=> {
-        console.log("err",err,"res",result);
-        return res.json(result);
-    });
-  }else{
-    res.json({success:false});
-  }
-})
 
 
 // Profile Routes
@@ -397,6 +384,59 @@ function escapeRegex(text) {
     res.sendFile(path.resolve(__dirname, '..' , 'client', 'build', 'index.html'));
   });
 // }
+
+
+// Content Page routes
+
+// Video upload link to get the url from video
+app.post("/video",uploadVideo,(req,res)=>{
+  if(req.file){
+    console.log("Video recieved",req.file);
+    cloudinary.uploader.upload(req.file.path,{ resource_type: "video"}, (err,result)=> {
+        if(err){
+          return res.json({success:false,msg:err.message})
+        }else{
+          return res.json({result,success:true});
+        }
+    });
+  }else{
+    res.json({success:false,msg:"no file found"});
+  }
+})
+
+//
+app.post("/video/:id",(req,res)=>{
+  db.Video.findById(req.params.id)
+    .then(video=>{
+      res.json({success:true,video});
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
+
+// Create a dummy video id and return the id
+app.post("/createVideo",(req,res)=>{
+  console.log("inside video route");
+  db.Video.create({title:"",description:"",url:"",filename:""})
+    .then(video=>{
+      res.json({success:true,video});
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
+
+// Update the video with given ID
+app.put("/video/:id",(req,res)=>{
+  db.Video.findByIdAndUpdate(req.params.id,req.body.details)
+    .then(updatedVideo=>{
+      res.json({success:true,video:updatedVideo});
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
 
 const port = process.env.PORT || 8080;
 app.listen(port,()=>{
