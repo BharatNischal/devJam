@@ -55,6 +55,33 @@ const Topic = (props)=>{
     ));
   };
 
+    const addVideo = ()=>{
+        axios.get(`http://localhost:8080/topic/${props.match.params.id}/createVideo`)
+          .then(res=>{
+              if(res.data.success){
+                props.history.push(`/video/${res.data.video._id}`);
+              }else{
+                console.log(res.data.msg);
+              }
+          })
+          .catch(err=>{
+              console.log(err.message);
+          })
+    }
+
+    const addDeliverable = ()=>{
+        axios.get(`http://localhost:8080/topic/${props.match.params.id}/createDeliverable`)
+          .then(res=>{
+              if(res.data.success){
+                props.history.push(`/deliverable/${res.data.deliverable._id}`);
+              }else{
+                console.log(res.data.msg);
+              }
+          })
+          .catch(err=>{
+              console.log(err.message);
+          })
+    }
 
     const SortableItem = sortableElement(({item}) => {  let data;
                                                         if(item.video)
@@ -87,8 +114,8 @@ const Topic = (props)=>{
                     <textarea name="description"  onChange={(e)=>setDetails({...details,description:e.target.value})} rows="5" placeholder="Enter Description" className="form-control" value={details.description} required ></textarea>
                 </div>
                 <div className="px-lg-4">
-                    <button className="btn text-pink btn-outline-grad mr-2"> + Add </button>
-                    <button className="btn text-pink btn-outline-grad"> + Create </button>
+                    <button className="btn text-pink btn-outline-grad mr-2" onClick={addVideo}> <i className="fa fa-paperclip"></i> Add </button>
+                    <button className="btn text-pink btn-outline-grad" onClick={addDeliverable}> <i className="fa fa-plus"></i> Create </button>
                 </div>
 
 

@@ -355,13 +355,18 @@ app.put("/content/topic/:id",(req,res)=>{
 //----DELEVIRABLE ROUTES START----------------------------
 
 //--route to generate empty deliverable and passing empty object to frontend
-app.get("/createDeliverable",(req,res)=>{
+app.get("/topic/:topicId/createDeliverable",(req,res)=>{
   db.Deliverable.create({})
-  .then(del=>{
-    res.json({data:del,success:true,empty:true});
-  }).catch(err=>{
-    res.json({msg:err.message,success:false});
-  })
+  .then(deliverable=>{
+    db.Topic.findById(req.params.topicId)
+      .then(topic=>{
+        topic.items.push({deliverable:deliverable._id});
+        topic.save();
+        res.json({success:true,deliverable});
+      })
+    }).catch(err=>{
+      res.json({msg:err.message,success:false});
+    })
 });
 
 app.get("/deliverable/:id",(req,res)=>{
@@ -394,7 +399,7 @@ app.get("/curUser",(req,res)=>{
 // Content Page routes
 
 // Video upload link to get the url from video
-app.post("/video",uploadVideo,(req,res)=>{
+app.post("/topic/video",uploadVideo,(req,res)=>{
   if(req.file){
     console.log("Video recieved",req.file);
     cloudinary.uploader.upload(req.file.path,{ resource_type: "video"}, (err,result)=> {
@@ -410,7 +415,7 @@ app.post("/video",uploadVideo,(req,res)=>{
 })
 
 //
-app.get("/video/:id",(req,res)=>{
+app.get("/topic/video/:id",(req,res)=>{
   db.Video.findById(req.params.id)
     .then(video=>{
       res.json({success:true,video});
@@ -420,12 +425,16 @@ app.get("/video/:id",(req,res)=>{
     })
 })
 
-// Create a dummy video id and return the id
-app.post("/createVideo",(req,res)=>{
-  console.log("inside video route");
+// Create a dummy video id ,add it to topic with given id and return the id
+app.get("/topic/:topicId/createVideo",(req,res)=>{
   db.Video.create({title:"",description:"",url:"",filename:""})
     .then(video=>{
-      res.json({success:true,video});
+      db.Topic.findById(req.params.topicId)
+        .then(topic=>{
+          topic.items.push({video:video._id});
+          topic.save();
+          res.json({success:true,video});
+        })
     })
     .catch(err=>{
       res.json({success:false,msg:err.message});
@@ -433,7 +442,7 @@ app.post("/createVideo",(req,res)=>{
 })
 
 // Update the video with given ID
-app.put("/video/:id",(req,res)=>{
+app.put("/topic/video/:id",(req,res)=>{
   db.Video.findByIdAndUpdate(req.params.id,req.body.details)
     .then(updatedVideo=>{
       res.json({success:true,video:updatedVideo});

@@ -12,12 +12,12 @@ const VideoPage = (props)=>{
   const videoRef = useRef(null);
 
   const [loading,setLoading]= useState(true);
-  const [err,setErr] = useState(null); 
+  const [err,setErr] = useState(null);
   const [copyAlert,setCopyAlert] = useState(false);
 
   useEffect(()=>{
     console.log("component did mount");
-    axios.get(`http://localhost:8080/video/${props.match.params.id}`)
+    axios.get(`http://localhost:8080/topic/video/${props.match.params.id}`)
       .then(res=>{
         if(res.data.success){
           setDetails(res.data.video);
@@ -53,7 +53,7 @@ const VideoPage = (props)=>{
     setUploading(true);
     const formData = new FormData();
     formData.append('video',videoRef.current.files[0]);
-    axios.post("http://localhost:8080/video",formData,config)
+    axios.post("http://localhost:8080/topic/video",formData,config)
       .then(res=>{
         setUploadPercentage(100);
         setDetails({...details,url:res.data.result.secure_url});
@@ -69,7 +69,7 @@ const VideoPage = (props)=>{
 
   const handleSave = ()=>{
     setLoading(true);
-    axios.put(`/video/${props.match.params.id}`,{details})
+    axios.put(`/topic/video/${props.match.params.id}`,{details})
       .then(res=>{
           if(res.data.success){
               console.log("Success");
