@@ -27,6 +27,28 @@ const Topic = (props)=>{
     },[])
 
 
+    const handleSave = ()=>{
+        const items = content.map(item=>{
+          if(item.video)
+            return {video:item.video._id};
+          else
+            return {deliverable: item.deliverable._id};
+        });
+        const data = {title:details.title,deliverable:details.deliverable,items};
+        console.log("new updated sequence",data);
+        axios.put(`http://localhost:8080/content/topic/${props.match.params.id}`,{...data})
+          .then(res=>{
+            if(res.data.success){
+              console.log("Saved");
+            }else{
+              console.log(res.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+    }
+
     const onSortEnd = ({oldIndex, newIndex}) => {
       setContent(content => (
         arrayMove(content, oldIndex, newIndex)
@@ -83,7 +105,7 @@ const Topic = (props)=>{
     )
 
     return (
-        <Modal title="Topic" >
+        <Modal title="Topic" save={handleSave}>
             {topicMain}
         </Modal>
     );

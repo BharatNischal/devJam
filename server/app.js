@@ -326,6 +326,31 @@ app.post('/reset/:token', function(req, res) {
   });
 });
 
+//----TOPIC ROUTES START----------------------------
+
+// To get topic with given id and its contents
+app.get("/content/topic/:id",(req,res)=>{
+  db.Topic.findById(req.params.id).populate('items.video').populate('items.deliverable').exec((err,topic)=>{
+      if(err){
+        res.json({success:false,msg:err.message});
+      }else{
+        res.json({success:true,data:topic});
+      }
+  })
+});
+
+// To update the new sequence of video/deliverables inside a topic
+app.put("/content/topic/:id",(req,res)=>{
+    console.log(req.body);
+    db.Topic.findByIdAndUpdate(req.params.id,req.body)
+      .then(result=>{
+        res.json({success:true});
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
+})
+
 
 //----DELEVIRABLE ROUTES START----------------------------
 
