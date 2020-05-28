@@ -1,10 +1,57 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Modal from "../ui/modal/modal";
+import {sortableContainer, sortableElement} from 'react-sortable-hoc';
+import arrayMove from 'array-move';
+import axios from "axios";
 import "./content.css"
 
 const Topic = (props)=>{
     const [details,setDetails] = useState({title:"",description:""});
-    
+    const [content,setContent] = useState([{video:{title:"First",url:"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg",_id:1}},{video:{title:"Second",url:"https://res.cloudinary.com/bharatnischal/video/upload/v1590603310/sgfmzzj8kuuxiopnaoow.jpg",_id:2}},{video:{title:"Third",url:"https://res.cloudinary.com/bharatnischal/video/upload/v1590609296/opjnczl0vdiyney2fkgh.jpg",_id:3}}]);
+
+    useEffect(()=>{
+      console.log("use effect");
+      axios.get(`http://localhost:8080/content/topic/${props.match.params.id}`)
+          .then(res=>{
+            console.log(res.data);
+            if(res.data.success){
+              setDetails({title:res.data.data.title,description:res.data.data.description});
+              setContent(res.data.data.items);
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+    },[])
+
+
+    const onSortEnd = ({oldIndex, newIndex}) => {
+      setContent(content => (
+        arrayMove(content, oldIndex, newIndex)
+    ));
+  };
+
+
+    const SortableItem = sortableElement(({item}) => {  let data;
+                                                        if(item.video)
+                                                            data = item.video;
+                                                        else
+                                                            data = item.deliverable;
+                                                          return(<div className="row mt-4 mb-2 mx-2 mx-md-4 itemBox cursor-pointer">
+                                                                    <div className="col-2 p-0">
+                                                                        <img src={data.url?data.url.substr(0, data.url.lastIndexOf("."))+".jpg":"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg"} className="itemImg" />
+                                                                    </div>
+                                                                    <div className="col-10 p-0 py-3 pl-2">
+                                                                        <h6>{data.title} </h6>
+                                                                        <span className="float-right pr-2 cursor-pointer"> <i className="fa fa-close"></i></span>
+                                                                    </div>
+                                                                </div>)});
+
+    const SortableContainer = sortableContainer(({children}) => {
+      return <div>{children}</div>;
+    });
 
     const topicMain=(
         <div className="row">
@@ -23,29 +70,15 @@ const Topic = (props)=>{
                 </div>
 
 
-                {/* List ITEMS START HERE */}
-                
-                <div className="row mt-4 mb-2 mx-2 mx-md-4 itemBox cursor-pointer" >
-                    <div className="col-2 p-0">
-                        <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg" className="itemImg" />
-                    </div>
-                    <div className="col-10 p-0 py-3 pl-2">
-                        <h6>1. Task To Have Fun  & keep travelling </h6>
-                        <span className="float-right pr-2 cursor-pointer"> <i className="fa fa-close"></i></span>
-                    </div>
-                </div>
-                <div className="row mt-4 mb-2 mx-2 mx-md-4 itemBox cursor-pointer" >
-                    <div className="col-2 p-0">
-                        <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg" className="itemImg" />
-                    </div>
-                    <div className="col-10 p-0 py-3 pl-2">
-                        <h6>1. Task To Have Fun  & keep travelling </h6>
-                        <span className="float-right pr-2 cursor-pointer"> <i className="fa fa-close"></i></span>
-                    </div>
-                </div>
-                
+                <SortableContainer onSortEnd={onSortEnd}>
+                  {content.map((item, index) => (
+                    <SortableItem key={item._id} index={index} item={item} />
+                  ))}
+                </SortableContainer>
+
+
             </div>
-            
+
         </div>
     )
 

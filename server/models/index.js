@@ -14,5 +14,6 @@ mongoose.connect(databaseURL,{
 
 module.exports.User=require("./user");
 module.exports.Video=require("./video");
+module.exports.Topic=require("./topic");
 module.exports.Developer = require("./developer");
 module.exports.Deliverable = require("./deliverable");
