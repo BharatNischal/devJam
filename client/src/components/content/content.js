@@ -67,14 +67,14 @@ const Content = (props)=>{
                         <button className="btn-outline-grad p-2"> + Create </button>
                     </div>
                     
-                    {/* <SortableContainer onSortEnd={onSortEnd} distance={1} >
+                    <SortableContainer onSortEnd={onSortEnd} distance={1} >
                         {topics.map((item, index) => (
                             <SortableItem key={item._id} index={index} item={item} />
                         ))}
-                    </SortableContainer> */}
-                    {topics.map((item) => (
+                    </SortableContainer>
+                    {/* {topics.map((item) => (
                             <ContentSection  id={"a"+item._id} title={item.title} data={item.items}  />
-                        ))}
+                        ))} */}
                     
                     <div style={{minHeight:"40vh"}}></div>
                 </div>
