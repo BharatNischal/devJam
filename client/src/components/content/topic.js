@@ -34,7 +34,7 @@ const Topic = (props)=>{
           else
             return {deliverable: item.deliverable._id};
         });
-        const data = {title:details.title,deliverable:details.deliverable,items};
+        const data = {title:details.title,description:details.description,items};
         console.log("new updated sequence",data);
         axios.put(`http://localhost:8080/content/topic/${props.match.params.id}`,{...data})
           .then(res=>{
@@ -88,13 +88,13 @@ const Topic = (props)=>{
                                                             data = item.video;
                                                         else
                                                             data = item.deliverable;
-                                                          return(<div className="row mt-4 mb-2 mx-2 mx-md-4 itemBox cursor-pointer">
+                                                          return(<div className="row mt-4 mb-2 mx-2 mx-md-4 itemBox cursor-pointer " onClick={()=>alert("Hello")} >
                                                                     <div className="col-2 p-0">
                                                                         <img src={data.url?data.url.substr(0, data.url.lastIndexOf("."))+".jpg":"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg"} className="itemImg" />
                                                                     </div>
                                                                     <div className="col-10 p-0 py-3 pl-2">
                                                                         <h6>{data.title} </h6>
-                                                                        <span className="float-right pr-2 cursor-pointer"> <i className="fa fa-close"></i></span>
+                                                                        <span className="float-right pr-2 cursor-pointer" onClick={()=>alert("Close")}> <i className="fa fa-close"></i></span>
                                                                     </div>
                                                                 </div>)});
 
@@ -119,7 +119,7 @@ const Topic = (props)=>{
                 </div>
 
 
-                <SortableContainer onSortEnd={onSortEnd}>
+                <SortableContainer onSortEnd={onSortEnd} distance={1} >
                   {content.map((item, index) => (
                     <SortableItem key={item._id} index={index} item={item} />
                   ))}

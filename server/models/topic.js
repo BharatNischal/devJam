@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const topicSchema = new mongoose.Schema({
     title:String,
-    descrition:String,
+    description:String,
     items:[{
         video:{
             type:mongoose.Schema.Types.ObjectId,
