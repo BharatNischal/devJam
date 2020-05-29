@@ -50,6 +50,10 @@
 .text-pink{
   color:#9d3870;
 }
+.cursor-pointer{
+  cursor: pointer;
+}
+
 
 .btn-outline-grad{
   background-color: #fafafa;
