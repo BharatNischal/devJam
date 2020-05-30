@@ -326,6 +326,81 @@ app.post('/reset/:token', function(req, res) {
   });
 });
 
+//------------CONTENT START HERE-------------------------------
+app.get("/getContent",(req,res)=>{
+  db.Content.findOne({})
+  .populate({
+    path:"topics",
+    model:"topic",
+    populate:{
+      path:"items.video",
+      model:"Video"
+    },
+    populate:{
+      path:"items.deliverable",
+      model:"deliverable"
+    }
+  })
+  .then(cont=>{
+    if(!cont){
+      console.log("EMPTY CONTENT");
+     return res.json({msg:"Empty",success:false});
+    }
+    return res.json({content:cont,success:true});
+  }).catch(err=>{
+    res.json({msg:err.message,success:false});
+  })
+});
+
+//Create Topic Route 
+app.get("/content/createTopic",(req,res)=>{
+  db.Content.findOne({})
+  .then(cont=>{
+    if(!cont){
+      //Empty Content array currently So, Creating one
+      db.Topic.create({title:"",description:""})
+      .then(topic=>{
+          db.Content.create({topics:[topic._id]})                       //adding topic in topics array
+          .then(createdContent=>{
+            res.json({topicId:topic._id,success:true});
+          }).catch(createErr=>{
+            res.json({msg:createErr.message,success:false});
+          })
+      }).catch(topicErr=>{
+        res.json({msg:topicErr.message,success:false});
+      });
+    }else{
+      db.Topic.create({title:"",description:""})
+      .then(topic=>{
+        
+        // pushing topic to topics array in existing content
+        cont.topics.push(topic._id);                                        
+        cont.save();
+        res.json({topicId:topic._id,success:true});
+       
+      }).catch(topicErr=>{
+        res.json({msg:topicErr.message,success:false});
+      })
+    }
+  }).catch(err=>{
+    res.json({msg:err.message,success:false});
+  })
+});
+
+//Update Content Sort 
+app.put("/content",(req,res)=>{
+  db.Content.findOneAndUpdate({},{topics:req.body})
+  .then(updatedContent=>{
+    res.json({content:updatedContent,success:true});
+  }).catch(err=>{
+    res.json({msg:err.message,success:false});
+  });
+});
+
+
+//------------CONTENT END HERE--------------------------------
+
+
 //----TOPIC ROUTES START----------------------------
 
 // To get topic with given id and its contents

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, animateScroll as scroll } from "react-scroll";
 import "./content.css";
 import ContentSection from "./contentSection";
 import {sortableContainer, sortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
+import axios from "axios";
 
 const Content = (props)=>{
     const [showSidebar,setShowSideBar] = useState(false);
+    const [saveActive,setSaveActive] = useState(false);
     const [topics,setTopics]=useState([
         {   _id:"1",
             title:"First Slide",
@@ -33,10 +35,24 @@ const Content = (props)=>{
                 }}
         ]}]);
     
+    useEffect(()=>{
+        axios.get("/getContent")
+        .then(res=>{
+            if(res.data.success){
+                setTopics(res.data.content.topics);
+            }
+        }).catch(err=>{
+            console.log(err);
+        })
+    },[])
     const onSortEnd = ({oldIndex, newIndex}) => {
         setTopics(topic => (
             arrayMove(topic, oldIndex, newIndex)
-        ));};
+        ));
+       if(oldIndex!==newIndex){
+           setSaveActive(true);
+       }
+    };
         
     const SortableItem = sortableElement(({item}) => {  
             return( <ContentSection  id={"a"+item._id} title={item.title} data={item.items}  />)
@@ -65,6 +81,10 @@ const Content = (props)=>{
                 <div className="col-lg-9 text-left">
                     <div className="mt-3">
                         <button className="btn-outline-grad p-2"> + Create </button>
+                        <button 
+                            className={saveActive?" float-right saveBtn active p-2 px-3":" float-right saveBtn p-2 px-3"} 
+                            disabled={!saveActive}  onClick={()=>alert("Hello")}> Save
+                        </button>
                     </div>
                     
                     <SortableContainer onSortEnd={onSortEnd} distance={1} >

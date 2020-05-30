@@ -17,3 +17,4 @@ module.exports.Video=require("./video");
 module.exports.Topic=require("./topic");
 module.exports.Developer = require("./developer");
 module.exports.Deliverable = require("./deliverable");
+module.exports.Content = require("./content");
