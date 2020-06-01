@@ -1,4 +1,5 @@
 import React from "react";
+import {withRouter} from "react-router-dom";
 import axios from "axios";
 
 const TopicItem = (props)=>{
@@ -15,8 +16,9 @@ const TopicItem = (props)=>{
         })
     }
 
+
     return (
-            <div className="row mt-4 mb-2 mx-2 mx-md-4 itemBox cursor-pointer " onClick={()=>alert("Hello")} >
+            <div className="row mt-4 mb-2 mx-2 mx-md-4 itemBox cursor-pointer " onClick={()=>props.history.push({pathname:`/${props.type}/${data._id}`,topicId:props.topicId})} >
                 <div className="col-2 p-0">
                     <img src={data.url?data.url.substr(0, data.url.lastIndexOf("."))+".jpg":"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg"} className="itemImg" />
                 </div>
@@ -28,4 +30,4 @@ const TopicItem = (props)=>{
     );
 }
 
-export default TopicItem;
+export default withRouter(TopicItem);
