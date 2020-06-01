@@ -41,7 +41,6 @@ const ContentSection=(props)=>{
                 <h2 className="text-pink "> {props.title}</h2>
                 <button className="float-right text-pink nostyleBtn h4" onClick={()=>setShowMenu(!showMenu)}> <i className="fas fa-ellipsis-v"></i></button>
             </div>
-
             {props.data?props.data.map(item=>{
                 let data;
                 if(item.video)
@@ -54,8 +53,8 @@ const ContentSection=(props)=>{
                 <div className="col-9 col-md-11 p-0"><h5 className=" pl-3" > {data.title}</h5></div>
                 </div>);
             }):null}
-            
-            
+
+
 
 
             {/* backdrop & Menu  */}

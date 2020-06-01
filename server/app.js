@@ -332,14 +332,13 @@ app.get("/getContent",(req,res)=>{
   .populate({
     path:"topics",
     model:"topic",
-    populate:{
-      path:"items.video",
-      model:"Video"
-    },
-    populate:{
+    populate:[{
       path:"items.deliverable",
       model:"deliverable"
-    }
+    },{
+      path:"items.video",
+      model:"Video"
+    }]
   })
   .then(cont=>{
     if(!cont){

@@ -9,7 +9,30 @@ import axios from "axios";
 const Content = (props)=>{
     const [showSidebar,setShowSideBar] = useState(false);
     const [saveActive,setSaveActive] = useState(false);
-    const [topics,setTopics]=useState([]);
+    const [topics,setTopics]=useState([{   _id:"1",
+            title:"First Slide",
+            items:[
+                {video:{
+                    _id:"x1",
+                    title:"Video of first"
+                }},
+                {deliverable:{
+                    _id:"d1",
+                    title:"Deliverable of first"
+                }}
+        ]},{
+            _id:"2",
+            title:"Second Topic",
+            items:[
+                {video:{
+                    _id:"x1",
+                    title:"Video of first"
+                }},
+                {deliverable:{
+                    _id:"d1",
+                    title:"Deliverable of first"
+                }}
+        ]}]);
 
     useEffect(()=>{
         axios.get("http://localhost:8080/getContent")
