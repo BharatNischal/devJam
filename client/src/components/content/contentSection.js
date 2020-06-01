@@ -11,7 +11,7 @@ const ContentSection=(props)=>{
         axios.get(`/topic/${props.id.slice(1)}/createVideo`)
           .then(res=>{
               if(res.data.success){
-                props.history.push(`/video/${res.data.video._id}`);
+                props.history.push({pathname:`/video/${res.data.video._id}`,topicId:props.id.slice(1)});
               }else{
                 console.log(res.data.msg);
               }
@@ -25,7 +25,7 @@ const ContentSection=(props)=>{
         axios.get(`/topic/${props.id.slice(1)}/createDeliverable`)
           .then(res=>{
               if(res.data.success){
-                props.history.push(`/deliverable/${res.data.deliverable._id}`);
+                props.history.push({pathname:`/deliverable/${res.data.deliverable._id}`,topicId:props.id.slice(1)});
               }else{
                 console.log(res.data.msg);
               }
@@ -33,6 +33,16 @@ const ContentSection=(props)=>{
           .catch(err=>{
               console.log(err.message);
           })
+    }
+
+    const deleteTopic = ()=>{
+      axios.delete(`http://localhost:8080/content/topic/${props.id.slice(1)}`)
+        .then(res=>{
+            console.log(res.data.msg);
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
     }
 
     return (
@@ -61,6 +71,7 @@ const ContentSection=(props)=>{
             <div className={showMenu?"backdrop show":"backdrop"} onClick={()=>setShowMenu(false)}></div>
             <div className={showMenu?"sectionMenu shadow show":"sectionMenu shadow"}>
                 <div><Link to={`/topic/${props.id.slice(1)}`}>Edit</Link></div>
+                <div><button className="btn btn-link text-left" onClick={deleteTopic} >Delete</button></div>
                 <div><button className="btn btn-link text-left" onClick={addVideo} >Add Video</button></div>
                 <div><button className="btn btn-link text-left" onClick={addDeliverable} >Add Deliverable</button></div>
             </div>

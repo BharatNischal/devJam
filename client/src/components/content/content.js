@@ -92,7 +92,7 @@ const Content = (props)=>{
     return (
         <div className="w-100 bg-light" style={{minHeight:"100vh"}}>
             <div className="row mx-0">
-                <div className={showSidebar?"col-lg-3 sidebar show":"col-lg-3 sidebar"}  >
+                <div className={showSidebar?"col-sm-3 sidebar show":"col-sm-3 sidebar"}  >
                         <div className="mt-5 " ></div>
                         {topics.map(t=>(
                             <Link key={t._id} className="sidebarLink " activeClass="active shadow" to={"a"+t._id} spy={true} smooth={true} offset={-70} duration={500}>
@@ -104,8 +104,8 @@ const Content = (props)=>{
 
                     <button className="expand" onClick={()=>setShowSideBar(!showSidebar)} > > </button>
                 </div>
-                <div className="col-lg-3"></div>
-                <div className="col-lg-9 text-left">
+                <div className="col-sm-3"></div>
+                <div className="col-sm-9 text-left">
                     <div className="mt-3">
                         <button className="btn-outline-grad p-2" onClick={handleNewTopic}> + Create </button>
                         <button

@@ -432,6 +432,22 @@ app.put("/content/topic/:id",(req,res)=>{
       })
 })
 
+app.delete("/content/topic/:topicId",(req,res)=>{
+    db.Topic.findById(req.params.topicId)
+      .then(topic=>{
+          const delVideo = topic.items.filter(topic=>topic.video).map(topic=>(topic.video._id));
+          const delDeliverable = topic.items.filter(topic=>topic.deliverable).map(topic=>(topic.deliverable._id));
+          console.log("video",delVideo,"deliverable",delDeliverable);
+          Promise.all([db.Video.remove({'_id':{'$in':delVideo}}),db.Video.remove({'_id':{'$in':delDeliverable}})])
+            .then(result=>{
+              console.log("removed all");
+              res.json({success:true});
+            })
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
+})
 
 //----DELEVIRABLE ROUTES START----------------------------
 
