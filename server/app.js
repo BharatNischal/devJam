@@ -438,11 +438,12 @@ app.delete("/content/topic/:topicId",(req,res)=>{
           const delVideo = topic.items.filter(topic=>topic.video).map(topic=>(topic.video._id));
           const delDeliverable = topic.items.filter(topic=>topic.deliverable).map(topic=>(topic.deliverable._id));
           console.log("video",delVideo,"deliverable",delDeliverable);
-          Promise.all([db.Video.remove({'_id':{'$in':delVideo}}),db.Video.remove({'_id':{'$in':delDeliverable}})])
+          Promise.all([db.Video.deleteMany({'_id':{'$in':delVideo}}),db.Deliverable.deleteMany({'_id':{'$in':delDeliverable}}),db.Topic.findByIdAndDelete(req.params.topicId)])
             .then(result=>{
               console.log("removed all");
+              
               res.json({success:true});
-            })
+            }).catch(Err=>console.log(Err));
       })
       .catch(err=>{
         res.json({success:false,msg:err.message});

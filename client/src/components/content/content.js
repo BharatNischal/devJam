@@ -5,11 +5,18 @@ import ContentSection from "./contentSection";
 import {sortableContainer, sortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import axios from "axios";
+import EmptyImg from "./emptyTopic.png";
+import Nav from "../profile/Nav/Nav";
 
 const Content = (props)=>{
+    const [topics,setTopics]=useState([]);
+    
+    //UI STATES
     const [showSidebar,setShowSideBar] = useState(false);
     const [saveActive,setSaveActive] = useState(false);
-    const [topics,setTopics]=useState([]);
+    const [loading,setLoading] = useState(true);
+    
+
 
     useEffect(()=>{
         axios.get("/getContent")
@@ -18,9 +25,12 @@ const Content = (props)=>{
             if(res.data.success){
                 console.log(res.data.content.topics);
                 setTopics(res.data.content.topics);
+
             }
+            setLoading(false);
         }).catch(err=>{
             console.log(err);
+            setLoading(false);
         })
     },[])
 
@@ -46,11 +56,16 @@ const Content = (props)=>{
             console.log(err.message);
         })
     }
+    const handleDelete=(id)=>{
+        setTopics(topics.filter(t=>t._id!=id));
+    }
 
     const handleSave = ()=>{
+        setLoading(true);
         const data = topics.map(topic=>topic._id);
         axios.put("/content",{data})
           .then(res=>{
+              setLoading(false);
               console.log(res.data.success);
           })
           .catch(err=>{
@@ -59,18 +74,21 @@ const Content = (props)=>{
     }
 
     const SortableItem = sortableElement(({item}) => {
-            return( <ContentSection  id={"a"+item._id} title={item.title} data={item.items}  />)
+            return( <ContentSection  id={"a"+item._id} title={item.title} data={item.items} removeTopic={(id)=>handleDelete(id)} />)
         });
 
     const SortableContainer = sortableContainer(({children}) => {
-        return <div>{children}</div>;
+        return <div >{children}</div>;
         });
 
     return (
+        <React.Fragment>
+        <Nav  menu={true} show={true} />
         <div className="w-100 bg-light" style={{minHeight:"100vh"}}>
-            <div className="row mx-0">
+            
+            <div className="row mx-0" >
                 <div className={showSidebar?"col-sm-3 sidebar show":"col-sm-3 sidebar"}  >
-                        <div className="mt-5 " ></div>
+                        <div style={{marginTop:"80px"}} ></div>
                         {topics.map(t=>(
                             <Link key={t._id} className="sidebarLink " activeClass="active shadow" to={"a"+t._id} spy={true} smooth={true} offset={-70} duration={500}>
                                 <div>{t.title}</div>
@@ -82,7 +100,7 @@ const Content = (props)=>{
                     <button className="expand" onClick={()=>setShowSideBar(!showSidebar)} > > </button>
                 </div>
                 <div className="col-sm-3"></div>
-                <div className="col-sm-9 text-left">
+                <div className="col-sm-9 text-left" style={{marginTop:"70px"}}>
                     <div className="mt-3">
                         <button className="btn-outline-grad p-2" onClick={handleNewTopic}> + Create </button>
                         <button
@@ -90,20 +108,32 @@ const Content = (props)=>{
                             disabled={!saveActive}  onClick={handleSave}> Save
                         </button>
                     </div>
-
-                    <SortableContainer onSortEnd={onSortEnd} distance={1} >
-                        {topics.map((item, index) => (
-                            <SortableItem key={item._id} index={index} item={item} />
-                        ))}
-                    </SortableContainer>
+                    {topics.length==0?(
+                        <div className="imgContainer">
+                            <img className="img img-fluid" src={EmptyImg} alt="No Topics added" />
+                        </div>
+                    ):null}
+                    
+                    {loading?
+                    (<div className="text-center"> <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /> </div>):
+                    (
+                        <SortableContainer onSortEnd={onSortEnd} distance={1} >
+                            {topics.map((item, index) => (
+                                <SortableItem key={item._id} index={index} item={item} />
+                            ))}
+                        </SortableContainer>
+                    )}
+                    
                     {/* {topics.map((item) => (
                             <ContentSection  id={"a"+item._id} title={item.title} data={item.items}  />
                         ))} */}
 
                     <div style={{minHeight:"40vh"}}></div>
+                    
                 </div>
             </div>
         </div>
+        </React.Fragment>
     )
 };
 

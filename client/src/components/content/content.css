@@ -165,11 +165,13 @@
     border-radius: 18px;
     border-bottom: none;
 }
-
+.imgContainer{
+    width:50%;
+}
 @media (max-width:600px){
     .sidebar{
         width:250px;
-        transform: translateX(-95%);
+        transform: translateX(-98%);
         transition: 0.6s;
     }
     .sidebar.show{
@@ -196,5 +198,9 @@
     }
     .sidebar .expand:focus{
         outline: none;
+    }
+
+    .imgContainer{
+        width:90%;
     }
 }

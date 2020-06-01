@@ -38,7 +38,8 @@ const ContentSection=(props)=>{
     const deleteTopic = ()=>{
       axios.delete(`/content/topic/${props.id.slice(1)}`)
         .then(res=>{
-            console.log(res.data.msg);
+            console.log(res.data.success);
+            props.removeTopic(props.id.slice(1));
         })
         .catch(err=>{
           console.log(err.message);
@@ -70,8 +71,8 @@ const ContentSection=(props)=>{
             {/* backdrop & Menu  */}
             <div className={showMenu?"backdrop show":"backdrop"} onClick={()=>setShowMenu(false)}></div>
             <div className={showMenu?"sectionMenu shadow show":"sectionMenu shadow"}>
-                <div><Link to={`/topic/${props.id.slice(1)}`}>Edit</Link></div>
-                <div><button className="btn btn-link text-left" onClick={deleteTopic} >Delete</button></div>
+                <div><Link to={`/topic/${props.id.slice(1)}`}>&nbsp;Edit</Link></div>
+                <div><button className="btn btn-link text-left text-danger" onClick={deleteTopic} >Delete</button></div>
                 <div><button className="btn btn-link text-left" onClick={addVideo} >Add Video</button></div>
                 <div><button className="btn btn-link text-left" onClick={addDeliverable} >Add Deliverable</button></div>
             </div>

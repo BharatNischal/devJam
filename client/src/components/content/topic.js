@@ -10,6 +10,8 @@ const Topic = (props)=>{
     const [details,setDetails] = useState({title:"",description:""});
     const [content,setContent] = useState([]);
 
+    const [loading,setLoading] = useState(true);
+
     useEffect(()=>{
       console.log("use effect");
       axios.get(`/content/topic/${props.match.params.id}`)
@@ -21,9 +23,11 @@ const Topic = (props)=>{
             }else{
               console.log(res.data.msg);
             }
+            setLoading(false);
           })
           .catch(err=>{
             console.log(err.message);
+            setLoading(false);
           })
     },[])
 
@@ -37,7 +41,23 @@ const Topic = (props)=>{
       }
     }
 
+    const deleteTopic = ()=>{
+      setLoading(true);
+      axios.delete(`/content/topic/${props.match.params.id}`)
+        .then(res=>{
+            if(res.data.success){
+              props.history.push("/content");
+            }
+            setLoading(false);
+        })
+        .catch(err=>{
+          console.log(err.message);
+          setLoading(false);
+        })
+    }
+
     const handleSave = ()=>{
+      
         const items = content.map(item=>{
           if(item.video)
             return {video:item.video._id};
@@ -45,6 +65,7 @@ const Topic = (props)=>{
             return {deliverable: item.deliverable._id};
         });
         const data = {title:details.title,description:details.description,items};
+        setLoading(true);
         console.log("new updated sequence",data);
         axios.put(`/content/topic/${props.match.params.id}`,{...data})
           .then(res=>{
@@ -53,8 +74,10 @@ const Topic = (props)=>{
             }else{
               console.log(res.msg);
             }
+            setLoading(false);
           })
           .catch(err=>{
+            setLoading(false);
             console.log(err.message);
           })
     }
@@ -135,8 +158,8 @@ const Topic = (props)=>{
     )
 
     return (
-        <Modal title="Topic" save={handleSave} close={()=>{props.history.push('/content')}}>
-            {topicMain}
+        <Modal title="Topic" save={handleSave} close={()=>{props.history.push('/content')}} delete={deleteTopic}>
+            {loading?<div className="text-center"> <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /> </div>:topicMain}
         </Modal>
     );
 
