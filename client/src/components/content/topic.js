@@ -2,12 +2,13 @@ import React, { useState,useEffect } from "react";
 import Modal from "../ui/modal/modal";
 import {sortableContainer, sortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
+import TopicItem from "./topicItem";
 import axios from "axios";
 import "./content.css"
 
 const Topic = (props)=>{
     const [details,setDetails] = useState({title:"",description:""});
-    const [content,setContent] = useState([{video:{title:"First",url:"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg",_id:1}},{video:{title:"Second",url:"https://res.cloudinary.com/bharatnischal/video/upload/v1590603310/sgfmzzj8kuuxiopnaoow.jpg",_id:2}},{video:{title:"Third",url:"https://res.cloudinary.com/bharatnischal/video/upload/v1590609296/opjnczl0vdiyney2fkgh.jpg",_id:3}}]);
+    const [content,setContent] = useState([]);
 
     useEffect(()=>{
       console.log("use effect");
@@ -88,15 +89,8 @@ const Topic = (props)=>{
                                                             data = item.video;
                                                         else
                                                             data = item.deliverable;
-                                                          return(<div className="row mt-4 mb-2 mx-2 mx-md-4 itemBox cursor-pointer " onClick={()=>alert("Hello")} >
-                                                                    <div className="col-2 p-0">
-                                                                        <img src={data.url?data.url.substr(0, data.url.lastIndexOf("."))+".jpg":"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg"} className="itemImg" />
-                                                                    </div>
-                                                                    <div className="col-10 p-0 py-3 pl-2">
-                                                                        <h6>{data.title} </h6>
-                                                                        <span className="float-right pr-2 cursor-pointer" onClick={()=>alert("Close")}> <i className="fa fa-close"></i></span>
-                                                                    </div>
-                                                                </div>)});
+                                                          return(<TopicItem data={data} type={item.video?"video":"deliverable"} topicId={props.match.params.id}/>)
+                                                        });
 
     const SortableContainer = sortableContainer(({children}) => {
       return <div>{children}</div>;

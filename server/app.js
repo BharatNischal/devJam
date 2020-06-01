@@ -343,16 +343,23 @@ app.get("/getContent",(req,res)=>{
   })
   .then(cont=>{
     if(!cont){
-      console.log("EMPTY CONTENT");
-     return res.json({msg:"Empty",success:false});
-    }
+      db.Content.create({})                       //adding topic in topics array
+      .then(createdContent=>{
+        return res.json({content:[],success:true});
+      })
+      .catch(err=>{
+        console.log(err.message);
+        return res.json({msg:err.message,success:false});
+      })
+    }else{
     return res.json({content:cont,success:true});
+  }
   }).catch(err=>{
     res.json({msg:err.message,success:false});
   })
 });
 
-//Create Topic Route 
+//Create Topic Route
 app.get("/content/createTopic",(req,res)=>{
   db.Content.findOne({})
   .then(cont=>{
@@ -372,12 +379,12 @@ app.get("/content/createTopic",(req,res)=>{
     }else{
       db.Topic.create({title:"",description:""})
       .then(topic=>{
-        
+
         // pushing topic to topics array in existing content
-        cont.topics.push(topic._id);                                        
+        cont.topics.push(topic._id);
         cont.save();
         res.json({topicId:topic._id,success:true});
-       
+
       }).catch(topicErr=>{
         res.json({msg:topicErr.message,success:false});
       })
@@ -387,7 +394,7 @@ app.get("/content/createTopic",(req,res)=>{
   })
 });
 
-//Update Content Sort 
+//Update Content Sort
 app.put("/content",(req,res)=>{
   db.Content.findOneAndUpdate({},{topics:req.body})
   .then(updatedContent=>{
@@ -463,6 +470,25 @@ app.put("/deliverable/:id",(req,res)=>{
 
 });
 
+app.delete("/topic/:topicId/deliverable/:deliverableId",(req,res)=>{
+    db.Topic.findById(req.params.topicId)
+      .then(topic=>{
+        const index = topic.items.findIndex((item)=>item.deliverable == req.params.deliverableId);
+        if(index>-1){
+          topic.items.splice(index,1);
+          topic.save();
+        }
+        db.Deliverable.RemoveById(req.params.deliverableId)
+          .then(video=>{
+              res.json({success:true});
+          })
+      })
+      .catch(err=>{
+        console.log(err.message);
+        res.json({success:false,msg:err.message});
+      })
+})
+
 //------END OF DELIVERABLE ROUTES---------
 
 
@@ -527,7 +553,24 @@ app.put("/topic/video/:id",(req,res)=>{
     })
 })
 
-
+app.delete("/topic/:topicId/video/:videoId",(req,res)=>{
+    db.Topic.findById(req.params.topicId)
+      .then(topic=>{
+        const index = topic.items.findIndex((item)=>item.video == req.params.videoId);
+        if(index>-1){
+          topic.items.splice(index,1);
+          topic.save();
+        }
+        db.Video.RemoveById(req.params.videoId)
+          .then(video=>{
+              res.json({success:true});
+          })
+      })
+      .catch(err=>{
+        console.log(err.message);
+        res.json({success:false,msg:err.message});
+      })
+})
 
 app.get("/api/err",(req,res)=>{
   res.json({success:false});
