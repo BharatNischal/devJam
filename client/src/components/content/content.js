@@ -9,43 +9,21 @@ import axios from "axios";
 const Content = (props)=>{
     const [showSidebar,setShowSideBar] = useState(false);
     const [saveActive,setSaveActive] = useState(false);
-    const [topics,setTopics]=useState([
-        {   _id:"1",
-            title:"First Slide",
-            items:[
-                {video:{
-                    _id:"x1",
-                    title:"Video of first"
-                }},
-                {deliverable:{
-                    _id:"d1",
-                    title:"Deliverable of first"
-                }}
-        ]},{
-            _id:"2",
-            title:"Second Topic",
-            items:[
-                {video:{
-                    _id:"x1",
-                    title:"Video of first"
-                }},
-                {deliverable:{
-                    _id:"d1",
-                    title:"Deliverable of first"
-                }}
-        ]}]);
+    const [topics,setTopics]=useState([]);
 
     useEffect(()=>{
         axios.get("http://localhost:8080/getContent")
         .then(res=>{
             console.log(res);
             if(res.data.success){
+                console.log(res.data.content.topics);
                 setTopics(res.data.content.topics);
             }
         }).catch(err=>{
             console.log(err);
         })
     },[])
+
     const onSortEnd = ({oldIndex, newIndex}) => {
         setTopics(topic => (
             arrayMove(topic, oldIndex, newIndex)
@@ -67,6 +45,17 @@ const Content = (props)=>{
         .catch(err=>{
             console.log(err.message);
         })
+    }
+
+    const handleSave = ()=>{
+        const data = topics.map(topic=>topic._id);
+        axios.put("http://localhost:8080/content",{data})
+          .then(res=>{
+              console.log(res.data.success);
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
     }
 
     const SortableItem = sortableElement(({item}) => {
@@ -98,7 +87,7 @@ const Content = (props)=>{
                         <button className="btn-outline-grad p-2" onClick={handleNewTopic}> + Create </button>
                         <button
                             className={saveActive?" float-right saveBtn active p-2 px-3":" float-right saveBtn p-2 px-3"}
-                            disabled={!saveActive}  onClick={()=>alert("Hello")}> Save
+                            disabled={!saveActive}  onClick={handleSave}> Save
                         </button>
                     </div>
 

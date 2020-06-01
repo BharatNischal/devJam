@@ -396,7 +396,7 @@ app.get("/content/createTopic",(req,res)=>{
 
 //Update Content Sort
 app.put("/content",(req,res)=>{
-  db.Content.findOneAndUpdate({},{topics:req.body})
+  db.Content.findOneAndUpdate({},{topics:req.body.data})
   .then(updatedContent=>{
     res.json({content:updatedContent,success:true});
   }).catch(err=>{
