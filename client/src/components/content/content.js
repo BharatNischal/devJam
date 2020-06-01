@@ -34,10 +34,11 @@ const Content = (props)=>{
                     title:"Deliverable of first"
                 }}
         ]}]);
-    
+
     useEffect(()=>{
-        axios.get("/getContent")
+        axios.get("http://localhost:8080/getContent")
         .then(res=>{
+            console.log(res);
             if(res.data.success){
                 setTopics(res.data.content.topics);
             }
@@ -53,14 +54,28 @@ const Content = (props)=>{
            setSaveActive(true);
        }
     };
-        
-    const SortableItem = sortableElement(({item}) => {  
+
+    const handleNewTopic = ()=>{
+      axios.get("http://localhost:8080/content/createTopic")
+        .then(res=>{
+            if(res.data.success){
+              props.history.push(`/topic/${res.data.topicId}`);
+            }else{
+              console.log(res.data.msg);
+            }
+        })
+        .catch(err=>{
+            console.log(err.message);
+        })
+    }
+
+    const SortableItem = sortableElement(({item}) => {
             return( <ContentSection  id={"a"+item._id} title={item.title} data={item.items}  />)
         });
-    
+
     const SortableContainer = sortableContainer(({children}) => {
         return <div>{children}</div>;
-        });    
+        });
 
     return (
         <div className="w-100 bg-light" style={{minHeight:"100vh"}}>
@@ -71,22 +86,22 @@ const Content = (props)=>{
                             <Link key={t._id} className="sidebarLink " activeClass="active shadow" to={"a"+t._id} spy={true} smooth={true} offset={-70} duration={500}>
                                 <div>{t.title}</div>
                             </Link>
-                        ))}     
-                           
-                        
-                    
+                        ))}
+
+
+
                     <button className="expand" onClick={()=>setShowSideBar(!showSidebar)} > > </button>
                 </div>
                 <div className="col-lg-3"></div>
                 <div className="col-lg-9 text-left">
                     <div className="mt-3">
-                        <button className="btn-outline-grad p-2"> + Create </button>
-                        <button 
-                            className={saveActive?" float-right saveBtn active p-2 px-3":" float-right saveBtn p-2 px-3"} 
+                        <button className="btn-outline-grad p-2" onClick={handleNewTopic}> + Create </button>
+                        <button
+                            className={saveActive?" float-right saveBtn active p-2 px-3":" float-right saveBtn p-2 px-3"}
                             disabled={!saveActive}  onClick={()=>alert("Hello")}> Save
                         </button>
                     </div>
-                    
+
                     <SortableContainer onSortEnd={onSortEnd} distance={1} >
                         {topics.map((item, index) => (
                             <SortableItem key={item._id} index={index} item={item} />
@@ -95,7 +110,7 @@ const Content = (props)=>{
                     {/* {topics.map((item) => (
                             <ContentSection  id={"a"+item._id} title={item.title} data={item.items}  />
                         ))} */}
-                    
+
                     <div style={{minHeight:"40vh"}}></div>
                 </div>
             </div>
