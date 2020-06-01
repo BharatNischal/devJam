@@ -8,6 +8,7 @@ const TopicItem = (props)=>{
       axios.delete(`http://localhost:8080/topic/${props.topicId}/${props.type}/${data._id}`)
         .then(res=>{
           console.log(res);
+          props.deleteItem(props.type,data._id);
         })
         .catch(err=>{
           console.log(err.message);

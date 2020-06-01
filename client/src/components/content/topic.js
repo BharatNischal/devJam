@@ -27,6 +27,15 @@ const Topic = (props)=>{
           })
     },[])
 
+    const deleteItem = (type,id)=>{
+      if(type=="video"){
+        const newContent = content.filter(item=>item.video._id!=id);
+        setContent(newContent);
+      }else{
+        const newContent = content.filter(item=>item.deliverable._id!=id);
+        setContent(newContent);
+      }
+    }
 
     const handleSave = ()=>{
         const items = content.map(item=>{
@@ -89,7 +98,7 @@ const Topic = (props)=>{
                                                             data = item.video;
                                                         else
                                                             data = item.deliverable;
-                                                          return(<TopicItem data={data} type={item.video?"video":"deliverable"} topicId={props.match.params.id}/>)
+                                                          return(<TopicItem data={data} type={item.video?"video":"deliverable"} topicId={props.match.params.id} deleteItem={deleteItem}/>)
                                                         });
 
     const SortableContainer = sortableContainer(({children}) => {
