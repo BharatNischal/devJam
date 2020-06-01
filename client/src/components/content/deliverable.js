@@ -15,9 +15,9 @@ const Deliverable =(props)=>{
         if(!props.empty){
             axios.get(`/deliverable/${props.match.params.id}`)
             .then(res=>{
-                
+
                 if(res.data.success){
-                    
+
                     setLoading(false);
                     setTitle(res.data.data.title?res.data.data.title:"");
                     setInstruction(res.data.data.instruction?res.data.data.instruction:"");
@@ -40,7 +40,7 @@ const Deliverable =(props)=>{
         setLoading(true);
         axios.put(`/deliverable/${props.match.params.id}`,{title,instruction,dueDate,points})
             .then(res=>{
-                
+
                 if(res.data.success){
                     setLoading(false);
                     alert("Saved Deliverable");
@@ -58,7 +58,7 @@ const Deliverable =(props)=>{
 
     const delMain=(
         <div className="row">
-                
+
                 <div className="col-md-8 mt-3" style={{borderRight:"1px solid #aaa"}}>
                     <div className="form-group input-group px-lg-4">
                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
@@ -76,10 +76,10 @@ const Deliverable =(props)=>{
                     </div>
                     <span className="px-lg-4">Due Date </span><br/>
                     <div className="form-group input-group px-lg-4">
-                         
+
                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fas fa-calendar-alt" ></i></div>
                         <input type="date" name="dueDate"  value={dueDate} onChange={(e)=>setDueDate(e.target.value)} placeholder="Enter Due Date" className="form-control" required />
-                        
+
                     </div>
                 </div>
             </div>
@@ -88,7 +88,7 @@ const Deliverable =(props)=>{
     return(
         <React.Fragment>
         <Nav show={true} menu={true}/>
-        <Modal title="Deliverable" save={saveDeliverableHandler}  >
+        <Modal title="Deliverable" save={saveDeliverableHandler} close={()=>{props.history.push(`/topic/${props.location.topicId}`)}} >
             {loading?<div className="text-center"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /></div>
                 :err?<p>{err}</p>:delMain}
         </Modal>

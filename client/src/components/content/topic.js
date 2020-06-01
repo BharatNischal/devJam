@@ -60,7 +60,7 @@ const Topic = (props)=>{
         axios.get(`http://localhost:8080/topic/${props.match.params.id}/createVideo`)
           .then(res=>{
               if(res.data.success){
-                props.history.push(`/video/${res.data.video._id}`);
+                props.history.push({pathname:`/video/${res.data.video._id}`,topicId:props.match.params.id});
               }else{
                 console.log(res.data.msg);
               }
@@ -74,7 +74,7 @@ const Topic = (props)=>{
         axios.get(`http://localhost:8080/topic/${props.match.params.id}/createDeliverable`)
           .then(res=>{
               if(res.data.success){
-                props.history.push(`/deliverable/${res.data.deliverable._id}`);
+                props.history.push({pathname:`/deliverable/${res.data.deliverable._id}`,topicId:props.match.params.id});
               }else{
                 console.log(res.data.msg);
               }
@@ -126,7 +126,7 @@ const Topic = (props)=>{
     )
 
     return (
-        <Modal title="Topic" save={handleSave}>
+        <Modal title="Topic" save={handleSave} close={()=>{props.history.push('/content')}}>
             {topicMain}
         </Modal>
     );
