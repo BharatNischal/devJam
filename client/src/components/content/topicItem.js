@@ -6,7 +6,7 @@ const TopicItem = (props)=>{
     const data = props.data;
 
     const handleDelete = ()=>{
-      axios.delete(`http://localhost:8080/topic/${props.topicId}/${props.type}/${data._id}`)
+      axios.delete(`/topic/${props.topicId}/${props.type}/${data._id}`)
         .then(res=>{
           console.log(res);
           props.deleteItem(props.type,data._id);

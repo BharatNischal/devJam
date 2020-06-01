@@ -12,7 +12,7 @@ const Topic = (props)=>{
 
     useEffect(()=>{
       console.log("use effect");
-      axios.get(`http://localhost:8080/content/topic/${props.match.params.id}`)
+      axios.get(`/content/topic/${props.match.params.id}`)
           .then(res=>{
             console.log(res.data);
             if(res.data.success){
@@ -46,7 +46,7 @@ const Topic = (props)=>{
         });
         const data = {title:details.title,description:details.description,items};
         console.log("new updated sequence",data);
-        axios.put(`http://localhost:8080/content/topic/${props.match.params.id}`,{...data})
+        axios.put(`/content/topic/${props.match.params.id}`,{...data})
           .then(res=>{
             if(res.data.success){
               console.log("Saved");
@@ -66,7 +66,7 @@ const Topic = (props)=>{
   };
 
     const addVideo = ()=>{
-        axios.get(`http://localhost:8080/topic/${props.match.params.id}/createVideo`)
+        axios.get(`/topic/${props.match.params.id}/createVideo`)
           .then(res=>{
               if(res.data.success){
                 props.history.push({pathname:`/video/${res.data.video._id}`,topicId:props.match.params.id});
@@ -80,7 +80,7 @@ const Topic = (props)=>{
     }
 
     const addDeliverable = ()=>{
-        axios.get(`http://localhost:8080/topic/${props.match.params.id}/createDeliverable`)
+        axios.get(`/topic/${props.match.params.id}/createDeliverable`)
           .then(res=>{
               if(res.data.success){
                 props.history.push({pathname:`/deliverable/${res.data.deliverable._id}`,topicId:props.match.params.id});

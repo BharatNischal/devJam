@@ -9,33 +9,10 @@ import axios from "axios";
 const Content = (props)=>{
     const [showSidebar,setShowSideBar] = useState(false);
     const [saveActive,setSaveActive] = useState(false);
-    const [topics,setTopics]=useState([{   _id:"1",
-            title:"First Slide",
-            items:[
-                {video:{
-                    _id:"x1",
-                    title:"Video of first"
-                }},
-                {deliverable:{
-                    _id:"d1",
-                    title:"Deliverable of first"
-                }}
-        ]},{
-            _id:"2",
-            title:"Second Topic",
-            items:[
-                {video:{
-                    _id:"x1",
-                    title:"Video of first"
-                }},
-                {deliverable:{
-                    _id:"d1",
-                    title:"Deliverable of first"
-                }}
-        ]}]);
+    const [topics,setTopics]=useState([]);
 
     useEffect(()=>{
-        axios.get("http://localhost:8080/getContent")
+        axios.get("/getContent")
         .then(res=>{
             console.log(res);
             if(res.data.success){
@@ -57,7 +34,7 @@ const Content = (props)=>{
     };
 
     const handleNewTopic = ()=>{
-      axios.get("http://localhost:8080/content/createTopic")
+      axios.get("/content/createTopic")
         .then(res=>{
             if(res.data.success){
               props.history.push(`/topic/${res.data.topicId}`);
@@ -72,7 +49,7 @@ const Content = (props)=>{
 
     const handleSave = ()=>{
         const data = topics.map(topic=>topic._id);
-        axios.put("http://localhost:8080/content",{data})
+        axios.put("/content",{data})
           .then(res=>{
               console.log(res.data.success);
           })

@@ -17,7 +17,7 @@ const VideoPage = (props)=>{
 
   useEffect(()=>{
     console.log("component did mount");
-    axios.get(`http://localhost:8080/topic/video/${props.match.params.id}`)
+    axios.get(`/topic/video/${props.match.params.id}`)
       .then(res=>{
         if(res.data.success){
           setDetails(res.data.video);
@@ -53,7 +53,7 @@ const VideoPage = (props)=>{
     setUploading(true);
     const formData = new FormData();
     formData.append('video',videoRef.current.files[0]);
-    axios.post("http://localhost:8080/topic/video",formData,config)
+    axios.post("/topic/video",formData,config)
       .then(res=>{
         setUploadPercentage(100);
         setDetails({...details,url:res.data.result.secure_url});

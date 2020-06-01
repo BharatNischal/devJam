@@ -36,7 +36,7 @@ const ContentSection=(props)=>{
     }
 
     const deleteTopic = ()=>{
-      axios.delete(`http://localhost:8080/content/topic/${props.id.slice(1)}`)
+      axios.delete(`/content/topic/${props.id.slice(1)}`)
         .then(res=>{
             console.log(res.data.msg);
         })
