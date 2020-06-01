@@ -98,7 +98,7 @@ const Topic = (props)=>{
                                                             data = item.video;
                                                         else
                                                             data = item.deliverable;
-                                                          return(<TopicItem data={data} type={item.video?"video":"deliverable"} topicId={props.match.params.id} deleteItem={deleteItem}/>)
+                                                          return(<TopicItem data={data} type={item.video?"video":"deliverable"} topicId={props.match.params.id} deleteItem={deleteItem} handleSave={handleSave}/>)
                                                         });
 
     const SortableContainer = sortableContainer(({children}) => {
@@ -117,8 +117,8 @@ const Topic = (props)=>{
                     <textarea name="description"  onChange={(e)=>setDetails({...details,description:e.target.value})} rows="5" placeholder="Enter Description" className="form-control" value={details.description} required ></textarea>
                 </div>
                 <div className="px-lg-4">
-                    <button className="btn text-pink btn-outline-grad mr-2" onClick={addVideo}> <i className="fa fa-paperclip"></i> Add </button>
-                    <button className="btn text-pink btn-outline-grad" onClick={addDeliverable}> <i className="fa fa-plus"></i> Create </button>
+                    <button className="btn text-pink btn-outline-grad mr-2" onClick={async ()=>{await handleSave();addVideo()}}> <i className="fa fa-paperclip"></i> Add </button>
+                    <button className="btn text-pink btn-outline-grad" onClick={async ()=>{await handleSave();addDeliverable()}}> <i className="fa fa-plus"></i> Create </button>
                 </div>
 
 
