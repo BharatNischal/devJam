@@ -11,7 +11,7 @@ const          express = require('express'),
            VideoRoutes = require("./routes/content/video"),
      DeliverableRoutes = require("./routes/content/deliverables"),
            TopicRoutes = require("./routes/content/topic"),
-           ContentRoutes = require("./routes/content/content"),
+         ContentRoutes = require("./routes/content/content"),
          ProfileRoutes = require("./routes/profile"),
             AuthRoutes = require("./routes/auth");
 
@@ -71,14 +71,14 @@ app.use("/",DeliverableRoutes);
 
 
 
-if (process.env.NODE_ENV === 'production') {
+// if (process.env.NODE_ENV === 'production') {
   // Set static folder
   app.use(express.static(__dirname+'/../client/build'));
 
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..' , 'client', 'build', 'index.html'));
   });
-}
+// }
 
 
 

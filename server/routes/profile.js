@@ -5,6 +5,8 @@ const db=require("../models/index");
 const multer = require('multer');
 const path = require('path');
 const middleware = require("../middleware");
+const dotenv = require('dotenv');
+dotenv.config();
 
 //Muler upload
 const storage = multer.diskStorage({
