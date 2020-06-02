@@ -2,12 +2,13 @@ const express= require('express');
 const mongoose = require("mongoose");
 const router=express.Router();
 const db=require("../../models/index");
+const middleware = require("../../middleware");
 
 
 // Topic Routes
 
 // To get topic with given id and its contents
-router.get("/content/topic/:id",(req,res)=>{
+router.get("/content/topic/:id",middleware.isAdmin,(req,res)=>{
   db.Topic.findById(req.params.id).populate('items.video').populate('items.deliverable').exec((err,topic)=>{
       if(err){
         res.json({success:false,msg:err.message});
@@ -18,7 +19,7 @@ router.get("/content/topic/:id",(req,res)=>{
 });
 
 // To update the new sequence of video/deliverables inside a topic
-router.put("/content/topic/:id",(req,res)=>{
+router.put("/content/topic/:id",middleware.isAdmin,(req,res)=>{
     console.log(req.body);
     db.Topic.findByIdAndUpdate(req.params.id,req.body)
       .then(result=>{
@@ -30,7 +31,7 @@ router.put("/content/topic/:id",(req,res)=>{
 })
 
 // To delete a topic and all its contents with given topicId
-router.delete("/content/topic/:topicId",(req,res)=>{
+router.delete("/content/topic/:topicId",middleware.isAdmin,(req,res)=>{
     db.Topic.findById(req.params.topicId)
       .then(topic=>{
           const delVideo = topic.items.filter(topic=>topic.video).map(topic=>(topic.video._id));

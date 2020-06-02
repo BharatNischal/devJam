@@ -4,6 +4,8 @@ const router=express.Router();
 const multer = require('multer');
 const db=require("../../models/index");
 const path   = require("path");
+const middleware = require("../../middleware");
+
 
 // Multer configurations
 const storage = multer.diskStorage({
@@ -24,10 +26,10 @@ cloudinary.config({
 });
 
 
-// There are the Video Routes 
+// There are the Video Routes
 
 // Video upload link to get the url from video
-router.post("/topic/video",uploadVideo,(req,res)=>{
+router.post("/topic/video",middleware.isAdmin,uploadVideo,(req,res)=>{
   if(req.file){
     console.log("Video recieved",req.file);
     cloudinary.uploader.upload(req.file.path,{ resource_type: "video"}, (err,result)=> {
@@ -55,7 +57,7 @@ router.get("/topic/video/:id",(req,res)=>{
 })
 
 // Create a dummy video id ,add it to topic with given id and return the id
-router.get("/topic/:topicId/createVideo",(req,res)=>{
+router.get("/topic/:topicId/createVideo",middleware.isAdmin,(req,res)=>{
   db.Video.create({title:"",description:"",url:"",filename:""})
     .then(video=>{
       db.Topic.findById(req.params.topicId)
@@ -72,7 +74,7 @@ router.get("/topic/:topicId/createVideo",(req,res)=>{
 
 
 // Update the video with given ID
-router.put("/topic/video/:id",(req,res)=>{
+router.put("/topic/video/:id",middleware.isAdmin,(req,res)=>{
   db.Video.findByIdAndUpdate(req.params.id,req.body.details)
     .then(updatedVideo=>{
       res.json({success:true,video:updatedVideo});
@@ -84,7 +86,7 @@ router.put("/topic/video/:id",(req,res)=>{
 
 
 // Delte the video from both topic and database for given videoId
-router.delete("/topic/:topicId/video/:videoId",(req,res)=>{
+router.delete("/topic/:topicId/video/:videoId",middleware.isAdmin,(req,res)=>{
     db.Topic.findById(req.params.topicId)
       .then(topic=>{
         const index = topic.items.findIndex((item)=>item.video == req.params.videoId);

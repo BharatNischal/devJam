@@ -2,11 +2,13 @@ const express= require('express');
 const mongoose = require("mongoose");
 const router=express.Router();
 const db=require("../../models/index");
+const middleware = require("../../middleware");
+
 
 // Content Routes
 
 // Get all the topics and their vieos/deliverables for the content page
-router.get("/getContent",(req,res)=>{
+router.get("/getContent",middleware.isAdmin,(req,res)=>{
   db.Content.findOne({})
   .populate({
     path:"topics",
@@ -38,7 +40,7 @@ router.get("/getContent",(req,res)=>{
 });
 
 //Create Topic Route
-router.get("/content/createTopic",(req,res)=>{
+router.get("/content/createTopic",middleware.isAdmin,(req,res)=>{
   db.Content.findOne({})
   .then(cont=>{
     if(!cont){
@@ -73,7 +75,7 @@ router.get("/content/createTopic",(req,res)=>{
 });
 
 //Update Content Sort
-router.put("/content",(req,res)=>{
+router.put("/content",middleware.isAdmin,(req,res)=>{
   db.Content.findOneAndUpdate({},{topics:req.body.data})
   .then(updatedContent=>{
     res.json({content:updatedContent,success:true});

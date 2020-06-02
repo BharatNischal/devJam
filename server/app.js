@@ -7,7 +7,6 @@ const          express = require('express'),
             bodyParser = require("body-parser"),
                   cors = require("cors"),
                    app = express(),
-            middleware = require("./middleware"),
            VideoRoutes = require("./routes/content/video"),
      DeliverableRoutes = require("./routes/content/deliverables"),
            TopicRoutes = require("./routes/content/topic"),
@@ -58,27 +57,27 @@ app.use("/",ProfileRoutes);
 app.use("/",AuthRoutes);
 
 // Content Page routes
-app.use("/",middleware.isAdmin, ContentRoutes);
+app.use("/", ContentRoutes);
 
 // Topic routes
-app.use("/",middleware.isAdmin,TopicRoutes);
+app.use("/",TopicRoutes);
 
 // Video Routes
-app.use("/",middleware.isAdmin,VideoRoutes);
+app.use("/",VideoRoutes);
 
 // Deliverable Routes
-app.use("/",middleware.isAdmin,DeliverableRoutes);
+app.use("/",DeliverableRoutes);
 
 
 
-// if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   // Set static folder
   app.use(express.static(__dirname+'/../client/build'));
 
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..' , 'client', 'build', 'index.html'));
   });
-// }
+}
 
 
 
