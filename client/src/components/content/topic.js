@@ -1,34 +1,38 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useContext } from "react";
 import Modal from "../ui/modal/modal";
 import {sortableContainer, sortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import TopicItem from "./topicItem";
+import {CurUserContext} from "../../contexts/curUser";
 import axios from "axios";
 import "./content.css"
 
 const Topic = (props)=>{
     const [details,setDetails] = useState({title:"",description:""});
     const [content,setContent] = useState([]);
-
+    const {login} = useContext(CurUserContext);
     const [loading,setLoading] = useState(true);
 
     useEffect(()=>{
-      console.log("use effect");
-      axios.get(`/content/topic/${props.match.params.id}`)
-          .then(res=>{
-            console.log(res.data);
-            if(res.data.success){
-              setDetails({title:res.data.data.title,description:res.data.data.description});
-              setContent(res.data.data.items);
-            }else{
-              console.log(res.data.msg);
-            }
-            setLoading(false);
-          })
-          .catch(err=>{
-            console.log(err.message);
-            setLoading(false);
-          })
+      if(login){
+        axios.get(`/content/topic/${props.match.params.id}`)
+            .then(res=>{
+              console.log(res.data);
+              if(res.data.success){
+                setDetails({title:res.data.data.title,description:res.data.data.description});
+                setContent(res.data.data.items);
+              }else{
+                console.log(res.data.msg);
+              }
+              setLoading(false);
+            })
+            .catch(err=>{
+              console.log(err.message);
+              setLoading(false);
+            })
+      }else{
+        props.history.push("/login");
+      }
     },[])
 
     const deleteItem = (type,id)=>{
@@ -57,7 +61,7 @@ const Topic = (props)=>{
     }
 
     const handleSave = ()=>{
-      
+
         const items = content.map(item=>{
           if(item.video)
             return {video:item.video._id};

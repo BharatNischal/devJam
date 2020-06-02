@@ -1,7 +1,8 @@
-import React,{useState,useRef,useEffect} from "react";
+import React,{useState,useRef,useEffect,useContext} from "react";
 import Modal from "../ui/modal/modal";
 import Nav from "../profile/Nav/Nav";
 import axios from "axios";
+import {CurUserContext} from "../../contexts/curUser";
 
 const VideoPage = (props)=>{
 
@@ -10,28 +11,31 @@ const VideoPage = (props)=>{
   const [uploadPercentage,setUploadPercentage] = useState(0);
   const [uploading,setUploading] = useState(false);
   const videoRef = useRef(null);
-
+  const {login} = useContext(CurUserContext);
   const [loading,setLoading]= useState(true);
   const [err,setErr] = useState(null);
   const [copyAlert,setCopyAlert] = useState(false);
 
   useEffect(()=>{
-    console.log("component did mount");
-    axios.get(`/topic/video/${props.match.params.id}`)
-      .then(res=>{
-        if(res.data.success){
-          setDetails(res.data.video);
-        }else{
-          console.log(res.data.msg);
-          setErr(res.data.msg);
-        }
-        setLoading(false);
-      })
-      .catch(err=>{
-        console.log(err.msg);
-        setLoading(false);
-        setErr(err.msg);
-      })
+    if(login){
+      axios.get(`/topic/video/${props.match.params.id}`)
+        .then(res=>{
+          if(res.data.success){
+            setDetails(res.data.video);
+          }else{
+            console.log(res.data.msg);
+            setErr(res.data.msg);
+          }
+          setLoading(false);
+        })
+        .catch(err=>{
+          console.log(err.msg);
+          setLoading(false);
+          setErr(err.msg);
+        })
+    }else{
+      props.history.push("/login");
+    }
   },[])
 
   const config = {

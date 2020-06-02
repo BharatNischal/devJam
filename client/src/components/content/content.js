@@ -1,37 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { Link, animateScroll as scroll } from "react-scroll";
 import "./content.css";
 import ContentSection from "./contentSection";
 import {sortableContainer, sortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import axios from "axios";
+import {CurUserContext} from "../../contexts/curUser";
 import EmptyImg from "./emptyTopic.png";
 import Nav from "../profile/Nav/Nav";
 
 const Content = (props)=>{
     const [topics,setTopics]=useState([]);
-    
+
     //UI STATES
     const [showSidebar,setShowSideBar] = useState(false);
     const [saveActive,setSaveActive] = useState(false);
     const [loading,setLoading] = useState(true);
-    
+    const {login} = useContext(CurUserContext);
 
 
     useEffect(()=>{
-        axios.get("/getContent")
-        .then(res=>{
-            console.log(res);
-            if(res.data.success){
-                console.log(res.data.content.topics);
-                setTopics(res.data.content.topics);
+        if(login){
+          axios.get("/getContent")
+          .then(res=>{
+              console.log(res);
+              if(res.data.success){
+                  console.log(res.data.content.topics);
+                  setTopics(res.data.content.topics);
 
-            }
-            setLoading(false);
-        }).catch(err=>{
-            console.log(err);
-            setLoading(false);
-        })
+              }
+              setLoading(false);
+          }).catch(err=>{
+              console.log(err);
+              setLoading(false);
+          })
+        }else{
+          props.history.push("/login");
+        }
     },[])
 
     const onSortEnd = ({oldIndex, newIndex}) => {
@@ -85,7 +90,7 @@ const Content = (props)=>{
         <React.Fragment>
         <Nav  menu={true} show={true} />
         <div className="w-100 bg-light" style={{minHeight:"100vh"}}>
-            
+
             <div className="row mx-0" >
                 <div className={showSidebar?"col-sm-3 sidebar show":"col-sm-3 sidebar"}  >
                         <div style={{marginTop:"80px"}} ></div>
@@ -113,7 +118,7 @@ const Content = (props)=>{
                             <img className="img img-fluid" src={EmptyImg} alt="No Topics added" />
                         </div>
                     ):null}
-                    
+
                     {loading?
                     (<div className="text-center"> <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /> </div>):
                     (
@@ -123,13 +128,13 @@ const Content = (props)=>{
                             ))}
                         </SortableContainer>
                     )}
-                    
+
                     {/* {topics.map((item) => (
                             <ContentSection  id={"a"+item._id} title={item.title} data={item.items}  />
                         ))} */}
 
                     <div style={{minHeight:"40vh"}}></div>
-                    
+
                 </div>
             </div>
         </div>

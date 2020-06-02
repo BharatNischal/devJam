@@ -441,9 +441,9 @@ app.delete("/content/topic/:topicId",(req,res)=>{
           Promise.all([db.Video.deleteMany({'_id':{'$in':delVideo}}),db.Deliverable.deleteMany({'_id':{'$in':delDeliverable}}),db.Topic.findByIdAndDelete(req.params.topicId)])
             .then(result=>{
               console.log("removed all");
-              
+
               res.json({success:true});
-            }).catch(Err=>console.log(Err));
+            })
       })
       .catch(err=>{
         res.json({success:false,msg:err.message});

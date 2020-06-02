@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import Modal from "../ui/modal/modal";
 import Nav from "../profile/Nav/Nav";
 import axios from "axios";
+import {CurUserContext} from "../../contexts/curUser";
 
 const Deliverable =(props)=>{
     const [title,setTitle] = useState("");
@@ -10,29 +11,34 @@ const Deliverable =(props)=>{
     const [points,setPoints]= useState("");
     const [loading,setLoading] = useState(true);
     const [err,setErr] = useState(null);
+    const {login} = useContext(CurUserContext);
 
     useEffect(()=>{
-        if(!props.empty){
-            axios.get(`/deliverable/${props.match.params.id}`)
-            .then(res=>{
+        if(login){
+          if(!props.empty){
+              axios.get(`/deliverable/${props.match.params.id}`)
+              .then(res=>{
 
-                if(res.data.success){
+                  if(res.data.success){
 
-                    setLoading(false);
-                    setTitle(res.data.data.title?res.data.data.title:"");
-                    setInstruction(res.data.data.instruction?res.data.data.instruction:"");
-                    setDueDate(res.data.data.dueDate?res.data.data.dueDate.substr(0,10):"");
-                    setPoints(res.data.data.points?res.data.data.points:"");
+                      setLoading(false);
+                      setTitle(res.data.data.title?res.data.data.title:"");
+                      setInstruction(res.data.data.instruction?res.data.data.instruction:"");
+                      setDueDate(res.data.data.dueDate?res.data.data.dueDate.substr(0,10):"");
+                      setPoints(res.data.data.points?res.data.data.points:"");
 
-                }else{
-                    setLoading(false);
-                    setErr(res.data.msg);
-                }
-            })
-            .catch(err=>{
-                setLoading(false);
-                setErr(err.message);
-            })
+                  }else{
+                      setLoading(false);
+                      setErr(res.data.msg);
+                  }
+              })
+              .catch(err=>{
+                  setLoading(false);
+                  setErr(err.message);
+              })
+          }
+        }else{
+          props.history.push("/login");
         }
     },[])
 
