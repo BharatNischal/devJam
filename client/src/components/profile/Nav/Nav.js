@@ -58,6 +58,9 @@ const Nav =(props)=>{
                                         <Link className="nav-link" to="/adminDashboard">Dashboard</Link>
                                     </li>
                                 ):null}
+                                <li className="nav-item ">
+                                    <Link className="nav-link" to="/content">Content</Link>
+                                </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="#" onClick={handleLogout} > Logout </Link>
                                 </li>

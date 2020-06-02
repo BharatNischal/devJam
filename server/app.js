@@ -7,6 +7,7 @@ const          express = require('express'),
             bodyParser = require("body-parser"),
                   cors = require("cors"),
                    app = express(),
+            middleware = require("./middleware"),
            VideoRoutes = require("./routes/content/video"),
      DeliverableRoutes = require("./routes/content/deliverables"),
            TopicRoutes = require("./routes/content/topic"),
@@ -57,16 +58,16 @@ app.use("/",ProfileRoutes);
 app.use("/",AuthRoutes);
 
 // Content Page routes
-app.use("/",ContentRoutes);
+app.use("/",middleware.isAdmin, ContentRoutes);
 
 // Topic routes
-app.use("/",TopicRoutes);
+app.use("/",middleware.isAdmin,TopicRoutes);
 
 // Video Routes
-app.use("/",VideoRoutes);
+app.use("/",middleware.isAdmin,VideoRoutes);
 
 // Deliverable Routes
-app.use("/",DeliverableRoutes);
+app.use("/",middleware.isAdmin,DeliverableRoutes);
 
 
 

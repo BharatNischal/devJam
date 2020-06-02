@@ -20,7 +20,6 @@ const Content = (props)=>{
 
 
     useEffect(()=>{
-        console.log("user",user);
         if(user.loggedIn){
           axios.get("/getContent")
           .then(res=>{
