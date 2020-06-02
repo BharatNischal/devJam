@@ -72,6 +72,7 @@ const Content = (props)=>{
           .then(res=>{
               setLoading(false);
               console.log(res.data.success);
+              setSaveActive(false);
           })
           .catch(err=>{
             console.log(err.message);

@@ -6,6 +6,9 @@ const db=require("../../models/index");
 const path   = require("path");
 const middleware = require("../../middleware");
 
+// Setting Up Dotenv for .env files environment variable
+const dotenv = require('dotenv');
+dotenv.config();
 
 // Multer configurations
 const storage = multer.diskStorage({
