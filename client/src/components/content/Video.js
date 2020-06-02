@@ -11,11 +11,13 @@ const VideoPage = (props)=>{
   const [uploadPercentage,setUploadPercentage] = useState(0);
   const [uploading,setUploading] = useState(false);
   const videoRef = useRef(null);
+  const timeoutRef = useRef(null);
   const {user} = useContext(CurUserContext);
   const [loading,setLoading]= useState(true);
   const [err,setErr] = useState(null);
   const [copyAlert,setCopyAlert] = useState(false);
   const [videoUploadedAlert,setVideoUploadedAlert] = useState(false);
+
 
   useEffect(()=>{
     if(user.loggedIn){
@@ -39,6 +41,14 @@ const VideoPage = (props)=>{
     }
   },[])
 
+  useEffect(()=>{
+    console.log("perc",uploadPercentage);
+    if(uploadPercentage>=95){
+      console.log("use effect called");
+      clearInterval(timeoutRef.current);
+    }
+  },[uploadPercentage])
+
   const config = {
     headers: {
         'content-type': 'multipart/form-data'
@@ -49,6 +59,12 @@ const VideoPage = (props)=>{
         // console.log( `${loaded}kb of ${total}kb | ${percent}%` );
         if( percent < 80 ){
           setUploadPercentage(percent);
+        }else if(percent==100){ //when the file is uploaded to heroku server and yet to be uploaded to cloudinary
+            console.log("fully uploaded");
+            timeoutRef.current = setInterval(()=>{
+              console.log("setInterval called");
+              setUploadPercentage((prev)=>prev+3);
+            },1000)
         }
       }
   };
@@ -64,11 +80,11 @@ const VideoPage = (props)=>{
         setUploadPercentage(100);
         setDetails({...details,url:res.data.result.secure_url,filename:fileName});
         setVideoUploadedAlert(true);
+        setUploading(false);
         setTimeout(()=>{
           setVideoUploadedAlert(false);
         },2000)
         console.log(res.data.result);
-        setUploading(false);
       })
       .catch(err=>{
         console.log(err);
