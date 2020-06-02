@@ -16,11 +16,12 @@ const Content = (props)=>{
     const [showSidebar,setShowSideBar] = useState(false);
     const [saveActive,setSaveActive] = useState(false);
     const [loading,setLoading] = useState(true);
-    const {login} = useContext(CurUserContext);
+    const {user} = useContext(CurUserContext);
 
 
     useEffect(()=>{
-        if(login){
+        console.log("user",user);
+        if(user.loggedIn){
           axios.get("/getContent")
           .then(res=>{
               console.log(res);

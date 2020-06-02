@@ -11,13 +11,13 @@ const VideoPage = (props)=>{
   const [uploadPercentage,setUploadPercentage] = useState(0);
   const [uploading,setUploading] = useState(false);
   const videoRef = useRef(null);
-  const {login} = useContext(CurUserContext);
+  const {user} = useContext(CurUserContext);
   const [loading,setLoading]= useState(true);
   const [err,setErr] = useState(null);
   const [copyAlert,setCopyAlert] = useState(false);
 
   useEffect(()=>{
-    if(login){
+    if(user.loggedIn){
       axios.get(`/topic/video/${props.match.params.id}`)
         .then(res=>{
           if(res.data.success){

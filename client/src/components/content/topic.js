@@ -10,11 +10,11 @@ import "./content.css"
 const Topic = (props)=>{
     const [details,setDetails] = useState({title:"",description:""});
     const [content,setContent] = useState([]);
-    const {login} = useContext(CurUserContext);
+    const {user} = useContext(CurUserContext);
     const [loading,setLoading] = useState(true);
 
     useEffect(()=>{
-      if(login){
+      if(user.loggedIn){
         axios.get(`/content/topic/${props.match.params.id}`)
             .then(res=>{
               console.log(res.data);

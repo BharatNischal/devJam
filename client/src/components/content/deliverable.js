@@ -11,10 +11,10 @@ const Deliverable =(props)=>{
     const [points,setPoints]= useState("");
     const [loading,setLoading] = useState(true);
     const [err,setErr] = useState(null);
-    const {login} = useContext(CurUserContext);
+    const {user} = useContext(CurUserContext);
 
     useEffect(()=>{
-        if(login){
+        if(user.loggedIn){
           if(!props.empty){
               axios.get(`/deliverable/${props.match.params.id}`)
               .then(res=>{
