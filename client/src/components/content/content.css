@@ -50,7 +50,6 @@
 .itemBox:hover{
     background-color: white;
     box-shadow: 0px 0px 20px rgba(148, 148, 148, 0.24);
-    border:none;
 }
 
 .itemBox .itemImg{
