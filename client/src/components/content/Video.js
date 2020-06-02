@@ -15,6 +15,7 @@ const VideoPage = (props)=>{
   const [loading,setLoading]= useState(true);
   const [err,setErr] = useState(null);
   const [copyAlert,setCopyAlert] = useState(false);
+  const [videoUploadedAlert,setVideoUploadedAlert] = useState(false);
 
   useEffect(()=>{
     if(user.loggedIn){
@@ -61,6 +62,10 @@ const VideoPage = (props)=>{
       .then(res=>{
         setUploadPercentage(100);
         setDetails({...details,url:res.data.result.secure_url});
+        setVideoUploadedAlert(true);
+        setTimeout(()=>{
+          setVideoUploadedAlert(false);
+        },2000)
         console.log(res.data.result);
         setTimeout(()=>{
           setUploading(false);
@@ -152,6 +157,7 @@ let videoMain =    <div>
             :err?<p>{err}</p>:videoMain}
     </Modal>
     {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
+    {videoUploadedAlert?<div className="custom-alert"> Video Uploaded </div>:null}
     </React.Fragment>
   );
 
