@@ -49,8 +49,6 @@ const Deliverable =(props)=>{
 
                 if(res.data.success){
                     setLoading(false);
-                    alert("Saved Deliverable");
-
                 }else{
                     setLoading(false);
                     setErr(res.data.msg);
