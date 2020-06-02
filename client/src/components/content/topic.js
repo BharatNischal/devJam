@@ -17,7 +17,6 @@ const Topic = (props)=>{
       if(user.loggedIn){
         axios.get(`/content/topic/${props.match.params.id}`)
             .then(res=>{
-              console.log(res.data);
               if(res.data.success){
                 setDetails({title:res.data.data.title,description:res.data.data.description});
                 setContent(res.data.data.items);

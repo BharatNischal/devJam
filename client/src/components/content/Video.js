@@ -54,22 +54,21 @@ const VideoPage = (props)=>{
   };
 
   const onUpload = (e)=>{
-    setDetails({...details,filename:videoRef.current.files[0].name});
+    const fileName = videoRef.current.files[0].name;
+    setDetails({...details,filename:fileName});
     setUploading(true);
     const formData = new FormData();
     formData.append('video',videoRef.current.files[0]);
     axios.post("/topic/video",formData,config)
       .then(res=>{
         setUploadPercentage(100);
-        setDetails({...details,url:res.data.result.secure_url});
+        setDetails({...details,url:res.data.result.secure_url,filename:fileName});
         setVideoUploadedAlert(true);
         setTimeout(()=>{
           setVideoUploadedAlert(false);
         },2000)
         console.log(res.data.result);
-        setTimeout(()=>{
-          setUploading(false);
-        },1000);
+        setUploading(false);
       })
       .catch(err=>{
         console.log(err);

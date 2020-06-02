@@ -8,8 +8,7 @@ const TopicItem = (props)=>{
     const handleDelete = ()=>{
       axios.delete(`/topic/${props.topicId}/${props.type}/${data._id}`)
         .then(res=>{
-          console.log(res);
-          props.deleteItem(props.type,data._id);
+          props.deleteItem(props.type,props.data._id);
         })
         .catch(err=>{
           console.log(err.message);
