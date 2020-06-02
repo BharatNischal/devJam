@@ -11,7 +11,7 @@ Adding Content  | [click to see](#adding-content)
 ## How To Run ?
   To Know functionality of this project there are two ways you can either view deployed version or run it locally.  
   1. ### Deployed:
-        [Click this link to view deployed version](devjam-week1.herokuapp.com)
+        [Click this link to view deployed version](http://devjam-week1.herokuapp.com)
   1. ### Locally:
         0. Install nodeJS, MongoDB.
         1. Clone This Git Repository using:
