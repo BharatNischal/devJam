@@ -12,8 +12,8 @@
 .f-20{
   font-size: 20px;
 }
-.mt-170{
-  margin-top:170px !important;
+.mt-80{
+  margin-top:80px !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -79,4 +79,16 @@
 
 .bgd-gradient{
   background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+}
+
+
+
+
+/* TYPOGRAPHY */
+h1{
+  font-family: Roboto;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 50px;
+   
 }
