@@ -6,21 +6,24 @@ import {CurUserContext} from "../../contexts/curUser";
 
 const VideoPage = (props)=>{
 
+// State to store data
   const [details,setDetails] = useState({title:"",description:"",filename:"",url:""});
-  const [file,setFile] = useState(undefined);
+  // UI states
   const [uploadPercentage,setUploadPercentage] = useState(0);
   const [uploading,setUploading] = useState(false);
-  const videoRef = useRef(null);
-  const timeoutRef = useRef(null);
-  const {user} = useContext(CurUserContext);
   const [loading,setLoading]= useState(true);
   const [err,setErr] = useState(null);
   const [copyAlert,setCopyAlert] = useState(false);
   const [videoUploadedAlert,setVideoUploadedAlert] = useState(false);
 
+// Reference states
+  const videoRef = useRef(null);
+  const timeoutRef = useRef(null);
+  // State to get corrent login status of user
+  const {user} = useContext(CurUserContext);
 
   useEffect(()=>{
-    if(user.loggedIn){
+    if(user.loggedIn){  //Frontend authorization for admin
       axios.get(`/topic/video/${props.match.params.id}`)
         .then(res=>{
           if(res.data.success){
@@ -41,6 +44,7 @@ const VideoPage = (props)=>{
     }
   },[])
 
+// Fxn to call when uploading Percentage changes to update the progressbar
   useEffect(()=>{
     console.log("perc",uploadPercentage);
     if(uploadPercentage>=95){
@@ -49,6 +53,7 @@ const VideoPage = (props)=>{
     }
   },[uploadPercentage])
 
+  // Fxn to keep track of percentage of file being uploaded to heroku server by axios
   const config = {
     headers: {
         'content-type': 'multipart/form-data'
@@ -69,6 +74,7 @@ const VideoPage = (props)=>{
       }
   };
 
+// Function to upload video to cloudinary servers and get url for the video
   const onUpload = (e)=>{
     const fileName = videoRef.current.files[0].name;
     setDetails({...details,filename:fileName});
@@ -91,6 +97,7 @@ const VideoPage = (props)=>{
       })
   }
 
+// Save the details of the current state to the database
   const handleSave = ()=>{
     setLoading(true);
     axios.put(`/topic/video/${props.match.params.id}`,{details})
@@ -110,6 +117,7 @@ const VideoPage = (props)=>{
       })
   }
 
+// Copy the text to clipboard logic
   const copyHandler = ()=>{
     var textField = document.createElement('textarea')
     textField.innerText = details.url.length>0?details.url:"empty";
@@ -123,7 +131,7 @@ const VideoPage = (props)=>{
   }
 
 
-
+// Logic to show progress bar or input button based on state
   let button = details.url.length<4?(uploading?<div className="progress mt-3" style={{height:"10px"}}>
                           <div className="progress-bar progress-bar-striped bgd-gradient" style={{width:`${String(uploadPercentage)}%`}} role="progressbar"  aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>:<div className="form-group input-group col-md-9 col-sm-12 mt-2 mt-lg-4">
@@ -132,6 +140,7 @@ const VideoPage = (props)=>{
                                 </div>):null;
   let thumbnailSrc = uploading?"https://gifimage.net/wp-content/uploads/2018/06/upload-animated-gif-3.gif":(details.url.length>4?details.url.substr(0, details.url.lastIndexOf("."))+".jpg":"https://simplylandscapingct.com/wp-content/uploads/2017/11/large-white-background.jpg")
 
+// Main UI
 let videoMain =    <div>
         <div className="row">
           <div className="col-md-9 col-12 mt-3" style={{borderRight:"1px solid #aaa"}}>

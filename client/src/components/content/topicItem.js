@@ -2,9 +2,11 @@ import React from "react";
 import {withRouter} from "react-router-dom";
 import axios from "axios";
 
+// This component is used for individual video/ Deliverable UI in topic page
 const TopicItem = (props)=>{
     const data = props.data;
 
+//  Delete item from database and then call props.deleteItem to remove that item from state
     const handleDelete = ()=>{
       axios.delete(`/topic/${props.topicId}/${props.type}/${data._id}`)
         .then(res=>{

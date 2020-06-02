@@ -8,13 +8,16 @@ import axios from "axios";
 import "./content.css"
 
 const Topic = (props)=>{
+    // States for data
     const [details,setDetails] = useState({title:"",description:""});
     const [content,setContent] = useState([]);
+    // State to get current login status of user
     const {user} = useContext(CurUserContext);
+    // UI state
     const [loading,setLoading] = useState(true);
 
     useEffect(()=>{
-      if(user.loggedIn){
+      if(user.loggedIn){  //Frontend authorization for admin
         axios.get(`/content/topic/${props.match.params.id}`)
             .then(res=>{
               if(res.data.success){
@@ -34,6 +37,7 @@ const Topic = (props)=>{
       }
     },[])
 
+    // Delete video/deliverable from State (used asa prop in topicItem)
     const deleteItem = (type,id)=>{
       if(type=="video"){
         const newContent = content.filter(item=>item.video._id!=id);
@@ -44,6 +48,7 @@ const Topic = (props)=>{
       }
     }
 
+    // Delete topic and all its contents from database and State
     const deleteTopic = ()=>{
       setLoading(true);
       axios.delete(`/content/topic/${props.match.params.id}`)
@@ -59,6 +64,7 @@ const Topic = (props)=>{
         })
     }
 
+    // Save the current state and its order(Drag n drop) in database
     const handleSave = ()=>{
 
         const items = content.map(item=>{
@@ -85,12 +91,14 @@ const Topic = (props)=>{
           })
     }
 
+// Fxn to keep track of new indices on drag and drop
     const onSortEnd = ({oldIndex, newIndex}) => {
       setContent(content => (
         arrayMove(content, oldIndex, newIndex)
     ));
   };
 
+// Add a new empty video to current topic in database and redirect to /video/Id
     const addVideo = ()=>{
         axios.get(`/topic/${props.match.params.id}/createVideo`)
           .then(res=>{
@@ -105,6 +113,7 @@ const Topic = (props)=>{
           })
     }
 
+// Add a new empty deliverable to current topic in database and redirects to /deliverable/Id
     const addDeliverable = ()=>{
         axios.get(`/topic/${props.match.params.id}/createDeliverable`)
           .then(res=>{
@@ -119,6 +128,7 @@ const Topic = (props)=>{
           })
     }
 
+// React HOC for drag and drop items
     const SortableItem = sortableElement(({item}) => {  let data;
                                                         if(item.video)
                                                             data = item.video;
@@ -127,10 +137,12 @@ const Topic = (props)=>{
                                                           return(<TopicItem data={data} type={item.video?"video":"deliverable"} topicId={props.match.params.id} deleteItem={deleteItem} handleSave={handleSave}/>)
                                                         });
 
+// React HOC for drag and drop items
     const SortableContainer = sortableContainer(({children}) => {
       return <div>{children}</div>;
     });
 
+// Main UI
     const topicMain=(
         <div className="row">
             <div className="col-md-8 mt-3" style={{borderRight:"1px solid #aaa"}}>

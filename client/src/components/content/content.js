@@ -20,7 +20,7 @@ const Content = (props)=>{
 
 
     useEffect(()=>{
-        if(user.loggedIn){
+        if(user.loggedIn){  //Authorization for logged in users on;y i.e admins
           axios.get("/getContent")
           .then(res=>{
               console.log(res);
@@ -39,6 +39,7 @@ const Content = (props)=>{
         }
     },[])
 
+// Function to handle change of indices on sorting
     const onSortEnd = ({oldIndex, newIndex}) => {
         setTopics(topic => (
             arrayMove(topic, oldIndex, newIndex)
@@ -48,6 +49,7 @@ const Content = (props)=>{
        }
     };
 
+// Creates a new topic with unique Id from database and then redirects to /topic/Id
     const handleNewTopic = ()=>{
       axios.get("/content/createTopic")
         .then(res=>{
@@ -61,10 +63,13 @@ const Content = (props)=>{
             console.log(err.message);
         })
     }
+
+// Fxn to delete video/deliverable from state
     const handleDelete=(id)=>{
         setTopics(topics.filter(t=>t._id!=id));
     }
 
+// Function to save the current state in database
     const handleSave = ()=>{
         setLoading(true);
         const data = topics.map(topic=>topic._id);
@@ -79,10 +84,12 @@ const Content = (props)=>{
           })
     }
 
+// React HOC for drag and drop items
     const SortableItem = sortableElement(({item}) => {
             return( <ContentSection  id={"a"+item._id} title={item.title} data={item.items} removeTopic={(id)=>handleDelete(id)} />)
         });
 
+// React HOC for drag and drop container
     const SortableContainer = sortableContainer(({children}) => {
         return <div >{children}</div>;
         });

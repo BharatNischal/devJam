@@ -4,9 +4,12 @@ import Content from "./content";
 import {Link,withRouter} from "react-router-dom";
 import axios from "axios";
 
+
+// This component contains a particular topic and all its childrens i.e all videos and deliverables attached to it
 const ContentSection=(props)=>{
     const [showMenu,setShowMenu]=useState(false);
 
+// Create a video with unique Id from database and redirects to /video/Id
     const addVideo = ()=>{
         axios.get(`/topic/${props.id.slice(1)}/createVideo`)
           .then(res=>{
@@ -21,6 +24,7 @@ const ContentSection=(props)=>{
           })
     }
 
+// Create a deliverable with unique Id from database and redirects to /deliverable/Id
     const addDeliverable = ()=>{
         axios.get(`/topic/${props.id.slice(1)}/createDeliverable`)
           .then(res=>{
@@ -35,6 +39,7 @@ const ContentSection=(props)=>{
           })
     }
 
+// Fxn which deletes a topic and its contents from database and state
     const deleteTopic = ()=>{
       axios.delete(`/content/topic/${props.id.slice(1)}`)
         .then(res=>{

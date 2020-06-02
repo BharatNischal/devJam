@@ -5,16 +5,19 @@ import axios from "axios";
 import {CurUserContext} from "../../contexts/curUser";
 
 const Deliverable =(props)=>{
+    // states for keepind data
     const [title,setTitle] = useState("");
     const [instruction,setInstruction] = useState("");
     const [dueDate,setDueDate] = useState("");
     const [points,setPoints]= useState("");
+    // UI states
     const [loading,setLoading] = useState(true);
     const [err,setErr] = useState(null);
+    // Get the status of user if it is loggedin or not
     const {user} = useContext(CurUserContext);
 
     useEffect(()=>{
-        if(user.loggedIn){
+        if(user.loggedIn){  //Frontend authorization for admin
           if(!props.empty){
               axios.get(`/deliverable/${props.match.params.id}`)
               .then(res=>{
@@ -42,6 +45,7 @@ const Deliverable =(props)=>{
         }
     },[])
 
+// Save the deliverable to database
     const saveDeliverableHandler=()=>{
         setLoading(true);
         axios.put(`/deliverable/${props.match.params.id}`,{title,instruction,dueDate,points})
@@ -60,6 +64,7 @@ const Deliverable =(props)=>{
             })
     }
 
+    // Main UI
     const delMain=(
         <div className="row">
 
