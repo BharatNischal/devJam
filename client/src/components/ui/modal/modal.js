@@ -1,6 +1,8 @@
 import React from "react";
 import "./modal.css";
 
+
+// It is a card based template used by other components
 const Modal=(props)=>{
     return(
         <div className="custModal text-left p-3 ">
@@ -20,4 +22,3 @@ const Modal=(props)=>{
 }
 
 export default Modal;
-

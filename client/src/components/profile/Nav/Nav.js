@@ -4,8 +4,10 @@ import {Link,withRouter} from "react-router-dom";
 import {CurUserContext} from "../../../contexts/curUser";
 import axios from "axios";
 
+// Navbar component which shows links based on props passed to it ans user login status
 const Nav =(props)=>{
 
+    // Used for checking login status
     const {user,setUser} = useContext(CurUserContext);
     useEffect(()=>{
       axios.get("/curUser")
@@ -22,6 +24,7 @@ const Nav =(props)=>{
         })
     },[]);
 
+    // Logs out user and redirects to login page
     const handleLogout = ()=>{
         axios.get("/logout")
           .then(res=>{

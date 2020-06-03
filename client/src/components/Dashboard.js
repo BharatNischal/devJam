@@ -3,6 +3,8 @@ import Nav from "./profile/Nav/Nav";
 import axios from "axios";
 import {CurUserContext} from "../contexts/curUser";
 
+
+// Component for superadmin to make new admins and check existing admins
 const Dashboard = (props)=>{
   const [err,setErr] = useState("");
   const [username,setUsername] = useState("");
@@ -13,7 +15,7 @@ const Dashboard = (props)=>{
 
   useEffect(()=>{
 
-    if(user.superAdmin){
+    if(user.superAdmin){  //Frontend authorization for superAdmin
       axios.get("/admins")
         .then(res=>{
           setAdmins(res.data);
@@ -67,6 +69,7 @@ const Dashboard = (props)=>{
     }
   }
 
+  // Loader logic
   let button;
   if(!btnclick){
     button =  <button type="submit" className="btn btn-block btn-lg text-white color-pink-shade">Create</button>;

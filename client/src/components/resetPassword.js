@@ -1,6 +1,8 @@
 import React,{useState} from "react";
 import axios from "axios";
 
+
+// Component where user can update its new password
 const ResetPassword = (props)=>{
 
   const [btnclick,setBtnClick] = useState(false);

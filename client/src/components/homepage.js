@@ -2,7 +2,7 @@ import React,{useEffect,useContext} from "react";
 import axios from "axios";
 import {CurUserContext} from "../contexts/curUser";
 
-
+// A component just to redirect user based on login status
 const Homepage = (props)=>{
 
   const{user} = useContext(CurUserContext);

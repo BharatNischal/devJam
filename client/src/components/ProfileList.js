@@ -3,6 +3,7 @@ import IndividualProfile from "./individualProfile";
 import axios from "axios";
 import Nav from "./profile/Nav/Nav";
 
+// Component to show all the profiles
 const ProfileList = (props)=>{
 
       const [profiles,setProfiles] = useState([]);
@@ -25,6 +26,7 @@ const ProfileList = (props)=>{
         fetchProfiles();
       },[]);
 
+      // Fxn to filter the profiles based on search keyword
       const handleSubmit = (e)=>{
         e.preventDefault();
         axios.post("/search",{name})
