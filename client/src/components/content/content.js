@@ -132,7 +132,7 @@ const Content = (props)=>{
                     (
                         <SortableContainer onSortEnd={onSortEnd} distance={1} >
                             {topics.map((item, index) => (
-                                <SortableItem key={item._id} index={index} item={item} />
+                                <SortableItem key={item._id} index={index} item={item} disabled={window.innerWidth>=600?false:true}/>
                             ))}
                         </SortableContainer>
                     )}
