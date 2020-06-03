@@ -132,13 +132,13 @@ const VideoPage = (props)=>{
 
 
 // Logic to show progress bar or input button based on state
-  let button = details.url.length<4?(uploading?<div className="progress mt-3" style={{height:"10px"}}>
+  let button = uploading?<div className="progress mt-3" style={{height:"10px"}}>
                           <div className="progress-bar progress-bar-striped bgd-gradient" style={{width:`${String(uploadPercentage)}%`}} role="progressbar"  aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>:<div className="form-group input-group col-md-9 col-sm-12 mt-2 mt-lg-4">
                                   <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-video-camera" ></i></div>
                                   <input type="file" name="profilePic" ref={videoRef} onChange={onUpload} placeholder="Upload Profile Pic" className="form-control"/>
-                                </div>):null;
-  let thumbnailSrc = uploading?"https://gifimage.net/wp-content/uploads/2018/06/upload-animated-gif-3.gif":(details.url.length>4?details.url.substr(0, details.url.lastIndexOf("."))+".jpg":"https://simplylandscapingct.com/wp-content/uploads/2017/11/large-white-background.jpg")
+                                </div>;
+  let thumbnailSrc = uploading?"https://gifimage.net/wp-content/uploads/2018/06/upload-animated-gif-3.gif":(details.url.length>4?details.url.substr(0, details.url.lastIndexOf("."))+".jpg":"https://res.cloudinary.com/bharatnischal/image/upload/v1591163716/oie_jpg.png")
 
 // Main UI
 let videoMain =    <div>
