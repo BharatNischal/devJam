@@ -1,6 +1,20 @@
 # DevJam Project by Team Code S.W.A.T
 This is project which we are making during Devjam Competition organized by zaio. This Project has various Components that are given in particular weeks of competition. Complete Description of each component will be given Below.
 
+## Contributors:
+
+  Name | Github | LinkedIn
+  -------------|------------------------------------------|----------------------------------------------------
+  __Manjot Singh__ | [Github](https://github.com/manjots1607) | [LinkedIn](https://www.linkedin.com/in/manjot-singh-5bb706153/)
+  __Bharat Nischal__ | [Github](https://github.com/BharatNischal) | [LinkedIn](https://www.linkedin.com/in/nischalbharat/)
+
+## Technical Stack
+
+* __MongoDB__ (Database)
+* __Express__ (NodeJS Framework)
+* __React__ (Frontend)
+* __NodeJS__ (Backend)
+
 ## Components:
 
  Component | Link
