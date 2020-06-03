@@ -160,7 +160,7 @@ const Topic = (props)=>{
                 </div>
 
 
-                <SortableContainer onSortEnd={onSortEnd} distance={1} >
+                <SortableContainer onSortEnd={onSortEnd} distance={1} lockAxis="y">
                   {content.map((item, index) => (
                     <SortableItem key={item._id} index={index} item={item} />
                   ))}

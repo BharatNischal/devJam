@@ -130,7 +130,7 @@ const Content = (props)=>{
                     {loading?
                     (<div className="text-center"> <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /> </div>):
                     (
-                        <SortableContainer onSortEnd={onSortEnd} distance={1} >
+                        <SortableContainer onSortEnd={onSortEnd} distance={1} lockAxis="y" >
                             {topics.map((item, index) => (
                                 <SortableItem key={item._id} index={index} item={item} disabled={window.innerWidth>=600?false:true}/>
                             ))}
