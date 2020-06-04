@@ -176,7 +176,7 @@ let videoMain =    <div>
   return (
     <React.Fragment>
     <Nav show={true} menu={true}/>
-    <Modal title="Video" save={handleSave} close={()=>{props.history.push(`/topic/${props.location.topicId}`)}} >
+    <Modal title="Video" save={handleSave} close={()=>{props.location.topicId?props.history.push(`/topic/${props.location.topicId}`):props.history.push('/content')}} >
         {loading?<div className="text-center"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /></div>
             :err?<p>{err}</p>:videoMain}
     </Modal>

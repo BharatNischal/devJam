@@ -14,7 +14,7 @@ const ContentSection=(props)=>{
         axios.get(`/topic/${props.id.slice(1)}/createVideo`)
           .then(res=>{
               if(res.data.success){
-                props.history.push({pathname:`/video/${res.data.video._id}`,topicId:props.id.slice(1)});
+                props.history.push({pathname:`/video/${res.data.video._id}`,topicId:undefined});  //Here undefine will redirect back to this page when close button is clicked on video page
               }else{
                 console.log(res.data.msg);
               }
@@ -29,7 +29,7 @@ const ContentSection=(props)=>{
         axios.get(`/topic/${props.id.slice(1)}/createDeliverable`)
           .then(res=>{
               if(res.data.success){
-                props.history.push({pathname:`/deliverable/${res.data.deliverable._id}`,topicId:props.id.slice(1)});
+                props.history.push({pathname:`/deliverable/${res.data.deliverable._id}`,topicId:undefined}); //Here undefine will redirect back to this page when close button is clicked on deliverable page
               }else{
                 console.log(res.data.msg);
               }
