@@ -3,6 +3,7 @@ import Modal from "../ui/modal/modal";
 import Nav from "../profile/Nav/Nav";
 import axios from "axios";
 import {CurUserContext} from "../../contexts/curUser";
+import Alert from "../ui/alert/alert";
 
 const VideoPage = (props)=>{
 
@@ -15,7 +16,7 @@ const VideoPage = (props)=>{
   const [err,setErr] = useState(null);
   const [copyAlert,setCopyAlert] = useState(false);
   const [videoUploadedAlert,setVideoUploadedAlert] = useState(false);
-
+  const [showWarningAlert,setShowWarningAlert] = useState(false);
 // Reference states
   const videoRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -116,6 +117,25 @@ const VideoPage = (props)=>{
         setLoading(false);
       })
   }
+  // close Handler
+  const onCloseHandler =()=>{
+    if(details.title!==""){
+        props.location.fromContent?props.history.push("/content"):props.history.push(`/topic/${props.location.topicId}`);
+    }else{
+        setShowWarningAlert(true);
+    }
+  }
+  //Delete Item
+  const handleDelete = ()=>{
+    axios.delete(`/topic/${props.location.topicId}/video/${props.match.params.id}`)
+      .then(res=>{
+        props.location.fromContent?props.history.push("/content"):props.history.push(`/topic/${props.location.topicId}`);
+      })
+      .catch(err=>{
+        console.log(err.message);
+      })
+  }
+
 
 // Copy the text to clipboard logic
   const copyHandler = ()=>{
@@ -176,7 +196,8 @@ let videoMain =    <div>
   return (
     <React.Fragment>
     <Nav show={true} menu={true}/>
-    <Modal title="Video" save={handleSave} close={()=>{props.location.topicId?props.history.push(`/topic/${props.location.topicId}`):props.history.push('/content')}} >
+    {showWarningAlert? <Alert msg="Video will not be saved as there is no title, would you like to continue? " cancel={()=>setShowWarningAlert(false)} ok={handleDelete} />:null}
+    <Modal title="Video" save={handleSave} close={onCloseHandler} >
         {loading?<div className="text-center"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /></div>
             :err?<p>{err}</p>:videoMain}
     </Modal>

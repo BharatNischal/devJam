@@ -6,6 +6,7 @@ import TopicItem from "./topicItem";
 import {CurUserContext} from "../../contexts/curUser";
 import axios from "axios";
 import "./content.css"
+import Alert from "../ui/alert/alert";
 
 const Topic = (props)=>{
     // States for data
@@ -15,6 +16,7 @@ const Topic = (props)=>{
     const {user} = useContext(CurUserContext);
     // UI state
     const [loading,setLoading] = useState(true);
+    const [showWarningAlert,setWarningAlert] = useState(false);
 
     useEffect(()=>{
       if(user.loggedIn){  //Frontend authorization for admin
@@ -91,6 +93,17 @@ const Topic = (props)=>{
           })
     }
 
+    // Logic that handles close operation
+    const onCloseHandler= ()=>{
+      if(details.title!==""){
+        props.history.push("/content");
+      }else{
+        setWarningAlert(true);
+      }
+    }
+
+    
+
 // Fxn to keep track of new indices on drag and drop
     const onSortEnd = ({oldIndex, newIndex}) => {
       setContent(content => (
@@ -103,7 +116,7 @@ const Topic = (props)=>{
         axios.get(`/topic/${props.match.params.id}/createVideo`)
           .then(res=>{
               if(res.data.success){
-                props.history.push({pathname:`/video/${res.data.video._id}`,topicId:props.match.params.id});
+                props.history.push({pathname:`/video/${res.data.video._id}`,topicId:props.match.params.id,fromContent:false});
               }else{
                 console.log(res.data.msg);
               }
@@ -118,7 +131,7 @@ const Topic = (props)=>{
         axios.get(`/topic/${props.match.params.id}/createDeliverable`)
           .then(res=>{
               if(res.data.success){
-                props.history.push({pathname:`/deliverable/${res.data.deliverable._id}`,topicId:props.match.params.id});
+                props.history.push({pathname:`/deliverable/${res.data.deliverable._id}`,topicId:props.match.params.id,fromContent:false});
               }else{
                 console.log(res.data.msg);
               }
@@ -173,9 +186,12 @@ const Topic = (props)=>{
     )
 
     return (
-        <Modal title="Topic" save={handleSave} close={()=>{props.history.push('/content')}} delete={deleteTopic}>
+      <React.Fragment>
+        {showWarningAlert?<Alert msg="Topic Will not be saved As Title is Empty. Would you Like to continue?" cancel={()=>setWarningAlert(false)} ok={deleteTopic} />:null}
+        <Modal title="Topic" save={handleSave} close={onCloseHandler} delete={deleteTopic}>
             {loading?<div className="text-center"> <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /> </div>:topicMain}
         </Modal>
+      </React.Fragment>
     );
 
 

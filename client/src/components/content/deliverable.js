@@ -3,6 +3,7 @@ import Modal from "../ui/modal/modal";
 import Nav from "../profile/Nav/Nav";
 import axios from "axios";
 import {CurUserContext} from "../../contexts/curUser";
+import Alert from "../ui/alert/alert";
 
 const Deliverable =(props)=>{
     // states for keepind data
@@ -13,6 +14,7 @@ const Deliverable =(props)=>{
     // UI states
     const [loading,setLoading] = useState(true);
     const [err,setErr] = useState(null);
+    const [showWarningAlert,setShowWarningAlert] = useState(false);
     // Get the status of user if it is loggedin or not
     const {user} = useContext(CurUserContext);
 
@@ -64,6 +66,26 @@ const Deliverable =(props)=>{
             })
     }
 
+    // close Handler
+    const onCloseHandler =()=>{
+        if(title!==""){
+            props.location.fromContent?props.history.push("/content"):props.history.push(`/topic/${props.location.topicId}`);
+        }else{
+            setShowWarningAlert(true);
+        }
+    }
+
+    //Delete Item
+    const handleDelete = ()=>{
+        axios.delete(`/topic/${props.location.topicId}/deliverable/${props.match.params.id}`)
+          .then(res=>{
+            props.location.fromContent?props.history.push("/content"):props.history.push(`/topic/${props.location.topicId}`);
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+      }
+
     // Main UI
     const delMain=(
         <div className="row">
@@ -96,8 +118,10 @@ const Deliverable =(props)=>{
 
     return(
         <React.Fragment>
+            
         <Nav show={true} menu={true}/>
-        <Modal title="Deliverable" save={saveDeliverableHandler} close={()=>{props.location.topicId?props.history.push(`/topic/${props.location.topicId}`):props.history.push("/content")}} >
+        {showWarningAlert? <Alert msg="Deliverable will not be saved as there is no title, would you like to continue? " cancel={()=>setShowWarningAlert(false)} ok={handleDelete} />:null} 
+        <Modal title="Deliverable" save={saveDeliverableHandler} close={onCloseHandler} >
             {loading?<div className="text-center"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /></div>
                 :err?<p>{err}</p>:delMain}
         </Modal>
