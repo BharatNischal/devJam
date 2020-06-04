@@ -11,10 +11,13 @@ const Deliverable =(props)=>{
     const [instruction,setInstruction] = useState("");
     const [dueDate,setDueDate] = useState("");
     const [points,setPoints]= useState("");
+    // Used to make sure title is provided
+    const [valid,setValid] = useState(false);
     // UI states
     const [loading,setLoading] = useState(true);
     const [err,setErr] = useState(null);
-    const [showWarningAlert,setShowWarningAlert] = useState(false);
+    const [showWarningAlert,setShowWarningAlert] = useState(false); //alert for close button without title
+    const [showSaveAlert,setShowSaveAlert] = useState(false); //alert for save button without title
     // Get the status of user if it is loggedin or not
     const {user} = useContext(CurUserContext);
 
@@ -25,13 +28,13 @@ const Deliverable =(props)=>{
               .then(res=>{
 
                   if(res.data.success){
-
                       setLoading(false);
                       setTitle(res.data.data.title?res.data.data.title:"");
                       setInstruction(res.data.data.instruction?res.data.data.instruction:"");
                       setDueDate(res.data.data.dueDate?res.data.data.dueDate.substr(0,10):"");
                       setPoints(res.data.data.points?res.data.data.points:"");
-
+                      if(res.data.data.title && res.data.data.title.length>0)
+                        setValid(true);
                   }else{
                       setLoading(false);
                       setErr(res.data.msg);
@@ -49,26 +52,31 @@ const Deliverable =(props)=>{
 
 // Save the deliverable to database
     const saveDeliverableHandler=()=>{
-        setLoading(true);
-        axios.put(`/deliverable/${props.match.params.id}`,{title,instruction,dueDate,points})
-            .then(res=>{
+        if(title.length>0){
+          setLoading(true);
+          axios.put(`/deliverable/${props.match.params.id}`,{title,instruction,dueDate,points})
+              .then(res=>{
 
-                if(res.data.success){
-                    setLoading(false);
-                }else{
-                    setLoading(false);
-                    setErr(res.data.msg);
-                }
-            })
-            .catch(err=>{
-                setLoading(false);
-                setErr(err.message);
-            })
+                  if(res.data.success){
+                      setLoading(false);
+                      setValid(true);
+                  }else{
+                      setLoading(false);
+                      setErr(res.data.msg);
+                  }
+              })
+              .catch(err=>{
+                  setLoading(false);
+                  setErr(err.message);
+              })
+        }else{
+          setShowSaveAlert(true);
+        }
     }
 
     // close Handler
     const onCloseHandler =()=>{
-        if(title!==""){
+        if(valid){
             props.location.fromContent?props.history.push("/content"):props.history.push(`/topic/${props.location.topicId}`);
         }else{
             setShowWarningAlert(true);
@@ -118,9 +126,10 @@ const Deliverable =(props)=>{
 
     return(
         <React.Fragment>
-            
+
         <Nav show={true} menu={true}/>
-        {showWarningAlert? <Alert msg="Deliverable will not be saved as there is no title, would you like to continue? " cancel={()=>setShowWarningAlert(false)} ok={handleDelete} />:null} 
+        {showWarningAlert? <Alert msg="Deliverable will not be saved as there is no title or you may have not saved, would you like to continue? " cancel={()=>setShowWarningAlert(false)} ok={handleDelete} />:null}
+        {showSaveAlert? <Alert msg="Please Provide the Title for the Deliverable " ok={()=>{setShowSaveAlert(false)}} />:null}
         <Modal title="Deliverable" save={saveDeliverableHandler} close={onCloseHandler} >
             {loading?<div className="text-center"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /></div>
                 :err?<p>{err}</p>:delMain}

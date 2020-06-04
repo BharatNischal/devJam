@@ -9,6 +9,8 @@ const VideoPage = (props)=>{
 
 // State to store data
   const [details,setDetails] = useState({title:"",description:"",filename:"",url:""});
+  // Used to avoid saving Video without title
+  const [valid,setValid] = useState(false);
   // UI states
   const [uploadPercentage,setUploadPercentage] = useState(0);
   const [uploading,setUploading] = useState(false);
@@ -16,7 +18,8 @@ const VideoPage = (props)=>{
   const [err,setErr] = useState(null);
   const [copyAlert,setCopyAlert] = useState(false);
   const [videoUploadedAlert,setVideoUploadedAlert] = useState(false);
-  const [showWarningAlert,setShowWarningAlert] = useState(false);
+  const [showWarningAlert,setShowWarningAlert] = useState(false);  //Alert for closing without title
+  const [showSaveAlert,setShowSaveAlert] = useState(false); //Alert for saving without title
 // Reference states
   const videoRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -29,6 +32,8 @@ const VideoPage = (props)=>{
         .then(res=>{
           if(res.data.success){
             setDetails(res.data.video);
+            if(res.data.video.title.length>0)
+              setValid(true);
           }else{
             console.log(res.data.msg);
             setErr(res.data.msg);
@@ -100,29 +105,34 @@ const VideoPage = (props)=>{
 
 // Save the details of the current state to the database
   const handleSave = ()=>{
-    setLoading(true);
-    axios.put(`/topic/video/${props.match.params.id}`,{details})
-      .then(res=>{
-          if(res.data.success){
-              console.log("Success");
-          }else{
-            setErr(res.data.msg);
-            console.log(res.data.msg);
-          }
+    if(details.title.length>0){ //Title is must
+      setLoading(true);
+      axios.put(`/topic/video/${props.match.params.id}`,{details})
+        .then(res=>{
+            if(res.data.success){
+                console.log("Success");
+                setValid(true);
+            }else{
+              setErr(res.data.msg);
+              console.log(res.data.msg);
+            }
+            setLoading(false);
+        })
+        .catch(err=>{
+          console.log(err.message);
+          setErr(err.msg);
           setLoading(false);
-      })
-      .catch(err=>{
-        console.log(err.message);
-        setErr(err.msg);
-        setLoading(false);
-      })
+        })
+    }else{
+      setShowSaveAlert(true);
+    }
   }
   // close Handler
   const onCloseHandler =()=>{
-    if(details.title!==""){
-        props.location.fromContent?props.history.push("/content"):props.history.push(`/topic/${props.location.topicId}`);
+    if(!valid){
+      setShowWarningAlert(true);
     }else{
-        setShowWarningAlert(true);
+        props.location.fromContent?props.history.push("/content"):props.history.push(`/topic/${props.location.topicId}`);
     }
   }
   //Delete Item
@@ -196,7 +206,8 @@ let videoMain =    <div>
   return (
     <React.Fragment>
     <Nav show={true} menu={true}/>
-    {showWarningAlert? <Alert msg="Video will not be saved as there is no title, would you like to continue? " cancel={()=>setShowWarningAlert(false)} ok={handleDelete} />:null}
+    {showWarningAlert? <Alert msg="Video will not be saved as there is no title or you may have not saved, would you like to continue? " cancel={()=>setShowWarningAlert(false)} ok={handleDelete} />:null}
+    {showSaveAlert? <Alert msg="Please provide the Title for the Video" ok={()=> setShowSaveAlert(false)} />:null}
     <Modal title="Video" save={handleSave} close={onCloseHandler} >
         {loading?<div className="text-center"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /></div>
             :err?<p>{err}</p>:videoMain}

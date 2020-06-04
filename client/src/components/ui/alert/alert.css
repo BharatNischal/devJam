@@ -11,7 +11,7 @@
     padding-top:20px;
     animation: slideDown 1s ease-out;
     overflow: hidden;
-    
+
 }
 @keyframes slideDown{
     0%{
@@ -41,4 +41,16 @@
 
 .splBtn{
     border-radius: 8px;
+}
+
+.btn-outline-cancel{
+  background-color: white;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+  border-radius: 8px;
+}
+
+.btn-outline-cancel:hover{
+  color: white;
+  background-color: #dc3545;
 }
