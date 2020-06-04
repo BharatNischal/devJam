@@ -7,6 +7,7 @@ import {CurUserContext} from "../../contexts/curUser";
 import axios from "axios";
 import "./content.css"
 import Alert from "../ui/alert/alert";
+import Nav from "../profile/Nav/Nav";
 
 const Topic = (props)=>{
     // States for data
@@ -17,6 +18,7 @@ const Topic = (props)=>{
     // UI state
     const [loading,setLoading] = useState(true);
     const [showWarningAlert,setWarningAlert] = useState(false);
+    const [showSavedAlert,setShowSavedAlert] = useState(false);
 
     useEffect(()=>{
       if(user.loggedIn){  //Frontend authorization for admin
@@ -42,10 +44,12 @@ const Topic = (props)=>{
     // Delete video/deliverable from State (used asa prop in topicItem)
     const deleteItem = (type,id)=>{
       if(type=="video"){
-        const newContent = content.filter(item=>item.video._id!=id);
+        console.log("inside video");
+        console.log(content);
+        const newContent = content.filter(item=>(!item.video || item.video._id!=id));
         setContent(newContent);
       }else{
-        const newContent = content.filter(item=>item.deliverable._id!=id);
+        const newContent = content.filter(item=>(!item.deliverable || item.deliverable._id!=id));
         setContent(newContent);
       }
     }
@@ -82,6 +86,10 @@ const Topic = (props)=>{
           .then(res=>{
             if(res.data.success){
               console.log("Saved");
+              setShowSavedAlert(true);
+              setTimeout(()=>{
+                setShowSavedAlert(false);
+              },2000)
             }else{
               console.log(res.msg);
             }
@@ -187,9 +195,11 @@ const Topic = (props)=>{
 
     return (
       <React.Fragment>
+        <Nav show={true} menu={true}/>
         {showWarningAlert?<Alert msg="Topic Will not be saved As Title is Empty. Would you Like to continue?" cancel={()=>setWarningAlert(false)} ok={deleteTopic} />:null}
         <Modal title="Topic" save={handleSave} close={onCloseHandler} delete={deleteTopic}>
             {loading?<div className="text-center"> <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /> </div>:topicMain}
+            {showSavedAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Topic Saved </div>:null}
         </Modal>
       </React.Fragment>
     );

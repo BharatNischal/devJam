@@ -20,6 +20,7 @@ const VideoPage = (props)=>{
   const [videoUploadedAlert,setVideoUploadedAlert] = useState(false);
   const [showWarningAlert,setShowWarningAlert] = useState(false);  //Alert for closing without title
   const [showSaveAlert,setShowSaveAlert] = useState(false); //Alert for saving without title
+  const [showSavedAlert,setShowSavedAlert] = useState(false); //Alert for saving without title
 // Reference states
   const videoRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -111,6 +112,8 @@ const VideoPage = (props)=>{
         .then(res=>{
             if(res.data.success){
                 console.log("Success");
+                setShowSavedAlert(true);
+                setTimeout(()=>{setShowSavedAlert(false)},2000);
                 setValid(true);
             }else{
               setErr(res.data.msg);
@@ -214,6 +217,7 @@ let videoMain =    <div>
     </Modal>
     {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
     {videoUploadedAlert?<div className="custom-alert"> Video Uploaded </div>:null}
+    {showSavedAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Video Saved </div>:null}
     </React.Fragment>
   );
 

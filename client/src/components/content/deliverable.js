@@ -18,6 +18,7 @@ const Deliverable =(props)=>{
     const [err,setErr] = useState(null);
     const [showWarningAlert,setShowWarningAlert] = useState(false); //alert for close button without title
     const [showSaveAlert,setShowSaveAlert] = useState(false); //alert for save button without title
+    const [showSavedAlert,setShowSavedAlert] = useState(false); //alert for save button without title
     // Get the status of user if it is loggedin or not
     const {user} = useContext(CurUserContext);
 
@@ -59,6 +60,8 @@ const Deliverable =(props)=>{
 
                   if(res.data.success){
                       setLoading(false);
+                      setShowSavedAlert(true);
+                      setTimeout(()=>{setShowSavedAlert(false)},2000);
                       setValid(true);
                   }else{
                       setLoading(false);
@@ -134,6 +137,7 @@ const Deliverable =(props)=>{
             {loading?<div className="text-center"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /></div>
                 :err?<p>{err}</p>:delMain}
         </Modal>
+        {showSavedAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Deliverable Saved </div>:null}
         </React.Fragment>
     )
 
