@@ -110,7 +110,7 @@ const Topic = (props)=>{
       }
     }
 
-    
+
 
 // Fxn to keep track of new indices on drag and drop
     const onSortEnd = ({oldIndex, newIndex}) => {
@@ -197,7 +197,7 @@ const Topic = (props)=>{
       <React.Fragment>
         <Nav show={true} menu={true}/>
         {showWarningAlert?<Alert msg="Topic Will not be saved As Title is Empty. Would you Like to continue?" cancel={()=>setWarningAlert(false)} ok={deleteTopic} />:null}
-        <Modal title="Topic" save={handleSave} close={onCloseHandler} delete={deleteTopic}>
+        <Modal title="Topic" save={handleSave} close={onCloseHandler} delete={deleteTopic} back={true}>
             {loading?<div className="text-center"> <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /> </div>:topicMain}
             {showSavedAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Topic Saved </div>:null}
         </Modal>
