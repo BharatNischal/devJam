@@ -3,15 +3,20 @@ import "./loginForm.css";
 import axios from "axios";
 import {CurUserContext} from "../../contexts/curUser";
 
+// Component for Login and reset Page
 const LoginForm = (props)=>{
 
+    //State to store data
     const [reset,setReset] = useState(false);
-    const [err,setErr] = useState("");
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
+    // UI states
+    const [err,setErr] = useState("");
     const [btnclick,setBtnClick] = useState(false);
+    // State to get the login status of user
     const{setUser} = useContext(CurUserContext);
 
+    // Check if the user is alredy loggedIn , In this case redirect to profiles page
     useEffect(()=>{
       axios.get("/curUser")
         .then(res=>{
@@ -27,6 +32,7 @@ const LoginForm = (props)=>{
         })
     },[])
 
+    // Fxn to take care of login or reset and send the data to relevant route
     const handleSubmit = (e)=>{
       e.preventDefault();
       setBtnClick(true);
@@ -73,6 +79,7 @@ const LoginForm = (props)=>{
       setPassword("");
     }
 
+    // Logic to display loader or Login Button
     let button;
     if(!btnclick){
       button =  <button type="submit" className="btn btn-block btn-lg text-white color-pink-shade">Log In</button>;

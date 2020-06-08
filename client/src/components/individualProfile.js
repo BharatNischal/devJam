@@ -1,8 +1,10 @@
 import React from "react";
 import {withRouter} from "react-router-dom";
 
+
+// Component to show basic details in the profiles page for a particular profile
 const IndividualProfile = (props)=>{
-    const copyToClipBoard=()=>{
+    const copyToClipBoard=()=>{ //Copy to clipboard Logic
       var textField = document.createElement('textarea')
         textField.innerText =window.location.host+`/profile/${personalInfo.firstName}/${props.data._id}`;
         document.body.appendChild(textField);

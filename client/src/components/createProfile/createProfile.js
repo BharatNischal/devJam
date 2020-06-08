@@ -159,8 +159,8 @@ const CreateProfile = (props)=>{
     return (
       <div>
         <Nav show={true} menu={true} />
-         <div className="mt-170 m-4 p-4 bg-light rounded" >
-           <h1> Create Profile </h1>
+         <div className="mt-80 m-4 p-4 bg-light rounded" >
+           <h1> {props.edit?"Edit ":"Create "} Profile </h1>
            <form onSubmit={submitHandler} >
               <div className="row">
                 <div className="col-12 col-lg-6 mb-3 p-3">

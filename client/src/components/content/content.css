@@ -1,0 +1,213 @@
+.saveBtn{
+    background-color: #cecece;
+    color: rgb(39, 39, 39);
+    outline:none;
+    border:none;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+.saveBtn:focus{
+    outline: none;
+}
+.saveBtn.active{
+    background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+    color:white;
+    box-shadow: 0px 2px 10px #35353586;
+    animation: growShrink 0.6s ease-in;
+}
+
+@keyframes growShrink{
+    0%{
+        transform: scale(1.0);
+    }
+    50%{
+        transform: scale(1.2);
+    }
+    100%{
+        transform: scale(1.0);
+    }
+}
+    
+
+.itemBox{
+    border: 1px solid #e9e5e5;
+    border-radius: 10px;
+    background-color: #fdfdfd;
+    
+}
+.itemBox h6{
+   
+    display: inline-block;
+    color:rgb(43, 43, 43);
+}
+.itemBox .cursor-pointer{
+    transition: 0.3s;
+}
+.itemBox .cursor-pointer:hover{
+    color: rgb(206, 0, 10);
+    font-size: 20px;
+}
+.nostyleBtn{
+    border:none;
+    outline:none;
+    background: none;
+}
+.nostyleBtn:focus{
+    outline:none;
+}
+.itemBox:hover{
+    background-color: white;
+    box-shadow: 0px 0px 20px rgba(148, 148, 148, 0.24);
+}
+
+.itemBox .itemImg{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px 0 0 10px;
+}
+
+.sidebar{
+    position: fixed;
+    height: 100vh;
+    z-index: 10;
+    box-shadow: 2px 0px 10px #00000025;
+    background-color: rgb(255, 254, 254);
+  
+
+}
+
+.sidebarLink{
+    display: block;
+    padding:10px;
+    text-align: right;
+    font-size: 20px;
+    font-weight: 500;
+    border-bottom: 1px solid rgb(235, 235, 235);
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: 0.3s;
+    border-radius: 15px 0 0 15px;
+}
+
+.sidebarLink.active{
+    
+    color: #9d3870 !important;
+    background: linear-gradient(137.9deg, rgba(101, 43, 115, 0.281) 13.76%, rgba(198, 66, 110, 0.226) 85.26%);
+    font-weight: 600;
+    border-right: 4px solid #9d3870;
+    border-bottom: none;
+   
+}
+
+.sidebar .expand{
+    display: none;
+}
+
+.section{
+    position: relative;    
+}
+
+.sectionHeading{
+    border-bottom: 2px solid #9d38708a;
+    vertical-align: middle;
+    
+    
+}
+.sectionHeading h2{
+    width: 90%;
+    display: inline-block;
+}
+.sectionMenu{
+    position: absolute;
+    top:5px;
+    right:45px;
+    z-index:8;
+    background-color: white;
+    width:120px;
+    border-radius: 10px;
+    padding:8px;
+    opacity: 0;
+    transition: 0.3s;
+}
+.sectionMenu>div{
+    width: 100%;
+    padding-bottom: 5px;
+    margin-bottom: 3px;
+    border-bottom: 1px solid #ebebeb;
+}
+.sectionMenu.show{
+    opacity: 1;
+}
+.backdrop{
+    background-color: rgba(0, 0, 0, 0.65);
+    position: absolute;
+    z-index: 7;
+    top:0;
+    left:0;
+    right:0;
+    bottom: 0;
+    display: none;
+    transition: 0.2s;
+}
+.backdrop.show{
+    display: block;
+}
+.sectionItem{
+    padding-bottom: 20px !important;
+    margin-bottom: 10px !important;
+    border-bottom: 1px solid #ececec;
+    color:rgb(53, 53, 53);
+    align-items: center;
+    width: 95%;
+    margin:auto;
+}
+.sectionItem span{
+    padding:12px 15px;
+    
+}
+.sectionItem:hover{
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(27, 27, 27, 0.158);
+    border-radius: 18px;
+    border-bottom: none;
+}
+.imgContainer{
+    width:50%;
+}
+@media (max-width:600px){
+    .sidebar{
+        width:250px;
+        transform: translateX(-98%);
+        transition: 0.6s;
+    }
+    .sidebar.show{
+        transform: translateX(0);
+    }
+    .sidebar .expand{
+        display: inline;
+        position: absolute;
+        top:30%;
+        left:93%;
+        background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+        color: white;
+        box-shadow: 2px 0px 10px #00000025;
+        border:none;
+        padding: 10px 17px;
+        font-weight: 700;
+        font-size: 20px;
+        border-radius: 50%;
+        transform: rotate(0deg);
+        transition: 0.3s;
+    }
+    .sidebar.show .expand{
+        transform: rotate(180deg);
+    }
+    .sidebar .expand:focus{
+        outline: none;
+    }
+
+    .imgContainer{
+        width:90%;
+    }
+}

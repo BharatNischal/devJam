@@ -12,8 +12,8 @@
 .f-20{
   font-size: 20px;
 }
-.mt-170{
-  margin-top:170px !important;
+.mt-80{
+  margin-top:80px !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -47,6 +47,27 @@
   opacity: 0;
 }
 
+.text-pink{
+  color:#9d3870;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+
+
+.btn-outline-grad{
+  background-color: #fafafa;
+  border-radius: 8px;
+  border:1.5px solid #9d3870;
+  color: #9d3870;
+  transition: 0.3s;
+}
+.btn-outline-grad:hover{
+  background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+  color:white;
+  box-shadow: 0px 2px 10px #35353586;
+}
+
 .fade-in{
   transition: 1s;
   opacity: 1;
@@ -58,4 +79,16 @@
 
 .bgd-gradient{
   background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
+}
+
+
+
+
+/* TYPOGRAPHY */
+h1{
+  font-family: Roboto;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 50px;
+   
 }

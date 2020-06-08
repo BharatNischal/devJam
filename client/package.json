@@ -6,11 +6,14 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "array-move": "^2.2.2",
     "axios": "^0.19.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "react-scroll": "^1.7.16",
+    "react-sortable-hoc": "^1.11.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,5 +36,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy":"http://localhost:8080"
+  "proxy": "http://localhost:8080"
 }

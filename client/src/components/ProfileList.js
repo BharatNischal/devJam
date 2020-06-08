@@ -3,6 +3,7 @@ import IndividualProfile from "./individualProfile";
 import axios from "axios";
 import Nav from "./profile/Nav/Nav";
 
+// Component to show all the profiles
 const ProfileList = (props)=>{
 
       const [profiles,setProfiles] = useState([]);
@@ -25,6 +26,7 @@ const ProfileList = (props)=>{
         fetchProfiles();
       },[]);
 
+      // Fxn to filter the profiles based on search keyword
       const handleSubmit = (e)=>{
         e.preventDefault();
         axios.post("/search",{name})
@@ -54,8 +56,8 @@ const ProfileList = (props)=>{
     return (
       <React.Fragment>
       <Nav show={true} menu={true}/>
-      <div className="container"  style={{marginTop:"100px"}}>
-        <h2 className="mt-5 text-white">Developer Profiles</h2>
+      <div className="container"  style={{marginTop:"80px"}}>
+        <h1 className="mt-5 text-white">Developer Profiles</h1>
           <div>
           {remove}
           <form className="form-inline text-center float-right" onSubmit={handleSubmit}>

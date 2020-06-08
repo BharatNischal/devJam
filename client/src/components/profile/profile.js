@@ -111,6 +111,22 @@ class Profile extends Component{
                         <Section heading="Experience" style={{gridColumnEnd:"4",gridColumnStart:"1" }}>
                             <Experience data={this.state.profileData.experience} />
                         </Section>
+                        <Section heading="Technical Skills" style={{gridColumnEnd:"4",gridColumnStart:"1" }}>
+                            <div className="row">
+                            {this.state.profileData.languages.map(lang=>(
+                                <Skill onlyIcon={true} icon={lang.name.toLowerCase()} key={lang._id} />
+                            ))}
+                            {this.state.profileData.frontend.map(lang=>(
+                                <Skill onlyIcon={true} icon={lang.name.toLowerCase()} key={lang._id} />
+                            ))}
+                            {this.state.profileData.backend.map(lang=>(
+                                <Skill onlyIcon={true} icon={lang.name.toLowerCase()} key={lang._id} />
+                            ))}
+                            {this.state.profileData.tools.map(lang=>(
+                                <Skill onlyIcon={true} icon={lang.name.toLowerCase()} key={lang._id} />
+                            ))}
+                            </div>
+                        </Section>
                         <div className="superHeadingCont text-left p-4 pr-0" style={{gridColumnEnd:"4",gridColumnStart:"1" }}>
                             <h1 className="superHeading " >Hard Skills</h1>
 

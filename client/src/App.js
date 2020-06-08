@@ -5,12 +5,16 @@ import Profile from "./components/profile/profile";
 import LoginForm from "./components/loginForm/loginForm";
 import ProfileList from "./components/ProfileList";
 import CreateProfile from "./components/createProfile/createProfile";
+import VideoPage from "./components/content/Video";
 import Dashboard from "./components/Dashboard";
 import ResetPassword from "./components/resetPassword";
 import Homepage from "./components/homepage";
 
 import axios from "axios";
-import {CurUserContext} from "./contexts/curUser"; 
+import {CurUserContext} from "./contexts/curUser";
+import Deliverable from './components/content/deliverable';
+import Topic from './components/content/topic';
+import Content from './components/content/content';
 
 axios.defaults.withCredentials = true;
 
@@ -31,13 +35,13 @@ function App(props) {
           .catch(err=>{
             setFirst(false);
             setUser({loggedIn:false,superAdmin:""});
-            
+
           });
     },[]);
 
   return (
     <BrowserRouter>
-      
+
         <div className="App">
           {first?<img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" />:(
             <Switch>
@@ -46,14 +50,18 @@ function App(props) {
             <Route path="/adminDashboard" exact component={Dashboard}/>
             <Route path="/profile/:name/:id" exact component={Profile}/>
             <Route path="/login" exact component={LoginForm}/>
+            <Route path="/deliverable/:id" exact component={Deliverable}/>
+            <Route path="/topic/:id" exact component={Topic} />
+            <Route path="/content" exact component={Content} />
+            <Route path="/video/:id" exact component={VideoPage}/>
             <Route path="/createProfile" exact component={CreateProfile}/>
   <Route path="/editProfile/:name/:id" exact  render={(props) => <CreateProfile {...props} edit={true} />}/>
             <Route path="/reset/:token" exact component={ResetPassword}/>
           </Switch>
           )};
-          
+
         </div>
-      
+
     </BrowserRouter>
   );
 }
