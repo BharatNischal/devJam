@@ -9,11 +9,11 @@ const commentSchema = new mongoose.Schema({
     timestamp:{
       type: Date,
       default: new Date()
-    }
+    },
     subComments: [{
       type:mongoose.Schema.Types.ObjectId,
       ref:'Comment'
     }]
 });
 
-module.exports = mongoose.model("Comment",topicSchema);
+module.exports = mongoose.model("Comment",commentSchema);

@@ -70,7 +70,7 @@ router.get('/video/:id/:qlt',middleware.isAdmin,(req,res)=>{
     db.User.findById(req.user._id)
       .then(user=>{
           if(user.canAccess){
-            return res.redirect('https://res.cloudinary.com/bharatnischal/video/upload/v1591106028/ocnaeugr1z9dltddrywl.mp4');
+            return res.redirect(`https://res.cloudinary.com/bharatnischal/video/upload/q_${req.params.qlt}/v1591106028/ocnaeugr1z9dltddrywl.mp4`);
           }else{
             return res.redirect('https://freefrontend.com/assets/img/403-forbidden-html-templates/403-Access-Forbidden-HTML-Template.gif');
           }
