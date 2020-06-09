@@ -6,19 +6,15 @@ const VideoPlayer = (props)=>{
 
     // Control the quality of video
     const [qlt,setQlt] = useState(70);
-    const [timeWatched,setTimeWatched] = useState(0);
-    // Used to authorize a video to user for a small window
-    const [authorize,setAuthorize] = useState(false);
+    // Reference of Video Player
     const playerRef = useRef(null);
+
+
     // Authorize user to access a video for a small window (To avoid downloading)
     useEffect(()=>{
       axios.post('/video/access')
         .then(res=>{
-          if(res.data.success){
-            setAuthorize(true);
-            // playerRef.current.getState().player.play();
-            console.log(playerRef.current.getState());
-          }else{
+          if(!res.data.success){
             console.log(res.data.msg);
           }
         })
@@ -27,20 +23,17 @@ const VideoPlayer = (props)=>{
         })
     },[])
 
+    // Steps to perform on video Quality Change
     useEffect(()=>{
-      const time = playerRef.current.getState().player.currentTime;
-      setAuthorize(false);
-      console.log("called",qlt);
-      setTimeWatched(playerRef.current.getState().player.currentTime);
-      console.log(playerRef.current.getState().player.currentTime);
+      const time = playerRef.current.getState().player.currentTime;  //video time of already watched content
       axios.post('/video/access')
         .then(res=>{
           if(res.data.success){
-            setAuthorize(true);
-            playerRef.current.load(`/video/${props.videoId}/${qlt}`);
-            console.log(time,"sec");
-            playerRef.current.forward(time);
-            // playerRef.current.play();
+            playerRef.current.load(`/video/${props.videoId}/${qlt}`); //New Quality Video
+            window.setTimeout(()=>{
+              playerRef.current.forward(time);
+              playerRef.current.play();
+            },100)
           }else{
             console.log(res.data.msg);
           }
@@ -51,7 +44,7 @@ const VideoPlayer = (props)=>{
     },[qlt])
 
     return (
-        <div style={{height:"60%"}}>
+        <React.Fragment>
           <Player fluid={false} height={300} width={600} ref={playerRef}>
             <source src={`/video/${props.videoId}/${qlt}`} />
             <ControlBar autoHide={false}>
@@ -59,11 +52,11 @@ const VideoPlayer = (props)=>{
               <ReplayControl seconds={10} order={2.2} />
               <ForwardControl seconds={10} order={3.2} />
             </ControlBar>
-            <BigPlayButton position="center" />
+            <BigPlayButton position="center"/>
             <LoadingSpinner/>
           </Player>
           <button onClick={()=>setQlt(30)}>Qlt low</button>
-        </div>
+        </React.Fragment>
     );
 }
 
