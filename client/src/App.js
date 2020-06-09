@@ -15,6 +15,7 @@ import {CurUserContext} from "./contexts/curUser";
 import Deliverable from './components/content/deliverable';
 import Topic from './components/content/topic';
 import Content from './components/content/content';
+import VideoPlayer from './components/videoPlayer';
 
 axios.defaults.withCredentials = true;
 
@@ -57,6 +58,7 @@ function App(props) {
             <Route path="/createProfile" exact component={CreateProfile}/>
   <Route path="/editProfile/:name/:id" exact  render={(props) => <CreateProfile {...props} edit={true} />}/>
             <Route path="/reset/:token" exact component={ResetPassword}/>
+            <Route path="/video" exact component={VideoPlayer}/>
           </Switch>
           )};
 
