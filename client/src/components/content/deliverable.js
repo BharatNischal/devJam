@@ -18,7 +18,7 @@ const Deliverable =(props)=>{
     const [err,setErr] = useState(null);
     const [showWarningAlert,setShowWarningAlert] = useState(false); //alert for close button without title
     const [showSaveAlert,setShowSaveAlert] = useState(false); //alert for save button without title
-    const [showSavedAlert,setShowSavedAlert] = useState(false); //alert for save button without title
+    // const [showSavedAlert,setShowSavedAlert] = useState(false); //alert for save button without title
     // Get the status of user if it is loggedin or not
     const {user} = useContext(CurUserContext);
 
@@ -60,9 +60,10 @@ const Deliverable =(props)=>{
 
                   if(res.data.success){
                       setLoading(false);
-                      setShowSavedAlert(true);
-                      setTimeout(()=>{setShowSavedAlert(false)},2000);
+                      // setShowSavedAlert(true);
+                      // setTimeout(()=>{setShowSavedAlert(false)},2000);
                       setValid(true);
+                      props.history.push(`/topic/${props.location.topicId}`);
                   }else{
                       setLoading(false);
                       setErr(res.data.msg);
@@ -133,11 +134,10 @@ const Deliverable =(props)=>{
         <Nav show={true} menu={true}/>
         {showWarningAlert? <Alert msg="Deliverable will not be saved as there is no title or you may have not saved, would you like to continue? " cancel={()=>setShowWarningAlert(false)} ok={handleDelete} />:null}
         {showSaveAlert? <Alert msg="Please Provide the Title for the Deliverable " ok={()=>{setShowSaveAlert(false)}} />:null}
-        <Modal title="Deliverable" save={saveDeliverableHandler} close={onCloseHandler} >
+        <Modal title="Deliverable" save={saveDeliverableHandler} close={onCloseHandler} back={true}>
             {loading?<div className="text-center"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" /></div>
                 :err?<p>{err}</p>:delMain}
         </Modal>
-        {showSavedAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Deliverable Saved </div>:null}
         </React.Fragment>
     )
 

@@ -47,6 +47,38 @@ router.post("/topic/video",middleware.isAdmin,uploadVideo,(req,res)=>{
   }
 })
 
+// To make a video accessible for a certain window time
+router.post('/video/access',middleware.isAdmin,(req,res)=>{
+    const time = 3000;
+    db.User.findById(req.user._id)
+      .then(user=>{
+        user.canAccess = true;
+        user.save();
+        setTimeout(()=>{
+          user.canAccess = false;
+          user.save();
+        },time)
+        res.json({success:true});
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
+})
+
+//To get a video with given quality
+router.get('/video/:id/:qlt',middleware.isAdmin,(req,res)=>{
+    db.User.findById(req.user._id)
+      .then(user=>{
+          if(user.canAccess){
+            return res.redirect(`https://res.cloudinary.com/bharatnischal/video/upload/q_${req.params.qlt}/v1591106028/ocnaeugr1z9dltddrywl.mp4`);
+          }else{
+            return res.redirect('https://freefrontend.com/assets/img/403-forbidden-html-templates/403-Access-Forbidden-HTML-Template.gif');
+          }
+      })
+      .catch(err=>{
+          console.log(err.message);
+      })
+})
 
 //Get details of video for a particular video
 router.get("/topic/video/:id",(req,res)=>{

@@ -26,7 +26,11 @@ var userSchema=new mongoose.Schema({
       unique:true
     },
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+    canAccess: {
+      type: Boolean,
+      default: false
+    }
 });
 userSchema.plugin(passportLocalMongoose);
 module.exports=mongoose.model("User",userSchema);
