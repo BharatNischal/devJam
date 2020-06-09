@@ -17,6 +17,7 @@ import Topic from './components/content/topic';
 import Content from './components/content/content';
 import StDash from './components/stdash';
 import VideoPlayer from './components/videoPlayer';
+import Comment from './components/comments';
 
 axios.defaults.withCredentials = true;
 
@@ -62,6 +63,7 @@ function App(props) {
 
             <Route path="/studDash" exact component={StDash} />
             <Route path="/video" exact component={VideoPlayer}/>
+            <Route path="/comment" exact component={Comment}/>
           </Switch>
           )};
 

@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useRef} from "react";
 import { Player, ControlBar,BigPlayButton, LoadingSpinner,ReplayControl,ForwardControl,PlaybackRateMenuButton } from 'video-react';
 import axios from "axios";
 
@@ -6,16 +6,15 @@ const VideoPlayer = (props)=>{
 
     // Control the quality of video
     const [qlt,setQlt] = useState(70);
-    // Used to authorize a video to user for a small window
-    const [authorize,setAuthorize] = useState(false);
+    // Reference of Video Player
+    const playerRef = useRef(null);
+
 
     // Authorize user to access a video for a small window (To avoid downloading)
     useEffect(()=>{
       axios.post('/video/access')
         .then(res=>{
-          if(res.data.success){
-            setAuthorize(true);
-          }else{
+          if(!res.data.success){
             console.log(res.data.msg);
           }
         })
@@ -24,13 +23,17 @@ const VideoPlayer = (props)=>{
         })
     },[])
 
+    // Steps to perform on video Quality Change
     useEffect(()=>{
-      setAuthorize(false);
-      console.log("called",qlt);
+      const time = playerRef.current.getState().player.currentTime;  //video time of already watched content
       axios.post('/video/access')
         .then(res=>{
           if(res.data.success){
-            setAuthorize(true);
+            playerRef.current.load(`/video/${props.videoId}/${qlt}`); //New Quality Video
+            window.setTimeout(()=>{
+              playerRef.current.forward(time);
+              playerRef.current.play();
+            },100)
           }else{
             console.log(res.data.msg);
           }
@@ -41,19 +44,19 @@ const VideoPlayer = (props)=>{
     },[qlt])
 
     return (
-          {authorize}?<div style={{height:"60vh"}}>
-          <Player>
+        <React.Fragment>
+          <Player fluid={false} height={300} width={600} ref={playerRef}>
             <source src={`/video/${props.videoId}/${qlt}`} />
             <ControlBar autoHide={false}>
               <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
               <ReplayControl seconds={10} order={2.2} />
               <ForwardControl seconds={10} order={3.2} />
             </ControlBar>
-            <BigPlayButton position="center" />
+            <BigPlayButton position="center"/>
             <LoadingSpinner/>
           </Player>
           <button onClick={()=>setQlt(30)}>Qlt low</button>
-          </div>:<div></div>
+        </React.Fragment>
     );
 }
 
