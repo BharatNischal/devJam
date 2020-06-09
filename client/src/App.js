@@ -15,6 +15,7 @@ import {CurUserContext} from "./contexts/curUser";
 import Deliverable from './components/content/deliverable';
 import Topic from './components/content/topic';
 import Content from './components/content/content';
+import StDash from './components/stdash';
 
 axios.defaults.withCredentials = true;
 
@@ -57,6 +58,8 @@ function App(props) {
             <Route path="/createProfile" exact component={CreateProfile}/>
   <Route path="/editProfile/:name/:id" exact  render={(props) => <CreateProfile {...props} edit={true} />}/>
             <Route path="/reset/:token" exact component={ResetPassword}/>
+
+            <Route path="/studDash" exac component={StDash} />
           </Switch>
           )};
 
