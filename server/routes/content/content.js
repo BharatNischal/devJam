@@ -39,6 +39,17 @@ router.get("/getContent",middleware.isAdmin,(req,res)=>{
   })
 });
 
+router.get("/getMinContent",(req,res)=>{
+    db.Content.findOne({})
+    .populate("topics")
+    .then(foundContent=>{
+      return res.json({content:foundContent,success:true});
+    })
+    .catch(err=>{
+      return res.json({msg:err.message,success:false});
+    });
+});
+
 //Create Topic Route
 router.get("/content/createTopic",middleware.isAdmin,(req,res)=>{
   db.Content.findOne({})

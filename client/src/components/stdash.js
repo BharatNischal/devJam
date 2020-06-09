@@ -1,7 +1,8 @@
 import React from "react";
+import Content from "./learnerPlatform/content";
 
 const StDash =(props)=>(
-    <h1> Hello Its Student Dashboard</h1>
+    <Content/>
 )
 
 export default StDash;
