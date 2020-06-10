@@ -18,7 +18,7 @@ const Comment = (props)=>{
     axios.post(`/comment/${comment._id}/new`,{text:commentMsg})
       .then(res=>{
         if(res.data.success){
-          const data = {...res.data.comment,author:{username:"username",profilePic:"profilePic"},subComments:[]};
+          const data = {...res.data.comment,author:{username:props.user.username,profilePic:props.user.profilePic},subComments:[]};
           const newSubComments = subComments.slice();
           newSubComments.push(data);
           setSubComments(newSubComments);
@@ -36,7 +36,7 @@ const Comment = (props)=>{
     axios.post(`/comment/${mainCommentId}/new`,{text})
       .then(res=>{
         if(res.data.success){
-          const data = {...res.data.comment,author:{username:"username",profilePic:"profilePic"},subComments:[]};
+          const data = {...res.data.comment,author:{username:props.user.username,profilePic:props.user.profilePic},subComments:[]};
           const newSubComments = subComments.slice();
           newSubComments.push(data);
           setSubComments(newSubComments);
@@ -57,7 +57,7 @@ const Comment = (props)=>{
           <p className="text-left" style={{lineHeight:"100%"}}>{comment.text}</p>
           <form className="mb-3" onSubmit={handleSubComment}>
             <div className="row">
-              <div className="col-2 profile-pic"><img src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/indian_man_turban_sikh-512.png" className="rounded-circle" style={{maxHeight:"35px",width:"auto"}}/></div>
+              <div className="col-2 profile-pic"><img src={props.user.username} className="rounded-circle" style={{maxHeight:"35px",width:"auto"}}/></div>
               <div className="col-10">
                 <input type="text" placeholder="Reply to this message" value={commentMsg} onChange={(e)=>{setCommentMsg(e.target.value)}} className="w-100" style={{border:"none",borderBottom:"2px solid black",background:"inherent",outline:"none"}}/>
               </div>
@@ -65,7 +65,7 @@ const Comment = (props)=>{
           </form>
           {(subComments && subComments.length>0)?
             subComments.slice().reverse().map(subComment=>(
-            <SubComment comment={subComment} mainCommentId={comment._id} key={subComment._id} handleAdd={handleAdd}/>
+            <SubComment comment={subComment} mainCommentId={comment._id} key={subComment._id} handleAdd={handleAdd} user={props.user}/>
           )):null}
         </div>
       </div>

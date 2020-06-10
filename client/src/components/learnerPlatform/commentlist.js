@@ -1,8 +1,11 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useContext} from "react";
 import Comment from "./comment";
 import axios from "axios";
+import {CurUserContext} from "../../contexts/curUser"
 
 const CommentList = (props)=>{
+
+    const {user} = useContext(CurUserContext);
 
     const [comments,setComments] = useState([{_id:1,text:"Hello World",author:{
       profilePic:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/indian_man_turban_sikh-512.png",username:"manjot"},
@@ -23,7 +26,7 @@ const CommentList = (props)=>{
       axios.post(`/${props.item.type}/${props.idemId}/new`,{text:commentMsg})
         .then(res=>{
           if(res.data.success){
-            const data = {...res.data.comment,author:{username:"username",profilePic:"profilePic"},subComments:[]};
+            const data = {...res.data.comment,author:{username:user.username,profilePic:user.profilePic},subComments:[]};
             const newComments = comments.slice();
             newComments.push(data);
             setComments(newComments);
@@ -41,7 +44,7 @@ const CommentList = (props)=>{
             <hr/>
                 <form className="mb-3" onSubmit={handleComment}>
                   <div className="row">
-                    <div className="col-2 profile-pic"><img src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/indian_man_turban_sikh-512.png" className="rounded-circle" style={{maxHeight:"50px",width:"auto"}}/></div>
+                    <div className="col-2 profile-pic"><img src={user.profilePic} className="rounded-circle" style={{maxHeight:"50px",width:"auto"}}/></div>
                     <div className="col-10">
                       <input type="text" className="background-inherent w-100" placeholder="Add a public Comment" value={commentMsg} onChange={(e)=>{setCommentMsg(e.target.value)}} style={{border:"none",borderBottom:"2px solid black",backgroundColor:"inherent",outline:"none"}}/>
                     </div>
@@ -49,7 +52,7 @@ const CommentList = (props)=>{
                 </form>
                 {(comments && comments.length>0)?
                   comments.slice().reverse().map(comment=>(
-                  <Comment comment={comment} key={comment._id} />
+                  <Comment comment={comment} key={comment._id} user={user}/>
                 )):null}
           </div>
   );

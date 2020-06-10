@@ -21,7 +21,7 @@ const LoginForm = (props)=>{
       axios.get("/curUser")
         .then(res=>{
             if(res.data.user){
-              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin});
+              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student,username:res.data.user.username});
               props.history.push("/profiles");
             }else{
               setUser({loggedIn:false,superAdmin:false});
@@ -50,7 +50,7 @@ const LoginForm = (props)=>{
               }else{
                 setTimeout(()=>{
                   setBtnClick(false);
-                  setUser({loggedIn:true,superAdmin:res.data.superAdmin});
+                  setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student,username:res.data.user.username});
                   props.history.push("/profiles");
                 },1000);
               }
@@ -112,7 +112,7 @@ const LoginForm = (props)=>{
                 </div>
                 {button}
 
-                
+
               </form>
               <p className="text-danger">{err}</p>
               <hr className="mt-4 mb-2"/>
