@@ -1,0 +1,29 @@
+.topicTitle{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+}
+
+.description{
+    transform-origin: top;
+    transform: scaleY(0);
+    height: 0;
+    
+    transition: 0.4s;
+    
+}
+
+.description.showDescription{
+    height: auto;
+    transform: scaleY(1);
+}
+.arrowIcon{
+    transition: 0.4s;
+}
+.rotate.arrowIcon{
+    transform: rotate(-180deg);
+}
+.showDescText{
+    color:#666666;
+}

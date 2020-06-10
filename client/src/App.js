@@ -14,6 +14,7 @@ import axios from "axios";
 import {CurUserContext} from "./contexts/curUser";
 import Deliverable from './components/content/deliverable';
 import Topic from './components/content/topic';
+import StudentTopic from "./components/learnerPlatform/topic/topic";  
 import Content from './components/content/content';
 import StDash from './components/stdash';
 import VideoPlayer from './components/videoPlayer';
@@ -61,6 +62,7 @@ function App(props) {
   <Route path="/editProfile/:name/:id" exact  render={(props) => <CreateProfile {...props} edit={true} />}/>
             <Route path="/reset/:token" exact component={ResetPassword}/>
 
+            <Route path="/topic/:topicId/:itemId" exact component={StudentTopic} />  
             <Route path="/studDash" exact component={StDash} />
             <Route path="/video" exact component={VideoPlayer}/>
             <Route path="/comment" exact component={Comment}/>

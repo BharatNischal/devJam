@@ -72,7 +72,7 @@ const Content = (props)=>{
 
                     {topics.map((t,i)=>(
                         <div key={t._id} className="col-lg-3 col-md-4 col-6  py-3" >
-                            <Link to={`${t._id}/${t.items[0].video?t.items[0].video:t.items[0].deliverable}`} >
+                            <Link to={`/topic/${t._id}/${t.items[0].video?t.items[0].video:t.items[0].deliverable}`} >
                             <div className="customCard" >
                                 <div className="card-body">
                                     <div className="iconWrap text-center">
