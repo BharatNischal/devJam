@@ -1,7 +1,7 @@
 .topicTitle{
     font-family: Roboto;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 32px;
 }
 
@@ -9,7 +9,9 @@
     transform-origin: top;
     transform: scaleY(0);
     height: 0;
-    
+    color: #3f3f3f;
+    font-size: 14px;
+    line-height: 16px;
     transition: 0.4s;
     
 }
@@ -27,3 +29,66 @@
 .showDescText{
     color:#666666;
 }
+
+
+.playlistWrapper{
+    overflow-x: hidden;
+    border-radius: 18px;
+    box-shadow: 0px 4px 10px #22222252;
+}
+.playlistDiv{
+    
+    height:500px;
+    width:100%;
+    overflow-y: scroll;
+    
+}
+.playlistDiv::-webkit-scrollbar {
+  width: 8px;
+  
+}
+ 
+.playlistDiv::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.164);
+  
+}
+ 
+.playlistDiv::-webkit-scrollbar-thumb {
+  background-color: rgb(156, 6, 61);
+  border-radius:4px ;
+  
+}
+.playlistDiv .time{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #69285bb8;
+    color: white;
+    padding: 0px 4px;
+    font-size: 13px;
+}
+.playlist-title{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+}
+.playlistItemWrapper{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.playlistItemWrapper:hover,.playlistItemWrapper.active{
+    background-color: #e1e1e1;
+}
+.playlistDiv .playlistThumbnailWrapper{
+    height: 60px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+
+    .topicTitle.mainH{
+        font-size: 36px;
+        font-weight: 600;
+    }

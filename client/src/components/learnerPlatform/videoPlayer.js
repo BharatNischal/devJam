@@ -45,7 +45,8 @@ const VideoPlayer = (props)=>{
 
     return (
         <React.Fragment>
-          <Player fluid={false} height={300} width={600} ref={playerRef}>
+          <div style={{borderRadius:"18px",overflow:"hidden"}}>
+          <Player fluid={true}  ref={playerRef} aspectRatio={"16:9"}>
             <source src={`/video/${props.videoId}/${qlt}`} />
             <ControlBar autoHide={false}>
               <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
@@ -55,6 +56,7 @@ const VideoPlayer = (props)=>{
             <BigPlayButton position="center"/>
             <LoadingSpinner/>
           </Player>
+          </div>
           <button onClick={()=>setQlt(30)}>Qlt low</button>
         </React.Fragment>
     );
