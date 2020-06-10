@@ -81,7 +81,9 @@
   background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
 }
 
-
+.background-inherent{
+  background-color: inherent !important;
+}
 
 
 /* TYPOGRAPHY */
@@ -90,5 +92,5 @@ h1{
     font-style: normal;
     font-weight: 600;
     font-size: 50px;
-   
+
 }

@@ -16,8 +16,8 @@ import Deliverable from './components/content/deliverable';
 import Topic from './components/content/topic';
 import Content from './components/content/content';
 import StDash from './components/stdash';
-import VideoPlayer from './components/videoPlayer';
-import Comment from './components/comments';
+import VideoPlayer from './components/learnerPlatform/videoPlayer';
+import Comment from './components/learnerPlatform/commentlist';
 
 axios.defaults.withCredentials = true;
 
@@ -29,9 +29,9 @@ function App(props) {
         axios.get("/curUser")
           .then(res=>{
             if(res.data.user){
-              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic});
+              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student});
             }else{
-              setUser({loggedIn:false,superAdmin:"",name:"",profilePic:null});
+              setUser({loggedIn:false,superAdmin:"",name:"",profilePic:null,student:false});
             }
             setFirst(false);
           })
