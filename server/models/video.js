@@ -8,6 +8,7 @@ const videoSchema = new mongoose.Schema({
   description: String,
   url: String,
   filename: String,
+  duration: String,
   comments:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:'Comment'
