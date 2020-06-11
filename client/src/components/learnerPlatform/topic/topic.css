@@ -92,3 +92,15 @@
         font-size: 36px;
         font-weight: 600;
     }
+
+.comment-inp{
+    border:none;
+    border-bottom:2px solid #555;
+    background-color:rgba(0,0,0,0);
+    padding:5px 5px;
+    outline:none
+}
+.comment-inp:focus{
+    border-bottom: 2px solid rgba(136, 9, 108, 0.76);
+    background-color: rgba(128, 0, 128, 0.151);
+}
