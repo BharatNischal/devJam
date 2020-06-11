@@ -56,6 +56,7 @@ const Topic =(props)=>{
                 <div className="row  " style={{position:"relative"}}>
                     <div className="col-12">
                         <h2 className="topicTitle mainH text-left text-pink"> {topic.title} </h2>
+                        <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/studDash")}><i className="fa fa-arrow-left "></i> Go Back</span><br/>
                         <b className="showDescText cursor-pointer px-2" onClick={()=>setShowTopicDescription(!showTopicDescription)} >
                             {showTopicDescription?"Hide":"Show"} Description <i className={showTopicDescription?"fa fa-arrow-down rotate arrowIcon ":"fa fa-arrow-down arrowIcon"}></i>
                         </b>

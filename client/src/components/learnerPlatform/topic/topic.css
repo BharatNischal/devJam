@@ -104,3 +104,30 @@
     border-bottom: 2px solid rgba(136, 9, 108, 0.76);
     background-color: rgba(128, 0, 128, 0.151);
 }
+.qDiv{
+    width: 60px;
+    height: 80px;
+    background-color: rgba(59, 4, 34, 0.808);
+    border:2px solid rgb(122, 122, 122);
+    border-radius: 10px;
+    color: white;
+    position: absolute;
+    /* top: 95%; */
+    right: 15px;
+    bottom: 25px;
+    z-index: 100;
+    overflow: hidden;
+    animation:showDropDown 0.4s ease-out ;
+    
+    
+}
+.qDiv div{
+    cursor: pointer;
+    border-bottom: 1px solid rgba(139, 139, 139, 0.5);
+    
+
+}
+.qDiv div:hover{
+    color: purple;
+    background-color: white;
+}

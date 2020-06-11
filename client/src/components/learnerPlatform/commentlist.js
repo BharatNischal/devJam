@@ -8,28 +8,7 @@ const CommentList = (props)=>{
 
     const {user} = useContext(CurUserContext);
 
-    const [comments,setComments] = useState([
-      {
-        _id:1,text:"Hello World",
-        author:{
-          profilePic:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/indian_man_turban_sikh-512.png",username:"manjot"},
-          subComments:
-          [
-            {_id:2,text:"Hello World",author:{profilePic:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/indian_man_turban_sikh-512.png",username:"Bharat"}},
-            {_id:3,text:"Hello World",author:{profilePic:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/indian_man_turban_sikh-512.png",username:"Manjot"}}
-          ]
-      },
-      {
-        _id:4,text:"Hello World",
-        author:{
-          profilePic:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/indian_man_turban_sikh-512.png",username:"manjot"},
-          subComments:
-          [
-            {_id:5,text:"Hello World",author:{profilePic:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/indian_man_turban_sikh-512.png",username:"Bharat"}},
-            {_id:6,text:"Hello World",author:{profilePic:"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/indian_man_turban_sikh-512.png",username:"Manjot"}}
-          ]
-      },
-      ]);
+    const [comments,setComments] = useState([]);
 
     // Used for main comment on video/deliverable
     const [commentMsg,setCommentMsg] = useState("");

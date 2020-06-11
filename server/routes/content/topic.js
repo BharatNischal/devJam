@@ -44,6 +44,32 @@ router.get("/deliverable/:id/getComments",(req,res)=>{
     console.log(err);
   })
 });
+router.get("/video/:id/getComments",(req,res)=>{
+  db.Video.findById(req.params.id)
+  .populate({
+    path:"comments",
+    model:"Comment",
+    populate:[{
+      path:"subComments",
+      model:"Comment",
+        populate:{
+          path:"author",
+          model:"User"
+        }
+      },
+      {
+       path:"author",
+       model:"User" 
+      }]
+    }
+  )
+  .then(foundComments=>{
+    console.log(foundComments);
+      res.json(foundComments);
+  }).catch(err=>{
+    console.log(err);
+  })
+});
 
 
 
