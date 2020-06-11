@@ -16,6 +16,7 @@ const          express = require('express'),
          ContentRoutes = require("./routes/content/content"),
          ProfileRoutes = require("./routes/profile"),
          CommentRoutes = require("./routes/comments"),
+         SubmissionRoutes = require("./routes/submission"),
             AuthRoutes = require("./routes/auth");
 
 
@@ -142,6 +143,8 @@ app.use("/",DeliverableRoutes);
 // Comments Routes
 app.use("/",CommentRoutes);
 
+// Submissions Routes
+app.use("/",SubmissionRoutes);
 
 const redirectHost=process.env.NODE_ENV === 'production'?"":"http://localhost:3000";
 
