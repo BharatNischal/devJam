@@ -40,7 +40,7 @@ var firebaseConfig = {
     limits:{fileSize: 10000000000}
  }).single("zip");
 
- router.get("/issubmitted/:deliverableId",middleware.isAdmin,(req,res)=>{
+ router.get("/issubmitted/:deliverableId",middleware.isStudent,(req,res)=>{
     db.Submission.find({deliverableId:req.params.deliverableId,studentId:req.user._id})
     .then(re=>{
         if(re.length>0){
@@ -54,7 +54,7 @@ var firebaseConfig = {
     })
 });
 
-router.post("/submission/:deliverableId",upload,middleware.isAdmin,(req,res)=>{
+router.post("/submission/:deliverableId",upload,middleware.isStudent,(req,res)=>{
     if(req.file){
         console.log(req.file ,"HERE");
         storageRef.child(Date.now()+req.file.originalname).put(req.file.buffer).then(async function(snapshot) {
