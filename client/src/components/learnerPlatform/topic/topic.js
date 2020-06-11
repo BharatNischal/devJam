@@ -5,7 +5,7 @@ import VideoPlayer from "../videoPlayer";
 import placeholder from "../../content/emptyTopic.png";
 import Playlist from "./playlist";
 import Deliverable from "./deliverable";
-import Comment from "../comment";
+import Comments from "../commentlist";
 import axios from "axios";
 
 const Topic =(props)=>{
@@ -74,7 +74,9 @@ const Topic =(props)=>{
                     <div className="col-lg-4 p-2" >
                         <Playlist items={items} topic={topic} handleChangeCurItem={handleChangeCurItem} setCurItemIndex={setCurItemIndex}/>
                     </div>
-
+                    <div className="col-12 mt-5">
+                        <Comments/>
+                    </div>
                 </div>
 
             </div>
