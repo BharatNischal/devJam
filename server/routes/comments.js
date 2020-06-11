@@ -6,7 +6,7 @@ const middleware = require("../middleware");
 
 // To create a main Comment for deliverable
 router.post('/deliverable/:id/new',middleware.isAdmin,(req,res)=>{
-  db.Comment.create({text:req.body,author:req.user._id})
+  db.Comment.create({text:req.body.text,author:req.user._id})
     .then(comment=>{
       db.Deliverable.findById(req.params.id)
         .then(deliverable=>{

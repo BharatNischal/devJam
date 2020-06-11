@@ -25,10 +25,8 @@ const Dropdown =(props)=>{
         <React.Fragment>
         <div className="d-backdrop" onClick={props.close}></div>
         <div className="dropdown">
-            <div className="dpWrapper dpWrapper2" > <img alt="profilePic" src={user.profilePic?user.profilePic:Dp} /></div>
-            <h2 className="title">Hi, {user.name?user.name:""} !</h2>
-            <hr className="mb-0"/>
-            <div className="btns p-2" onClick={logoutHandler} >  Logout <i className="fa fa-power-off"></i> </div>
+           
+            <div className="btns p-3" onClick={logoutHandler} >  Logout <i className="fa fa-power-off"></i> </div>
         </div>
         </React.Fragment>
     )
