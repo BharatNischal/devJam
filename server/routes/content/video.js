@@ -41,6 +41,7 @@ router.post("/topic/video",middleware.isAdmin,uploadVideo,(req,res)=>{
         }else{
           const temp = result.secure_url.split('/');
           result.secure_url = temp[temp.length-2]+'/'+temp[temp.length-1];
+          console.log(result);
           return res.json({result,success:true});
         }
     });
@@ -81,6 +82,7 @@ router.get('/video/:id/:id2/:qlt',middleware.isAdmin,(req,res)=>{
           console.log(err.message);
       })
 })
+
 
 //Get details of video for a particular video
 router.get("/topic/video/:id",(req,res)=>{
