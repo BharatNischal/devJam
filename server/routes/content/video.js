@@ -39,6 +39,8 @@ router.post("/topic/video",middleware.isAdmin,uploadVideo,(req,res)=>{
         if(err){
           return res.json({success:false,msg:err.message})
         }else{
+          const temp = result.secure_url.split('/');
+          result.secure_url = temp[temp.length-2]+'/'+temp[temp.length-1];
           return res.json({result,success:true});
         }
     });
@@ -66,11 +68,11 @@ router.post('/video/access',middleware.isAdmin,(req,res)=>{
 })
 
 //To get a video with given quality
-router.get('/video/:id/:qlt',middleware.isAdmin,(req,res)=>{
+router.get('/video/:id/:id2/:qlt',middleware.isAdmin,(req,res)=>{
     db.User.findById(req.user._id)
       .then(user=>{
           if(user.canAccess){
-            return res.redirect(`https://res.cloudinary.com/bharatnischal/video/upload/q_${req.params.qlt}/v1591106028/ocnaeugr1z9dltddrywl.mp4`);
+            return res.redirect(`https://res.cloudinary.com/bharatnischal/video/upload/q_${req.params.qlt}/${req.params.id}/${req.params.id2}`);
           }else{
             return res.redirect('https://freefrontend.com/assets/img/403-forbidden-html-templates/403-Access-Forbidden-HTML-Template.gif');
           }

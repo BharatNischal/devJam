@@ -4,28 +4,21 @@ function Deliverable(props) {
     const [showItemDescription, setShowItemDescription] = useState(true);
     return (
         <div >
-            <h3 className="topicTitle ">Deliverable Title </h3>
+            <h3 className="topicTitle ">{props.deliverable?props.deliverable.title:""}</h3>
             <div className="px-3">
-                <div><b>Points: </b> 100 Points</div>
-                <div className="mb-3"><b>Due Date: </b> 16, July, 2020 </div>
-                
-                <b className="showDescText cursor-pointer mb-2" onClick={()=>setShowItemDescription(!showItemDescription)} > 
-                    {showItemDescription?"Hide":"Show"} Deliverable Description <i className={showItemDescription?"fa fa-arrow-down rotate arrowIcon ":"fa fa-arrow-down arrowIcon"}></i> 
+                <div><b>Points: </b>{props.deliverable?props.deliverable.points:0} Points</div>
+                <div className="mb-3"><b>Due Date: </b>{props.deliverable?props.deliverable.dueDate.substr(0,10):""}</div>
+                <b className="showDescText cursor-pointer mb-2" onClick={()=>setShowItemDescription(!showItemDescription)} >
+                    {showItemDescription?"Hide":"Show"} Deliverable Description <i className={showItemDescription?"fa fa-arrow-down rotate arrowIcon ":"fa fa-arrow-down arrowIcon"}></i>
                 </b>
-                <p className={showItemDescription?"showDescription description":"px-3 description"}>
-                    
-                    Lorem Ipsum Hello how are you....Lorem Ipsum Hello how are you....
-                    Lorem Ipsum Hello how are you....Lorem Ipsum Hello how are you....
-                    Lorem Ipsum Hello how are you....Lorem Ipsum Hello how are you....
-                    Lorem Ipsum Hello how are you....Lorem Ipsum Hello how are you....
-                </p>
+                <p className={showItemDescription?"showDescription description":"px-3 description"}>{props.deliverable?props.deliverable.instruction:""}</p>
                 <div className="row my-5" >
                         <div className="col-lg-3 col-md-2"></div>
-                        
+
                         <div className="col-lg-6 col-md-8">
                             <div style={{borderRadius:"18px"}} className="shadow p-3">
                                 <h4 className="text-center text-pink mb-3"> Submit Work </h4>
-                                
+
                                 <div className="mb-2"><b>Upload Zip File</b> </div>
                                 <input type="file" ></input>
 
@@ -35,7 +28,7 @@ function Deliverable(props) {
                         </div>
                         <div className="col-lg-3 col-md-2"></div>
                         <div className="col-lg-3 col-md-2"></div>
-                        
+
                         <div className="col-lg-6 col-md-8 mt-5">
                             <div style={{borderRadius:"18px"}} className="shadow p-3">
                                 <h5 className="text-center text-pink mb-3"> Private Comments </h5>
@@ -53,4 +46,3 @@ function Deliverable(props) {
 }
 
 export default Deliverable;
-
