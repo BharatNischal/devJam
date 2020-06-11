@@ -4,7 +4,7 @@ var passportLocalMongoose=require("passport-local-mongoose");
 var userSchema=new mongoose.Schema({
     profilePic:{
       type:String,
-      default:""
+      default:"https://res.cloudinary.com/bharatnischal/image/upload/v1563524517/czrd2jp9glgoluwm3vpp.png"
     },
     username:String,
     password:String,

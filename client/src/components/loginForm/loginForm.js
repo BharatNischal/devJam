@@ -21,8 +21,8 @@ const LoginForm = (props)=>{
       axios.get("/curUser")
         .then(res=>{
             if(res.data.user){
-              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student,username:res.data.user.username});
-              props.history.push("/profiles");
+              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student});
+              res.data.user.student?props.history.push("/studDash"):props.history.push("/profiles");
             }else{
               setUser({loggedIn:false,superAdmin:false});
             }
@@ -41,7 +41,6 @@ const LoginForm = (props)=>{
           console.log(username,password);
           axios.post("/login",{username,password})
             .then(res=>{
-
               if(!res.data.success){
                 setTimeout(()=>{
                     setBtnClick(false);
@@ -51,7 +50,7 @@ const LoginForm = (props)=>{
                 setTimeout(()=>{
                   setBtnClick(false);
                   setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student,username:res.data.user.username});
-                  props.history.push("/profiles");
+                  res.data.user.student?props.history.push("/studDash"):props.history.push("/profiles");
                 },1000);
               }
             })
