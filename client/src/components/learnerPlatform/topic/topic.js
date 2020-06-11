@@ -32,7 +32,7 @@ const Topic =(props)=>{
                             Lorem Ipsum Hello how are you....Lorem Ipsum Hello how are you....
                         </p>
                     </div>
-                    <div className="col-lg-8  mt-4">
+                    <div className="col-lg-8 col-md-7  mt-4">
                         {/* <Deliverable/> */}
                         <div className="m-3 p-1 " style={{borderRadius:"18px",border:"1px solid #e1e1e1",overflow:"hidden"}}>
                                 <VideoPlayer ></VideoPlayer>
@@ -56,7 +56,7 @@ const Topic =(props)=>{
                         </div>
                         
                     </div>
-                    <div className="col-lg-4 p-2" >
+                    <div className="col-lg-4 col-md-5 p-2" >
                         <Playlist/>
                     </div>
                     <div className="col-12 mt-5">

@@ -88,4 +88,7 @@ router.delete('/comment/:id/subComment/:subCommentId',(req,res)=>{
     .catch(err=>{
         res.json({success:false,msg:err.message});
     })
-})
+});
+
+
+module.exports =router;
