@@ -18,6 +18,7 @@ import StudentTopic from "./components/learnerPlatform/topic/topic";
 import Content from './components/content/content';
 import StDash from './components/stdash';
 import VideoPlayer from './components/learnerPlatform/videoPlayer';
+import SignupForm from './components/learnerPlatform/signup';
 import Comment from './components/learnerPlatform/commentlist';
 
 axios.defaults.withCredentials = true;
@@ -54,6 +55,7 @@ function App(props) {
             <Route path="/adminDashboard" exact component={Dashboard}/>
             <Route path="/profile/:name/:id" exact component={Profile}/>
             <Route path="/login" exact component={LoginForm}/>
+            <Route path="/signup" exact component={SignupForm}/>
             <Route path="/deliverable/:id" exact component={Deliverable}/>
             <Route path="/topic/:id" exact component={Topic} />
             <Route path="/content" exact component={Content} />

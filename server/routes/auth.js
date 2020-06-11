@@ -13,17 +13,20 @@ const passport = require("passport");
 
 
 // Register new admins
-router.post("/register",middleware.isSuperAdmin,(req,res)=>{
+router.post("/register",(req,res)=>{
     console.log("user",req.body);
-    db.User.register(new db.User({username:req.body.username}),req.body.password,(err,user)=>{
+    db.User.register(new db.User({username:req.body.username,student:req.body.student?true:false,name:req.body.name}),req.body.password,(err,user)=>{
         if(err){
             console.log(err);
             res.json({err:err.message,success:false});
         }
-        res.json({
-            success:true,
-            user:user,
-        });
+        if(req.body.student){
+          passport.authenticate("local")(req,res,()=>{
+            res.json({success:true,user:user});
+          });
+        }else{
+          res.json({success:true,user:user});
+        }
     });
 });
 
