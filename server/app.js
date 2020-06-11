@@ -15,6 +15,7 @@ const          express = require('express'),
            TopicRoutes = require("./routes/content/topic"),
          ContentRoutes = require("./routes/content/content"),
          ProfileRoutes = require("./routes/profile"),
+         CommentRoutes = require("./routes/comments"),
             AuthRoutes = require("./routes/auth");
 
 
@@ -67,6 +68,9 @@ passport.use(new GoogleStrategy({
              done(null,createdUser);
            }).catch(err=>{done(err);});
          }else{
+           foundUser.profilePic=profile._json.picture;
+           console.log(profile._json.picture);
+           await foundUser.save();
            done(null,foundUser);
          }
        })
@@ -135,6 +139,8 @@ app.use("/",VideoRoutes);
 // Deliverable Routes
 app.use("/",DeliverableRoutes);
 
+// Comments Routes
+app.use("/",CommentRoutes);
 
 
 const redirectHost=process.env.NODE_ENV === 'production'?"":"http://localhost:3000";

@@ -4,7 +4,7 @@ function Deliverable(props) {
     const [showItemDescription, setShowItemDescription] = useState(true);
     return (
         <div >
-            <h3 className="topicTitle ">{props.deliverable?props.deliverable.title:""}</h3>
+            <h3 className="topicTitle "><span className="pr-3" style={{borderBottom:"2px solid pink"}}>{props.deliverable?props.deliverable.title:""}</span></h3>
             <div className="px-3">
                 <div><b>Points: </b>{props.deliverable?props.deliverable.points:0} Points</div>
                 <div className="mb-3"><b>Due Date: </b>{props.deliverable?props.deliverable.dueDate.substr(0,10):""}</div>

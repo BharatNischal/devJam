@@ -35,14 +35,31 @@ const CommentList = (props)=>{
     const [commentMsg,setCommentMsg] = useState("");
 
     // Initialize all comments
-    // useEffect(()=>{
-    //   setComments(props.comments);
-    // },[])
+    useEffect(()=>{
+      axios.get(`/${props.type}/${props.itemId}/getComments`)
+      .then(res=>{
+        setComments(res.data.comments);
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+      
+    },[])
+    useEffect(()=>{
+      axios.get(`/${props.type}/${props.itemId}/getComments`)
+      .then(res=>{
+        setComments(res.data.comments);
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+      
+    },[props.itemId]);
 
     // Handles Main Comment
     const handleComment = (e)=>{
       e.preventDefault();
-      axios.post(`/${props.item.type}/${props.idemId}/new`,{text:commentMsg})
+      axios.post(`/${props.type}/${props.itemId}/new`,{text:commentMsg})
         .then(res=>{
           if(res.data.success){
             const data = {...res.data.comment,author:{username:user.username,profilePic:user.profilePic},subComments:[]};

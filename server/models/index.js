@@ -19,3 +19,4 @@ module.exports.Developer = require("./developer");
 module.exports.Deliverable = require("./deliverable");
 module.exports.Content = require("./content");
 module.exports.Comment = require("./comments");
+module.exports.Submission = require("./submission");

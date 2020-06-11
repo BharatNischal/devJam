@@ -21,6 +21,7 @@ const Topic =(props)=>{
 
     const handleChangeCurItem = (ind)=>{
       setCurItem(items[ind]);
+      console.log(items[ind]);
     }
 
     useEffect(()=>{
@@ -61,27 +62,33 @@ const Topic =(props)=>{
                         <p className={showTopicDescription?"px-2 showDescription description":"px-2 description"}>{topic.description}</p>
                     </div>
                     <div className="col-lg-8  mt-4">
-                        {(curItem && curItem.video)?<React.Fragment>
-                          <div className="m-3 p-1 " style={{borderRadius:"18px",border:"1px solid #e1e1e1",overflow:"hidden"}}>
-                                  <VideoPlayer items={items} setCurItem={setCurItem} curItemIndex={curItemIndex} setCurItemIndex={setCurItemIndex} videoId={items[curItemIndex].video.url}/>
-                          </div>
-                        <div className="ml-3">
-                            <h3 className="topicTitle px-3 text-pink ">{curItem.video.title} </h3>
-                            <div className="px-3">
-
-                                <b className="showDescText cursor-pointer mb-2" onClick={()=>setShowItemDescription(!showItemDescription)} >
-                                    {showItemDescription?"Hide":"Show"} Video Description <i className={showItemDescription?"fa fa-arrow-down rotate arrowIcon ":"fa fa-arrow-down arrowIcon"}></i>
-                                </b>
-                                <p className={showItemDescription?"showDescription description":"px-3 description"}>{curItem.video.description}</p>
+                    {curItem?
+                           (curItem && curItem.video)?<React.Fragment>
+                           <div className="m-3 p-1 " style={{borderRadius:"18px",border:"1px solid #e1e1e1",overflow:"hidden"}}>
+                                   <VideoPlayer items={items} setCurItem={setCurItem} curItemIndex={curItemIndex} setCurItemIndex={setCurItemIndex} videoId={items[curItemIndex].video.url}/>
+                           </div>
+                            <div className="ml-3">
+                                <h3 className="topicTitle px-3 text-pink ">{curItem.video.title} </h3>
+                                <div className="px-3">
+    
+                                    <b className="showDescText cursor-pointer mb-2" onClick={()=>setShowItemDescription(!showItemDescription)} >
+                                        {showItemDescription?"Hide":"Show"} Video Description <i className={showItemDescription?"fa fa-arrow-down rotate arrowIcon ":"fa fa-arrow-down arrowIcon"}></i>
+                                    </b>
+                                    <p className={showItemDescription?"showDescription description":"px-3 description"}>{curItem.video.description}</p>
+                                </div>
                             </div>
-                        </div>
-                      </React.Fragment>:<Deliverable deliverable={curItem?curItem.deliverable:null}/>}
+                        </React.Fragment>:<Deliverable deliverable={curItem?curItem.deliverable:null}/> 
+                    :null}
+                    
                     </div>
                     <div className="col-lg-4 p-2" >
                         <Playlist items={items} topic={topic} handleChangeCurItem={handleChangeCurItem} setCurItemIndex={setCurItemIndex}/>
                     </div>
                     <div className="col-12 mt-5">
-                        <Comments/>
+                        {curItem?
+                            <Comments type={curItem.video?"video":"deliverable"} itemId={curItem.video?curItem.video._id:curItem.deliverable._id} comments={curItem.video?curItem.video.comments:curItem.deliverable.comments} />
+                        :null
+                        }
                     </div>
                 </div>
 
