@@ -14,7 +14,7 @@ import axios from "axios";
 import {CurUserContext} from "./contexts/curUser";
 import Deliverable from './components/content/deliverable';
 import Topic from './components/content/topic';
-import StudentTopic from "./components/learnerPlatform/topic/topic";  
+import StudentTopic from "./components/learnerPlatform/topic/topic";
 import Content from './components/content/content';
 import StDash from './components/stdash';
 import VideoPlayer from './components/learnerPlatform/videoPlayer';
@@ -30,9 +30,9 @@ function App(props) {
         axios.get("/curUser")
           .then(res=>{
             if(res.data.user){
-              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student,username:res.data.user.username});
+              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student});
             }else{
-              setUser({loggedIn:false,superAdmin:"",name:"",profilePic:null,student:false,username:""});
+              setUser({loggedIn:false,superAdmin:"",name:"",profilePic:null,student:false});
             }
             setFirst(false);
           })
@@ -62,7 +62,7 @@ function App(props) {
   <Route path="/editProfile/:name/:id" exact  render={(props) => <CreateProfile {...props} edit={true} />}/>
             <Route path="/reset/:token" exact component={ResetPassword}/>
 
-            <Route path="/topic/:topicId/:itemId" exact component={StudentTopic} />  
+            <Route path="/topic/:topicId/:itemId" exact component={StudentTopic} />
             <Route path="/studDash" exact component={StDash} />
             <Route path="/video" exact component={VideoPlayer}/>
             <Route path="/comment" exact component={Comment}/>

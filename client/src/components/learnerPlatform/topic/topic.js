@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useContext} from "react";
 import TopBar from "../TopBar";
 import "./topic.css";
 import VideoPlayer from "../videoPlayer";
@@ -6,6 +6,7 @@ import placeholder from "../../content/emptyTopic.png";
 import Playlist from "./playlist";
 import Deliverable from "./deliverable";
 import Comments from "../commentlist";
+import {CurUserContext} from "../../../contexts/curUser"
 import axios from "axios";
 
 const Topic =(props)=>{
@@ -16,12 +17,17 @@ const Topic =(props)=>{
     const [curItem,setCurItem] = useState(null);
     const [curItemIndex,setCurItemIndex] = useState(0);
     const [items,setItems] = useState([]);
+    const {user} = useContext(CurUserContext);
 
     const handleChangeCurItem = (ind)=>{
       setCurItem(items[ind]);
     }
 
     useEffect(()=>{
+      // Frontend authorization
+      if(!user.loggedIn)
+        props.history.push("/login");
+
       axios.get(`/content/topic/${props.match.params.topicId}`)
         .then(res=>{
             if(res.data.success){

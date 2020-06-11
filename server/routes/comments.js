@@ -59,7 +59,7 @@ router.post('/comment/:id/new',middleware.isAdmin,(req,res)=>{
 })
 
 // Delete a main comments
-router.delete('/comment/:id',(req,res)=>{
+router.delete('/comment/:id',middleware.isAdmin,(req,res)=>{
   db.Comment.findById(req.params.id)
     .then(comment=>{
       Promise.all([db.Comment.deleteMany({'_id':{'$in':comment.subComments}}),db.Comment.findByIdAndDelete(req.params.id)])
@@ -73,7 +73,7 @@ router.delete('/comment/:id',(req,res)=>{
 })
 
 // Delete a subComment from main comments
-router.delete('/comment/:id/subComment/:subCommentId',(req,res)=>{
+router.delete('/comment/:id/subComment/:subCommentId',middleware.isAdmin,(req,res)=>{
   db.Comment.findById(req.params.id)
     .then(comment=>{
         const ind = comment.subcomments.findIndex((subComment)=>(subComment._id == req.params.subCommentId));
