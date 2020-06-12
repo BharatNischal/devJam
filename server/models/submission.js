@@ -18,7 +18,8 @@ const submissionSchema = new mongoose.Schema({
     timestamp:{
         type: Date,
         default: new Date()
-    }
+    },
+    comment:String
 });
 
 module.exports=mongoose.model("submission",submissionSchema);

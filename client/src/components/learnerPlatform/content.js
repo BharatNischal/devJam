@@ -8,13 +8,14 @@ import {CurUserContext} from "../../contexts/curUser";
 
 var initialTopics=[];
 const Content = (props)=>{
+    // To get details for logged in user
     const {setUser,user} = useContext(CurUserContext);
-
+    // Search related states
     const [searchText,setSearchText] = useState("");
     const [topics,setTopics]=useState(initialTopics);
     const [focusInp,setFocusInp]=useState(false);
 
-
+    // To get the data from database on component mount
     useEffect(()=>{
         if(user.loggedIn){
             Axios.get("/getMinContent")
@@ -38,13 +39,14 @@ const Content = (props)=>{
 
     },[]);
 
+    // Search topics
     const searchChangeHandler = (e)=>{
         setSearchText(e.target.value);
         if(e.target.value===""){
             setTopics(initialTopics);
         }else{
-            
-            
+
+
             setTopics(initialTopics.filter( t=> {
                 return (t.title.toLowerCase().includes(e.target.value.toLowerCase()))
             } ));
@@ -80,17 +82,17 @@ const Content = (props)=>{
                                     </div>
                                     <h2 className="card-title">{t.title }</h2>
                                     <p className="card-desc"> {t.description.substr(0,75)}..... </p>
-                                    
+
                                 </div>
-                            
+
                                 <div className="bgcurve"> <img src={curve} /></div>
-                            </div>    
+                            </div>
                             </Link>
                         </div>
                     ))}
-                    
-                    
-                   
+
+
+
                 </div>
             </div>
         </React.Fragment>

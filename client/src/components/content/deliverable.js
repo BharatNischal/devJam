@@ -23,7 +23,7 @@ const Deliverable =(props)=>{
     const {user} = useContext(CurUserContext);
 
     useEffect(()=>{
-        if(user.loggedIn){  //Frontend authorization for admin
+        if(user.loggedIn && !user.student){  //Frontend authorization for admin
           if(!props.empty){
               axios.get(`/deliverable/${props.match.params.id}`)
               .then(res=>{
@@ -47,7 +47,7 @@ const Deliverable =(props)=>{
               })
           }
         }else{
-          props.history.push("/login");
+          props.history.push("/");
         }
     },[])
 

@@ -28,7 +28,7 @@ const VideoPage = (props)=>{
   const {user} = useContext(CurUserContext);
 
   useEffect(()=>{
-    if(user.loggedIn){  //Frontend authorization for admin
+    if(user.loggedIn && !user.student){  //Frontend authorization for admin
       axios.get(`/topic/video/${props.match.params.id}`)
         .then(res=>{
           if(res.data.success){
@@ -47,7 +47,7 @@ const VideoPage = (props)=>{
           setErr(err.msg);
         })
     }else{
-      props.history.push("/login");
+      props.history.push("/");
     }
   },[])
 

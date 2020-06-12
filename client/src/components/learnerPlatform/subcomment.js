@@ -3,6 +3,7 @@ import React,{useState} from "react";
 
 const SubComment = (props)=>{
 
+  // Data States
   const [commentMsg,setCommentMsg] = useState("");
   const comment = props.comment;
 
@@ -17,14 +18,14 @@ const SubComment = (props)=>{
           <div className="text-left" style={{lineHeight:"100%"}}>{comment.text}
           <div className="pt-2  mb-2"><b onClick={()=>setShowReply(!showReply)} className="cursor-pointer">{showReply?"Cancel":"Reply"}</b></div>
           </div>
-        
+
           {showReply?
-             <form onSubmit={(e)=>{e.preventDefault();props.handleAdd(commentMsg,props.mainCommentId);setCommentMsg("")}}> 
+             <form onSubmit={(e)=>{e.preventDefault();props.handleAdd(commentMsg,props.mainCommentId);setCommentMsg("")}}>
                <input type="text" placeholder="Reply to this thread" value={commentMsg} onChange={(e)=>{setCommentMsg(e.target.value)}} className="w-100 comment-inp" />
              </form>
             :null
           }
-         
+
         </div>
       </div>
   );

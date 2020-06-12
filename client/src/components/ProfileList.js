@@ -1,7 +1,9 @@
-import React,{useEffect,useState} from "react";
+import React,{useEffect,useState,useContext} from "react";
 import IndividualProfile from "./individualProfile";
 import axios from "axios";
 import Nav from "./profile/Nav/Nav";
+import {CurUserContext} from "../contexts/curUser"
+
 
 // Component to show all the profiles
 const ProfileList = (props)=>{
@@ -10,6 +12,7 @@ const ProfileList = (props)=>{
       const [name,setName] = useState("");
       const [search,setSearch] = useState(false);
       const [copyAlert,setCopyAlert] = useState(false);
+      const{user} = useContext(CurUserContext);
 
       const fetchProfiles = async () => {
          const response = await axios.get(`/Profiles`);
@@ -23,6 +26,12 @@ const ProfileList = (props)=>{
       }
 
       useEffect(()=>{
+        if(!user.loggedIn){
+          props.history.push("/login");
+        }
+        if(user.student){
+          props.history.push("/studDash");
+        }
         fetchProfiles();
       },[]);
 

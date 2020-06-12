@@ -6,8 +6,9 @@ import "./topic/topic.css";
 
 const CommentList = (props)=>{
 
+    // To get the profilePic of current user
     const {user} = useContext(CurUserContext);
-
+    // State to store input field for reply
     const [comments,setComments] = useState([]);
 
     // Used for main comment on video/deliverable
@@ -22,7 +23,7 @@ const CommentList = (props)=>{
       .catch(err=>{
         console.log(err);
       })
-      
+
     },[])
     useEffect(()=>{
       axios.get(`/${props.type}/${props.itemId}/getComments`)
@@ -32,7 +33,7 @@ const CommentList = (props)=>{
       .catch(err=>{
         console.log(err);
       })
-      
+
     },[props.itemId]);
 
     // Handles Main Comment

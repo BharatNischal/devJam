@@ -7,7 +7,7 @@ const VideoPlayer = (props)=>{
     // Control the quality of video
     const [qlt,setQlt] = useState(70);
 
-    
+    // Quality Control Box
     const [showQBox, setShowQBox] = useState(false);
     // Reference of Video Player
     const playerRef = useRef(null);
@@ -67,8 +67,8 @@ const VideoPlayer = (props)=>{
           <div style={{borderRadius:"18px",overflow:"hidden",position:"relative"}}>
           {showQBox?
           <div className="qDiv text-center " >
-            <div>Best</div>
-            <div>Good</div>
+            <div onClick={()=>{handleQualityChange(100);setShowQBox(false)}}>Best</div>
+            <div onClick={()=>{handleQualityChange(70);setShowQBox(false)}}>Good</div>
             <div onClick={()=>{handleQualityChange(30);setShowQBox(false)}}>Low</div>
           </div>:null
           }
@@ -76,10 +76,8 @@ const VideoPlayer = (props)=>{
             <source src={`http://localhost:8080/video/${props.videoId}/${qlt}`} />
             <ControlBar autoHide={false}>
               <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
-              <ReplayControl seconds={10} order={2.2} />
-              <ForwardControl seconds={10} order={3.2} />
-              {props.curItemIndex!=props.items.length-1?<a className="video-react-control video-react-button fa fa-arrow-right" onClick={()=>{props.setCurItem(props.items[props.curItemIndex+1]);props.setCurItemIndex(props.curItemIndex+1)}} order={7} ></a>:null}
               {props.curItemIndex!=0?<a className="video-react-control video-react-button fa fa-arrow-left" onClick={()=>{props.setCurItem(props.items[props.curItemIndex-1]);props.setCurItemIndex(props.curItemIndex-1)}} order={7}></a>:null}
+              {props.curItemIndex!=props.items.length-1?<a className="video-react-control video-react-button fa fa-arrow-right" onClick={()=>{props.setCurItem(props.items[props.curItemIndex+1]);props.setCurItemIndex(props.curItemIndex+1)}} order={7} ></a>:null}
               <a className="video-react-control video-react-button fa fa-cog" onClick={()=>setShowQBox(!showQBox)} order={7.2}></a>
             </ControlBar>
             <BigPlayButton position="center"/>

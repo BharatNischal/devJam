@@ -9,7 +9,7 @@ function PlaylistItem(props) {
   }
 
     return (
-        <div className=" pl-2 pr-0 mb-2 w-100 py-2 playlistItemWrapper" onClick={()=>{props.setCurItemIndex(props.count-1);props.handleChangeCurItem(props.count-1)}}>
+        <div className={props.active?"pl-2 pr-0 mb-2 w-100 py-2 playlistItemWrapper active":"pl-2 pr-0 mb-2 w-100 py-2 playlistItemWrapper"} onClick={()=>{props.setCurItemIndex(props.count-1);props.handleChangeCurItem(props.count-1)}}>
             <div> {props.count}&nbsp; </div>
 
             <div className="row ml-0 mr-0">

@@ -20,7 +20,7 @@ const Content = (props)=>{
 
 
     useEffect(()=>{
-        if(user.loggedIn){  //Authorization for logged in users on;y i.e admins
+        if(user.loggedIn && !user.student){  //Authorization for logged in users on;y i.e admins
           axios.get("/getContent")
           .then(res=>{
               console.log(res);
@@ -35,7 +35,7 @@ const Content = (props)=>{
               setLoading(false);
           })
         }else{
-          props.history.push("/login");
+          props.history.push("/");
         }
     },[])
 

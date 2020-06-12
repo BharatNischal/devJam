@@ -36,6 +36,7 @@ const Comment = (props)=>{
       })
   }
 
+  // Add subcomments to UI
   const handleAdd = (text,mainCommentId)=>{
     axios.post(`/comment/${mainCommentId}/new`,{text})
       .then(res=>{

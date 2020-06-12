@@ -71,19 +71,19 @@ const Topic =(props)=>{
                             <div className="ml-3">
                                 <h3 className="topicTitle px-3 text-pink ">{curItem.video.title} </h3>
                                 <div className="px-3">
-    
+
                                     <b className="showDescText cursor-pointer mb-2" onClick={()=>setShowItemDescription(!showItemDescription)} >
                                         {showItemDescription?"Hide":"Show"} Video Description <i className={showItemDescription?"fa fa-arrow-down rotate arrowIcon ":"fa fa-arrow-down arrowIcon"}></i>
                                     </b>
                                     <p className={showItemDescription?"showDescription description":"px-3 description"}>{curItem.video.description}</p>
                                 </div>
                             </div>
-                        </React.Fragment>:<Deliverable deliverable={curItem?curItem.deliverable:null}/> 
+                        </React.Fragment>:<Deliverable deliverable={curItem?curItem.deliverable:null}/>
                     :null}
-                    
+
                     </div>
                     <div className="col-lg-4 p-2" >
-                        <Playlist items={items} topic={topic} handleChangeCurItem={handleChangeCurItem} setCurItemIndex={setCurItemIndex}/>
+                        <Playlist items={items} topic={topic} handleChangeCurItem={handleChangeCurItem} setCurItemIndex={setCurItemIndex} curItemIndex={curItemIndex}/>
                     </div>
                     <div className="col-12 mt-5">
                         {curItem?

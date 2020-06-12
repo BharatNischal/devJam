@@ -25,7 +25,7 @@ const Dashboard = (props)=>{
           props.history.push("/profiles");
         })
     }else{
-      props.history.push("/profiles");
+      props.student?props.history.push("/studDash"):props.history.push("/profiles");
     }
   },[])
 
