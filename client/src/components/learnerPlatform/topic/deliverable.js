@@ -7,6 +7,9 @@ function Deliverable(props) {
     const [comment, setComment] = useState("");
     const SubmissionRef=useRef(null);
 
+    //UI STATES
+    const [showSubmitAlert, setShowSubmitAlert] = useState(false);
+
     useEffect(() => {
         Axios.get(`/issubmitted/${props.deliverable._id}`)
         .then(res=>{
@@ -36,7 +39,11 @@ function Deliverable(props) {
               if(res.data.success){
                   setIsSubmitted(true);
                   setComment("");
-                  alert("Work Submitted Successfully");
+                  
+                  setShowSubmitAlert(true);
+                  setTimeout(()=>{
+                    setShowSubmitAlert(false);
+                  },2000)
               }else{
                   alert(res.data.msg);
               }
@@ -46,6 +53,7 @@ function Deliverable(props) {
      }
     return (
         <div >
+             {showSubmitAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Work Submitted Successfully </div>:null}
             <h3 className="topicTitle "><span className="pr-3" style={{borderBottom:"2px solid pink"}}>{props.deliverable?props.deliverable.title:""}</span></h3>
             <div className="px-3">
                 <div><b>Points: </b>{props.deliverable?props.deliverable.points:0} Points</div>

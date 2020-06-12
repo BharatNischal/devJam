@@ -61,7 +61,7 @@ const Comment = (props)=>{
         <div className="col-9">
           <h6 className="text-left"><b>{comment.author.username} <span className="ml-2" style={{fontSize:"0.8em"}}>10 july</span></b></h6>
           <div className="text-left" style={{lineHeight:"100%"}}>{comment.text}
-            <div className="pt-2  mb-2"><b onClick={()=>setShowReply(!showReply)} className="cursor-pointer">{showReply?"Cancel":"Reply"}</b></div>
+            <div className="pt-2  mb-2 pl-2" style={{color:"#666",fontSize:"12px"}}><b onClick={()=>setShowReply(!showReply)} className="cursor-pointer">{showReply?"Cancel":"Reply"}</b></div>
           </div>
 
           {showReply?
