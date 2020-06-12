@@ -15,9 +15,9 @@ const VideoPlayer = (props)=>{
 
     // Authorize user to access a video for a small window (To avoid downloading)
     useEffect(()=>{
-      document.addEventListener('contextmenu', function(event){
-        event.preventDefault();
-      });
+      // document.addEventListener('contextmenu', function(event){
+      //   event.preventDefault();
+      // });
       axios.post('/video/access')
         .then(res=>{
           if(!res.data.success){
