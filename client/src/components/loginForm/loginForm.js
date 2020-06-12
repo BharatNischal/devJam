@@ -117,8 +117,8 @@ const LoginForm = (props)=>{
               <p className="text-danger">{err}</p>
               <hr className="mt-4 mb-2"/>
               <div className="row px-2"><div className="col-6"><Link to="/signup">Register as a Student</Link></div><div className="text-right col-6"> Or Directly Login With: &nbsp;</div></div>
-              <div><a href={window.location.protocol + '//' + window.location.host + '/auth/google'} className="btn btn-block btn-outline-grad py-2" > <i className="fa fa-google text-danger h4"></i> &nbsp;&nbsp;Login With Google </a></div>
-              <div className="mt-2"><a href={window.location.protocol + '//' + window.location.host + '/auth/github'} className="btn btn-block btn-outline-grad py-2" > <i className="fa fa-github h4"></i> &nbsp;&nbsp;Login With Github </a></div>
+              <div><a href={ `${window.location.host=="localhost:3000"?"http://localhost:8080":""}/auth/google`} className="btn btn-block btn-outline-grad py-2" > <i className="fa fa-google text-danger h4"></i> &nbsp;&nbsp;Login With Google </a></div>
+              <div className="mt-2"><a href={`${window.location.host=="localhost:3000"?"http://localhost:8080":""}/auth/github`} className="btn btn-block btn-outline-grad py-2" > <i className="fa fa-github h4"></i> &nbsp;&nbsp;Login With Github </a></div>
           </div>
         </div>
         <div className="col-lg-4 col-1">
