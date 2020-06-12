@@ -23,7 +23,7 @@ const uploadVideo = multer({storage:storage}).single("video");
 // Cloud service to store videos
 var cloudinary = require('cloudinary').v2;
 cloudinary.config({
-  cloud_name: 'bharatnischal',
+  cloud_name: process.env.cloud_name,
   api_key: process.env.api ,
   api_secret: process.env.secret
 });
@@ -73,7 +73,7 @@ router.get('/video/:id/:id2/:qlt',middleware.isAdmin,(req,res)=>{
     db.User.findById(req.user._id)
       .then(user=>{
           if(user.canAccess){
-            return res.redirect(`https://res.cloudinary.com/nischalbharat/video/upload/q_${req.params.qlt}/${req.params.id}/${req.params.id2}`);
+            return res.redirect(`https://res.cloudinary.com/${process.env.cloud_name}/video/upload/q_${req.params.qlt}/${req.params.id}/${req.params.id2}`);
           }else{
             return res.redirect('https://freefrontend.com/assets/img/403-forbidden-html-templates/403-Access-Forbidden-HTML-Template.gif');
           }
