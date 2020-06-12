@@ -19,7 +19,7 @@ const Comment = (props)=>{
     var msPerDay = msPerHour * 24;
     var msPerMonth = msPerDay * 30;
     var msPerYear = msPerDay * 365;
-    var current = new Date();
+    var current = Date.now()
     var elapsed = current - previous;
 
     if (elapsed < msPerMinute) {
