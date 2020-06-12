@@ -8,12 +8,13 @@ import Deliverable from "./deliverable";
 import Comments from "../commentlist";
 import {CurUserContext} from "../../../contexts/curUser"
 import axios from "axios";
+import Skeleton from 'react-loading-skeleton';
 
 const Topic =(props)=>{
 
     const [showTopicDescription, setShowTopicDescription] = useState(false);
     const [showItemDescription, setShowItemDescription] = useState(true);
-    const [topic,setTopic] = useState({title:"",description:""})
+    const [topic,setTopic] = useState({title:null,description:null})
     const [curItem,setCurItem] = useState(null);
     const [curItemIndex,setCurItemIndex] = useState(0);
     const [items,setItems] = useState([]);
@@ -55,12 +56,12 @@ const Topic =(props)=>{
 
                 <div className="row  " style={{position:"relative"}}>
                     <div className="col-12">
-                        <h2 className="topicTitle mainH text-left text-pink"> {topic.title} </h2>
+    <h2 className="topicTitle mainH text-left text-pink"> {topic.title || <Skeleton/> }</h2>
                         <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/studDash")}><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/>
                         <b className="showDescText cursor-pointer px-2" onClick={()=>setShowTopicDescription(!showTopicDescription)} >
                             {showTopicDescription?"Hide":"Show"} Description <i className={showTopicDescription?"fa fa-arrow-down rotate arrowIcon ":"fa fa-arrow-down arrowIcon"}></i>
                         </b>
-                        <p className={showTopicDescription?"px-2 showDescription description":"px-2 description"}>{topic.description}</p>
+                        <p className={showTopicDescription?"px-2 showDescription description":"px-2 description"}>{topic.description || <Skeleton count={2}/>} </p>
                     </div>
                     <div className="col-lg-8  mt-4">
                     {curItem?
@@ -79,7 +80,7 @@ const Topic =(props)=>{
                                 </div>
                             </div>
                         </React.Fragment>:<Deliverable deliverable={curItem?curItem.deliverable:null}/>
-                    :null}
+                    :<Skeleton height={500}/>}
 
                     </div>
                     <div className="col-lg-4 p-2" >

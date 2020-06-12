@@ -5,6 +5,7 @@ import "./learnerStyle.css";
 import curve from "./curve.svg";
 import Axios from "axios";
 import {CurUserContext} from "../../contexts/curUser";
+import Skeleton from 'react-loading-skeleton';
 
 var initialTopics=[];
 const Content = (props)=>{
@@ -15,6 +16,8 @@ const Content = (props)=>{
     const [topics,setTopics]=useState(initialTopics);
     const [focusInp,setFocusInp]=useState(false);
 
+    // UI STATES
+    const [loading, setloading] = useState(true);
     // To get the data from database on component mount
     useEffect(()=>{
         if(user.loggedIn){
@@ -28,9 +31,11 @@ const Content = (props)=>{
                 else{
                     alert(res.data.message);
                 }
+                setloading(false);
             })
             .catch(err=>{
                 console.log(err.message);
+                setloading(false);
             })
         }else{
             console.log("THIS REDIRECT HAPPENING");
@@ -56,6 +61,26 @@ const Content = (props)=>{
         return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
     }
 
+    const loader=[];
+    for(let i=0;i<2;i++){
+        loader.push((<div  className="col-lg-3 col-md-4 col-6  py-3" >
+                           
+        <div className="customCard" >
+            <div className="card-body">
+                <div className="iconWrap text-center">
+                    <Skeleton circle={true} height={50} width={50}></Skeleton>
+                </div>
+                <h2 className="card-title"><Skeleton></Skeleton></h2>
+                <p className="card-desc"><Skeleton count={3}></Skeleton> </p>
+
+            </div>
+
+            <div className="bgcurve"> <img src={curve} /></div>
+        </div>
+        
+    </div>));
+    }
+
     return(
         <React.Fragment>
             <TopBar/>
@@ -71,7 +96,10 @@ const Content = (props)=>{
                             <span className="float-right pr-3 srchIcon"><i className="fa fa-search"></i></span>
                         </div>
                     </div>
-
+                                        
+                    {loading?loader:null}
+                    
+                    
                     {topics.map((t,i)=>(
                         <div key={t._id} className="col-lg-3 col-md-4 col-6  py-3" >
                             <Link to={`/topic/${t._id}/${t.items.length>0?t.items[0].video?t.items[0].video:t.items[0].deliverable:"empty"}`} >
