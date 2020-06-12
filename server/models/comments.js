@@ -8,7 +8,7 @@ const commentSchema = new mongoose.Schema({
     },
     timestamp:{
       type: Date,
-      default: new Date()
+      default: Date.now
     },
     subComments: [{
       type:mongoose.Schema.Types.ObjectId,

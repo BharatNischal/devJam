@@ -69,12 +69,12 @@ function App(props) {
             <Route path="/video" exact component={VideoPlayer}/>
             <Route path="/comment" exact component={Comment}/>
           </Switch>
-          )};
+          )}
 
         </div>
 
     </BrowserRouter>
-  );
+  )
 }
 
 export default App;

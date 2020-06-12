@@ -15,6 +15,9 @@ const VideoPlayer = (props)=>{
 
     // Authorize user to access a video for a small window (To avoid downloading)
     useEffect(()=>{
+      document.addEventListener('contextmenu', function(event){
+        event.preventDefault();
+      });
       axios.post('/video/access')
         .then(res=>{
           if(!res.data.success){
@@ -37,7 +40,7 @@ const VideoPlayer = (props)=>{
             window.setTimeout(()=>{
               playerRef.current.forward(time);
               playerRef.current.play();
-            },100)
+            },1000)
           }else{
             console.log(res.data.msg);
           }
@@ -65,14 +68,14 @@ const VideoPlayer = (props)=>{
     return (
         <React.Fragment>
           <div style={{borderRadius:"18px",overflow:"hidden",position:"relative"}}>
-          {showQBox?
-          <div className="qDiv text-center " >
-            <div onClick={()=>{handleQualityChange(100);setShowQBox(false)}}>Best</div>
-            <div onClick={()=>{handleQualityChange(70);setShowQBox(false)}}>Good</div>
-            <div onClick={()=>{handleQualityChange(30);setShowQBox(false)}}>Low</div>
-          </div>:null
-          }
           <Player fluid={true}  ref={playerRef} aspectRatio={"16:9"}>
+            {showQBox?
+            <div className="qDiv text-center " style={{fontSize:"14px"}}>
+              <div onClick={()=>{handleQualityChange(100);setShowQBox(false)}}>Best</div>
+              <div onClick={()=>{handleQualityChange(70);setShowQBox(false)}}>Good</div>
+              <div onClick={()=>{handleQualityChange(30);setShowQBox(false)}}>Low</div>
+            </div>:null
+            }
             <source src={`/video/${props.videoId}/${qlt}`} />
             <ControlBar autoHide={false}>
               <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />

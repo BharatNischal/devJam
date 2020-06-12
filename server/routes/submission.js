@@ -42,7 +42,7 @@ var firebaseConfig = {
 
 
 // To get the detail whether user has submited the zip for a given deliverable
- router.get("/issubmitted/:deliverableId",middleware.isStudent,(req,res)=>{
+ router.get("/issubmitted/:deliverableId",middleware.isAdmin,(req,res)=>{
     db.Submission.find({deliverableId:req.params.deliverableId,studentId:req.user._id})
     .then(re=>{
         if(re.length>0){
