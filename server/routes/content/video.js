@@ -73,7 +73,7 @@ router.get('/video/:id/:id2/:qlt',middleware.isAdmin,(req,res)=>{
     db.User.findById(req.user._id)
       .then(user=>{
           if(user.canAccess){
-            return res.redirect(`https://res.cloudinary.com/bharatnischal/video/upload/q_${req.params.qlt}/${req.params.id}/${req.params.id2}`);
+            return res.redirect(`https://res.cloudinary.com/nischalbharat/video/upload/q_${req.params.qlt}/${req.params.id}/${req.params.id2}`);
           }else{
             return res.redirect('https://freefrontend.com/assets/img/403-forbidden-html-templates/403-Access-Forbidden-HTML-Template.gif');
           }
