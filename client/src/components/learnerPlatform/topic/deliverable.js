@@ -9,6 +9,7 @@ function Deliverable(props) {
 
     //UI STATES
     const [showSubmitAlert, setShowSubmitAlert] = useState(false);
+    const [showLoader, setShowLoader] = useState(false);
 
     useEffect(() => {
         Axios.get(`/issubmitted/${props.deliverable._id}`)
@@ -26,6 +27,7 @@ function Deliverable(props) {
 
     const submitHandler=(e)=>{
         e.preventDefault();
+        setShowLoader(true);
         const config = {
             headers: {
                 'content-type': 'multipart/form-data'
@@ -36,6 +38,7 @@ function Deliverable(props) {
           formData.append('comment',comment);
           Axios.post(`/submission/${props.deliverable._id}`,formData,config)
           .then(res=>{
+              setShowLoader(false);
               if(res.data.success){
                   setIsSubmitted(true);
                   setComment("");
@@ -48,11 +51,14 @@ function Deliverable(props) {
                   alert(res.data.msg);
               }
           }).catch(Err=>{
+              setShowLoader(false);
               console.log(Err);
           });
+        
      }
     return (
         <div >
+            {showLoader?<div className="d-backdrop text-center pt-5" onClick={props.close}><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="mt-5"/></div>:null}
              {showSubmitAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Work Submitted Successfully </div>:null}
             <h3 className="topicTitle "><span className="pr-3" style={{borderBottom:"2px solid pink"}}>{props.deliverable?props.deliverable.title:""}</span></h3>
             <div className="px-3">
