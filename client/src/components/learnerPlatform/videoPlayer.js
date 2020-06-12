@@ -73,7 +73,7 @@ const VideoPlayer = (props)=>{
           </div>:null
           }
           <Player fluid={true}  ref={playerRef} aspectRatio={"16:9"}>
-            <source src={`http://localhost:8080/video/${props.videoId}/${qlt}`} />
+            <source src={`/video/${props.videoId}/${qlt}`} />
             <ControlBar autoHide={false}>
               <PlaybackRateMenuButton rates={[2, 1, 0.5, 0.1]} />
               {props.curItemIndex!=0?<a className="video-react-control video-react-button fa fa-arrow-left" onClick={()=>{props.setCurItem(props.items[props.curItemIndex-1]);props.setCurItemIndex(props.curItemIndex-1)}} order={7}></a>:null}

@@ -5,7 +5,7 @@ function PlaylistItem(props) {
   let url="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg";
   if(props.isVideo){
       const ind = props.item.video.url.lastIndexOf(".");
-      url = "http://localhost:8080/video/"+ props.item.video.url.substr(0,ind)+".jpg/100";
+      url = "/video/"+ props.item.video.url.substr(0,ind)+".jpg/100";
   }
 
     return (
