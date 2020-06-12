@@ -53,12 +53,12 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.mail_client_id,
     clientSecret: process.env.mail_client_secret,
-    callbackURL: `http://localhost:8080/auth/google/redirect`
+    callbackURL: process.env.NODE_ENV === 'production'?"http://devjam-code-swat.herokuapp.com/auth/google/redirect":`http://localhost:8080/auth/google/redirect`
   },
   function(accessToken, refreshToken, profile, done) {
        db.User.findOne({googleId:profile.id})
        .then(async function(foundUser){
-         if(!foundUser){ 
+         if(!foundUser){
            db.User.create({
              username:profile._json.email,
              name:profile._json.name,
@@ -84,7 +84,7 @@ passport.use(new GoogleStrategy({
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: "http://localhost:8080/auth/github/callback"
+  callbackURL: process.env.NODE_ENV === 'production'?"http://devjam-code-swat.herokuapp.com/auth/github/callback":`http://localhost:8080/auth/github/callback`
 },
 function(accessToken, refreshToken, profile, done) {
   db.User.findOne({githubId:profile._json.id})
@@ -154,7 +154,7 @@ app.get('/auth/google',
 
 // GET /auth/google/callback
 //   Google authentication will be completed in this route
-app.get('/auth/google/redirect', 
+app.get('/auth/google/redirect',
   passport.authenticate('google', { failureRedirect: `${redirectHost}/login` }),
   function(req, res) {
     console.log(req.user);
@@ -165,12 +165,12 @@ app.get('/auth/google/redirect',
     }
   });
 
-// Github authentication will initiate in this route  
+// Github authentication will initiate in this route
 app.get('/auth/github',
   passport.authenticate('github'));
 
 //Github authentication will complete in this route
-app.get('/auth/github/callback', 
+app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: `${redirectHost}/login` }),
   function(req, res) {
     // Successful authentication, redirect home.
