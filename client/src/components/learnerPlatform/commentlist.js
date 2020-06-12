@@ -42,7 +42,7 @@ const CommentList = (props)=>{
       axios.post(`/${props.type}/${props.itemId}/new`,{text:commentMsg})
         .then(res=>{
           if(res.data.success){
-            const data = {...res.data.comment,author:{username:user.username,profilePic:user.profilePic},subComments:[]};
+            const data = {...res.data.comment,author:{name:user.name,profilePic:user.profilePic},subComments:[]};
             const newComments = comments.slice();
             newComments.push(data);
             setComments(newComments);
