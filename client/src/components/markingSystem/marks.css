@@ -1,0 +1,69 @@
+table {
+  position: relative;
+  max-width: 80vw;
+  background-color: white;
+  overflow: hidden;
+  border-collapse: collapse;
+}
+
+/*thead*/
+thead {
+  position: relative;
+  display: block; /*seperates the header from the body allowing it to be positioned*/
+  max-width: 80vw;
+  overflow: visible;
+}
+
+thead th {
+  min-width: 130px;
+  height: 45px;
+  border: 1px solid #d7d7d7;
+  background-color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+thead th:nth-child(1) {/*first cell in the header*/
+  position: relative;
+  display: block; /*seperates the first cell in the header from the header*/
+  border: 1px solid #d7d7d7;
+  background-color: #f4f4f4;
+}
+
+
+/*tbody*/
+tbody {
+  position: relative;
+  display: block; /*seperates the tbody from the header*/
+  max-width: 80vw;
+  max-height: 70vh;
+  overflow: scroll;
+}
+
+tbody td {
+  min-width: 130px;
+  border: 1px solid #d7d7d7;
+  background-color: #fcfcfc;
+  height: 45px;
+}
+
+tbody tr th {  /*the first cell in each tr*/
+  position: relative;
+  display: block; /*seperates the first column from the tbody*/
+  height: 45px;
+  width: 130px;
+  border: 1px solid #d7d7d7;
+  background-color: white;
+  box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.25);
+}
+
+.no-style{
+  max-width: 50px;
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+  background-color: inherit;
+}
+
+.font-sm{
+  font-size: 0.8em;
+}

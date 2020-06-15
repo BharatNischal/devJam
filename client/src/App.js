@@ -21,6 +21,8 @@ import VideoPlayer from './components/learnerPlatform/videoPlayer';
 import SignupForm from './components/learnerPlatform/signup';
 import Comment from './components/learnerPlatform/commentlist';
 
+import MarksList from './components/markingSystem/marks';
+
 axios.defaults.withCredentials = true;
 
 function App(props) {
@@ -61,13 +63,14 @@ function App(props) {
             <Route path="/content" exact component={Content} />
             <Route path="/video/:id" exact component={VideoPage}/>
             <Route path="/createProfile" exact component={CreateProfile}/>
-  <Route path="/editProfile/:name/:id" exact  render={(props) => <CreateProfile {...props} edit={true} />}/>
+            <Route path="/editProfile/:name/:id" exact  render={(props) => <CreateProfile {...props} edit={true} />}/>
             <Route path="/reset/:token" exact component={ResetPassword}/>
 
             <Route path="/topic/:topicId/:itemId" exact component={StudentTopic} />
             <Route path="/studDash" exact component={StDash} />
             <Route path="/video" exact component={VideoPlayer}/>
             <Route path="/comment" exact component={Comment}/>
+            <Route path="/marks" exact component={MarksList}/>
           </Switch>
           )}
 
