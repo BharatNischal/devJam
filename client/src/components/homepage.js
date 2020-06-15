@@ -8,7 +8,7 @@ const Homepage = (props)=>{
   const{user} = useContext(CurUserContext);
   useEffect(()=>{
     if(user.loggedIn){
-      props.history.push("/profiles");
+      user.student?props.history.push("/studDash"):props.history.push("/profiles");
     }else{
       props.history.push("/login");
     }

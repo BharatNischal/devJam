@@ -23,7 +23,7 @@ const upload = multer({
 // Cloud service to store images
 var cloudinary = require('cloudinary').v2;
 cloudinary.config({
-  cloud_name: 'bharatnischal',
+  cloud_name: process.env.cloud_name,
   api_key: process.env.api ,
   api_secret: process.env.secret
 });

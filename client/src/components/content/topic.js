@@ -21,7 +21,7 @@ const Topic = (props)=>{
     const [showSavedAlert,setShowSavedAlert] = useState(false);
 
     useEffect(()=>{
-      if(user.loggedIn){  //Frontend authorization for admin
+      if(user.loggedIn && !user.student){  //Frontend authorization for admin
         axios.get(`/content/topic/${props.match.params.id}`)
             .then(res=>{
               if(res.data.success){
@@ -37,7 +37,7 @@ const Topic = (props)=>{
               setLoading(false);
             })
       }else{
-        props.history.push("/login");
+        props.history.push("/");
       }
     },[])
 

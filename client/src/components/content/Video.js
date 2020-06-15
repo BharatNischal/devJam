@@ -8,7 +8,7 @@ import Alert from "../ui/alert/alert";
 const VideoPage = (props)=>{
 
 // State to store data
-  const [details,setDetails] = useState({title:"",description:"",filename:"",url:""});
+  const [details,setDetails] = useState({title:"",description:"",filename:"",url:"",duration:0});
   // Used to avoid saving Video without title
   const [valid,setValid] = useState(false);
   // UI states
@@ -28,7 +28,7 @@ const VideoPage = (props)=>{
   const {user} = useContext(CurUserContext);
 
   useEffect(()=>{
-    if(user.loggedIn){  //Frontend authorization for admin
+    if(user.loggedIn && !user.student){  //Frontend authorization for admin
       axios.get(`/topic/video/${props.match.params.id}`)
         .then(res=>{
           if(res.data.success){
@@ -47,7 +47,7 @@ const VideoPage = (props)=>{
           setErr(err.msg);
         })
     }else{
-      props.history.push("/login");
+      props.history.push("/");
     }
   },[])
 
@@ -55,7 +55,6 @@ const VideoPage = (props)=>{
   useEffect(()=>{
     console.log("perc",uploadPercentage);
     if(uploadPercentage>=95){
-      console.log("use effect called");
       clearInterval(timeoutRef.current);
     }
   },[uploadPercentage])
@@ -90,8 +89,22 @@ const VideoPage = (props)=>{
     formData.append('video',videoRef.current.files[0]);
     axios.post("/topic/video",formData,config)
       .then(res=>{
+        let d = Math.round(res.data.result.duration);
+        let h = String(Math.floor(d/3600));
+        if(h.length<2){
+          h = "0"+h;
+        }
+        let m = String(Math.floor(d%3600 /60));
+        if(m.length<2){
+          m = "0"+m;
+        }
+        let s = String(Math.floor(d % 3600 % 60));
+        if(s.length<2){
+          s = "0"+s;
+        }
+        const duration = h+":"+m+":"+s;
         setUploadPercentage(100);
-        setDetails({...details,url:res.data.result.secure_url,filename:fileName});
+        setDetails({...details,url:res.data.result.secure_url,filename:fileName,duration});
         setVideoUploadedAlert(true);
         setUploading(false);
         setTimeout(()=>{

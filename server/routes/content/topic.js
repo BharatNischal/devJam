@@ -18,6 +18,61 @@ router.get("/content/topic/:id",middleware.isAdmin,(req,res)=>{
   })
 });
 
+router.get("/deliverable/:id/getComments",(req,res)=>{
+  db.Deliverable.findById(req.params.id)
+  .populate({
+    path:"comments",
+    model:"Comment",
+    populate:[{
+      path:"subComments",
+      model:"Comment",
+        populate:{
+          path:"author",
+          model:"User"
+        }
+      },
+      {
+       path:"author",
+       model:"User" 
+      }]
+    }
+  )
+  .then(foundComments=>{
+    console.log(foundComments);
+      res.json(foundComments);
+  }).catch(err=>{
+    console.log(err);
+  })
+});
+router.get("/video/:id/getComments",(req,res)=>{
+  db.Video.findById(req.params.id)
+  .populate({
+    path:"comments",
+    model:"Comment",
+    populate:[{
+      path:"subComments",
+      model:"Comment",
+        populate:{
+          path:"author",
+          model:"User"
+        }
+      },
+      {
+       path:"author",
+       model:"User" 
+      }]
+    }
+  )
+  .then(foundComments=>{
+    console.log(foundComments);
+      res.json(foundComments);
+  }).catch(err=>{
+    console.log(err);
+  })
+});
+
+
+
 // To update the new sequence of video/deliverables inside a topic
 router.put("/content/topic/:id",middleware.isAdmin,(req,res)=>{
     console.log(req.body);

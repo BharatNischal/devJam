@@ -3,15 +3,20 @@ var middlewareObj = {};
 
 middlewareObj.isAdmin = function(req,res,next){
   if(req.user){
-    console.log("MIDDLEWARE logined",req.user);
     return next();
   }
-  return res.json({success:false,err:"NOt Logined From Middleware"});
+  return res.json({success:false,msg:"NOt Logined From Middleware"});
+}
+
+middlewareObj.isStudent = function (req,res,next) {
+    if(req.user && req.user.student){
+      return next();
+    }
+    return res.json({success:false,msg:"NOt Logined From Middleware"});
 }
 
 middlewareObj.isSuperAdmin = function(req,res,next){
   if(req.user&&req.user.superAdmin){
-    console.log("MIDDLEWARE logined",req.user);
     return next();
   }
   return res.json({success:false,err:"NOt Logined From Middleware"});

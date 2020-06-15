@@ -23,7 +23,7 @@ const uploadVideo = multer({storage:storage}).single("video");
 // Cloud service to store videos
 var cloudinary = require('cloudinary').v2;
 cloudinary.config({
-  cloud_name: 'bharatnischal',
+  cloud_name: process.env.cloud_name,
   api_key: process.env.api ,
   api_secret: process.env.secret
 });
@@ -39,12 +39,48 @@ router.post("/topic/video",middleware.isAdmin,uploadVideo,(req,res)=>{
         if(err){
           return res.json({success:false,msg:err.message})
         }else{
+          const temp = result.secure_url.split('/');
+          result.secure_url = temp[temp.length-2]+'/'+temp[temp.length-1];
+          console.log(result);
           return res.json({result,success:true});
         }
     });
   }else{
     res.json({success:false,msg:"no file found"});
   }
+})
+
+// To make a video accessible for a certain window time
+router.post('/video/access',middleware.isAdmin,(req,res)=>{
+    const time = 3000;
+    db.User.findById(req.user._id)
+      .then(user=>{
+        user.canAccess = true;
+        user.save();
+        setTimeout(()=>{
+          user.canAccess = false;
+          user.save();
+        },time)
+        res.json({success:true});
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
+})
+
+//To get a video with given quality
+router.get('/video/:id/:id2/:qlt',middleware.isAdmin,(req,res)=>{
+    db.User.findById(req.user._id)
+      .then(user=>{
+          if(user.canAccess){
+            return res.redirect(`https://res.cloudinary.com/${process.env.cloud_name}/video/upload/q_${req.params.qlt}/${req.params.id}/${req.params.id2}`);
+          }else{
+            return res.redirect('https://freefrontend.com/assets/img/403-forbidden-html-templates/403-Access-Forbidden-HTML-Template.gif');
+          }
+      })
+      .catch(err=>{
+          console.log(err.message);
+      })
 })
 
 

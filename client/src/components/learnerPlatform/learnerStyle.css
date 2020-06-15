@@ -1,0 +1,295 @@
+.topBar{
+    position: fixed;
+    width: 100%;
+    height: 70px;
+    left: 0px;
+    top: 0px;
+
+    background: linear-gradient(263.48deg, #642B73 13.3%, #C6426E 76.86%);
+    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 0px 0px 15px 15px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left:20px;
+    padding-right:20px;
+    z-index: 1000;
+}
+.topBar h1{
+    font-family: Cookie;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 40px;
+    
+    text-align: left;
+
+    color: #FFFFFF;
+}
+.dpWrapper{
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    border: 8px solid rgba(227, 227, 227, 0.2);
+}
+.dpWrapper img{
+    width:100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.dpWrapper2{
+    margin-left: 50%;
+    transform: translateX(-50%);
+    width:100px;
+    height: 100px;
+    border: 10px solid rgba(198, 66, 110, 0.315);
+    margin-top:25px;
+    margin-bottom: 10px;
+}
+.dropdown{
+    position: fixed;
+    width: 150px;
+    
+    right:20px;
+    top: 60px;
+
+    background: #F8F8F8;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+    border-radius: 19px;
+    z-index:1100;
+    animation:showDropDown 0.4s ease-out ;
+}
+@keyframes showDropDown{
+    from{
+        opacity: 0;
+        
+    }
+    to{
+       
+        opacity: 1;
+    }
+}
+.dropdown .title{
+    font-family: poppins;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom:8px;
+    text-align: center;
+    
+    color: #840D54;
+
+
+}
+.dropdown .btns{
+    border-bottom: 1px solid #e1e1e1;
+    cursor: pointer;
+}
+.dropdown .btns:hover{
+    color:#840D54;
+}
+.d-backdrop{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index: 1099;
+    background-color: rgba(29, 29, 29, 0.137);
+
+}
+
+.customCard{
+    
+    background: #FFFFFF;
+    border: 2px solid #e1e1e1;
+    box-sizing: border-box;
+    border-radius: 25px;
+    min-height: 260px;
+    position: relative;
+    overflow: hidden;
+    
+    
+    
+}
+
+.customCard .card-body{
+    position: absolute;
+    width:100%;
+    
+    margin-top: 36px;
+    z-index: 10;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.customCard .bgcurve{
+    position: absolute;
+    
+    top:25%;
+    left: 0;
+    width:100%;
+    height: 100%;
+    opacity: 0.2;
+    
+    z-index: 0;
+    transition: 0.7s;
+
+}
+.customCard .bgcurve img,.responsive-img{
+    width:100%;
+    height: 100%;
+    object-fit: cover;
+}
+.customCard:hover  .bgcurve{
+    top:-40%;
+    opacity:1;
+    height: 150%;
+    z-index: 0;
+}
+
+.customCard:hover .card-title,.customCard:hover .card-desc{
+    color: white !important;
+}
+.customCard:hover .icon{
+    background: white;
+    color:#8D0144;
+}
+
+.customCard .icon{
+    width: 51px;
+    height: 51px;
+
+    font-size: 25px;
+    color:white;
+    border-radius: 50%;
+    padding:10px;
+    background: linear-gradient(166.24deg, #8D0144 9.84%, #C6127E 75.03%);
+
+    transition:0.8s;
+}
+.customCard .card-title{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    margin-top:44px;
+    margin-bottom:8px;
+    /* identical to box height */
+    z-index: 10;
+    text-align: center;
+    
+    color: #840D54;
+
+    transition:0.8s;
+}
+
+.customCard .card-desc{
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    color: #1D1D1D;
+
+    transition:0.8s;
+}
+.bgwhiteoverlay {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    left: 0;
+    background-color:white;
+    z-index: -1;
+}
+
+.srch input{
+    width:94%;
+    border:none;
+    outline:none;
+    height:100%;
+    background: #F9F6F6;
+    border-radius: 35.5px;
+    color: rgb(114, 35, 86);
+}
+.srch .srchIcon{
+    color: rgb(114, 35, 86);
+    font-size: 24px;
+}
+.srch{
+    background: #F9F6F6;
+    border: 2px solid rgb(192, 186, 186);
+    
+    box-sizing: border-box;
+    border-radius: 35.5px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding-left:10px ;
+    margin-left:24px;
+    margin-right:24px;
+    transition: 0.3s;
+    
+}
+
+.srch.focus{
+    box-shadow: 0px 4px 10px 1px rgb(114, 35, 86,0.4);
+    border:2px solid rgb(126, 42, 96);
+}
+
+.underline{
+    width: 120px;
+    height: 20px;
+
+    position: absolute;
+    left:50.5%;
+    top:60%;
+    transform: translateX(-50%);
+
+    background-color: rgba(201, 21, 129, 0.3);
+}
+
+
+
+
+@media (min-width: 1200px){
+    
+.cust-Container {
+    max-width: 1000px !important;
+}
+.srch{
+    margin-left:64px;
+    margin-right:64px;
+}
+}
+
+
+@media (max-width:500px){
+    .customCard .card-body{
+        margin-left:0;
+        margin-right:0;
+    }
+    
+}
+
+.anim-hil{
+    animation: hil-animation 2s ease-in-out infinite;
+}
+
+@keyframes hil-animation{
+    0%{
+        transform: translateX(0);
+    }
+    
+    25%{
+        transform: translateX(-50%);
+    }
+    50%{
+        transform: translateX(0);
+    }
+    100%{
+        transform: translateX(0);
+    }
+}

@@ -1,6 +1,7 @@
 import React,{useState,useContext,useEffect} from "react";
 import "./loginForm.css";
 import axios from "axios";
+import {Link} from "react-router-dom";
 import {CurUserContext} from "../../contexts/curUser";
 
 // Component for Login and reset Page
@@ -21,8 +22,8 @@ const LoginForm = (props)=>{
       axios.get("/curUser")
         .then(res=>{
             if(res.data.user){
-              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin});
-              props.history.push("/profiles");
+              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student});
+              res.data.user.student?props.history.push("/studDash"):props.history.push("/profiles");
             }else{
               setUser({loggedIn:false,superAdmin:false});
             }
@@ -41,7 +42,6 @@ const LoginForm = (props)=>{
           console.log(username,password);
           axios.post("/login",{username,password})
             .then(res=>{
-
               if(!res.data.success){
                 setTimeout(()=>{
                     setBtnClick(false);
@@ -50,8 +50,8 @@ const LoginForm = (props)=>{
               }else{
                 setTimeout(()=>{
                   setBtnClick(false);
-                  setUser({loggedIn:true,superAdmin:res.data.superAdmin});
-                  props.history.push("/profiles");
+                  setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student,username:res.data.user.username});
+                  res.data.user.student?props.history.push("/studDash"):props.history.push("/profiles");
                 },1000);
               }
             })
@@ -90,7 +90,7 @@ const LoginForm = (props)=>{
     return (
         <div className="row vertical-allign">
           <div className="col-lg-4 col-1"></div>
-          <div className="col-lg-4 col-10 card height-fixed  shadow-pink">
+          <div className="col-lg-4 col-10 card height-fixed  shadow-pink" style={{borderRadius:"23px"}}>
             <div className="row">
               <div className="col-4"></div>
               <div className="col-4 position-img">
@@ -111,8 +111,14 @@ const LoginForm = (props)=>{
                   <input type="password" className="form-control form-control-lg text-center" value={password} onChange={e=>{setPassword(e.target.value)}} id="password" placeholder="Password"/>
                 </div>
                 {button}
+
+
               </form>
               <p className="text-danger">{err}</p>
+              <hr className="mt-4 mb-2"/>
+              <div className="row px-2"><div className="col-6"><Link to="/signup">Register as a Student</Link></div><div className="text-right col-6"> Or Directly Login With: &nbsp;</div></div>
+              <div><a href={ `${window.location.host=="localhost:3000"?"http://localhost:8080":""}/auth/google`} className="btn btn-block btn-outline-grad py-2" > <i className="fa fa-google text-danger h4"></i> &nbsp;&nbsp;Login With Google </a></div>
+              <div className="mt-2"><a href={`${window.location.host=="localhost:3000"?"http://localhost:8080":""}/auth/github`} className="btn btn-block btn-outline-grad py-2" > <i className="fa fa-github h4"></i> &nbsp;&nbsp;Login With Github </a></div>
           </div>
         </div>
         <div className="col-lg-4 col-1">
