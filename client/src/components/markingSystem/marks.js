@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from "react";
 import "./marks.css"
 import $ from 'jquery';
+import Cell from "./cell";
 
 function MarksList(props){
 
@@ -34,202 +35,17 @@ function MarksList(props){
     <tbody>
       <tr>
         <th>Student 1</th>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i className="fa fa-ellipsis-v pointer" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0"><input type="text" placeholder="points" className="no-style"/>/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell/>
       </tr>
-      <tr>
-        <th>Student 2</th>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th>Student 3</th>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-        <td>
-          <div className="row">
-            <div className="col-10" style={{}}>
-              <p className="m-0 text-center"><input type="text" placeholder="points" className="no-style"/>&nbsp;&nbsp;/100</p>
-              <span className="font-sm">Remarks</span>
-            </div>
-            <div className="col-2"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-          </div>
-        </td>
-      </tr>
+ 
+ 
+      
     </tbody>
   </table>
           </div>

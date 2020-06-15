@@ -1,6 +1,6 @@
 table {
   position: relative;
-  max-width: 80vw;
+  max-width: 100vw;
   background-color: white;
   overflow: hidden;
   border-collapse: collapse;
@@ -12,14 +12,17 @@ thead {
   display: block; /*seperates the header from the body allowing it to be positioned*/
   max-width: 80vw;
   overflow: visible;
+  z-index:2;
 }
-
+thead tr{
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+}
 thead th {
   min-width: 130px;
   height: 45px;
   border: 1px solid #d7d7d7;
   background-color: white;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  
 }
 
 thead th:nth-child(1) {/*first cell in the header*/
@@ -49,11 +52,12 @@ tbody td {
 tbody tr th {  /*the first cell in each tr*/
   position: relative;
   display: block; /*seperates the first column from the tbody*/
-  height: 45px;
+  height: 74px;
   width: 130px;
   border: 1px solid #d7d7d7;
   background-color: white;
   box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.25);
+  z-index: 2;
 }
 
 .no-style{
@@ -66,4 +70,35 @@ tbody tr th {  /*the first cell in each tr*/
 
 .font-sm{
   font-size: 0.8em;
+}
+
+.subMenu{
+  position: absolute;
+  left:70%;
+  top:5px;
+  width:70px;
+  height:60px;
+  box-shadow: 0px 3px 5px #0f0f0f3b;
+  background-color: white;
+  z-index: 10;
+  font-size: 11px;
+  padding-top: 8px;
+  cursor: pointer;
+  animation:showDropDown 0.3s ease-out ;
+}
+
+
+
+td .black{
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom: 0;
+  z-index: 8;
+  background-color: rgba(0, 0, 0, 0.555);
+  animation:showDropDown 0.3s ease-out ;
+}
+.subMenu span:hover{
+  color:rgb(124, 12, 117);
 }
