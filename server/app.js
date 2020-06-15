@@ -65,7 +65,14 @@ passport.use(new GoogleStrategy({
              profilePic:profile._json.picture,
              googleId:profile.id,
              student:true
-           }).then(createdUser=>{
+           }).then(async (createdUser)=>{
+            await db.Deliverable.find({})
+              .then(foundDeliverables=>{
+                foundDeliverables.forEach(foundDel=>{
+                  foundDel.submissions.push({userId:createdUser._id});
+                  foundDel.save();
+                })
+              });
              done(null,createdUser);
            }).catch(err=>{done(err);});
          }else{
@@ -95,7 +102,14 @@ function(accessToken, refreshToken, profile, done) {
              profilePic:profile._json.avatar_url,
              githubId:profile._json.id,
              student:true
-           }).then(createdUser=>{
+           }).then(async (createdUser)=>{
+              await db.Deliverable.find({})
+              .then(foundDeliverables=>{
+                foundDeliverables.forEach(foundDel=>{
+                  foundDel.submissions.push({userId:createdUser._id});
+                  foundDel.save();
+                })
+              });
              done(null,createdUser);
            }).catch(err=>{done(err);});
          }else{

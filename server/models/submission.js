@@ -17,7 +17,11 @@ const submissionSchema = new mongoose.Schema({
     },
     timestamp:{
         type: Date,
-        default: new Date()
+        default: Date.now
+    },
+    marks:{
+        type:Number,
+        default:0
     },
     comment:String
 });
