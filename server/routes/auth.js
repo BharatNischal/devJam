@@ -15,12 +15,21 @@ const passport = require("passport");
 // Register new admins
 router.post("/register",(req,res)=>{
     console.log("user",req.body);
-    db.User.register(new db.User({username:req.body.username,student:req.body.student?true:false,name:req.body.name}),req.body.password,(err,user)=>{
+    db.User.register(new db.User({username:req.body.username,student:req.body.student?true:false,name:req.body.name}),req.body.password,async (err,user)=>{
         if(err){
             console.log(err);
-            res.json({err:err.message,success:false});
+            return res.json({err:err.message,success:false});
         }
         if(req.body.student){
+          await db.Deliverable.find({})
+          .then(foundDeliverables=>{
+            foundDeliverables.forEach(foundDel=>{
+              foundDel.submissions.push({userId:user._id});
+              foundDel.save();
+            })
+          }).catch(Err=>{
+            return res.json({msg:Err.message,success:false});
+          })
           passport.authenticate("local")(req,res,()=>{
             res.json({success:true,user:user});
           });
@@ -150,6 +159,15 @@ router.get("/curUser",(req,res)=>{
 
 router.get("/api/err",(req,res)=>{
   res.json({success:false});
+});
+
+router.get("/students",function(req,res){
+  db.user.find({student:true})
+  .then(students=>{
+    res.json({success:true,students:students});
+  }).catch(Err=>{
+    res.json({success:false,msg:err.message});
+  })
 });
 
 module.exports = router;
