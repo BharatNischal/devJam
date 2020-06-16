@@ -53,7 +53,7 @@ function Cell(props) {
 
             {showMenu?<React.Fragment>
                 <div className="black" onClick={()=>setshowMenu(false)}>  </div>
-                <div className="subMenu"> <span>View Submission</span> </div>
+                <div className="subMenu" onClick={props.view}> <span>View Submission</span> </div>
                 </React.Fragment>:null}
         </td>
     )

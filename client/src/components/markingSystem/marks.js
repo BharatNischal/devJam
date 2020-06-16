@@ -35,7 +35,7 @@ function MarksList(props){
         let row=[]
         row.push(<th>{marksList[0].submissions[j].userId.name}</th>)
         for(let i=0;i<rows;i++){
-            row.push(<Cell maxPoints={marksList[i].points} submission={marksList[i].submissions[j].submissionId} dueDate={marksList[i].dueDate} />)
+            row.push(<Cell maxPoints={marksList[i].points} submission={marksList[i].submissions[j].submissionId} dueDate={marksList[i].dueDate} view={()=>{props.history.push({pathname:`/submission/${marksList[0]._id}/${j}`,deliverable:marksList[i]})}}/>)
         }
         tableData.push(<tr>{row}</tr>);
       }

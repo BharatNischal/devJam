@@ -23,6 +23,7 @@ import Comment from './components/learnerPlatform/commentlist';
 
 import MarksList from './components/markingSystem/marks';
 import SubmissionPage from './components/markingSystem/submission';
+// import Submission2 from './components/markingSystem/submission2';
 
 axios.defaults.withCredentials = true;
 
@@ -72,7 +73,8 @@ function App(props) {
             <Route path="/video" exact component={VideoPlayer}/>
             <Route path="/comment" exact component={Comment}/>
             <Route path="/marks" exact component={MarksList}/>
-            <Route path="/submission/:id" exact component={SubmissionPage}/>
+            <Route path="/submission/:id/:index" exact component={SubmissionPage}/>
+            
           </Switch>
           )}
 

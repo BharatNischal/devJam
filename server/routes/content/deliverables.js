@@ -92,7 +92,7 @@ router.post("/deliverables",function(req,res){
 });
 
 // Route to get details of a particular deliverable with submissions
-router.get('/deliverable/:id',function (req,res) {
+router.get('/deliverableFull/:id',function (req,res) {
     db.Deliverable.findById(req.params.id)
     .populate([{
       path:"submissions.submissionId",
@@ -101,7 +101,7 @@ router.get('/deliverable/:id',function (req,res) {
       path:"submissions.userId",
       model:"User"
     }])
-      .then(res=>{
+      .then(del=>{
           res.json({success:true,deliverable:del});
       })
       .catch(err=>{
