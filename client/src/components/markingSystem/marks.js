@@ -12,6 +12,7 @@ function MarksList(props){
         .then(res=>{
           if(res.data.success){
             setMarksList(res.data.deliverables);
+            console.log(res.data.deliverables);
           }else{
             console.log(res.data.err);
           }
@@ -48,7 +49,7 @@ function MarksList(props){
                 <tr>
                   <th></th>
                   {marksList.map(deliverable=>(
-                    <th>{deliverable.title}</th>
+                    <th className="pointer" onClick={()=>{props.history.push({pathname:`/submission/${deliverable._id}`,deliverable:deliverable})}}>{deliverable.title}</th>
                   ))}
                 </tr>
               </thead>
