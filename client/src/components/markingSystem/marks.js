@@ -3,6 +3,7 @@ import "./marks.css"
 import $ from 'jquery';
 import axios from "axios";
 import Cell from "./cell";
+import Nav from "../profile/Nav/Nav";
 
 function MarksList(props){
 
@@ -42,8 +43,12 @@ function MarksList(props){
 
 
     return (
+      <React.Fragment>
+      <Nav show={true} />
       <div style={{minHeight:"100vh",backgroundColor:"white"}}>
-        <div className="horizontal-scroll-except-first-column" style={{marginTop:"80px"}}>
+        <div className="bgwhiteoverlay"></div>
+        
+          <div className="horizontal-scroll-except-first-column" style={{marginTop:"80px"}} >
           <table className="">
               <thead>
                 <tr>
@@ -59,6 +64,7 @@ function MarksList(props){
             </table>
           </div>
     </div>
+    </React.Fragment>
     );
 }
 

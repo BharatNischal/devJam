@@ -28,14 +28,15 @@ function Cell(props) {
 
     const dueDate = new Date(props.dueDate);
     const curDate = new Date();
+    const disable = !props.submission && dueDate.getTime()<curDate.getTime();
     let cellData = "";
-    if(!props.submission && dueDate.getTime()<curDate.getTime()){
+    if(disable){
       cellData = <span className="text-danger">Missing</span>
     }else if(props.submission){
       const subDate = new Date(props.submission.timestamp);
       if(subDate.getTime()>dueDate.getTime()){
         cellData =  [<p className="m-0 text-center"><input type="number" placeholder="points"onKeyDown={handleMarksUpdate} value={marks} onChange={e=>setMarks(e.target.value)} className="no-style text-right" min="0" max={props.maxPoints}/>&nbsp;&nbsp;/{props.maxPoints}</p>,
-                    <span className="font-sm text-warning">Due Late</span>]
+                    <span className="font-sm text-warning">Done Late</span>]
       }else{
         cellData = [<p className="m-0 text-center"><input type="number" placeholder="points" onKeyDown={handleMarksUpdate} value={marks} onChange={e=>setMarks(e.target.value)} className="no-style text-right" min="0" max={props.maxPoints}/>&nbsp;&nbsp;/{props.maxPoints}</p>,
                     <span className="font-sm text-warning">&nbsp;</span>]
@@ -43,9 +44,10 @@ function Cell(props) {
     }
 
     return (
-        <td style={{position:"relative"}}>
+        <td style={{position:"relative"}} className={disable?"disable":""}>
               {cellData}
-            <div style={{position:"absolute",right:"5px",top:"5px"}} onClick={()=>setshowMenu(true)} ><i className="fa fa-ellipsis-v pointer" aria-hidden="true"></i></div>
+            
+            <div className={disable?"menu-toggle d-none":"menu-toggle"} onClick={()=>setshowMenu(true)} ><i className="fa fa-ellipsis-v pointer" aria-hidden="true"></i></div>
 
 
 
