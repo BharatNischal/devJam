@@ -46,8 +46,8 @@ function MarksList(props){
       <Nav show={true} />
       <div style={{minHeight:"100vh",backgroundColor:"white"}}>
         <div className="bgwhiteoverlay"></div>
-        <div style={{marginTop:"80px"}}>
-          <div className="horizontal-scroll-except-first-column">
+        
+          <div className="horizontal-scroll-except-first-column" style={{marginTop:"80px"}} >
           <table className="">
               <thead>
                 <tr>
@@ -62,7 +62,6 @@ function MarksList(props){
               </tbody>
             </table>
           </div>
-        </div>
     </div>
     </React.Fragment>
     );
