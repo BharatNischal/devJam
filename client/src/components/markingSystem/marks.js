@@ -42,8 +42,7 @@ function MarksList(props){
 
     return (
       <div style={{minHeight:"100vh",backgroundColor:"white"}}>
-        <div className="container">
-          <div className="horizontal-scroll-except-first-column">
+        <div className="horizontal-scroll-except-first-column" style={{marginTop:"80px"}}>
           <table className="">
               <thead>
                 <tr>
@@ -58,7 +57,6 @@ function MarksList(props){
               </tbody>
             </table>
           </div>
-        </div>
     </div>
     );
 }
