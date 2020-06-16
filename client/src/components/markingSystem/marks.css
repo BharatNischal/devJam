@@ -74,7 +74,7 @@ tbody tr th {  /*the first cell in each tr*/
 
 .subMenu{
   position: absolute;
-  left:70%;
+  right:5px;
   top:5px;
   width:70px;
   height:60px;
@@ -85,7 +85,34 @@ tbody tr th {  /*the first cell in each tr*/
   padding-top: 8px;
   cursor: pointer;
   animation:showDropDown 0.3s ease-out ;
+  border-radius: 3px;
 }
+.menu-toggle{
+  position:absolute;
+  right:5px;
+  top:5px;
+  color:#464646;
+}
+td.disable{
+  background-color: #e9e9e9;
+  cursor: not-allowed;
+}
+
+@media (min-width:800px){
+  td:hover{
+    background-color: rgb(252, 225, 244);
+  }
+  td.disable:hover{
+    background-color: #e9e9e9;
+  }
+  .menu-toggle{
+    display: none;
+  }
+  td:hover .menu-toggle{
+    display: inline-block;
+  }
+}
+
 
 
 
