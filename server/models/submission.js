@@ -6,11 +6,6 @@ const submissionSchema = new mongoose.Schema({
         ref:'user',
         required:true
     },
-    deliverableId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"deliverable",
-        required:true
-    },
     fileURL:{
         type:String,
         required:true

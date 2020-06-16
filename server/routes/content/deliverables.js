@@ -8,7 +8,7 @@ const middleware = require("../../middleware");
 
 //--route to generate empty deliverable and passing empty object to frontend
 router.get("/topic/:topicId/createDeliverable",middleware.isAdmin,async function(req,res){
-  var submissions=[]; 
+  var submissions=[];
   await db.User.find({student:true}).then(users=>{
     submissions=users.map(u=>({userId:u._id}));
   }).catch(err=>{
@@ -68,16 +68,19 @@ router.delete("/topic/:topicId/deliverable/:deliverableId",middleware.isAdmin,(r
 });
 
 //Route to get first 20 Deliverable with Submission IDs populated and user populatedfunction
-router.get("/deliverables",function(req,res){
+router.post("/deliverables",function(req,res){
   const query={};
-  if(req.query.date){
-    query.timestamp={$lt:req.query.date};
+  if(req.body.date){
+    query.timestamp={$lt:req.body.date};
   }
   db.Deliverable.find(query)
-  .populate({
+  .populate([{
     path:"submissions.submissionId",
     model:"submission"
-  })
+  },{
+    path:"submissions.userId",
+    model:"User"
+  }])
   .sort({timestamp:"desc"})
   .limit(20)
   .then(del=>{
