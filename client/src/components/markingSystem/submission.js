@@ -148,7 +148,7 @@ function SubmissionPage(props) {
                             <div className="ml-2">
                                 {submissions[curIndex].submissionId?
                                 <form onSubmit={updateMarks}>
-                                    <input  type="number" className="comment-inp text-center" value={submissions[curIndex].submissionId.marks} onChange={marksChangeHandler} style={{width:"50px",padding:0,fontSize:"18px"}}></input>
+                                    <input  type="number" className="comment-inp text-center" value={submissions[curIndex].submissionId.marks==-1?"":submissions[curIndex].submissionId.marks} onChange={marksChangeHandler} style={{width:"50px",padding:0,fontSize:"18px"}}></input>
                                     <span className="px-2" style={{fontSize:"20px"}} >/ {deliverable?deliverable.points:""}</span><br/>
                                     <button className="btn btn-success mt-2"> Update Marks</button>
                                 </form >
