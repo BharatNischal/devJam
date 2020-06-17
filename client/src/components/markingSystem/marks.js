@@ -28,14 +28,23 @@ function MarksList(props){
       });
     },[])
 
+    function handleUpdate(i,j,val) {
+      let newMarksList = Array.from(marksList);
+      newMarksList[i].submissions[j].submissionId.marks = Number(val);
+      setMarksList(newMarksList);
+    }
+
     let tableData = [];
+    let sumOfDeliverable=[],rows=0,cols=0;
     if(marksList.length>0){
-      let rows = marksList.length,cols=marksList[0].submissions.length;
+      rows = marksList.length;cols=marksList[0].submissions.length;
+      sumOfDeliverable = Array(rows).fill(0);
       for(let j=0;j<cols;j++){
         let row=[]
         row.push(<th>{marksList[0].submissions[j].userId.name}</th>)
         for(let i=0;i<rows;i++){
-            row.push(<Cell maxPoints={marksList[i].points} submission={marksList[i].submissions[j].submissionId} dueDate={marksList[i].dueDate} view={()=>{props.history.push({pathname:`/submission/${marksList[i]._id}/${j}`,deliverable:marksList[i]})}}/>)
+            sumOfDeliverable[i] +=  marksList[i].submissions[j].submissionId?(marksList[i].submissions[j].submissionId.marks==-1?0:marksList[i].submissions[j].submissionId.marks):0;
+            row.push(<Cell i={i} j={j} handleUpdate={handleUpdate} maxPoints={marksList[i].points} submission={marksList[i].submissions[j].submissionId} dueDate={marksList[i].dueDate} view={()=>{props.history.push({pathname:`/submission/${marksList[i]._id}/${j}`,deliverable:marksList[i]})}}/>)
         }
         tableData.push(<tr>{row}</tr>);
       }
@@ -59,6 +68,12 @@ function MarksList(props){
                 </tr>
               </thead>
               <tbody>
+                <tr>
+                  <th>Average</th>
+                  {sumOfDeliverable.map(sum=>(
+                    <td>{(sum/rows).toFixed(2)}</td>
+                  ))}
+                </tr>
                 {tableData}
               </tbody>
             </table>

@@ -15,6 +15,7 @@ function Cell(props) {
           axios.post(`/updateMarks/${props.submission._id}`,{marks})
             .then(res=>{
               if(res.data.success){
+                props.handleUpdate(props.i,props.j,marks);
                 console.log("updated");
               }else{
                 console.log(res.data.msg);
