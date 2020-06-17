@@ -23,8 +23,7 @@ import Comment from './components/learnerPlatform/commentlist';
 
 import MarksList from './components/markingSystem/marks';
 import SubmissionPage from './components/markingSystem/submission';
-import DeliverableMarks from './components/markingSystem/deliverable';
-import Deliverable2 from './components/markingSystem/deliverable2';
+import Deliverable2 from './components/markingSystem/deliverable';
 
 axios.defaults.withCredentials = true;
 
@@ -75,8 +74,7 @@ function App(props) {
             <Route path="/comment" exact component={Comment}/>
             <Route path="/marks" exact component={MarksList}/>
             <Route path="/submission/:id/:index" exact component={SubmissionPage}/>
-            <Route path="/marks/deliverable/:id" exact component={DeliverableMarks}/>
-            <Route path="/marks/deliverable/" exact component={Deliverable2}/>
+            <Route path="/marks/deliverable/:id" exact component={Deliverable2}/>
           </Switch>
           )}
 
