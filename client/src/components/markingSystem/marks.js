@@ -58,7 +58,7 @@ function MarksList(props){
         <div className="bgwhiteoverlay"></div>
 
           <div className="horizontal-scroll-except-first-column" style={{marginTop:"80px"}} >
-          <table className="">
+          <table className="custom-table">
               <thead>
                 <tr>
                   <th></th>
