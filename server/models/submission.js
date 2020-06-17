@@ -16,7 +16,7 @@ const submissionSchema = new mongoose.Schema({
     },
     marks:{
         type:Number,
-        default:0
+        default:-1
     },
     comment:String
 });
