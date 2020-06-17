@@ -47,14 +47,14 @@ function MarksList(props){
       <Nav show={true} />
       <div style={{minHeight:"100vh",backgroundColor:"white"}}>
         <div className="bgwhiteoverlay"></div>
-        
+
           <div className="horizontal-scroll-except-first-column" style={{marginTop:"80px"}} >
           <table className="">
               <thead>
                 <tr>
                   <th></th>
                   {marksList.map(deliverable=>(
-                    <th className="pointer" onClick={()=>{props.history.push({pathname:`/submission/${deliverable._id}`,deliverable:deliverable})}}>{deliverable.title}</th>
+                    <th className="pointer" onClick={()=>{props.history.push({pathname:`/marks/deliverable/${deliverable._id}`,deliverable:deliverable})}}>{deliverable.title}</th>
                   ))}
                 </tr>
               </thead>
