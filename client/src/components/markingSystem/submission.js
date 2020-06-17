@@ -10,9 +10,9 @@ function SubmissionPage(props) {
     const [submissions,setSubmissions] = useState([]);
     const [deliverable,setDeliverable] = useState(null);
     const [curIndex,setCurIndex] = useState(0);
-    
-    
-    
+
+
+
     useEffect(()=>{
         props.history.push(`/submission/${props.match.params.id}/${curIndex}`);
     },[curIndex]);
@@ -50,12 +50,15 @@ function SubmissionPage(props) {
     const options=[];
     if(deliverable){
         submissions.forEach((s,i)=>{
+            const dueDate = new Date(deliverable.dueDate);
+            const curDate = new Date();
+            const subDate = s.submissionId?new Date(s.submissionId.timestamp):null;
             options.push({value:String(i),
                 label:(<div className="d-flex w-100 justify-content-between"><div className="d-flex align-content-center " style={{fontSize:"20px"}}>
-                    <div className="mr-2"><img src={s.userId.profilePic} style={{width:"30px",height:"30px",objectFit:"cover"}} className="rounded-circle" /> </div>  
-                    <div>{"    "+s.userId.name?s.userId.name:""}</div> 
+                    <div className="mr-2"><img src={s.userId.profilePic} style={{width:"30px",height:"30px",objectFit:"cover"}} className="rounded-circle" /> </div>
+                    <div>{"    "+s.userId.name?s.userId.name:""}</div>
                     </div>
-                    <div className="mr-2" style={{fontSize:"13px"}}> <b> {s.submissionId?"Handed In":"Pending"} </b>  </div>
+                    <div className="mr-2" style={{fontSize:"13px"}}> <b> {s.submissionId?"Handed In "+(subDate.getTime()>dueDate.getTime()?"Done Late":""):(dueDate.getTime()<curDate.getTime()?"Missing":"Pending")} </b>  </div>
                     </div>)})
         })
     }
@@ -69,7 +72,7 @@ function SubmissionPage(props) {
     const updateMarks=(e)=>{
         e.preventDefault();
         console.log(submissions[curIndex]);
-        
+
         axios.post(`/updateMarks/${submissions[curIndex].submissionId._id}`,{marks:Number(submissions[curIndex].submissionId.marks)})
             .then(res=>{
               if(res.data.success){
@@ -103,7 +106,7 @@ function SubmissionPage(props) {
 
                         <div className="col-lg-8 pt-4 align-self-center">
                             <div >
-                          
+
                                 <Select
                                     options={options}
                                     value={options[curIndex]}
@@ -111,8 +114,8 @@ function SubmissionPage(props) {
                                     getOptionLabel={option => option.label}
                                     classNamePrefix="react-select"
                                     className="p-2"
-                                    
-                                    
+
+
                                 />
                                 {/* <select className="form-control  form-control-lg" style={{height:"60px",fontSize:"26px"}} value={curIndex} onChange={(e)=>setCurIndex(Number(e.target.value))}>
                                     {submissions.map((s,i)=>(
@@ -122,21 +125,21 @@ function SubmissionPage(props) {
                             </div>
                         </div>
                         <div className="col-lg-4 pt-2 pt-lg-4 text-right text-lg-center align-self-center">
-                            {curIndex!=0?<span className="mx-3 h3 cursor-pointer" onClick={()=>{setCurIndex(curIndex-1)}}> <i className="fa fa-less-than text-pink"></i></span> :null}
-                            {curIndex!=submissions.length-1?<span className="mx-3 h3 cursor-pointer" onClick={()=>{setCurIndex(curIndex+1)}}> <i className="fa fa-greater-than text-pink"></i></span>:null}
-                            
-                            
+                            <span className={curIndex!=0?"mx-3 h3 cursor-pointer":"mx-3 h3 cursor-disable"} onClick={()=>{curIndex!=0?setCurIndex(curIndex-1):console.log("not available");}} > <i className="fa fa-less-than text-pink"></i></span>
+                            <span className={curIndex!=submissions.length-1?"mx-3 h3 cursor-pointer":"mx-3 h3 cursor-disable"} onClick={()=>{curIndex!=submissions.length-1?setCurIndex(curIndex+1):console.log("not available");}}> <i className="fa fa-greater-than text-pink"></i></span>
+
+
                         </div>
                         <div className="col-lg-8 mt-4">
                             <div className="px-4 row justify-content-between">
-                                <div> 
+                                <div>
                                     <h3 className="text-pink">Files</h3>
-                                    <p style={{fontSize:"12px"}} className="text-gray"><b>Handed in on </b>  {submissions[curIndex].submissionId?submissions[curIndex].submissionId.timestamp:"Not Submitted Yet"}</p>
+                                    <p style={{fontSize:"12px"}} className="text-gray"><b>Handed in on </b>  {submissions[curIndex].submissionId?submissions[curIndex].submissionId.timestamp.substr(0,10):"Not Submitted Yet"}</p>
                                 </div>
                                 <div className="p-3 ">
                                     <a className="btn btn-outline-grad btn-block" href={submissions[curIndex].submissionId?submissions[curIndex].submissionId.fileURL:""}> {submissions[curIndex].submissionId?"Download File":"No File"}</a>
                                 </div>
-    
+
                             </div>
                         </div>
                         <div className="col-lg-4 mt-4 px-4 px-lg-0 text-lg-right">
@@ -151,7 +154,7 @@ function SubmissionPage(props) {
                                 </form >
                                 :<h4>Not Submitted Yet</h4>
                                 }
-                                
+
                             </div>
                         </div>
                         {submissions[curIndex].submissionId?
@@ -159,7 +162,7 @@ function SubmissionPage(props) {
                             <div className="p-3" style={{backgroundColor:"#e1e1e1",borderRadius:"18px"}}>
                                 <h3>Private Comments</h3>
                                 <hr/>
-                                
+
                                 <div className="row mt-3" style={{justifyContent:"center"}}>
                                     <div className="profile-pic rounded-circle border " style={{height:"50px",width:"50px",overflow:"hidden"}}><img src={submissions[curIndex].userId.profilePic || UserImg}  className="rounded-circle  responsive-img" /></div>
                                     <div className="col-9">
@@ -169,22 +172,22 @@ function SubmissionPage(props) {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                     <form className="my-3" onSubmit={handleSubComment}>
                                         <input type="text" placeholder="Reply to this message" value={commentMsg} onChange={(e)=>{setCommentMsg(e.target.value)}} className="w-100 comment-inp" />
                                     </form>
-                                
-    
-    
+
+
+
                             </div>
-    
-                        </div>        
+
+                        </div>
                         :<div className="mb-4"></div>}
                     </React.Fragment>
                     :null
                     }
-            
-                    
+
+
                 </div>
             </div>
         </React.Fragment>
@@ -193,4 +196,3 @@ function SubmissionPage(props) {
 
 
 export default SubmissionPage;
-

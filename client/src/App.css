@@ -54,6 +54,10 @@
   cursor: pointer;
 }
 
+.cursor-disable{
+  cursor: not-allowed;
+}
+
 
 .btn-outline-grad{
   background-color: #fafafa;
