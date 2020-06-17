@@ -60,6 +60,29 @@ function SubmissionPage(props) {
         })
     }
 
+    const marksChangeHandler=(e)=>{
+        const subs=[...submissions];
+        subs[curIndex].submissionId.marks=e.target.value;
+        setSubmissions(subs);
+
+    }
+    const updateMarks=(e)=>{
+        e.preventDefault();
+        console.log(submissions[curIndex]);
+        
+        axios.post(`/updateMarks/${submissions[curIndex].submissionId._id}`,{marks:Number(submissions[curIndex].submissionId.marks)})
+            .then(res=>{
+              if(res.data.success){
+                alert(" Marks updated");
+              }else{
+                console.log(res.data.msg);
+              }
+            })
+            .catch(err=>{
+              console.log(err.message);
+            })
+        }
+
     return (
         <React.Fragment>
             <Nav show={true} />
@@ -121,10 +144,11 @@ function SubmissionPage(props) {
                             <hr/>
                             <div className="ml-2">
                                 {submissions[curIndex].submissionId?
-                                <React.Fragment>
-                                    <input  type="number" className="comment-inp text-center" value={submissions[curIndex].submissionId.marks} style={{width:"50px",padding:0,fontSize:"18px"}}></input>
-                                <span className="px-2" style={{fontSize:"20px"}} >/ {deliverable?deliverable.points:""}</span>
-                                </React.Fragment>
+                                <form onSubmit={updateMarks}>
+                                    <input  type="number" className="comment-inp text-center" value={submissions[curIndex].submissionId.marks} onChange={marksChangeHandler} style={{width:"50px",padding:0,fontSize:"18px"}}></input>
+                                    <span className="px-2" style={{fontSize:"20px"}} >/ {deliverable?deliverable.points:""}</span><br/>
+                                    <button className="btn btn-success mt-2"> Update Marks</button>
+                                </form >
                                 :<h4>Not Submitted Yet</h4>
                                 }
                                 
