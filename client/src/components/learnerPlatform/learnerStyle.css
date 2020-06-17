@@ -277,6 +277,20 @@
 .anim-hil{
     animation: hil-animation 2s ease-in-out infinite;
 }
+.delTable{
+    height:70vh;
+    overflow-y: scroll;
+    
+}
+.delTable .item{
+    max-height:60px;
+}
+
+@media (min-width:800px){
+    .resp-70{
+        width:70%
+    }
+}
 
 @keyframes hil-animation{
     0%{
