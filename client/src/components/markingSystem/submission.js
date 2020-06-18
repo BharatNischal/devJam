@@ -1,45 +1,59 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import Nav from '../profile/Nav/Nav';
 import UserImg from "../profile/CLIP.png";
 import Skeleton from "react-loading-skeleton";
 import axios from "axios";
 import Select from "react-select";
+import {CurUserContext} from '../../contexts/curUser';
 
 function SubmissionPage(props) {
+
+    // States for data handling
     const [commentMsg, setCommentMsg] = useState("");
     const [submissions,setSubmissions] = useState([]);
     const [deliverable,setDeliverable] = useState(null);
     const [curIndex,setCurIndex] = useState(0);
+    const {user} = useContext(CurUserContext);
 
-
-
+    // Change the url with change on active student (useful for hard refresh)
     useEffect(()=>{
         props.history.push(`/submission/${props.match.params.id}/${curIndex}`);
     },[curIndex]);
+
+
     useEffect(()=>{
-        if(!props.location.deliverable){
-        // Get the data from the database
-        axios.get(`/deliverableFull/${props.match.params.id}`)
-            .then(res=>{
-            if(res.data.success){
-                console.log("data from DataBase");
-                const {title,dueDate,points} = res.data.deliverable;
-                setSubmissions(res.data.deliverable.submissions);
-                setCurIndex(props.match.params.index<res.data.deliverable.submissions.length?Number(props.match.params.index):0);
-                setDeliverable({title,dueDate,points});
-            }else{
-                alert(res.data.msg);
+        if(!user.loggedIn){
+          props.history.push('/login');
+        }else if(user.student){
+          props.history.push('/studDash');
+        }else{
+          if(!props.location.deliverable){
+
+            // Get the data from the database
+            axios.get(`/deliverableFull/${props.match.params.id}`)
+                .then(res=>{
+                  if(res.data.success){
+                      console.log("data from DataBase");
+                      const {title,dueDate,points} = res.data.deliverable;
+                      setSubmissions(res.data.deliverable.submissions);
+                      setCurIndex(props.match.params.index<res.data.deliverable.submissions.length?Number(props.match.params.index):0);
+                      setDeliverable({title,dueDate,points});
+                  }else{
+                      console.log(res.data.msg);
+                  }
+                })
+                .catch(err=>{
+                  console.log(err.message);
+                })
+          }else{
+
+            //Data provided during the redirect
+            console.log("data from props");
+            const {title,dueDate,points} = props.location.deliverable;
+            setSubmissions(props.location.deliverable.submissions);
+            setCurIndex(Number(props.match.params.index));
+            setDeliverable({title,dueDate,points});
             }
-            })
-            .catch(err=>{
-            alert(err.message);
-            })
-        }else{  //Data provided during the redirect
-        console.log("data from props");
-        const {title,dueDate,points} = props.location.deliverable;
-        setSubmissions(props.location.deliverable.submissions);
-        setCurIndex(Number(props.match.params.index));
-        setDeliverable({title,dueDate,points});
         }
     },[])
 
@@ -47,6 +61,7 @@ function SubmissionPage(props) {
         e.preventDefault();
         alert("comment Submitted");
     }
+
     const options=[];
     if(deliverable){
         submissions.forEach((s,i)=>{
@@ -63,12 +78,14 @@ function SubmissionPage(props) {
         })
     }
 
+    // Function to update the marks
     const marksChangeHandler=(e)=>{
         const subs=[...submissions];
         subs[curIndex].submissionId.marks=e.target.value;
         setSubmissions(subs);
 
     }
+    // Update marks in database
     const updateMarks=(e)=>{
         e.preventDefault();
         console.log(submissions[curIndex]);
