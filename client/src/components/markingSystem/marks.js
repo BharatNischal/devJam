@@ -50,7 +50,7 @@ function MarksList(props){
     function handleScroll(e) {
       if(e.target.scrollLeft == (e.target.scrollWidth - e.target.clientWidth)){
         console.log("reached");
-        axios.post('/deliverables',{date:marksList[marksList.length-1].timestamp})
+        axios.post('/deliverables',{date:marksList[marksList.length-1].dueDate})
           .then(res=>{
             if(res.data.success){
               setMarksList([...marksList,...res.data.deliverables]);

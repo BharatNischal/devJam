@@ -56,7 +56,7 @@ router.delete("/topic/:topicId/deliverable/:deliverableId",middleware.isAdmin,(r
           topic.items.splice(index,1);
           topic.save();
         }
-        db.Deliverable.RemoveById(req.params.deliverableId)
+        db.Deliverable.findByIdAndDelete(req.params.deliverableId)
           .then(video=>{
               res.json({success:true});
           })
@@ -72,7 +72,7 @@ router.post("/deliverables",middleware.isAdmin,function(req,res){
   console.log("deliverable before",req.body.date);
   const query={};
   if(req.body.date){
-    query.timestamp={$lt:req.body.date};
+    query.dueDate={$lt:req.body.date};
   }
   db.Deliverable.find(query)
   .populate([{
@@ -82,7 +82,7 @@ router.post("/deliverables",middleware.isAdmin,function(req,res){
     path:"submissions.userId",
     model:"User"
   }])
-  .sort({timestamp:"desc"})
+  .sort({dueDate:"desc"})
   .limit(10)
   .then(del=>{
     res.json({success:true,deliverables:del});
