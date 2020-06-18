@@ -6,7 +6,8 @@ import axios from "axios";
 
 var submissions = [];
 function Deliverable2(props) {
-    const [filterVal, setFilterVal] = useState("none")
+    const [filterVal, setFilterVal] = useState("none");
+    const [sortVal,setSortVal] = useState("Ascending");
 
     const [filteredSubmitions,setFilteredSubmissions] = useState([]);
     const [deliverable,setDeliverable] = useState(null);
@@ -46,87 +47,90 @@ function Deliverable2(props) {
 
 
       // Function to sort the submissions based on sort method choosen
-  function handleSort(choice) {
+  function handleSort(choice,array=filteredSubmitions) {
         // Note we will be using -1 for default value rather than -1 to differentiate b/w 0 marks and unmarked
 
         if(choice=="Ascending"){
-        setFilteredSubmissions(filteredSubmitions.slice().sort(function(first,second){
+        setFilteredSubmissions(array.slice().sort(function(first,second){
             const x = Number(first.submissionId?first.submissionId.marks:-1); //Giving unsubmitted submission as -1(default)
             const y = Number(second.submissionId?second.submissionId.marks:-1);
             return x-y;
         }))
         }else { //Descending
-        setFilteredSubmissions(filteredSubmitions.slice().sort(function(first,second){
+        setFilteredSubmissions(array.slice().sort(function(first,second){
             const x = Number(first.submissionId?first.submissionId.marks:-1);
             const y = Number(second.submissionId?second.submissionId.marks:-1);
             return y-x;
         }))
         }
+        setSortVal(choice);
     }
 
     // Function to filter submissions based on filter method applied
   function handleFilter(choice,a,b){
+    let array = []; //Used to hold the filtered array
     if(choice=="Greater than"){
       console.log("Greater than");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         return submission.submissionId ? (submission.submissionId.marks==-1?a<0:submission.submissionId.marks>a) : a<0;
-      }));
+      });
     }else if(choice=="Less than"){
       console.log("Less than");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         return submission.submissionId ? (submission.submissionId.marks==-1?a>0:submission.submissionId.marks<a) : a>0;
-      }));
+      });
     }else if(choice==="Greater than or equal to"){
       console.log("Greater than or equal to");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         return submission.submissionId ? (submission.submissionId.marks==-1?a<=0:submission.submissionId.marks>=a) : a<=0;
-      }));
+      });
     }else if(choice=="Less than or equal to"){
       console.log("Less than or equal to");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         return submission.submissionId ? (submission.submissionId.marks==-1?a>=0:submission.submissionId.marks<=a) : a>=0;
-      }));
+      });
     }else if(choice==="Is equal to"){
       console.log("Is equal to");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         return submission.submissionId ? (submission.submissionId.marks==-1?a==0:submission.submissionId.marks==a) : a==0;
-      }));
+      });
     }else if(choice=="Is not equal to"){
       console.log("Is not equal to");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         return submission.submissionId ? (submission.submissionId.marks==-1?a!=0:submission.submissionId.marks!=a) : a!=0;
-      }));
+      });
     }else if(choice=="Is between"){
       console.log("Is between");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         return submission.submissionId ? (submission.submissionId.marks==-1?(a<=0 && b>=0):(a<=submission.submissionId.marks && b>=submission.submissionId.marks)) : (a<=0 && b>=0);
-      }));
+      });
     }else if(choice=="Is not between"){
       console.log("Is not between");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         return submission.submissionId ? (submission.submissionId.marks==-1 ? !(a<=0 && b>=0):!(a<=submission.submissionId.marks && b>=submission.submissionId.marks)) : !(a<=0 && b>=0);
-      }));
+      });
     }else if(choice=="Unmarked"){
       console.log("Unmarked");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         return submission.submissionId && submission.submissionId.marks==-1;
-      }))
+      });
     }else if(choice=="Not submitted"){
       console.log("Not submitted");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         return !submission.submissionId;
-      }))
+      });
     }else if(choice=="Late"){
       console.log("Late");
-      setFilteredSubmissions(submissions.filter(submission=>{
+      array = submissions.filter(submission=>{
         const subDate = submission.submissionId?new Date(submission.submissionId.timestamp):null;
         const dueDate = new Date(deliverable.dueDate);
         return submission.submissionId && subDate.getTime()>dueDate.getTime();
-      }))
+      });
     }else{  //For None
       console.log("none");
-      setFilteredSubmissions(submissions);
+      array = submissions;
     }
+    handleSort(sortVal,array);
   }
 
     const filterOoptions=[
@@ -163,7 +167,7 @@ function Deliverable2(props) {
     const filterAdvanceHandler=(e)=>{
         e.preventDefault();
         handleFilter(filterVal,numbers[0],numbers[1]);
-        setshowNumberOptions(-1);
+        //setshowNumberOptions(-1);
     }
     return (
         <React.Fragment>
@@ -190,7 +194,7 @@ function Deliverable2(props) {
                                 <span className="bg-grad text-center text-white text-center rounded-circle shadow py-1" style={{fontSize:"19px",height:"39px",width:"39px",display:"inline-block"}}> <i className="fa fa-calendar-alt"> </i> </span>
                                 <b className="pl-1 pl-md-2">{deliverable?deliverable.dueDate.substr(0,10):""}</b>
                             </div>
-                            
+
                         </div>
                         <div className="mt-3 pl-2 resp-70">
                             <h3>Instructions</h3>
@@ -205,9 +209,9 @@ function Deliverable2(props) {
                     <div className="col-lg-4 mt-1 order-lg-2">
                         <div className="p-3 shadow mt-lg-5" style={{borderRadius:"18px",minHeight:"200px",backgroundColor:"#f8f8f8"}}>
                             <h4 className="mb-2">Filters</h4>
-                            
+
                             <Select
-                                className="mb-2" 
+                                className="mb-2"
                                 placeholder="Sort "
                                 options={sortOptions}
                                 onChange={(e)=>handleSort(e.value)}
@@ -237,19 +241,30 @@ function Deliverable2(props) {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {filteredSubmitions.map(sub=>(
-                                    <tr key={sub._id}>
-                                        <td>{sub.userId.name}</td>
-                                        <td>{sub.submissionId?sub.submissionId.marks==-1?<b>UnMarked</b>:sub.submissionId.marks:<b className="text-danger"> Not Submitted Yet </b>}</td>
-                                    </tr>
-                                ))}
+                                {filteredSubmitions.map(sub=>{
+                                    if(!deliverable)
+                                      return null;
+                                    const dueDate = new Date(deliverable.dueDate);
+                                    const subDate = sub.submissionId?new Date(sub.submissionId.timestamp):null;
+                                    const curDate = new Date();
+                                    return (<tr key={sub._id}>
+                                                <td>{sub.userId.name}</td>
+                                                <td>
+                                                  {sub.submissionId?(<span>
+                                                                      {sub.submissionId.marks==-1?"Unmarked":sub.submissionId.marks}
+                                                                      {dueDate.getTime()<subDate.getTime()?<b className="text-warning" style={{fontSize:"0.8em"}}> Done Late</b>:null}
+                                                                    </span>)
+                                                    :(dueDate.getTime()<curDate.getTime()?<b className="text-danger">Missing</b>:"Not Submitted Yet")}
+                                                </td>
+                                            </tr>);
+                                })}
                                 </tbody>
                             </table>
                         </div>
-                   
+
                     </div>
-                    
-                    
+
+
                 </div>
             </div>
         </React.Fragment>
@@ -259,4 +274,3 @@ function Deliverable2(props) {
 
 
 export default Deliverable2
-

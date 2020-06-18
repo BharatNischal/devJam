@@ -8,7 +8,10 @@ import Nav from "../profile/Nav/Nav";
 function MarksList(props){
 
     const [marksList,setMarksList] = useState([]);
-    useEffect(()=>{
+    // useEffect(()=>{
+    //   document.querySelector(`tbody`).addEventListener("scroll",function (e) {
+    //
+    //   })
       axios.post('/deliverables')
         .then(res=>{
           if(res.data.success){
@@ -50,7 +53,6 @@ function MarksList(props){
       }
     }
 
-
     return (
       <React.Fragment>
       <Nav show={true} />
@@ -67,11 +69,11 @@ function MarksList(props){
                   ))}
                 </tr>
               </thead>
-              <tbody>
+              <tbody >
                 <tr>
                   <th>Average</th>
                   {sumOfDeliverable.map(sum=>(
-                    <td>{(sum/rows).toFixed(2)}</td>
+                    <td>{(sum/cols).toFixed(2)}</td>
                   ))}
                 </tr>
                 {tableData}
