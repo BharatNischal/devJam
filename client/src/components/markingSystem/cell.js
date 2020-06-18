@@ -16,13 +16,18 @@ function Cell(props) {
             .then(res=>{
               if(res.data.success){
                 props.handleUpdate(props.i,props.j,marks);
-                console.log("updated");
+                props.updateAlert(true);
+                setTimeout(()=>{
+                  props.updateAlert(false);
+                },2000);
               }else{
-                console.log(res.data.msg);
+                console.error(res.data.msg);
+                alert(res.data.msg);
               }
             })
             .catch(err=>{
-              console.log(err.message);
+              alert(err.message);
+              console.error(err.message);
             })
         }
     }

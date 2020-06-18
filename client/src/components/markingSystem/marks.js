@@ -8,6 +8,9 @@ import Nav from "../profile/Nav/Nav";
 function MarksList(props){
 
     const [marksList,setMarksList] = useState([]);
+
+    //UI STATES
+    const [showSubmitAlert, setShowSubmitAlert] = useState(false);
     useEffect(()=>{
       axios.post('/deliverables')
         .then(res=>{
@@ -32,17 +35,19 @@ function MarksList(props){
     function handleScroll(e) {
       if(e.target.scrollLeft == (e.target.scrollWidth - e.target.clientWidth)){
         console.log("reached");
-        axios.post('/deliverables',{date:marksList[marksList.length-1].timestamp})
-          .then(res=>{
-            if(res.data.success){
-              setMarksList([...marksList,...res.data.deliverables]);
-            }else{
-              console.log(res.data.msg);
-            }
-          })
-          .catch(err=>{
-            console.log(err.message);
-          })
+        if(marksList.length%10==0){
+          axios.post('/deliverables',{date:marksList[marksList.length-1].timestamp})
+            .then(res=>{
+              if(res.data.success){
+                setMarksList([...marksList,...res.data.deliverables]);
+              }else{
+                console.log(res.data.msg);
+              }
+            })
+            .catch(err=>{
+              console.log(err.message);
+            })
+        }
       }
     }
 
@@ -69,7 +74,7 @@ function MarksList(props){
 
         for(let i=0;i<rows;i++){
             sumOfDeliverable[i] +=  marksList[i].submissions[j].submissionId?(marksList[i].submissions[j].submissionId.marks==-1?0:marksList[i].submissions[j].submissionId.marks):0;
-            row.push(<Cell i={i} j={j} handleUpdate={handleUpdate} maxPoints={marksList[i].points} submission={marksList[i].submissions[j].submissionId} dueDate={marksList[i].dueDate} view={()=>{props.history.push({pathname:`/submission/${marksList[i]._id}/${j}`,deliverable:marksList[i]})}}/>)
+            row.push(<Cell i={i} j={j} handleUpdate={handleUpdate} maxPoints={marksList[i].points} submission={marksList[i].submissions[j].submissionId} dueDate={marksList[i].dueDate} updateAlert={(val)=>setShowSubmitAlert(val)} view={()=>{props.history.push({pathname:`/submission/${marksList[i]._id}/${j}`,deliverable:marksList[i]})}}/>)
         }
         tableData.push(<tr>{row}</tr>);
       }
@@ -78,6 +83,7 @@ function MarksList(props){
     return (
       <React.Fragment>
       <Nav show={true} />
+      {showSubmitAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Marks Updated Successfully </div>:null}
       <div style={{minHeight:"100vh",backgroundColor:"white"}}>
         <div className="bgwhiteoverlay"></div>
 

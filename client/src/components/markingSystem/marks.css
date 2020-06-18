@@ -19,6 +19,7 @@
 }
 .custom-table thead th {
   min-width: 130px;
+  width: 130px;
   height: 45px;
   border: 1px solid #d7d7d7;
   background-color: white;
@@ -39,7 +40,7 @@
   position: relative;
   display: block; /*seperates the tbody from the header*/
   max-width: 97vw;
-  max-height: 70vh;
+  max-height: 78vh;
   overflow: scroll;
 }
 
