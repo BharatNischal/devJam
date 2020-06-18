@@ -59,7 +59,7 @@ router.post("/login",passport.authenticate("local",{
 
 // To get all the admins for super-admin Dashboard
 router.get("/admins",middleware.isSuperAdmin,(req,res)=>{
-  db.User.find({})
+  db.User.find({student:false})
     .then(admins=>{
       res.json(admins);
     })
