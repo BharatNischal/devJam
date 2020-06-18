@@ -12,10 +12,16 @@ function Cell(props) {
 
     function handleMarksUpdate(e){
         if(e.key==="Enter"){
-          axios.post(`/updateMarks/${props.submission._id}`,{marks})
+          // Handle the case where marks are given out of range
+          if(marks>props.maxPoints){
+            setMarks(props.maxPoints);
+          }else if(marks<0){
+            setMarks(0);
+          }
+          axios.post(`/updateMarks/${props.submission._id}`,{marks:marks<0?0:Math.min(marks,props.maxPoints)})
             .then(res=>{
               if(res.data.success){
-                props.handleUpdate(props.i,props.j,marks);
+                props.handleUpdate(props.i,props.j,marks<0?0:Math.min(marks,props.maxPoints));
                 props.updateAlert(true);
                 setTimeout(()=>{
                   props.updateAlert(false);

@@ -101,7 +101,7 @@ function SubmissionPage(props) {
     // Function to update the marks
     const marksChangeHandler=(e)=>{
         const subs=[...submissions];
-        subs[curIndex].submissionId.marks=e.target.value;
+        subs[curIndex].submissionId.marks = e.target.value<0?0:Math.min(e.target.value,deliverable.points);
         setSubmissions(subs);
 
     }

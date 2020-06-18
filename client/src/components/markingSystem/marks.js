@@ -60,7 +60,7 @@ function MarksList(props){
 
     // Function to get new deliverables on reaching end of scroll
     function handleScroll(e) {
-      if(e.target.scrollLeft == (e.target.scrollWidth - e.target.clientWidth)){
+      if(e.target.scrollLeft == (e.target.scrollWidth - e.target.clientWidth) && e.target.clientWidth>200){  //@nd condition is to prevent input field to fire the event
         console.log("reached");
         if(marksList.length%10==0){
           setShowSideLoader(true);
