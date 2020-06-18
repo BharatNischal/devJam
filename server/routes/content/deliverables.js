@@ -56,7 +56,7 @@ router.delete("/topic/:topicId/deliverable/:deliverableId",middleware.isAdmin,(r
           topic.items.splice(index,1);
           topic.save();
         }
-        db.Deliverable.RemoveById(req.params.deliverableId)
+        db.Deliverable.findByIdAndDelete(req.params.deliverableId)
           .then(video=>{
               res.json({success:true});
           })
@@ -67,12 +67,12 @@ router.delete("/topic/:topicId/deliverable/:deliverableId",middleware.isAdmin,(r
       })
 });
 
-//Route to get first 8 Deliverable with Submission IDs populated and user populatedfunction
-router.post("/deliverables",function(req,res){
+//Route to get first 10 Deliverable with Submission IDs populated and user populatedfunction
+router.post("/deliverables",middleware.isAdmin,function(req,res){
   console.log("deliverable before",req.body.date);
   const query={};
   if(req.body.date){
-    query.timestamp={$lt:req.body.date};
+    query.dueDate={$lt:req.body.date};
   }
   db.Deliverable.find(query)
   .populate([{
@@ -82,7 +82,7 @@ router.post("/deliverables",function(req,res){
     path:"submissions.userId",
     model:"User"
   }])
-  .sort({timestamp:"desc"})
+  .sort({dueDate:"desc"})
   .limit(10)
   .then(del=>{
     res.json({success:true,deliverables:del});
@@ -93,7 +93,7 @@ router.post("/deliverables",function(req,res){
 });
 
 // Route to get details of a particular deliverable with submissions
-router.get('/deliverableFull/:id',function (req,res) {
+router.get('/deliverableFull/:id',middleware.isAdmin,function (req,res) {
     db.Deliverable.findById(req.params.id)
     .populate([{
       path:"submissions.submissionId",

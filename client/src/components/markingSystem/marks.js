@@ -1,34 +1,52 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useContext} from "react";
 import "./marks.css"
 import $ from 'jquery';
 import axios from "axios";
 import Cell from "./cell";
 import Nav from "../profile/Nav/Nav";
+import {CurUserContext} from '../../contexts/curUser';
 
 function MarksList(props){
 
+    // State to save data
     const [marksList,setMarksList] = useState([]);
 
     //UI STATES
     const [showSubmitAlert, setShowSubmitAlert] = useState(false);
+    // State to get current user details to avoid students from entering this component
+    const {user} = useContext(CurUserContext);
+
+
     useEffect(()=>{
-      axios.post('/deliverables')
-        .then(res=>{
-          if(res.data.success){
-            setMarksList(res.data.deliverables);
-            console.log(res.data.deliverables);
-          }else{
-            console.log(res.data.err);
-          }
-        })
-        .catch(err=>{
-          console.log(err.message);
-        })
-      $('tbody').scroll(function(e) { //detect a scroll event on the tbody
-        $('thead').css("left", -$("tbody").scrollLeft()); //fix the thead relative to the body scrolling
-        $('thead th:nth-child(1)').css("left", $("tbody").scrollLeft()); //fix the first cell of the header
-        $('tbody th:nth-child(1)').css("left", $("tbody").scrollLeft()); //fix the first column of tdbody
-      });
+
+      // Redirect to appropriate routes
+      if(!user.loggedIn){
+        props.history.push('/login');
+      }else if(user.student){
+        props.history.push('/studDash');
+      }else{
+
+        // Fetch the data
+        axios.post('/deliverables')
+          .then(res=>{
+            if(res.data.success){
+              setMarksList(res.data.deliverables);
+              console.log(res.data.deliverables);
+            }else{
+              console.log(res.data.err);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+
+        // Scroll settings
+        $('tbody').scroll(function(e) { //detect a scroll event on the tbody
+          $('thead').css("left", -$("tbody").scrollLeft()); //fix the thead relative to the body scrolling
+          $('thead th:nth-child(1)').css("left", $("tbody").scrollLeft()); //fix the first cell of the header
+          $('tbody th:nth-child(1)').css("left", $("tbody").scrollLeft()); //fix the first column of tdbody
+        });
+      }
     },[])
 
     // Function to get new deliverables on reaching end of scroll
@@ -51,12 +69,14 @@ function MarksList(props){
       }
     }
 
+    // Update the marks entered by admin
     function handleUpdate(i,j,val) {
       let newMarksList = Array.from(marksList);
       newMarksList[i].submissions[j].submissionId.marks = Number(val);
       setMarksList(newMarksList);
     }
 
+    // Display Logic
     let tableData = [];
     let sumOfDeliverable=[],rows=0,cols=0;
     if(marksList.length>0){

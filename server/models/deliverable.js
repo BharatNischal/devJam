@@ -26,11 +26,7 @@ const deliverableSchema=new mongoose.Schema({
             type:mongoose.Schema.Types.ObjectId,
             ref:"submission"
         }
-    }],
-    timestamp:{
-        type:Date,
-        default:Date.now
-    }
+    }]
 });
 
 module.exports = mongoose.model("deliverable",deliverableSchema);
