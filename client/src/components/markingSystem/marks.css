@@ -30,6 +30,7 @@
   display: block; /*seperates the first cell in the header from the header*/
   border: 1px solid #d7d7d7;
   background-color: #f4f4f4;
+  min-width: 170px;
 }
 
 
@@ -53,7 +54,7 @@
   position: relative;
   display: block; /*seperates the first column from the tbody*/
   height: 74px;
-  width: 130px;
+  width: 170px;
   border: 1px solid #d7d7d7;
   background-color: white;
   box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.25);

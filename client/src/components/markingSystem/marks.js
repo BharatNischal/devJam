@@ -59,7 +59,14 @@ function MarksList(props){
       sumOfDeliverable = Array(rows).fill(0);
       for(let j=0;j<cols;j++){
         let row=[]
-        row.push(<th>{marksList[0].submissions[j].userId.name}</th>)
+        row.push(
+        <th>
+          <div style={{display:"flex",alignItems:"center",marginTop:"0.5em"}} className="px-1 text-left" >
+            <div > <img alt="userImg" src={marksList[0].submissions[j].userId.profilePic} className="rounded-circle shadow" style={{width:"50px",height:"50px", objectFit:"cover" }} /></div>
+            <div className="pl-1">{marksList[0].submissions[j].userId.name}</div>
+          </div>
+        </th>);
+
         for(let i=0;i<rows;i++){
             sumOfDeliverable[i] +=  marksList[i].submissions[j].submissionId?(marksList[i].submissions[j].submissionId.marks==-1?0:marksList[i].submissions[j].submissionId.marks):0;
             row.push(<Cell i={i} j={j} handleUpdate={handleUpdate} maxPoints={marksList[i].points} submission={marksList[i].submissions[j].submissionId} dueDate={marksList[i].dueDate} view={()=>{props.history.push({pathname:`/submission/${marksList[i]._id}/${j}`,deliverable:marksList[i]})}}/>)
