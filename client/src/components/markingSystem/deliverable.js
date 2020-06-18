@@ -6,11 +6,12 @@ import axios from "axios";
 import {CurUserContext} from '../../contexts/curUser';
 
 var submissions = [];
+var average=0;
 function Deliverable2(props) {
     const [filterVal, setFilterVal] = useState("none");
     const [sortVal,setSortVal] = useState("Ascending");
 
-    const [filteredSubmitions,setFilteredSubmissions] = useState([]);
+    const [filteredSubmissions,setFilteredSubmissions] = useState([]);
     const [deliverable,setDeliverable] = useState(null);
     const {user} = useContext(CurUserContext);
 
@@ -29,8 +30,18 @@ function Deliverable2(props) {
               // Deliverable data passed as prop during redirect
               console.log("called");
               const {title,dueDate,points,instruction} = props.location.deliverable;
-              setFilteredSubmissions(props.location.deliverable.submissions);
               submissions = props.location.deliverable.submissions;
+
+              // Calculate average
+              submissions.forEach(sub=>{
+                average += sub.submissionId?(sub.submissionId.marks==-1?0:sub.submissionId.marks):0;
+              });
+              if(submissions.length>0){
+                  average = (average/submissions.length).toFixed(2);
+              }
+
+
+              setFilteredSubmissions(props.location.deliverable.submissions);
               setDeliverable({title,dueDate,points,instruction});
             }else{
               // To get the data from database in case of refresh
@@ -39,8 +50,18 @@ function Deliverable2(props) {
                   if(res.data.success){
                     console.log(res.data);
                     const {title,dueDate,points,instruction} = res.data.deliverable;
-                    setFilteredSubmissions(res.data.deliverable.submissions);
                     submissions = res.data.deliverable.submissions;
+
+                    // Calculate average
+                    submissions.forEach(sub=>{
+                      average += sub.submissionId?(sub.submissionId.marks==-1?0:sub.submissionId.marks):0;
+                    });
+                    if(submissions.length>0){
+                        average = (average/submissions.length).toFixed(2);
+                    }
+
+
+                    setFilteredSubmissions(res.data.deliverable.submissions);
                     setDeliverable({title,dueDate,points,instruction});
                   }else{
                     alert(res.data.msg);
@@ -55,7 +76,7 @@ function Deliverable2(props) {
 
 
       // Function to sort the submissions based on sort method choosen
-  function handleSort(choice,array=filteredSubmitions) {
+  function handleSort(choice,array=filteredSubmissions) {
         // Note we will be using -1 for default value rather than -1 to differentiate b/w 0 marks and unmarked
 
         if(choice=="Ascending"){
@@ -249,7 +270,11 @@ function Deliverable2(props) {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {filteredSubmitions.map(sub=>{
+                                <tr>
+                                  <td><b>Average</b></td>
+                                  <td>{average}</td>
+                                </tr>
+                                {filteredSubmissions.map(sub=>{
                                     if(!deliverable)
                                       return null;
                                     const dueDate = new Date(deliverable.dueDate);
@@ -262,7 +287,7 @@ function Deliverable2(props) {
                                                                       {sub.submissionId.marks==-1?"Unmarked":sub.submissionId.marks}
                                                                       {dueDate.getTime()<subDate.getTime()?<b className="text-warning" style={{fontSize:"0.8em"}}> Done Late</b>:null}
                                                                     </span>)
-                                                    :(dueDate.getTime()<curDate.getTime()?<b className="text-danger">Missing</b>:"Not Submitted Yet")}
+                                                    :(dueDate.getTime()<curDate.getTime()?<span>0 <b className="text-danger" style={{fontSize:"0.8em"}}>Missing</b></span>:<span>0<b style={{fontSize:"0.8em"}}> Pending</b></span>)}
                                                 </td>
                                             </tr>);
                                 })}
