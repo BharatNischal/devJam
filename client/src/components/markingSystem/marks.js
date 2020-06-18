@@ -13,6 +13,8 @@ function MarksList(props){
 
     //UI STATES
     const [showSubmitAlert, setShowSubmitAlert] = useState(false);
+    const [showSideLoader, setShowSideLoader] = useState(false);
+    const [initialLoader, setinitialLoader] = useState(true);
     // State to get current user details to avoid students from entering this component
     const {user} = useContext(CurUserContext);
 
@@ -35,9 +37,11 @@ function MarksList(props){
             }else{
               console.log(res.data.err);
             }
+            setinitialLoader(false);
           })
           .catch(err=>{
             console.log(err.message);
+            setinitialLoader(false);
           })
 
         // Scroll settings
@@ -54,6 +58,8 @@ function MarksList(props){
       if(e.target.scrollLeft == (e.target.scrollWidth - e.target.clientWidth)){
         console.log("reached");
         if(marksList.length%10==0){
+          setShowSideLoader(true);
+          
           axios.post('/deliverables',{date:marksList[marksList.length-1].timestamp})
             .then(res=>{
               if(res.data.success){
@@ -61,9 +67,11 @@ function MarksList(props){
               }else{
                 console.log(res.data.msg);
               }
+              setShowSideLoader(false);
             })
             .catch(err=>{
               console.log(err.message);
+              setShowSideLoader(false);
             })
         }
       }
@@ -104,6 +112,8 @@ function MarksList(props){
       <React.Fragment>
       <Nav show={true} />
       {showSubmitAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Marks Updated Successfully </div>:null}
+      {showSideLoader?<div className="sideLoader" > <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" style={{width:"100px"}} /> </div>:null}
+      {initialLoader?<div className="bgwhiteoverlay" style={{zIndex:"70"}}><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" style={{width:"300px",marginTop:"30vh"}} /> </div>:null}
       <div style={{minHeight:"100vh",backgroundColor:"white"}}>
         <div className="bgwhiteoverlay"></div>
 

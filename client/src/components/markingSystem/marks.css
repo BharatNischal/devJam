@@ -138,3 +138,20 @@
 .subMenu span:hover{
   color:rgb(124, 12, 117);
 }
+.sideLoader{
+  width:180px;
+  height:78vh;
+  position: absolute;
+  top:130px;
+  right:8px;
+  background: linear-gradient(90deg, rgba(63, 94, 251, 0) 0%, rgb(236, 236, 236) 85%);
+  z-index: 20;
+  /* box-shadow: 0px 4px 10px rgba(0,0,0,0.3); */
+  
+  border-radius: 20px;
+}
+.sideLoader img{
+  filter: brightness(50%) hue-rotate(100deg);
+  margin-top:38vh;
+  transform: translateY(-50%);
+}
