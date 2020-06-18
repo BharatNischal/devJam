@@ -151,7 +151,7 @@
   border-radius: 20px;
 }
 .sideLoader img{
-  filter: brightness(50%) hue-rotate(100deg);
+  
   margin-top:38vh;
   transform: translateY(-50%);
 }

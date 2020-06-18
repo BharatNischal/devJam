@@ -5,6 +5,7 @@ import axios from "axios";
 import Cell from "./cell";
 import Nav from "../profile/Nav/Nav";
 import {CurUserContext} from '../../contexts/curUser';
+import Alert from "../ui/alert/alert";
 
 function MarksList(props){
 
@@ -15,6 +16,7 @@ function MarksList(props){
     const [showSubmitAlert, setShowSubmitAlert] = useState(false);
     const [showSideLoader, setShowSideLoader] = useState(false);
     const [initialLoader, setinitialLoader] = useState(true);
+    const [showhelper, setshowhelper] = useState(false);
     // State to get current user details to avoid students from entering this component
     const {user} = useContext(CurUserContext);
 
@@ -27,7 +29,10 @@ function MarksList(props){
       }else if(user.student){
         props.history.push('/studDash');
       }else{
-
+        if(!(localStorage.getItem("firstTime"))){
+          setshowhelper(true);
+          localStorage.setItem("firstTime","false");
+        }
         // Fetch the data
         axios.post('/deliverables')
           .then(res=>{
@@ -111,8 +116,15 @@ function MarksList(props){
     return (
       <React.Fragment>
       <Nav show={true} />
+      {showhelper?<Alert msg={(<React.Fragment>
+        <h3>First Time Guide to Update Marks</h3>
+        <ol className="text-left">
+          <li>Find The appropriate Cell according to student name & deliverable. </li>
+          <li>Click On Input Field and change marks and hit Enter. </li>
+        </ol></React.Fragment>)}  ok={()=>setshowhelper(false)} />:null}
+
       {showSubmitAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Marks Updated Successfully </div>:null}
-      {showSideLoader?<div className="sideLoader" > <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" style={{width:"100px"}} /> </div>:null}
+      {showSideLoader?<div className="sideLoader" > <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/f1055231234507.564a1d234bfb6.gif" style={{width:"100px"}} /> </div>:null}
       {initialLoader?<div className="bgwhiteoverlay" style={{zIndex:"70"}}><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" style={{width:"300px",marginTop:"30vh"}} /> </div>:null}
       <div style={{minHeight:"100vh",backgroundColor:"white"}}>
         <div className="bgwhiteoverlay"></div>
