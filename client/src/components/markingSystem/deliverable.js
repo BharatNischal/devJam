@@ -286,7 +286,7 @@ function Deliverable2(props) {
                                                 <td>{sub.userId.name}</td>
                                                 <td>
                                                   {sub.submissionId?(<span>
-                                                                      {sub.submissionId.marks==-1?"Unmarked":sub.submissionId.marks}
+                                                                      {sub.submissionId.marks==-1?<span>0 <b style={{fontSize:"0.8em"}}>Unmarked</b></span>:sub.submissionId.marks}
                                                                       {dueDate.getTime()<subDate.getTime()?<b className="text-warning" style={{fontSize:"0.8em"}}> Done Late</b>:null}
                                                                     </span>)
                                                     :(dueDate.getTime()<curDate.getTime()?<span>0 <b className="text-danger" style={{fontSize:"0.8em"}}>Missing</b></span>:<span>0<b style={{fontSize:"0.8em"}}> Pending</b></span>)}
