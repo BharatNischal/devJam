@@ -67,8 +67,9 @@ router.delete("/topic/:topicId/deliverable/:deliverableId",middleware.isAdmin,(r
       })
 });
 
-//Route to get first 20 Deliverable with Submission IDs populated and user populatedfunction
+//Route to get first 8 Deliverable with Submission IDs populated and user populatedfunction
 router.post("/deliverables",function(req,res){
+  console.log("deliverable before",req.body.date);
   const query={};
   if(req.body.date){
     query.timestamp={$lt:req.body.date};
@@ -82,7 +83,7 @@ router.post("/deliverables",function(req,res){
     model:"User"
   }])
   .sort({timestamp:"desc"})
-  .limit(20)
+  .limit(10)
   .then(del=>{
     res.json({success:true,deliverables:del});
   }).catch(Err=>{

@@ -8,10 +8,7 @@ import Nav from "../profile/Nav/Nav";
 function MarksList(props){
 
     const [marksList,setMarksList] = useState([]);
-    // useEffect(()=>{
-    //   document.querySelector(`tbody`).addEventListener("scroll",function (e) {
-    //
-    //   })
+    useEffect(()=>{
       axios.post('/deliverables')
         .then(res=>{
           if(res.data.success){
@@ -30,6 +27,24 @@ function MarksList(props){
         $('tbody th:nth-child(1)').css("left", $("tbody").scrollLeft()); //fix the first column of tdbody
       });
     },[])
+
+    // Function to get new deliverables on reaching end of scroll
+    function handleScroll(e) {
+      if(e.target.scrollLeft == (e.target.scrollWidth - e.target.clientWidth)){
+        console.log("reached");
+        axios.post('/deliverables',{date:marksList[marksList.length-1].timestamp})
+          .then(res=>{
+            if(res.data.success){
+              setMarksList([...marksList,...res.data.deliverables]);
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+      }
+    }
 
     function handleUpdate(i,j,val) {
       let newMarksList = Array.from(marksList);
@@ -69,7 +84,7 @@ function MarksList(props){
                   ))}
                 </tr>
               </thead>
-              <tbody >
+              <tbody onScroll={handleScroll}>
                 <tr>
                   <th>Average</th>
                   {sumOfDeliverable.map(sum=>(
