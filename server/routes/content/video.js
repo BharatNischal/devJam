@@ -133,7 +133,7 @@ router.delete("/topic/:topicId/video/:videoId",middleware.isAdmin,(req,res)=>{
           topic.items.splice(index,1);
           topic.save();
         }
-        db.Video.RemoveById(req.params.videoId)
+        db.Video.findByIdAndDelete(req.params.videoId)
           .then(video=>{
               res.json({success:true});
           })

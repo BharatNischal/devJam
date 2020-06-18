@@ -151,6 +151,7 @@ function SubmissionPage(props) {
 
                                 <Select
                                     options={options}
+                                    isSearchable={false}
                                     value={options[curIndex]}
                                     onChange={(e)=>{setCurIndex(Number(e.value))}}
                                     getOptionLabel={option => option.label}
