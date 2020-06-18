@@ -18,7 +18,8 @@ const submissionSchema = new mongoose.Schema({
         type:Number,
         default:-1
     },
-    comment:String
+    comment:String,
+    feedback:String
 });
 
 module.exports=mongoose.model("submission",submissionSchema);

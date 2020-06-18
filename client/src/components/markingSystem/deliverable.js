@@ -33,6 +33,7 @@ function Deliverable2(props) {
               submissions = props.location.deliverable.submissions;
 
               // Calculate average
+              average = 0;
               submissions.forEach(sub=>{
                 average += sub.submissionId?(sub.submissionId.marks==-1?0:sub.submissionId.marks):0;
               });
@@ -53,6 +54,7 @@ function Deliverable2(props) {
                     submissions = res.data.deliverable.submissions;
 
                     // Calculate average
+                    average=0;
                     submissions.forEach(sub=>{
                       average += sub.submissionId?(sub.submissionId.marks==-1?0:sub.submissionId.marks):0;
                     });

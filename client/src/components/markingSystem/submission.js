@@ -14,6 +14,8 @@ function SubmissionPage(props) {
     const [deliverable,setDeliverable] = useState(null);
     const [curIndex,setCurIndex] = useState(0);
     const {user} = useContext(CurUserContext);
+    const [showSubmitAlert, setShowSubmitAlert] = useState(false);
+    const [showFeedbackAlert, setShowFeedbackAlert] = useState(false);
 
     // Change the url with change on active student (useful for hard refresh)
     useEffect(()=>{
@@ -53,13 +55,31 @@ function SubmissionPage(props) {
             setSubmissions(props.location.deliverable.submissions);
             setCurIndex(Number(props.match.params.index));
             setDeliverable({title,dueDate,points});
+            setCommentMsg(props.location.deliverable.feedback?props.location.deliverable.feedback:"");
             }
         }
     },[])
 
     const handleSubComment=function(e){
         e.preventDefault();
-        alert("comment Submitted");
+        axios.post(`/updateFeedback/${submissions[curIndex].submissionId._id}`,{feedback:commentMsg})
+        .then(res=>{
+            if(res.data.success){
+              setShowFeedbackAlert(true);
+              var sub=[...submissions];
+              sub[curIndex].submissionId.feedback=commentMsg;
+              setSubmissions(sub);
+              setCommentMsg("");
+              setTimeout(()=>setShowFeedbackAlert(false),2000);
+            }else{
+                alert(res.data.msg);
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+              alert(err.message);
+            console.log(err.message);
+          })
     }
 
     const options=[];
@@ -93,12 +113,15 @@ function SubmissionPage(props) {
         axios.post(`/updateMarks/${submissions[curIndex].submissionId._id}`,{marks:Number(submissions[curIndex].submissionId.marks)})
             .then(res=>{
               if(res.data.success){
-                alert(" Marks updated");
+                setShowSubmitAlert(true);
+                setTimeout(()=>setShowSubmitAlert(false),2000);
               }else{
+                  alert(res.data.msg);
                 console.log(res.data.msg);
               }
             })
             .catch(err=>{
+                alert(err.message);
               console.log(err.message);
             })
         }
@@ -107,6 +130,8 @@ function SubmissionPage(props) {
         <React.Fragment>
             <Nav show={true} />
             <div className="bgwhiteoverlay" ></div>
+            {showFeedbackAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Feedback Updated Successfully </div>:null}
+            {showSubmitAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Marks Updated Successfully </div>:null}
             <div className="container text-left" style={{marginTop:"100px"}}>
                 <div className="row">
                     <div className="col-12 p-3">
@@ -189,9 +214,20 @@ function SubmissionPage(props) {
                                         </div>
                                     </div>
                                 </div>
+                                {submissions[curIndex].submissionId.feedback? <React.Fragment>
+                                <h5 className="mt-3"><b>Feedback</b></h5>
+                                <div className="row mt-1" style={{justifyContent:"center",alignItems:"center"}}>
+                                    <div className="profile-pic rounded-circle border " style={{height:"50px",width:"50px",overflow:"hidden"}}><img src={ UserImg}  className="rounded-circle  responsive-img" /></div>
+                                    <div className="col-9">
+                                        <div className="text-left" style={{lineHeight:"100%"}}>
+                                            {submissions[curIndex].submissionId.feedback}
+                                        </div>
+                                    </div>
+                                </div></React.Fragment>
+                                :null}
 
                                     <form className="my-3" onSubmit={handleSubComment}>
-                                        <input type="text" placeholder="Reply to this message" value={commentMsg} onChange={(e)=>{setCommentMsg(e.target.value)}} className="w-100 comment-inp" />
+                                        <input type="text" placeholder="Add Feedback to this comment" value={commentMsg} onChange={(e)=>{setCommentMsg(e.target.value)}} className="w-100 comment-inp" />
                                     </form>
 
 

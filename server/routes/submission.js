@@ -111,6 +111,18 @@ router.post("/updateMarks/:submissionId",middleware.isAdmin,function(req,res){
     });
 });
 
+//Route to add feedback
+router.post("/updateFeedback/:submissionId",middleware.isAdmin,function(req,res){
+    db.Submission.findById(req.params.submissionId)
+    .then(async function(sub){
+        sub.feedback=req.body.feedback;
+        await sub.save();
+        res.json({success:true,msg:"feedback updated successfully"});
+    }).catch(err=>{
+        res.json({success:false,msg:err.message});
+    });
+})
+
 
 
 
