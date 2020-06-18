@@ -64,8 +64,8 @@ function MarksList(props){
         console.log("reached");
         if(marksList.length%10==0){
           setShowSideLoader(true);
-          
-          axios.post('/deliverables',{date:marksList[marksList.length-1].timestamp})
+
+          axios.post('/deliverables',{date:marksList[marksList.length-1].dueDate})
             .then(res=>{
               if(res.data.success){
                 setMarksList([...marksList,...res.data.deliverables]);
