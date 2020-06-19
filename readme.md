@@ -21,6 +21,7 @@ This is project which we are making during Devjam Competition organized by zaio.
  ----------|-------
  Profile Generator | [click to see](#profile-generator)
 Adding Content  | [click to see](#adding-content)
+Learner's Portal | [click to see](#learners-portal)
 Marking System on Admin Portal | [click to see](#marking-system-on-admin-portal)
 
 ## How To Run ?
@@ -81,6 +82,16 @@ This is component that we have to develop in week 1 and 2. This component help a
  3.| /deliverable/:id | This route is used in editing and adding deliverable.
  4.| /video/:id | This route is used in editing and adding videos.
  
+ ## Learners Portal
+ This Functionality will allow signup students from google, github or by email and In this they can see content added by admin and also submit the submission in form of zip.
+ #### Routes
+ Sr. No. | Path | Description
+ 1. | /studDash | This Route will show all topics cards.
+ 2. | /topic/:topicId/:itemId | This Route opens topic page with item with (itemId) and it also has playlist for easy navigation. (Items is Either Topic or Video).
+ 
+ ### Bonus
+ - __Video Should Not Downloaded from Inspector__: We Added Server Side logic to enusre we are not exposing cloud link of video to end user even if he inspects the video element. The detailed explanation of our logic is in drive document. (Click here to view)["https://docs.google.com/document/d/1i5CRbXbxZtEYLbJvpbzy4RHniOUgp-PKbD1IHW_tUHA/edit?usp=sharing"]  
+ 
  ## Marking System on Admin Portal
 The admin portal will now be used to view each of the students deliverable submissions and allow them to be marked. These will in turn be seen by the learner themselves.
  #### Routes
@@ -90,8 +101,7 @@ The admin portal will now be used to view each of the students deliverable submi
  2.| /submission/:id/:index | This route shows the submission for a particular deliverable for all the students. The user from where the view submission is called will be active, __index__ param help us to manage the active student. Admins can also reply to the private comments here.(This route is renamed from the /submission/id because of our database modal design to make the webapp faster by reducing load time. More about this in bonus part.)
  3.| /marks/deliverable/:id | This route helps us to filter the submissions from various students based on options provided and can then sort them as well.
  
- ### Bonus
- 
+ ### Bonus 
  - __Avatars__: Student avatars are provided in the marks and submission page.
  - __Navigation__: The navigation to the different pages in the webapp is made very easy. Links and back buttons are added in every page and are placed in such a way that the user can find them easily.
  - __Startup Guide__: Startup guide has been provided in the marks page which will teach the users how to use this route when they visit the __/marks__ page for the first time.
