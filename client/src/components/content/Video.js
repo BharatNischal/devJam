@@ -167,7 +167,7 @@ const VideoPage = (props)=>{
 // Copy the text to clipboard logic
   const copyHandler = ()=>{
     var textField = document.createElement('textarea')
-    textField.innerText = details.url.length>0?details.url:"empty";
+    textField.innerText = details.url.length>0?"https://res.cloudinary.com/nischalbharat/video/upload/"+details.url:"";
     document.body.appendChild(textField);
     textField.select();
     document.execCommand('copy');

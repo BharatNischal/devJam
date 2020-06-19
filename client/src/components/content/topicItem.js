@@ -21,7 +21,7 @@ const TopicItem = (props)=>{
     return (
             <div className="row mt-4 mb-2 mx-2 mx-md-4 itemBox cursor-pointer "  >
                 <div className="col-2 p-0">
-                    <img src={data.url?data.url.substr(0, data.url.lastIndexOf("."))+".jpg":"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg"} className="itemImg" />
+                    <img src={data.url?"https://res.cloudinary.com/nischalbharat/video/upload/"+data.url.substr(0, data.url.lastIndexOf("."))+".jpg":"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg"} className="itemImg" />
                 </div>
                 <div className="col-8 p-0 py-3 pl-2 align-self-center" onClick={async ()=>{await props.handleSave();props.history.push({pathname:`/${props.type}/${data._id}`,topicId:props.topicId})}}>
                     <h6>{data.title} </h6>
