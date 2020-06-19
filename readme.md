@@ -26,7 +26,7 @@ Marking System on Admin Portal | [click to see](#marking-system-on-admin-portal)
 ## How To Run ?
   To Know functionality of this project there are two ways you can either view deployed version or run it locally.  
   1. ### Deployed:
-        [Click this link to view deployed version](http://devjam-week1.herokuapp.com)
+        [Click this link to view deployed version](http://devjam-code-swat.herokuapp.com/)
   1. ### Locally:
         0. Install nodeJS, MongoDB.
         1. Clone This Git Repository using:
