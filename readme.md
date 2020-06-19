@@ -86,11 +86,12 @@ This is component that we have to develop in week 1 and 2. This component help a
  This Functionality will allow signup students from google, github or by email and In this they can see content added by admin and also submit the submission in form of zip.
  #### Routes
  Sr. No. | Path | Description
- 1. | /studDash | This Route will show all topics cards.
- 2. | /topic/:topicId/:itemId | This Route opens topic page with item with (itemId) and it also has playlist for easy navigation. (Items is Either Topic or Video).
+ --------|------|------------
+ 1.| /studDash | This Route will show all topics cards.
+ 2.| /topic/:topicId/:itemId | This Route opens topic page with item with (itemId) and it also has playlist for easy navigation. (Items is Either Topic or Video).
  
  ### Bonus
- - __Video Should Not Downloaded from Inspector__: We Added Server Side logic to enusre we are not exposing cloud link of video to end user even if he inspects the video element. The detailed explanation of our logic is in drive document. (Click here to view)["https://docs.google.com/document/d/1i5CRbXbxZtEYLbJvpbzy4RHniOUgp-PKbD1IHW_tUHA/edit?usp=sharing"]  
+ - __Video Should Not Downloaded from Inspector__: We Added Server Side logic to enusre we are not exposing cloud link of video to end user even if he inspects the video element. The detailed explanation of our logic is in drive document. [Click here to view](https://docs.google.com/document/d/1i5CRbXbxZtEYLbJvpbzy4RHniOUgp-PKbD1IHW_tUHA/edit?usp=sharing)
  
  ## Marking System on Admin Portal
 The admin portal will now be used to view each of the students deliverable submissions and allow them to be marked. These will in turn be seen by the learner themselves.
