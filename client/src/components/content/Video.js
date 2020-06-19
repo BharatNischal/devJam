@@ -185,7 +185,7 @@ const VideoPage = (props)=>{
                                   <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-video-camera" ></i></div>
                                   <input type="file" name="profilePic" ref={videoRef} onChange={onUpload} placeholder="Upload Profile Pic" className="form-control"/>
                                 </div>;
-  let thumbnailSrc = uploading?"https://gifimage.net/wp-content/uploads/2018/06/upload-animated-gif-3.gif":(details.url.length>4?details.url.substr(0, details.url.lastIndexOf("."))+".jpg":"https://res.cloudinary.com/bharatnischal/image/upload/v1591163716/oie_jpg.png")
+  let thumbnailSrc = uploading?"https://gifimage.net/wp-content/uploads/2018/06/upload-animated-gif-3.gif":(details.url.length>4?"https://res.cloudinary.com/nischalbharat/video/upload/"+details.url.substr(0, details.url.lastIndexOf("."))+".jpg":"https://res.cloudinary.com/bharatnischal/image/upload/v1591163716/oie_jpg.png")
 
 // Main UI
 let videoMain =    <div>
@@ -207,7 +207,7 @@ let videoMain =    <div>
             <div>
               <div className="px-lg-2 mt-2">
                   <p className="my-0" style={{fontSize:"0.8em",position:"relative",top:"5px",fontWeight:"bold",left:"-2px"}}>Video Url</p>
-                  <input type="text" name="title" value={details.url.length>0?details.url:"Empty"}  className="" readOnly style={{border:"none",outline:"none",maxWidth:"80%",marginRight:"5px"}} />
+                  <input type="text" name="title" value={details.url.length>0?"https://res.cloudinary.com/nischalbharat/video/upload/"+details.url:"Empty"}  className="" readOnly style={{border:"none",outline:"none",maxWidth:"80%",marginRight:"5px"}} />
                   <i className="fa fa-clone pointer" onClick={copyHandler} ></i>
               </div>
               <div className="px-lg-2">
