@@ -25,6 +25,13 @@ var userSchema=new mongoose.Schema({
       type:String,
       unique:true
     },
+    notifications:[{
+      title:String,
+      read:{
+        type:Boolean,
+        default:false
+      }
+    }],
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     canAccess: {
