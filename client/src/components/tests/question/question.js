@@ -2,6 +2,8 @@ import React from 'react';
 import "../test.css";
 import placeholder from "../Placeholder.png";
 import MCQ from './mcq/mcq';
+import MGrid from './mGrid';
+import Paragraph from './paragraph';
 
 
 function Question(props) {
@@ -26,7 +28,9 @@ function Question(props) {
                     <div className="qImg mt-3"  >
                        <span > <img src={placeholder} style={{maxHeight:"200px"}} className="img-fluid" /></span>
                     </div>
-                    <MCQ id={props.id} />
+                    {props.type=="MCQ"?<MCQ id={props.id} />:null}
+                    {props.type=="MGrid"?<MGrid/>:null}
+                    {props.type=="Paragraph"? <Paragraph/> :null}
                 </div>
             </div>
             <div className="col-2 col-lg-1 px-2">

@@ -43,8 +43,9 @@ function CreateTest(props) {
                     </div>
 
                     <div className="col-12 my-5" >
-                        <Question id="1" />
-                        <Question id="2" />
+                        <Question id="1" type="MCQ" />
+                        <Question id="2" type="MGrid" />
+                        <Question id="3" type="Paragraph" />
 
                     </div>
                     
