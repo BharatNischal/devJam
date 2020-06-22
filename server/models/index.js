@@ -21,6 +21,7 @@ module.exports.Content = require("./content");
 module.exports.Comment = require("./comments");
 module.exports.Submission = require("./submission");
 module.exports.Test = require("./test");
+module.exports.TestSubmission = require("./testSubmission");
 module.exports.Mcq = require("./questions/mcq");
 module.exports.McqGrid = require("./questions/mcqGrid");
 module.exports.Paragraph = require("./questions/paragraph");
