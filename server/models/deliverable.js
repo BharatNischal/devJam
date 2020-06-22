@@ -16,6 +16,16 @@ const deliverableSchema=new mongoose.Schema({
     comments:[{
       type:mongoose.Schema.Types.ObjectId,
       ref:'Comment'
+    }],
+    submissions:[{
+        userId:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User"
+        },
+        submissionId:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"submission"
+        }
     }]
 });
 

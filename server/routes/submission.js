@@ -73,7 +73,17 @@ router.post("/submission/:deliverableId",upload,middleware.isStudent,(req,res)=>
                     fileURL:downloadURL,
                     comment: req.body.comment
                 }).then(createdSub=>{
-                    res.json({success:true,Submission:createdSub});
+                    db.Deliverable.findById(req.params.deliverableId)
+                    .then(async function(del){
+                        del.submissions=del.submissions.map(sub=>(sub.userId.equals(req.user._id)?{userId:sub.userId,submissionId:createdSub._id}:sub));
+                        await del.save();
+                        res.json({success:true,Submission:createdSub});
+                    }).catch(delErr=>{
+                        return res.json({success:false,msg:delErr.message});
+                    })
+                    
+                   
+
                 }).catch(err=>{
                     res.json({success:false,msg:err.message});
                 });
@@ -88,6 +98,31 @@ router.post("/submission/:deliverableId",upload,middleware.isStudent,(req,res)=>
         res.json({success:false,msg:"No file Uploaded"});
     }
 });
+
+//Route to update Marks 
+router.post("/updateMarks/:submissionId",middleware.isAdmin,function(req,res){
+    db.Submission.findById(req.params.submissionId)
+    .then(async function(sub){
+        sub.marks=req.body.marks;
+        await sub.save();
+        res.json({success:true,msg:"marks updated successfully"});
+    }).catch(err=>{
+        res.json({success:false,msg:err.message});
+    });
+});
+
+//Route to add feedback
+router.post("/updateFeedback/:submissionId",middleware.isAdmin,function(req,res){
+    db.Submission.findById(req.params.submissionId)
+    .then(async function(sub){
+        sub.feedback=req.body.feedback;
+        await sub.save();
+        res.json({success:true,msg:"feedback updated successfully"});
+    }).catch(err=>{
+        res.json({success:false,msg:err.message});
+    });
+})
+
 
 
 

@@ -25,7 +25,7 @@ router.get("/getContent",middleware.isAdmin,(req,res)=>{
     if(!cont){
       db.Content.create({})                       //adding topic in topics array
       .then(createdContent=>{
-        return res.json({content:[],success:true});
+        return res.json({content:createdContent,success:true});
       })
       .catch(err=>{
         console.log(err.message);

@@ -6,20 +6,20 @@ const submissionSchema = new mongoose.Schema({
         ref:'user',
         required:true
     },
-    deliverableId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"deliverable",
-        required:true
-    },
     fileURL:{
         type:String,
         required:true
     },
     timestamp:{
         type: Date,
-        default: new Date()
+        default: Date.now
     },
-    comment:String
+    marks:{
+        type:Number,
+        default:-1
+    },
+    comment:String,
+    feedback:String
 });
 
 module.exports=mongoose.model("submission",submissionSchema);
