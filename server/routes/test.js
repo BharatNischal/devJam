@@ -38,6 +38,9 @@ router.post('/publish/:id',function (req,res) {
     }else{
       req.body.test.state = "Draft";
     }
+    // Create all the questions in DB and save their order
+
+
     db.Test.findByIdandUpdate(req.params.id,req.body.test)
       .then(test=>{
         res.json({success:true});
@@ -47,11 +50,29 @@ router.post('/publish/:id',function (req,res) {
       })
 });
 
-// Route to close a test
+// Route to close a test and evaluate marks for each submission
 router.get('/test/close/:id',function (req,res) {
-  db.Test.findByIdandUpdate(req.params.id,{active:false})
-    .then(res=?{
-      res.json({success:true});
+  db.Test.findByIdandUpdate(req.params.id,{state:"Closed"})
+    .then(test=?{
+        test.students.forEach(student=>{
+          if(!student.testSubmissionId){  //Not attempted
+            continue;
+          }
+          let marks=0;
+          test.questions.forEach((question,i)=>{
+              if(question.mcq){
+                          // -1 means not attempted
+                if(Number(student.testSubmissionId.answers[i])>=0 && Number(student.testSubmissionId.answers[i])==question.correctOption){
+                  marks++;
+                }
+              }else{
+                marks++;
+              }
+          })
+          student.testSubmissionId.marks = marks;
+        })
+        test.save();
+        res.json({success:true});
     })
     .catch(err=>{
       res.json({success:false,msg:err.message});
@@ -81,7 +102,7 @@ router.get('/test/:id/testSubmission/new',function (req,res) {
     })
 })
 
-// To save the test Progress
+// To save the test Progress. **Send the answers array in the correct format
 router.post('/testsubmission/:id',function (req,res) {
   db.TestSubmission.findByIdandUpdate(req.params.id,{answers:req.body.answers})
     .then(testSubmission=>{
@@ -91,35 +112,5 @@ router.post('/testsubmission/:id',function (req,res) {
       res.json({success:false,msg:err.message});
     })
 })
-
-// Final submission for a test
-router.post('/test/:id/submit',function (req,res) {
-  let marks = 0;
-  db.Test.findById(req.params.id)
-    // populate
-    .then(test=>{
-      test.questions.forEach((question,i)=>{
-          if(question.mcq){
-            // -1 means not attempted
-            if(Number(req.body.answers[i])>=0 && Number(req.body.answers[i])==question.correctOption){
-              marks++;
-            }
-          }else{
-            marks++;
-          }
-      })
-      const ind = test.students.findIndex(student=>student.userId._id==req.user._id);
-      if(ind!=-1){
-        test.students[ind].testSubmission.marks = marks;
-        test.save();
-      }
-      res.json({success:true});
-    })
-    .catch(err=>{
-      res.json({success:false,msg:err.message});
-    })
-  req.body.answers.
-})
-
 
 module.exports =router;
