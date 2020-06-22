@@ -28,17 +28,14 @@ router.get('/test/new'function (req,res) {
 });
 
 
-// Route to save a test as draft or publish it depending upon data sent from frontend
-router.post('/publish/:id',function (req,res) {
-    // Handles publish
-    if(req.body.test.students){
-      const students = req.body.test.students;
-      req.body.test.students.userId = students;
-      req.body.test.state = "Publish";
-    }else{
-      req.body.test.state = "Draft";
-    }
-    db.Test.findByIdandUpdate(req.params.id,req.body.test)
+// Route to save a test as draft and publish based on data recieved
+router.put('/test/:id',function (req,res) {
+    // Save the questions
+    // let questionIds=[],promises=[];
+    // req.body.questions.forEach(question=>{
+    //
+    // });
+    db.Test.findByIdAndUpdate(req.params.id,req.body.test)
       .then(test=>{
         res.json({success:true});
       })
@@ -47,11 +44,44 @@ router.post('/publish/:id',function (req,res) {
       })
 });
 
-// Route to close a test
-router.get('/test/close/:id',function (req,res) {
-  db.Test.findByIdandUpdate(req.params.id,{active:false})
-    .then(res=?{
-      res.json({success:true});
+// Route to give authorizaion to students for test after publish
+router.put('/test/publish/:id',function (req,res) {
+    db.Test.findById(req.params.id)
+      .then(test=>{
+        req.params.students.forEach(student=>{
+          test.students.push({userId:student._id});
+        });
+        test.save();
+        res.json({success:true,test});
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
+})
+
+// Route to close a test and evaluate marks for each submission
+router.put('/test/close/:id',function (req,res) {
+  db.Test.findByIdAndUpdate(req.params.id,{state:"Closed"})
+    .then(test=?{
+        test.students.forEach(student=>{
+          if(!student.testSubmissionId){  //Not attempted
+            continue;
+          }
+          let marks=0;
+          test.questions.forEach((question,i)=>{
+              if(question.mcq){
+                          // -1 means not attempted
+                if(Number(student.testSubmissionId.answers[i])>=0 && Number(student.testSubmissionId.answers[i])==question.correctOption){
+                  marks++;
+                }
+              }else{
+                marks++;
+              }
+          })
+          student.testSubmissionId.marks = marks;
+        })
+        test.save();
+        res.json({success:true});
     })
     .catch(err=>{
       res.json({success:false,msg:err.message});
@@ -60,66 +90,61 @@ router.get('/test/close/:id',function (req,res) {
 
 // Create a new testSubmission when a user starts a test
 router.get('/test/:id/testSubmission/new',function (req,res) {
-  db.TestSubmission.create({userId:req.user._id,testId:req.params.id})
-    .then(testSubmission=>{
-      // Save the testSubmission to the test for given student
-      db.Test.findById(req.params.id)
-        .then(test=>{
-          const ind = test.students.findIndex(student=>student.userId==req.user._id);
-          if(ind!=-1){
-            test.students.testSubmissionId = testSubmission._id;
-            test.save();
-          }
-          // Store maxMarks for a test
-          testSubmission.maxMarks = test.questions.length;
-          testSubmission.save();
-          res.json({success:true,testSubmission});
-        })
+  // Checking if the student is authorized and that test is open
+  db.Test.findById(req.params.id)
+    .then(test=>{
+      const ind = test.students.findIndex(student=>student.userId==req.user._id);
+      if(ind!=-1){
+        db.TestSubmission.create({userId:req.user._id,testId:req.params.id})
+          .then(testSubmission=>{
+                test.students[ind].testSubmissionId = testSubmission._id;
+                test.save();
+              // Store maxMarks for a test
+              testSubmission.maxMarks = test.questions.length;
+              testSubmission.save();
+              res.json({success:true,testSubmission});
+            })
+      }else{
+        res.json({success:false,msg:"Not Authorized"});
+      }
     })
     .catch(err=>{
       res.json({success:false,msg:err.message});
     })
 })
 
-// To save the test Progress
-router.post('/testsubmission/:id',function (req,res) {
-  db.TestSubmission.findByIdandUpdate(req.params.id,{answers:req.body.answers})
+// To save the test Progress. **Send the answers array in the correct format
+router.put('/testsubmission/:id',function (req,res) {
+  db.TestSubmission.findByIdAndUpdate(req.params.id,{answers:req.body.answers})
     .then(testSubmission=>{
       res.json({success:true,testSubmission});
     })
     .catch(err=>{
       res.json({success:false,msg:err.message});
     })
+});
+
+// Submit the test
+router.put('/testSubmission/:id/complete',function (req,res) {
+  db.TestSubmission.findByIdAndUpdate(req.params.id,{onTime:true})
+  .then(testSubmission=>{
+    res.json({success:true,testSubmission});
+  })
+  .catch(err=>{
+    res.json({success:false,msg:err.message});
+  })
 })
 
-// Final submission for a test
-router.post('/test/:id/submit',function (req,res) {
-  let marks = 0;
-  db.Test.findById(req.params.id)
-    // populate
-    .then(test=>{
-      test.questions.forEach((question,i)=>{
-          if(question.mcq){
-            // -1 means not attempted
-            if(Number(req.body.answers[i])>=0 && Number(req.body.answers[i])==question.correctOption){
-              marks++;
-            }
-          }else{
-            marks++;
-          }
+
+// To get all the tests that the student has given
+router.get('/allTests',function (req,res) {
+    db.TestSubmission.find({user:req.user._id}).populate('testId')
+      .then(testSubmissions=>{
+        res.json({success:true,testSubmissions});
       })
-      const ind = test.students.findIndex(student=>student.userId._id==req.user._id);
-      if(ind!=-1){
-        test.students[ind].testSubmission.marks = marks;
-        test.save();
-      }
-      res.json({success:true});
-    })
-    .catch(err=>{
-      res.json({success:false,msg:err.message});
-    })
-  req.body.answers.
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
 })
-
 
 module.exports =router;

@@ -25,3 +25,4 @@ module.exports.TestSubmission = require("./testSubmission");
 module.exports.Mcq = require("./questions/mcq");
 module.exports.McqGrid = require("./questions/mcqGrid");
 module.exports.Paragraph = require("./questions/paragraph");
+module.exports.Notification = require("./notification");

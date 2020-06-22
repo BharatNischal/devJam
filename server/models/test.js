@@ -12,11 +12,6 @@ const testSchema = new mongoose.Schema({
       type: Boolean,
       default: false
     },
-    // Students can access the test or not
-    active:{
-      type:Boolean,
-      default:true
-    },
     questions:[{
         mcq:{
             type:mongoose.Schema.Types.ObjectId,
