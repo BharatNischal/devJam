@@ -1,0 +1,12 @@
+.qOpt{
+    height: 130px;
+    max-width: 50px;
+    font-size: 22px;
+    color:#666;
+    transition: 0.4s;
+
+}
+.qOpt:hover{
+    background-color: #f1f1f1;
+    border:1px solid #c9c8c8;
+}

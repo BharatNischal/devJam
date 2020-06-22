@@ -10,20 +10,9 @@ function Test(props) {
             <Nav show={true} menu={true} />
             <div className="bgwhiteoverlay"></div>
             <div className="container" style={{marginTop:"120px"}} >
-                <div><h1 className="topicTitle mainH text-left text-pink">Tests </h1></div>
+                <div style={{display:"flex",justifyContent:"space-between"}} ><h1 className="topicTitle mainH text-left text-pink">Tests </h1>  <div> <button className="btn btn-outline-grad" > Create </button> </div> </div>
                 <div className="row my-5" >
-                    {/* <div className="col-12" >
-                        <div className="form-group input-group px-lg-4">
-                            <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
-                            <input type="text" className="form-control"  placeholder="Enter Test Title" />
-                        </div>
-                        <div className="form-group input-group px-lg-4">
-                            <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-align-justify" ></i></div>
-                            <textarea rows="5"  placeholder="Enter Test Instructions " className="form-control" ></textarea>
-                           
-                        </div>
-                        
-                    </div> */}
+                    
 
                     <div className="col-lg-4 mt-1 order-lg-2">
                         <div className="p-3 shadow mt-lg-5" style={{borderRadius:"18px",minHeight:"200px",backgroundColor:"#f8f8f8"}}>
@@ -51,19 +40,19 @@ function Test(props) {
                         <div className="p-3 my-2" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}}>
                             <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
                                 <h3 className="topicTitle cursor-pointer" style={{fontSize:"20px"}} > Maths Test</h3>
-                                <div> <button className="btn btn-outline-grad" > Publish </button> </div>
+                                <div> <button className="btn btn-grad" > Publish </button> </div>
                             </div>
                         </div>
                         <div className="p-3 my-2" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}}>
                             <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
                                 <h3 className="topicTitle cursor-pointer" style={{fontSize:"20px"}} > Maths Test</h3>
-                                <div> <button className="btn btn-outline-grad" > Publish </button> </div>
+                                <div> <button className="btn btn-grad" > Publish </button> </div>
                             </div>
                         </div>
                         <div className="p-3 my-2" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}}>
                             <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
                                 <h3 className="topicTitle cursor-pointer" style={{fontSize:"20px"}} > Maths Test</h3>
-                                <div> <button className="btn btn-outline-grad" > Publish </button> </div>
+                                <div> <button className="btn btn-grad" > Publish </button> </div>
                             </div>
                         </div>
                        
