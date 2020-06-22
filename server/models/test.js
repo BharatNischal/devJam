@@ -10,7 +10,7 @@ const testSchema = new mongoose.Schema({
     },
     shuffle:{
       type: Boolean,
-      default: false;
+      default: false
     },
     questions:[{
         mcq:{
