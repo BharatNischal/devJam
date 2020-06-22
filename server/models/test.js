@@ -10,7 +10,12 @@ const testSchema = new mongoose.Schema({
     },
     shuffle:{
       type: Boolean,
-      default: false;
+      default: false
+    },
+    // Students can access the test or not
+    active:{
+      type:Boolean,
+      default:true
     },
     questions:[{
         mcq:{
@@ -27,9 +32,15 @@ const testSchema = new mongoose.Schema({
         }
     }],
     // Authorized Students
-    studens:[{
-      type:mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+    students:[{
+      userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      },
+      testSubmissionId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'testSubmission'
+      }
     }]
 });
 
