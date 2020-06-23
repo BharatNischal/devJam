@@ -26,6 +26,7 @@ import SubmissionPage from './components/markingSystem/submission';
 import Deliverable2 from './components/markingSystem/deliverable';
 import Test from './components/tests/Test';
 import CreateTest from './components/tests/createTest';
+import PublishTest from './components/tests/publishTest';
 
 axios.defaults.withCredentials = true;
 
@@ -79,6 +80,7 @@ function App(props) {
             <Route path="/marks/deliverable/:id" exact component={Deliverable2}/>
             <Route path="/test" exact component={Test} />
             <Route path="/test/:id" exact component={CreateTest} />
+            <Route path="/publish/test/:id" exact component={PublishTest} />
 
           </Switch>
           )}

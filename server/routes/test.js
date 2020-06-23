@@ -51,7 +51,7 @@ router.put('/test/:id',function (req,res) {
 router.put('/test/publish/:id',function (req,res) {
     db.Test.findById(req.params.id)
       .then(test=>{
-        req.params.students.forEach(student=>{
+        req.body.students.forEach(student=>{
           test.students.push({userId:student._id});
         });
         test.save();
