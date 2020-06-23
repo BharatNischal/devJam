@@ -6,9 +6,9 @@ const Alert =(props)=>{
     <React.Fragment>
     <div className="backdropAlert"></div>
     <div className="custAlert shadow">
-        <p>
+        <div className="p-2">
             {props.msg}
-        </p>
+        </div>
         <div className="footer">
              {props.cancel?<button className="splBtn btn btn-outline-cancel mr-2" onClick={props.cancel}> Cancel </button>:null}
              {props.ok?<button className="btn btn-outline-grad px-4" onClick={props.ok} > OK </button>:null}
