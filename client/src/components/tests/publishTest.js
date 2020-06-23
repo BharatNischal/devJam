@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Nav from '../profile/Nav/Nav';
 import placeholder from "./Placeholder.png";
 import Axios from 'axios';
+import Alert from '../ui/alert/alert';
 
 function PublishTest(props) {
     const [students,setStudents]=useState([]);
@@ -10,6 +11,7 @@ function PublishTest(props) {
     const [focusInp,setFocusInp] = useState(false);
     const [srchTxt,setSrchTxt] = useState("");
     const [selectAll,setSelectAll] = useState(false);
+    const [showConfirmation,setShowConfirmation] = useState(false);
 
     useEffect(()=>{
         Axios.get("/students")
@@ -28,23 +30,29 @@ function PublishTest(props) {
     },[]);
 
     const handlePublish=function(){
+        setShowConfirmation(true);
+    }
+    const finalPublishHandler=function(){
         const data={};
         data.students =students.filter((st)=>st.selected).map(s=>s._id);
 
         console.log(data);
-        // Publish request to server.....
+        //Publish request to server.....
 
-        Axios.put(`/test/publish/${props.match.params.id}`,data)
-        .then(res=>{
-            if(res.data.success){
-                console.log(res.data.test);
-                alert("Published Test");
-            }else{
-                alert(res.data.msg);
-            }
-        }).catch(err=>{
-            alert(err.message);
-        })
+        // Axios.put(`/test/publish/${props.params.id}`,data)
+        // .then(res=>{
+        //    setShowConfirmation(false);
+        //     if(res.success){
+        //         alert("Published Test");
+        //     }else{
+        //         alert(res.msg);
+        //     }
+
+        // }).catch(err=>{
+        //    setShowConfirmation(false);
+        //     alert(err.message);
+        // })
+        setShowConfirmation(false);
     }
 
 
@@ -53,6 +61,22 @@ function PublishTest(props) {
         <React.Fragment>
             <Nav show={true}/>
             <div className="bgwhiteoverlay" ></div>
+            {showConfirmation?<Alert msg={(
+                <React.Fragment>
+                <h4>Click Ok To Confirm Selected Students</h4>
+                {students.map((student,i)=>(
+                    <React.Fragment key={i}>
+                    {student.selected?<div className="text-left mb-2">
+                        <img src={student.profilePic} style={{width:"40px",height:"40px",objectFit:"cover"}} className="rounded-circle shadow" />
+                        &nbsp;&nbsp; {student.name}
+                        </div>:null}
+                    </React.Fragment>))}
+
+
+            </React.Fragment>)}
+            cancel={()=>setShowConfirmation(false)}
+            ok={finalPublishHandler}
+            />:null}
             <div className="container text-left" style={{marginTop:"100px"}}>
                 <div className="row">
                     <div className="col-12 p-3">
