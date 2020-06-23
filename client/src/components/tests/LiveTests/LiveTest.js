@@ -3,15 +3,17 @@ import TopBar from "../../learnerPlatform/TopBar";
 import "./liveTest.css";
 import StartPage from './startPage';
 
+const lorem ="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
 
 function LiveTest(props) {
+
     return (
         <React.Fragment>
             <TopBar/>
             <div className="bgwhiteoverlay"></div>
             
                 <div className="frame p-4">
-                    <StartPage/>
+                    <StartPage title="Maths Test" instruction={lorem} duration={30}  />
                 </div>
             
         </React.Fragment>
