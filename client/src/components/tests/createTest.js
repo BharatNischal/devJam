@@ -2,6 +2,9 @@ import React, { useState,useEffect } from 'react';
 import Nav from '../profile/Nav/Nav';
 import Question from './question/question';
 import axios from "axios";
+import {sortableContainer, sortableElement} from 'react-sortable-hoc';
+import arrayMove from 'array-move';
+
 
 function CreateTest(props) {
 
@@ -10,6 +13,7 @@ function CreateTest(props) {
     // Data State
     const [questions,setQuestions] = useState([]);
     const [test,setTest] = useState({title:"",status:"Draft",instructions:"",duration:-1,shuffle:false});
+
 
     useEffect(()=>{
       axios.get(`/test/${props.match.params.id}`)
@@ -79,6 +83,22 @@ function CreateTest(props) {
       setQuestions(newQuestions);
     }
 
+
+    // Function to handle change of indices on sorting
+        const onSortEnd = ({oldIndex, newIndex}) => {
+            setQuestions(question => (
+                arrayMove(question, oldIndex, newIndex)
+            ));
+        };
+
+    // React HOC for drag and drop items
+        const SortableItem = sortableElement(({question,i}) => (<Question index={i} add={addQuestion} remove={delQuestion} update={updateQuestion} question={question} disableDel={questions.length==1?true:false}/>));
+
+    // React HOC for drag and drop items
+        const SortableContainer = sortableContainer(({children}) => {
+          return <div>{children}</div>;
+        });
+
     return (
         <React.Fragment>
             <Nav show={true} menu={true}/>
@@ -116,9 +136,16 @@ function CreateTest(props) {
                     </div>
 
                     <div className="col-12 my-5" >
-                      {questions.map((question,i)=>(
-                        <Question key={i} index={i} add={addQuestion} remove={delQuestion} update={updateQuestion} question={question} disableDel={questions.length==1?true:false}/>
-                      ))}
+
+                      <SortableContainer onSortEnd={onSortEnd} distance={1} lockAxis="y">
+                        {questions.map((question,i)=>(
+                          <SortableItem key={question._id} index={i} question={question} i={i}/>
+                        ))}
+                      </SortableContainer>
+
+
+
+
                     </div>
 
                 </div>
