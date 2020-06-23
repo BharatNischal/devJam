@@ -1,64 +1,70 @@
-import React from 'react';
+import React,{useState} from 'react';
 
 function MGrid(props) {
+
+  const [row,setRow] = useState("");
+  const [col,setCol] = useState("");
+
+  function addRow(e) {
+      e.preventDefault();
+      props.handleUpdate(null,row,"rows");
+      setRow("");
+  }
+
+  function addCol(e) {
+    e.preventDefault();
+    props.handleUpdate(null,{title:col},"options");
+    setCol("");
+  }
+
+  function removeRow(ind) {
+      props.handleUpdate(null,ind,"rows",true);
+  }
+
+  function removeCol(ind) {
+    props.handleUpdate(null,ind,"options",true);
+  }
+
     return (
         <div className="row text-left mt-3">
             {/* Rows */}
             <div className="col-md-6">
                 <h4>Rows</h4>
-                <div className="row mb-1">
-                    <div className="col-10">
-                        1.  Row Name 1
-                    </div>
-                    <div className="col-2"> <i className="fa fa-close hover-danger pointer"></i> </div>
-                </div>
-                <div className="row mb-1">
-                    <div className="col-10">
-                        2.  Row Name 2
-                    </div>
-                    <div className="col-2"> <i className="fa fa-close hover-danger pointer"></i> </div>
-                </div>
-                <div className="row mb-1">
-                    <div className="col-10">
-                        3.  Row Name 3 
-                    </div>
-                    <div className="col-2"> <i className="fa fa-close hover-danger pointer"></i> </div>
-                </div>
+                {props.rows?props.rows.map((row,i)=>(
+                  <div className="row mb-1" key={i}>
+                      <div className="col-10">
+                          {i+1}.  {row}
+                      </div>
+                      <div className="col-2" onClick={()=>{removeRow(i)}}> <i className="fa fa-close hover-danger pointer"></i> </div>
+                  </div>
+                )):null}
                 <div className="mt-2">
-                <form > <input className="w-75 p-2" style={{border:"none",borderBottom:"2px solid #a1a1a1a1"}} placeholder="Add Row"/></form>
+                <form onSubmit={addRow}> <input className="w-75 p-2" value={row} onChange={e=>setRow(e.target.value)} style={{border:"none",borderBottom:"2px solid #a1a1a1a1"}} placeholder="Add Row"/></form>
                 </div>
             </div>
 
             {/* Collumns */}
             <div className="col-md-6">
                 <h4>Columns</h4>
-                <div className="row">
-                    <div className="col-10">
-                        <div className=" custom-control custom-radio">
-                            <input type="radio" name="opt" id="o1" className="custom-control-input" />
-                            <label className="custom-control-label" htmlFor="o1"> Column 1 </label>
-                        </div>
-                    </div>
-                    <div className="col-2"> <i className="fa fa-close hover-danger pointer"></i> </div>
-                </div>
-                <div className="row">
-                    <div className="col-10">
-                        <div className=" custom-control custom-radio">
-                            <input type="radio" name="opt" id="o2" className="custom-control-input" />
-                            <label className="custom-control-label" htmlFor="o2"> Column 2 </label>
-                        </div>
-                    </div>
-                    <div className="col-2"> <i className="fa fa-close hover-danger pointer"></i> </div>
-                </div>
+                {props.cols?props.cols.map((col,i)=>(
+                  <div className="row" key={i}>
+                      <div className="col-10">
+                          <div className=" custom-control custom-radio">
+                              <input type="radio" name="opt" id="o1" className="custom-control-input" disabled />
+                              <label className="custom-control-label" htmlFor="o1"> {col.title} </label>
+                          </div>
+                      </div>
+                      <div className="col-2" onClick={()=>{removeCol(i)}}> <i className="fa fa-close hover-danger pointer"></i> </div>
+                  </div>
+                )):null}
                 <div className="mt-2">
-                    <form > <input className="w-75 p-2" style={{border:"none",borderBottom:"2px solid #a1a1a1a1"}} placeholder="Add Collumn"/></form>
+                    <form onSubmit={addCol}> <input className="w-75 p-2" value={col} onChange={e=>setCol(e.target.value)} style={{border:"none",borderBottom:"2px solid #a1a1a1a1"}} placeholder="Add Collumn"/></form>
                 </div>
             </div>
-            
+
         </div>
     )
 }
 
 
 export default MGrid;
-

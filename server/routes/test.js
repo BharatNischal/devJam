@@ -17,7 +17,7 @@ router.get('/tests',function (req,res) {
 });
 
 // Route to create new test
-router.get('/test/new'function (req,res) {
+router.get('/test/new',function (req,res) {
   db.Test.create({})
     .then(test=>{
       res.json({success:true,test});
@@ -62,7 +62,7 @@ router.put('/test/publish/:id',function (req,res) {
 // Route to close a test and evaluate marks for each submission
 router.put('/test/close/:id',function (req,res) {
   db.Test.findByIdAndUpdate(req.params.id,{state:"Closed"})
-    .then(test=?{
+    .then(test=>{
         test.students.forEach(student=>{
           if(!student.testSubmissionId){  //Not attempted
             continue;
@@ -71,7 +71,7 @@ router.put('/test/close/:id',function (req,res) {
           test.questions.forEach((question,i)=>{
               if(question.mcq){
                           // -1 means not attempted
-                if(Number(student.testSubmissionId.answers[i])>=0 && Number(student.testSubmissionId.answers[i])==question.correctOption){
+                if(Number(student.testSubmissionId.answers[i])>=0 && Number(student.testSubmissionId.answers[i])==question.correctOption-1){
                   marks++;
                 }
               }else{

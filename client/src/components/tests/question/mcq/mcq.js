@@ -3,20 +3,32 @@ import placeholder from "../../Placeholder.png";
 import Option from './option';
 import { NonceProvider } from 'react-select';
 function MCQ(props) {
-    
+
     //UI STATES
     const [isAutograde,setIsAutograde] =useState(false);
+    // Data State
+    const [option,setOption] = useState("");
+
+    function addOption(e) {
+      e.preventDefault();
+      props.handleUpdate(null,{title:option},"options");
+      setOption("");
+    }
+
+    function removeOption(ind) {
+      props.handleUpdate(null,ind,"options",true);
+    }
 
     return (
         <React.Fragment>
-             <div className="row mt-3 text-left">  
-                    <Option text="Option 1" id="1" />
-                    <Option text="Option 2" id="2" />
-                    <Option text="Option 3" id="3" />
+             <div className="row mt-3 text-left">
+                  {props.options.map((opt,i)=>(
+                      <Option option={opt} key={i} id={i}  removeOption={removeOption}/>
+                  ))}
             </div>
-            
+
             <div className="mt-2">
-                <form > <input className="w-100 p-2" style={{border:"none",borderBottom:"2px solid #a1a1a1a1"}} placeholder="Add Option"/></form>
+                <form onSubmit={addOption}> <input className="w-100 p-2" value={option} onChange={(e)=>{setOption(e.target.value)}} style={{border:"none",borderBottom:"2px solid #a1a1a1a1"}} placeholder="Add Option"/></form>
                 {/* <button className="btn hover-pink"> <i className="fa fa-plus-circle"></i> Add Option  </button> */}
             </div>
             <div className="mt-3 text-left">
@@ -24,7 +36,7 @@ function MCQ(props) {
                     <label className="custom-control-label" htmlFor={"isAutoGradeCheck"+props.id }>Autograde</label>
                     <input type="checkbox" className="custom-control-input" id={"isAutoGradeCheck"+props.id } checked={isAutograde} onChange={(e)=> setIsAutograde(e.target.checked)} />
                 </div>
-                {isAutograde?<input type="number" className="form-control d-inline p-1" style={{width:"50px",marginLeft:"10px",height:"25px"}}  ></input>:null}
+                {isAutograde?<input type="number" min="1" max={(props.options&&props.options.length>0)?props.options.length:"1"} value={props.correctOption} name="correctOption" onChange={props.handleUpdate} className="form-control d-inline p-1" style={{width:"50px",marginLeft:"10px",height:"25px"}}  ></input>:null}
             </div>
         </React.Fragment>
     )
@@ -32,4 +44,3 @@ function MCQ(props) {
 
 
 export default MCQ;
-
