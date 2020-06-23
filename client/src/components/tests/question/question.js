@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import "../test.css";
 import placeholder from "../Placeholder.png";
 import MCQ from './mcq/mcq';
@@ -7,6 +7,12 @@ import Paragraph from './paragraph';
 import axios from 'axios';
 
 function Question(props) {
+
+    const[title,setTitle] = useState("");
+
+    useEffect(()=>{
+      setTitle(props.question.question?props.question.question:"");
+    },[])
 
     // To add a new question by default mcq
     function addQuestion() {
@@ -42,6 +48,7 @@ function Question(props) {
 
     // Update the state of option
     function handleUpdate(e,data,type="option",del=false) {
+      console.log("handleUpdate");
       const question = JSON.parse(JSON.stringify(props.question));
       if(e){  //Updation for input tags
         question[`${e.target.name}`] = e.target.value;
@@ -84,7 +91,7 @@ function Question(props) {
                 <div style={{border:"1px solid #c1c1c1",backgroundColor:"#f9f9f9", borderRadius:"18px",padding:"20px"}} >
                     <div className="row p-0 " style={{alignItems:"center"}} >
                         <div className="col-md-7 col-lg-8">
-                        <input type="text" name="question" value={props.question.question?props.question.question:""} onChange={handleUpdate} placeholder="Enter Question" className="w-100 comment-inp"/>
+                        <input type="text" name="question" onBlur={handleUpdate} value={title} onChange={(e)=>{setTitle(e.target.value)}} placeholder="Enter Question" className="w-100 comment-inp"/>
                         </div>
                         <div className="col-md-5 col-lg-4 mt-2 mt-md-0">
                             <span className="pointer hover-pink" style={{fontSize:"24px"}} ><i className="fa fa-image"></i></span>
