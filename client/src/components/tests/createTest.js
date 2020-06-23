@@ -9,7 +9,7 @@ function CreateTest(props) {
     const [isTimed,setIsTimed] = useState(false);
     // Data State
     const [questions,setQuestions] = useState([]);
-    const [test,setTest] = useState({title:"",state:"Draft",instructions:"",duration:-1,shuffle:false});
+    const [test,setTest] = useState({title:"",status:"Draft",instructions:"",duration:-1,shuffle:false});
 
     useEffect(()=>{
       axios.get(`/test/${props.match.params.id}`)
@@ -27,11 +27,11 @@ function CreateTest(props) {
               }else{
                 setQuestions(res.data.test.questions);
               }
-              const {title,state,instructions,duration,shuffle} = res.data.test;
+              const {title,status,instructions,duration,shuffle} = res.data.test;
               if(duration>-1){
                 setIsTimed(true);
               }
-              setTest({title,state,instructions,duration,shuffle});
+              setTest({title,status,instructions,duration,shuffle});
           }else{
             console.log(res.data.msg);
           }
@@ -42,6 +42,7 @@ function CreateTest(props) {
     },[])
 
     function saveTest() {
+      console.log(test);
       axios.put(`/test/${props.match.params.id}`,{test,questions})
         .then(res=>{
           if(res.data.success){

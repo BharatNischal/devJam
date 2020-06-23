@@ -10,7 +10,7 @@ function PublishTest(props) {
     const [focusInp,setFocusInp] = useState(false);
     const [srchTxt,setSrchTxt] = useState("");
     const [selectAll,setSelectAll] = useState(false);
-    
+
     useEffect(()=>{
         Axios.get("/students")
         .then(res=>{
@@ -30,23 +30,24 @@ function PublishTest(props) {
     const handlePublish=function(){
         const data={};
         data.students =students.filter((st)=>st.selected).map(s=>s._id);
-        
-        console.log(data);
-        //Publish request to server.....
 
-        // Axios.put(`/test/publish/${props.params.id}`,data)
-        // .then(res=>{
-        //     if(res.success){
-        //         alert("Published Test");
-        //     }else{
-        //         alert(res.msg);
-        //     }
-        // }).catch(err=>{
-        //     alert(err.message);
-        // })
+        console.log(data);
+        // Publish request to server.....
+
+        Axios.put(`/test/publish/${props.match.params.id}`,data)
+        .then(res=>{
+            if(res.data.success){
+                console.log(res.data.test);
+                alert("Published Test");
+            }else{
+                alert(res.data.msg);
+            }
+        }).catch(err=>{
+            alert(err.message);
+        })
     }
 
-    
+
 
     return (
         <React.Fragment>
@@ -57,7 +58,7 @@ function PublishTest(props) {
                     <div className="col-12 p-3">
                         <div className=" p-3  shadow" style={{borderRadius:"18px",backgroundColor:"rgb(255, 235, 249)"}}>
                             <h2 className="topicTitle mainH text-left text-pink" >
-                                    Test Title 
+                                    Test Title
                             </h2>
                                 <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/test")}><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/>
                         </div>
@@ -83,17 +84,17 @@ function PublishTest(props) {
                                     </div>
                                 </div>
                                 <div className="col-md-6  pl-5" style={{height:"500px"}}>
-                                    
+
                                     {students.map((student,i)=>(
                                         <div key={student._id} className={(srchTxt!=""?(student.name.toLowerCase().includes(srchTxt.toLowerCase())?"custom-control custom-checkbox mt-3":"custom-control custom-checkbox mt-3 d-none"):"custom-control custom-checkbox mt-3")} >
                                             <input type="checkbox" className="custom-control-input" id={"s"+student._id}  checked={student.selected} onChange={(e)=>{const sts=[...students]; sts[i].selected=!sts[i].selected; setStudents(sts)}} />
                                             <label className="custom-control-label" htmlFor={"s"+student._id} >
-                                                <img src={student.profilePic} style={{width:"40px",height:"40px",objectFit:"cover"}} className="rounded-circle shadow" /> 
-                                                &nbsp;&nbsp; {student.name} 
+                                                <img src={student.profilePic} style={{width:"40px",height:"40px",objectFit:"cover"}} className="rounded-circle shadow" />
+                                                &nbsp;&nbsp; {student.name}
                                             </label>
                                         </div>
                                     ))}
-                                    
+
 
                                 </div>
                             </div>
@@ -108,4 +109,3 @@ function PublishTest(props) {
 
 
 export default PublishTest;
-

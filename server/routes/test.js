@@ -61,9 +61,8 @@ router.put('/test/:id',function (req,res) {
 router.put('/test/publish/:id',function (req,res) {
     db.Test.findById(req.params.id)
       .then(test=>{
-        req.body.students.forEach(student=>{
-          test.students.push({userId:student._id});
-        });
+        const newStudents = req.body.students.map(student=>({userId:student}));
+        test.students = newStudents;
         test.save();
         res.json({success:true,test});
       })
@@ -74,7 +73,7 @@ router.put('/test/publish/:id',function (req,res) {
 
 // Route to close a test and evaluate marks for each submission
 router.put('/test/close/:id',function (req,res) {
-  db.Test.findByIdAndUpdate(req.params.id,{state:"Closed"})
+  db.Test.findByIdAndUpdate(req.params.id,{status:"Closed"})
     .then(test=>{
         test.students.forEach(student=>{
           if(!student.testSubmissionId){  //Not attempted

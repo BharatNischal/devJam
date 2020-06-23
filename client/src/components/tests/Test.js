@@ -1,10 +1,55 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import Modal from '../ui/modal/modal';
 import Nav from '../profile/Nav/Nav';
 import Select from "react-select";
 import axios from "axios";
 
 function Test(props) {
+
+  const [tests,setTests] = useState([]);
+  var allTests = [];
+
+  // Get data from the database
+  useEffect(()=>{
+    axios.get('/tests')
+      .then(res=>{
+        if(res.data.success){
+          allTests = res.data.tests;
+          setTests(res.data.tests);
+        }else{
+          console.log(res.data.msg);
+        }
+      })
+      .catch(err=>{
+        console.log(err.message);
+      })
+  },[]);
+
+
+  // handle filters
+  function handleFilter(choice){
+    if(choice=="Draft"){
+      console.log("Draft");
+      setTests(allTests.filter(test=>{
+        return test.status=="Draft";
+      }));
+    }else if(choice=="Published"){
+      console.log("Published");
+      setTests(allTests.filter(test=>{
+        return test.status=="Published";
+      }));
+    }else if(choice=="Closed"){
+      console.log("Closed");
+      setTests(allTests.filter(test=>{
+        return test.status=="Closed";
+      }));
+    }else{
+      console.log("Clear");
+      setTests(allTests);
+    }
+  }
+
+
 
   function handleNew() {
     axios.get('/test/new')
@@ -52,25 +97,14 @@ function Test(props) {
                         </div>
                     </div>
                     <div className="col-lg-8 mt-2 mb-5 " >
-                        <div className="p-3 my-2" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}}>
+                      {tests.map(test=>(
+                        <div className="p-3 my-2" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}} key={test._id}>
                             <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
-                                <h3 className="topicTitle cursor-pointer" style={{fontSize:"20px"}} > Maths Test</h3>
-                                <div> <button className="btn btn-grad" > Publish </button> </div>
+                                <h3 className="topicTitle cursor-pointer" style={{fontSize:"20px"}} > {test.title}</h3><span>{test.status}</span>
+                                <div> <button className="btn btn-grad" > {test.status=="Draft"?("Publish"):(test.status=="Published"?"View Result":"Close Test")} </button> </div>
                             </div>
                         </div>
-                        <div className="p-3 my-2" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}}>
-                            <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
-                                <h3 className="topicTitle cursor-pointer" style={{fontSize:"20px"}} > Maths Test</h3>
-                                <div> <button className="btn btn-grad" > Publish </button> </div>
-                            </div>
-                        </div>
-                        <div className="p-3 my-2" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}}>
-                            <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
-                                <h3 className="topicTitle cursor-pointer" style={{fontSize:"20px"}} > Maths Test</h3>
-                                <div> <button className="btn btn-grad" > Publish </button> </div>
-                            </div>
-                        </div>
-
+                      ))}
 
                 </div>
             </div>

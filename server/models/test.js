@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 
 const testSchema = new mongoose.Schema({
     title:String,
-    state:String, //Publish/Closed/Draft
+    status:{
+      type:String, //Published/Closed/Draft
+      default:"Draft"
+    },
     instructions:String,
     duration:{
       type:Number,
