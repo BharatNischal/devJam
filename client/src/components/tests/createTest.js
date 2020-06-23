@@ -26,17 +26,15 @@ function CreateTest(props) {
     }
 
     function addQuestion(index,ques) {
-      const newQuestions = questions;
+      const newQuestions = JSON.parse(JSON.stringify(questions)); //Deep copy
       newQuestions.splice(index+1,0,ques);
       setQuestions(newQuestions);
-      setTimeout(()=>console.log(questions),2000);
     }
 
     function delQuestion(index) {
-      const newQuestions = questions;
+      const newQuestions = JSON.parse(JSON.stringify(questions)); //Deep copy
       newQuestions.splice(index,1);
       setQuestions(newQuestions);
-      setTimeout(()=>console.log(questions),2000);
     }
 
     function updateQuestion(index,ques) {

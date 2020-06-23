@@ -42,7 +42,7 @@ function Question(props) {
 
     // Update the state of option
     function handleUpdate(e,data,type="option",del=false) {
-      const question = props.question;
+      const question = JSON.parse(JSON.stringify(props.question));
       if(e){  //Updation for input tags
         question[`${e.target.name}`] = e.target.value;
       }else{  //Updation for ading/removing options/rows/cols
@@ -57,9 +57,8 @@ function Question(props) {
 
     // Autograde update
     function autoGradeUpdate(value) {
-      const question = props.question;
+      const question = JSON.parse(JSON.stringify(props.question));;
       question.autoGrade = value;
-      console.log(question);
       props.update(props.index,question);
     }
 
@@ -99,7 +98,7 @@ function Question(props) {
                     <div className="qImg mt-3"  >
                        <span > <img src={props.question.img} style={{maxHeight:"200px"}} className="img-fluid" /></span>
                     </div>
-                    {props.question.type=="mcq"?<MCQ id={props.id} options={props.question.options} autoGrade={props.question.autoGrade} handleUpdate={handleUpdate} correctOption={props.question.correctOption} autoGradeUpdate={autoGradeUpdate}/>:null}
+                    {props.question.type=="mcq"?<MCQ id={props.id} options={props.question.options} autoGrade={props.question.autoGrade} handleUpdate={handleUpdate} correctOption={props.question.correctOption} autoGradeUpdate={autoGradeUpdate} />:null}
                     {props.question.type=="mcqGrid"?<MGrid rows={props.question.rows} cols={props.question.options} handleUpdate={handleUpdate}/>:null}
                     {props.question.type=="paragraph"? <Paragraph/> :null}
                 </div>
