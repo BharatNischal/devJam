@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import placeholder from "../../Placeholder.png";
 import Option from './option';
 import { NonceProvider } from 'react-select';
@@ -8,6 +8,10 @@ function MCQ(props) {
     const [isAutograde,setIsAutograde] =useState(false);
     // Data State
     const [option,setOption] = useState("");
+
+    useEffect(()=>{
+      setIsAutograde(props.autoGrade);
+    },[])
 
     function addOption(e) {
       e.preventDefault();
@@ -34,7 +38,7 @@ function MCQ(props) {
             <div className="mt-3 text-left">
                 <div className="custom-control custom-switch d-inline" >
                     <label className="custom-control-label" htmlFor={"isAutoGradeCheck"+props.id }>Autograde</label>
-                    <input type="checkbox" className="custom-control-input" id={"isAutoGradeCheck"+props.id } checked={isAutograde} onChange={(e)=> setIsAutograde(e.target.checked)} />
+                    <input type="checkbox" className="custom-control-input" id={"isAutoGradeCheck"+props.id } checked={isAutograde} onChange={(e)=>{props.autoGradeUpdate(e.target.checked);setIsAutograde(e.target.checked)}} />
                 </div>
                 {isAutograde?<input type="number" min="1" max={(props.options&&props.options.length>0)?props.options.length:"1"} value={props.correctOption} name="correctOption" onChange={props.handleUpdate} className="form-control d-inline p-1" style={{width:"50px",marginLeft:"10px",height:"25px"}}  ></input>:null}
             </div>

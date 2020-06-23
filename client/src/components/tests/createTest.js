@@ -8,7 +8,7 @@ function CreateTest(props) {
     //UI STATES
     const [isTimed,setIsTimed] = useState(false);
     // Data State
-    const [questions,setQuestions] = useState([{type:"mcq",rows:[],options:[]},{type:"mcqGrid",rows:[],options:[]},{type:"paragraph",rows:[],options:[]}]);
+    const [questions,setQuestions] = useState([{type:"mcq",rows:[],options:[]}]);
     const [test,setTest] = useState({title:"",state:"Draft",instructions:"",duration:-1,shuffle:false});
 
     function saveTest() {
@@ -56,6 +56,7 @@ function CreateTest(props) {
             <Nav show={true} menu={true}/>
             <div className="bgwhiteoverlay"></div>
             <div className="container" style={{marginTop:"120px"}} >
+                <button onClick={saveTest}>Save</button>
                 <h1 className="topicTitle mainH text-left text-pink">Create Test  <span style={{fontSize:"16px"}} >( {questions.length} Questions )</span></h1>
 
                 <div className="row my-5" >

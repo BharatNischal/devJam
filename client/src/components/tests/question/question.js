@@ -55,6 +55,14 @@ function Question(props) {
       props.update(props.index,question);
     }
 
+    // Autograde update
+    function autoGradeUpdate(value) {
+      const question = props.question;
+      question.autoGrade = value;
+      console.log(question);
+      props.update(props.index,question);
+    }
+
     // To delete a question
     function deleteQuestion() {
       axios.delete(`/question/${props.question._id}`)
@@ -91,7 +99,7 @@ function Question(props) {
                     <div className="qImg mt-3"  >
                        <span > <img src={props.question.img} style={{maxHeight:"200px"}} className="img-fluid" /></span>
                     </div>
-                    {props.question.type=="mcq"?<MCQ id={props.id} options={props.question.options} handleUpdate={handleUpdate} correctOption={props.question.correctOption}/>:null}
+                    {props.question.type=="mcq"?<MCQ id={props.id} options={props.question.options} autoGrade={props.question.autoGrade} handleUpdate={handleUpdate} correctOption={props.question.correctOption} autoGradeUpdate={autoGradeUpdate}/>:null}
                     {props.question.type=="mcqGrid"?<MGrid rows={props.question.rows} cols={props.question.options} handleUpdate={handleUpdate}/>:null}
                     {props.question.type=="paragraph"? <Paragraph/> :null}
                 </div>

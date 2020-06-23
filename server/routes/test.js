@@ -31,12 +31,15 @@ router.get('/test/new',function (req,res) {
 // Route to save a test as draft and publish based on data recieved
 router.put('/test/:id',function (req,res) {
     // Save the questions
-    // let questionIds=[],promises=[];
-    // req.body.questions.forEach(question=>{
-    //
-    // });
-    db.Test.findByIdAndUpdate(req.params.id,req.body.test)
-      .then(test=>{
+    console.log(req.body);
+    let questionIds=[],promises=[];
+    req.body.questions.forEach(question=>{
+      promises.push(db.Question.findByIdAndUpdate(question._id,question));
+      questionIds.push(question._id);
+    })
+    req.body.test.questions = questionIds;
+    Promise.all([...promises,db.Test.findByIdAndUpdate(req.params.id,req.body.test)])
+      .then(responses=>{
         res.json({success:true});
       })
       .catch(err=>{

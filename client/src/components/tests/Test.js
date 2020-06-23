@@ -2,17 +2,32 @@ import React from 'react';
 import Modal from '../ui/modal/modal';
 import Nav from '../profile/Nav/Nav';
 import Select from "react-select";
+import axios from "axios";
 
 function Test(props) {
-    return (
 
+  function handleNew() {
+    axios.get('/test/new')
+      .then(res=>{
+        if(res.data.success){
+          props.history.push(`/test/${res.data.test._id}`);
+        }else{
+          console.log(res.data.msg);
+        }
+      })
+      .catch(err=>{
+        console.log(err.message);
+      })
+  }
+
+    return (
         <React.Fragment>
             <Nav show={true} menu={true} />
             <div className="bgwhiteoverlay"></div>
             <div className="container" style={{marginTop:"120px"}} >
-                <div style={{display:"flex",justifyContent:"space-between"}} ><h1 className="topicTitle mainH text-left text-pink">Tests </h1>  <div> <button className="btn btn-outline-grad" > Create </button> </div> </div>
+                <div style={{display:"flex",justifyContent:"space-between"}} ><h1 className="topicTitle mainH text-left text-pink">Tests </h1>  <div> <button className="btn btn-outline-grad" onClick={handleNew}> Create </button> </div> </div>
                 <div className="row my-5" >
-                    
+
 
                     <div className="col-lg-4 mt-1 order-lg-2">
                         <div className="p-3 shadow mt-lg-5" style={{borderRadius:"18px",minHeight:"200px",backgroundColor:"#f8f8f8"}}>
@@ -21,7 +36,7 @@ function Test(props) {
                             <Select
                                 className="mb-2"
                                 placeholder="Sort "
-                                
+
                              />
                             <Select
                                className="Filter"
@@ -55,8 +70,8 @@ function Test(props) {
                                 <div> <button className="btn btn-grad" > Publish </button> </div>
                             </div>
                         </div>
-                       
-                       
+
+
                 </div>
             </div>
             </div>
@@ -67,4 +82,3 @@ function Test(props) {
 
 
 export default Test;
-
