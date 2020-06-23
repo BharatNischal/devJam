@@ -59,6 +59,7 @@ function Question(props) {
     function autoGradeUpdate(value) {
       const question = JSON.parse(JSON.stringify(props.question));;
       question.autoGrade = value;
+      console.log("autoGrade",question,props.index);
       props.update(props.index,question);
     }
 
@@ -66,7 +67,7 @@ function Question(props) {
     function deleteQuestion() {
       axios.delete(`/question/${props.question._id}`)
         .then(res=>{
-          if(res.data.success){
+          if(res.data){
             props.remove(props.index);
           }else{
             console.log(res.data.msg);
@@ -83,7 +84,7 @@ function Question(props) {
                 <div style={{border:"1px solid #c1c1c1",backgroundColor:"#f9f9f9", borderRadius:"18px",padding:"20px"}} >
                     <div className="row p-0 " style={{alignItems:"center"}} >
                         <div className="col-md-7 col-lg-8">
-                        <input type="text" name="question" value={props.question.question} onChange={handleUpdate} placeholder="Enter Question" className="w-100 comment-inp" />
+                        <input type="text" name="question" value={props.question.question?props.question.question:""} onChange={handleUpdate} placeholder="Enter Question" className="w-100 comment-inp" />
                         </div>
                         <div className="col-md-5 col-lg-4 mt-2 mt-md-0">
                             <span className="pointer hover-pink" style={{fontSize:"24px"}} ><i className="fa fa-image"></i></span>
@@ -107,7 +108,7 @@ function Question(props) {
                   <div className="round py-2 qOpt" >
                     <div className=" pointer hover-pink" onClick={()=>duplicateQuestion(props.question)}><i className="fa fa-copy"></i></div>
                     <div className=" pointer hover-pink" onClick={addQuestion}> <i className="fa fa-plus-circle" ></i> </div>
-                    <div className="text-danger pointer" onClick={deleteQuestion}> <i className="fa fa-trash" ></i> </div>
+                    {props.disableDel?null:<div className="text-danger pointer" onClick={deleteQuestion}> <i className="fa fa-trash" ></i> </div>}
                   </div>
             </div>
         </div>

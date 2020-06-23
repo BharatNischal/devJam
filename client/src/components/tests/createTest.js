@@ -8,11 +8,41 @@ function CreateTest(props) {
     //UI STATES
     const [isTimed,setIsTimed] = useState(false);
     // Data State
-    const [questions,setQuestions] = useState([{type:"mcq",rows:[],options:[]}]);
+    const [questions,setQuestions] = useState([]);
     const [test,setTest] = useState({title:"",state:"Draft",instructions:"",duration:-1,shuffle:false});
 
+    useEffect(()=>{
+      axios.get(`/test/${props.match.params.id}`)
+        .then(res=>{
+          if(res.data.success){
+              if(!res.data.test.questions || res.data.test.questions.length==0){
+                // If there is no question add one
+                axios.get('/question/mcq/new')
+                  .then(res=>{
+                    setQuestions([res.data.question]);
+                  })
+                  .catch(err=>{
+                    console.log(err.message);
+                  })
+              }else{
+                setQuestions(res.data.test.questions);
+              }
+              const {title,state,instructions,duration,shuffle} = res.data.test;
+              if(duration>-1){
+                setIsTimed(true);
+              }
+              setTest({title,state,instructions,duration,shuffle});
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    },[])
+
     function saveTest() {
-      axios.put(`/test/${props.params.id}`,{test,questions})
+      axios.put(`/test/${props.match.params.id}`,{test,questions})
         .then(res=>{
           if(res.data.success){
             console.log("Saved");
@@ -46,7 +76,6 @@ function CreateTest(props) {
         }
       });
       setQuestions(newQuestions);
-      setTimeout(()=>console.log(questions),2000);
     }
 
     return (
@@ -61,11 +90,11 @@ function CreateTest(props) {
                     <div className="col-12" >
                         <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
-                            <input type="text" className="form-control" value={test.title} onChange={(e)=>setTest({...test,title:e.target.value})}  placeholder="Enter Test Title" />
+                            <input type="text" className="form-control" value={test.title?test.title:""} onChange={(e)=>setTest({...test,title:e.target.value})}  placeholder="Enter Test Title" />
                         </div>
                         <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-align-justify" ></i></div>
-                            <textarea rows="5" value={test.instructions} onChange={(e)=>setTest({...test,instructions:e.target.value})} placeholder="Enter Test Instructions " className="form-control" ></textarea>
+                            <textarea rows="5" value={test.instructions?test.instructions:""} onChange={(e)=>setTest({...test,instructions:e.target.value})} placeholder="Enter Test Instructions " className="form-control" ></textarea>
 
                         </div>
                         <div className="row text-left">
@@ -87,7 +116,7 @@ function CreateTest(props) {
 
                     <div className="col-12 my-5" >
                       {questions.map((question,i)=>(
-                        <Question key={i} index={i} add={addQuestion} remove={delQuestion} update={updateQuestion} question={question}/>
+                        <Question key={i} index={i} add={addQuestion} remove={delQuestion} update={updateQuestion} question={question} disableDel={questions.length==1?true:false}/>
                       ))}
                     </div>
 

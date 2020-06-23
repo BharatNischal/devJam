@@ -27,17 +27,27 @@ router.get('/test/new',function (req,res) {
     })
 });
 
+// To get the details of a test
+router.get('/test/:id',function (req,res) {
+  db.Test.findById(req.params.id).populate('questions')
+    .then(test=>{
+      res.json({success:true,test});
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
 
 // Route to save a test as draft and publish based on data recieved
 router.put('/test/:id',function (req,res) {
     // Save the questions
-    console.log(req.body);
     let questionIds=[],promises=[];
     req.body.questions.forEach(question=>{
       promises.push(db.Question.findByIdAndUpdate(question._id,question));
       questionIds.push(question._id);
     })
     req.body.test.questions = questionIds;
+    console.log(req.body.test);
     Promise.all([...promises,db.Test.findByIdAndUpdate(req.params.id,req.body.test)])
       .then(responses=>{
         res.json({success:true});

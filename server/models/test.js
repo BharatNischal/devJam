@@ -13,18 +13,8 @@ const testSchema = new mongoose.Schema({
       default: false
     },
     questions:[{
-        mcq:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'mcq'
-        },
-        mcqGrid:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'mcqGrid'
-        },
-        paragraph:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'paragraph'
-        }
+      type:mongoose.Schema.Types.ObjectId,
+      ref: 'question'
     }],
     // Authorized Students
     students:[{
