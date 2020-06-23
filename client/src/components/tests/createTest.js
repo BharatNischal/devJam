@@ -92,7 +92,7 @@ function CreateTest(props) {
         };
 
     // React HOC for drag and drop items
-        const SortableItem = sortableElement(({question,i}) => (<Question index={i} add={addQuestion} remove={delQuestion} update={updateQuestion} question={question} disableDel={questions.length==1?true:false}/>));
+        const SortableItem = sortableElement(({question,i}) => (<Question index={i} id={i} add={addQuestion} remove={delQuestion} update={updateQuestion} question={question} disableDel={questions.length==1?true:false}/>));
 
     // React HOC for drag and drop items
         const SortableContainer = sortableContainer(({children}) => {
