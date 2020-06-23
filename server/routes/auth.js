@@ -162,7 +162,7 @@ router.get("/api/err",(req,res)=>{
 });
 
 router.get("/students",function(req,res){
-  db.user.find({student:true})
+  db.User.find({student:true})
   .then(students=>{
     res.json({success:true,students:students});
   }).catch(Err=>{
