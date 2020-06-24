@@ -13,7 +13,12 @@ function Option(props) {
                     <input type="radio" name="opt" id={"a"+props.id} className="custom-control-input" disabled/>
                     <label className="custom-control-label" htmlFor={"a"+props.id}>{props.option.title}  </label>
                 </div>
-                <div className="ml-4 mt-1" > <img src={props.option.img} style={{maxHeight:"100px"}} className="img-fluid" /></div>
+                {props.option.img?<div className="ml-4 mt-1" >
+                    <span style={{position:"relative",display:"inline-block"}}> 
+                       <span className="closeImg fa fa-times-circle-o " onClick={()=>props.update("",props.id,true)} ></span> 
+                       <img src={props.option.img} style={{maxHeight:"100px"}} className="img-fluid" />
+                    </span>
+                </div>:null}
             </div>
             <div className="col-2">
                     <i className="fa fa-image pointer hover-pink" onClick={()=>setShowImgUploader(true)}></i>

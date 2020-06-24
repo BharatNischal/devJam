@@ -10,3 +10,16 @@
     background-color: #f1f1f1;
     border:1px solid #c9c8c8;
 }
+.closeImg{
+    font-size: 30px;
+    position: absolute;
+    top:-5px;
+    left:-14px;
+    color:white;
+    background: rgba(20, 20, 20, 0.781);
+    border-radius: 50%;
+    cursor: pointer;
+}
+.closeImg:hover{
+    background-color: rgba(151, 5, 5, 0.76);
+}

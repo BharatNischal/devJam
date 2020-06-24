@@ -66,15 +66,24 @@ function Question(props) {
     }
 
     //Function to add Image to Question
-    function handleQuesImgUpdate(url){
+    function handleQuesImgUpdate(url,del){
       const question=JSON.parse(JSON.stringify(props.question));
-      question.img=url;
+      if(del){
+        question.img="";
+      }else{
+        question.img=url;
+      }
       props.update(props.index,question);
     }
     // Function to add Image to Option
-    function handleOptImgUpdate(url,ind){
+    function handleOptImgUpdate(url,ind,del){
       const question=JSON.parse(JSON.stringify(props.question));
-      question.options[ind].img=url;
+      if(del){
+        question.options[ind].img="";
+      }else{
+
+        question.options[ind].img=url;
+      }
       props.update(props.index,question);
     }
 
@@ -121,9 +130,10 @@ function Question(props) {
                         </div>
 
                     </div>
+                    {props.question.img?
                     <div className="qImg mt-3"  >
-                       <span > <img src={props.question.img} style={{maxHeight:"200px"}} className="img-fluid" /></span>
-                    </div>
+                       <span style={{position:"relative",display:"inline-block"}}><span className="closeImg fa fa-times-circle-o " onClick={()=>handleQuesImgUpdate(null,true)} ></span>  <img src={props.question.img} style={{maxHeight:"200px"}} className="img-fluid" /></span>
+                    </div>:null}
                     {props.question.type=="mcq"?<MCQ id={props.id} updateOptImg={handleOptImgUpdate} options={props.question.options} autoGrade={props.question.autoGrade} handleUpdate={handleUpdate} correctOption={props.question.correctOption} autoGradeUpdate={autoGradeUpdate} />:null}
                     {props.question.type=="mcqGrid"?<MGrid rows={props.question.rows} cols={props.question.options} handleUpdate={handleUpdate}/>:null}
                     {props.question.type=="paragraph"? <Paragraph/> :null}
