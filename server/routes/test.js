@@ -100,6 +100,22 @@ router.put('/test/close/:id',function (req,res) {
     })
 });
 
+// For Live test startup page
+router.get('/livetest/:id',middleware.isStudent,function (req,res) {
+  db.Test.findById(req.params.id)
+    .then(test=>{
+      const ind = test.students.findIndex(student=>student.userId==req.user._id);
+      if(ind!=-1 && test.status=="Published"){
+            res.json({success:true,test});
+      }else{
+        res.json({success:false,msg:"Either you are not Authorized or the test is not live"});
+      }
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
+
 // Create a new testSubmission when a user starts a test
 router.get('/test/:id/testSubmission/new',function (req,res) {
   // Checking if the student is authorized and that test is open
