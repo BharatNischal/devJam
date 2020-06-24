@@ -5,10 +5,13 @@ import MCQ from './mcq/mcq';
 import MGrid from './mGrid';
 import Paragraph from './paragraph';
 import axios from 'axios';
+import ImgUploader from '../../ui/imgUploader';
 
 function Question(props) {
 
     const[title,setTitle] = useState("");
+
+    const [showImgUploader,setShowImgUploader] = useState(false);
 
     useEffect(()=>{
       setTitle(props.question.question?props.question.question:"");
@@ -62,6 +65,13 @@ function Question(props) {
       props.update(props.index,question);
     }
 
+    //Function to add Image to Question
+    function handleQuesImgUpdate(url){
+      const question=JSON.parse(JSON.stringify(props.question));
+      question.img=url;
+      props.update(props.index,question);
+    }
+
     // Autograde update
     function autoGradeUpdate(value) {
       const question = JSON.parse(JSON.stringify(props.question));;
@@ -86,6 +96,8 @@ function Question(props) {
     }
 
     return (
+      <React.Fragment>
+        {showImgUploader?<ImgUploader update={(url)=>handleQuesImgUpdate(url)} cancel={()=>setShowImgUploader(false)}  />:null}
         <div className="row my-4">
             <div className="col-10 col-lg-11">
                 <div style={{border:"1px solid #c1c1c1",backgroundColor:"#f9f9f9", borderRadius:"18px",padding:"20px"}} >
@@ -94,7 +106,7 @@ function Question(props) {
                         <input type="text" name="question" onBlur={handleUpdate} value={title} onChange={(e)=>{setTitle(e.target.value)}} placeholder="Enter Question" className="w-100 comment-inp"/>
                         </div>
                         <div className="col-md-5 col-lg-4 mt-2 mt-md-0">
-                            <span className="pointer hover-pink" style={{fontSize:"24px"}} ><i className="fa fa-image"></i></span>
+                            <span className="pointer hover-pink" style={{fontSize:"24px"}} onClick={()=>setShowImgUploader(true)} ><i className="fa fa-image"></i></span>
                             <select name="type" className="form-control d-inline ml-2" style={{maxWidth:"200px"}} value={props.question.type} onChange={handleUpdate}>
                                 <option value="mcq">Multiple Choice</option>
                                 <option value="mcqGrid">Multiple Choice Grid</option>
@@ -119,6 +131,7 @@ function Question(props) {
                   </div>
             </div>
         </div>
+        </React.Fragment>
     )
 }
 
