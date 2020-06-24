@@ -102,11 +102,19 @@ router.put('/test/close/:id',function (req,res) {
 
 // For Live test startup page
 router.get('/livetest/:id',middleware.isStudent,function (req,res) {
-  db.Test.findById(req.params.id)
+  db.Test.findById(req.params.id).populate('questions')
     .then(test=>{
-      const ind = test.students.findIndex(student=>student.userId==req.user._id);
-      if(ind!=-1 && test.status=="Published"){
+      console.log("students",test.students);
+      const ind = test.students.findIndex(student=>student.userId.equals(req.user._id));
+      if(ind!=-1){
+          if(test.students[ind].testSubmissionId){  //User has alredy startded the test
+            db.TestSubmission.findById(test.students[ind].testSubmissionId)
+              .then(testSubmission=>{
+                res.json({success:true,testSubmission,test});
+              })
+          }else{
             res.json({success:true,test});
+          }
       }else{
         res.json({success:false,msg:"Either you are not Authorized or the test is not live"});
       }
@@ -117,11 +125,11 @@ router.get('/livetest/:id',middleware.isStudent,function (req,res) {
 })
 
 // Create a new testSubmission when a user starts a test
-router.get('/test/:id/testSubmission/new',function (req,res) {
+router.get('/test/:id/testSubmission/new',middleware.isStudent,function (req,res) {
   // Checking if the student is authorized and that test is open
-  db.Test.findById(req.params.id)
+  db.Test.findById(req.params.id).populate('questions')
     .then(test=>{
-      const ind = test.students.findIndex(student=>student.userId==req.user._id);
+      const ind = test.students.findIndex(student=>student.userId.equals(req.user._id));
       if(ind!=-1){
         db.TestSubmission.create({userId:req.user._id,testId:req.params.id})
           .then(testSubmission=>{
@@ -130,7 +138,7 @@ router.get('/test/:id/testSubmission/new',function (req,res) {
               // Store maxMarks for a test
               testSubmission.maxMarks = test.questions.length;
               testSubmission.save();
-              res.json({success:true,testSubmission});
+              res.json({success:true,testSubmission,test});
             })
       }else{
         res.json({success:false,msg:"Not Authorized"});
