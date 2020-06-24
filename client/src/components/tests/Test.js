@@ -102,9 +102,9 @@ function Test(props) {
                     </div>
                     <div className="col-lg-8 mt-2 mb-5 " >
                       {tests.map(test=>(
-                        <div className="p-3 my-2" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}} key={test._id}>
+                        <div className="p-3 my-2 pointer" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}} key={test._id} >
                             <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
-                                <div className="cursor-pointer w-75 hover-pink text-left pt-1" onClick={()=>props.history.push(`/test/${test._id}`)} ><h3 className="topicTitle  d-inline mr-2" style={{fontSize:"20px"}} > {test.title}</h3><i style={{color:"#444"}} >{test.status}</i></div>
+                                <h3 className="topicTitle" style={{fontSize:"20px"}}> {test.title}</h3><span>{test.status}</span>
                                 <div> <button className="btn btn-grad" > {test.status=="Draft"?("Publish"):(test.status=="Published"?"View Result":"Close Test")} </button> </div>
                             </div>
                         </div>
