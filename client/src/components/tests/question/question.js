@@ -71,6 +71,12 @@ function Question(props) {
       question.img=url;
       props.update(props.index,question);
     }
+    // Function to add Image to Option
+    function handleOptImgUpdate(url,ind){
+      const question=JSON.parse(JSON.stringify(props.question));
+      question.options[ind].img=url;
+      props.update(props.index,question);
+    }
 
     // Autograde update
     function autoGradeUpdate(value) {
@@ -97,7 +103,7 @@ function Question(props) {
 
     return (
       <React.Fragment>
-        {showImgUploader?<ImgUploader update={(url)=>handleQuesImgUpdate(url)} cancel={()=>setShowImgUploader(false)}  />:null}
+        {showImgUploader?<ImgUploader update={(url)=>handleQuesImgUpdate(url)}  cancel={()=>setShowImgUploader(false)}  />:null}
         <div className="row my-4">
             <div className="col-10 col-lg-11">
                 <div style={{border:"1px solid #c1c1c1",backgroundColor:"#f9f9f9", borderRadius:"18px",padding:"20px"}} >
@@ -108,7 +114,7 @@ function Question(props) {
                         <div className="col-md-5 col-lg-4 mt-2 mt-md-0">
                             <span className="pointer hover-pink" style={{fontSize:"24px"}} onClick={()=>setShowImgUploader(true)} ><i className="fa fa-image"></i></span>
                             <select name="type" className="form-control d-inline ml-2" style={{maxWidth:"200px"}} value={props.question.type} onChange={handleUpdate}>
-                                <option value="mcq">Multiple Choice</option>
+                                <option value="mcq"  >Multiple Choice</option>
                                 <option value="mcqGrid">Multiple Choice Grid</option>
                                 <option value="paragraph">Paragraph</option>
                             </select>
@@ -118,7 +124,7 @@ function Question(props) {
                     <div className="qImg mt-3"  >
                        <span > <img src={props.question.img} style={{maxHeight:"200px"}} className="img-fluid" /></span>
                     </div>
-                    {props.question.type=="mcq"?<MCQ id={props.id} options={props.question.options} autoGrade={props.question.autoGrade} handleUpdate={handleUpdate} correctOption={props.question.correctOption} autoGradeUpdate={autoGradeUpdate} />:null}
+                    {props.question.type=="mcq"?<MCQ id={props.id} updateOptImg={handleOptImgUpdate} options={props.question.options} autoGrade={props.question.autoGrade} handleUpdate={handleUpdate} correctOption={props.question.correctOption} autoGradeUpdate={autoGradeUpdate} />:null}
                     {props.question.type=="mcqGrid"?<MGrid rows={props.question.rows} cols={props.question.options} handleUpdate={handleUpdate}/>:null}
                     {props.question.type=="paragraph"? <Paragraph/> :null}
                 </div>

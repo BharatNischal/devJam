@@ -27,7 +27,7 @@ function MCQ(props) {
         <React.Fragment>
              <div className="row mt-3 text-left">
                   {props.options.map((opt,i)=>(
-                      <Option option={opt} key={i} id={i}  removeOption={removeOption}/>
+                      <Option option={opt} update={props.updateOptImg} key={i} id={i}  removeOption={removeOption}/>
                   ))}
             </div>
 

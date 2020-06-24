@@ -15,7 +15,7 @@ function ImgUploader(props) {
                 console.log(downloadURL,"HERE");
                 
                 props.update(downloadURL);
-                props.cancel();
+              
             });
     }).catch(Err=>{
         console.log(Err);
