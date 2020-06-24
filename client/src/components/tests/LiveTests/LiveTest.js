@@ -5,8 +5,6 @@ import StartPage from './startPage';
 import Question from './question';
 import axios from "axios";
 
-const lorem ="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
-
 function LiveTest(props) {
 
   const [test,setTest] = useState({title:"Title",instructions:"",duration:-1});
@@ -99,8 +97,14 @@ function LiveTest(props) {
           alert(err.message);
         })
     }
-
   },[answers])
+
+  useEffect(()=>{
+    if(timer<0){
+      alert("Timeout");
+      clearInterval(timerRef.current);
+    }
+  })
 
   function startTest() {
     axios.get(`/test/${props.match.params.id}/testSubmission/new`)
