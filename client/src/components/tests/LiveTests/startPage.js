@@ -28,7 +28,7 @@ function StartPage(props) {
                   :<p>You can do this test at your own pace. No timer is present for this test.</p>}
               </div>
               <div className="my-3">
-                  <button className="btn btn-outline-grad"> Start Test </button>
+                  <button className="btn btn-outline-grad" onClick={props.startTest}> Start Test </button>
               </div>
           </React.Fragment>}
 

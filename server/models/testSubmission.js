@@ -13,7 +13,13 @@ const testSubmissionSchema = new mongoose.Schema({
     },
     marks:Number,
     maxMarks:Number,
-    answers:[String],  //Incase of mcq it will be index in case of mcqGrid ','separated column index for eachrow and for paragraph its the answer
+    answers:[{
+      questionId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'question'
+      },
+      answer:String
+    }],  //Incase of mcq it will be index, in case of mcqGrid ','separated column index for eachrow and for paragraph its the answer
     feedback:[String], //individual feedback for questions
     onTime:{  //Refering to submission time
       type:Boolean,

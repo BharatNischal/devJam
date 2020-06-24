@@ -37,21 +37,21 @@ function PublishTest(props) {
         data.students =students.filter((st)=>st.selected).map(s=>s._id);
 
         console.log(data);
-        //Publish request to server.....
+        // Publish request to server.....
 
-        // Axios.put(`/test/publish/${props.params.id}`,data)
-        // .then(res=>{
-        //    setShowConfirmation(false);
-        //     if(res.success){
-        //         alert("Published Test");
-        //     }else{
-        //         alert(res.msg);
-        //     }
+        Axios.put(`/test/publish/${props.match.params.id}`,data)
+        .then(res=>{
+           setShowConfirmation(false);
+            if(res.success){
+                alert("Published Test");
+            }else{
+                alert(res.msg);
+            }
 
-        // }).catch(err=>{
-        //    setShowConfirmation(false);
-        //     alert(err.message);
-        // })
+        }).catch(err=>{
+           setShowConfirmation(false);
+            alert(err.message);
+        })
         setShowConfirmation(false);
     }
 
