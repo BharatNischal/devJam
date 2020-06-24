@@ -2,6 +2,8 @@ import React from 'react';
 import "./liveTest.css";
 import placeholder from "../Placeholder.png";
 import MCQ from './mcq';
+import Paragraph from './paragraph';
+import MGrid from './mGrid';
 
 function Question(props) {
     return (
@@ -15,8 +17,11 @@ function Question(props) {
                 <div className="progress-bar progress-bar-striped bgd-gradient" style={{width:`50%`}} role="progressbar"  aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
            </div>
            <div className="text-left p-3"> Question <b>23/49</b></div>
-           <MCQ/>
-
+            
+            {/* <MCQ/> */}
+            {/* <Paragraph/> */}
+            <MGrid/>
+            
             <div className="navigator row mt-5">
                 <div className="col-md-4 text-left">
                     <div><span className="onlyind submitted-q" style={{width:"30px",height:"30px",padding:"0"}}> &nbsp; </span> Submitted </div>

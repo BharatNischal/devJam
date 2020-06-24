@@ -50,3 +50,15 @@
     height: 30px;
     border-radius: 50%;
 }
+
+.gridWrapper{
+    width:100%;
+    overflow-x: scroll;
+}
+.mGrid{
+    display: grid;
+}
+.headCol,.headRow{
+    background-color: rgb(252, 210, 239);
+}
+ 
