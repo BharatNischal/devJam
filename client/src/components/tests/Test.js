@@ -3,11 +3,16 @@ import Modal from '../ui/modal/modal';
 import Nav from '../profile/Nav/Nav';
 import Select from "react-select";
 import axios from "axios";
+import Alert from "../ui/alert/alert";
+
 var allTests = [];
 function Test(props) {
 
   const [tests,setTests] = useState([]);
- 
+
+  //UI STATES
+  const [copyAlert,setCopyAlert] = useState(false);
+  const [showConfirmAlert,setShowConfirmAlert] = useState(false);
 
   // Get data from the database
   useEffect(()=>{
@@ -64,6 +69,17 @@ function Test(props) {
         console.log(err.message);
       })
   }
+  const copyToClipBoard=function(id){
+    var textField = document.createElement('textarea')
+    textField.innerText =`${window.location.host}/livetest/${id}` ;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
+    console.log("Coppied");
+    setCopyAlert(true);
+    setTimeout(()=>{setCopyAlert(false)},2000);
+}
 
   const filterOptions=[
     {value:"Draft",label:"Draft"},
@@ -71,9 +87,25 @@ function Test(props) {
     {value:"Closed",label:"Closed"}
   ]
 
+  function handleBtnClick(test){
+    if(test.status=="Draft"){
+      props.history.push(`/publish/test/${test._id}`);
+    }else if (test.status=="Publish"){
+      setShowConfirmAlert(true);
+    }else{
+      // code to redirect to view ressults page
+    }
+  }
+
+  function closeHandler(){
+    console.log("Closed");
+  }
+
     return (
         <React.Fragment>
             <Nav show={true} menu={true} />
+            {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
+            {showConfirmAlert?<Alert msg={<React.Fragment> <h3>Are You Sure to continue?</h3><p> Click Ok to Proceed.</p> </React.Fragment>} ok={null} cancel={()=>setShowConfirmAlert(false)} />:null}
             <div className="bgwhiteoverlay"></div>
             <div className="container" style={{marginTop:"120px"}} >
                 <div style={{display:"flex",justifyContent:"space-between"}} ><h1 className="topicTitle mainH text-left text-pink">Tests </h1>  <div> <button className="btn btn-outline-grad" onClick={handleNew}> Create </button> </div> </div>
@@ -105,7 +137,9 @@ function Test(props) {
                         <div className="p-3 my-2 pointer" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}} key={test._id} >
                             <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
                                 <div className="pt-2 hover-pink" onClick={()=>props.history.push(`/test/${test._id}`)} ><h3 className="topicTitle d-inline mr-2" style={{fontSize:"20px"}}> {test.title}</h3><i style={{fontSize:"14px",color:"#333"}} >{test.status}</i></div>
-                                <div> <button className="btn btn-grad" > {test.status=="Draft"?("Publish"):(test.status=="Published"?"View Result":"Close Test")} </button> </div>
+                                <div> {test.status=="Publish"? <span className="hover-pink pointer" onClick={()=>copyToClipBoard(test._id)}  > <i className="fa fa-copy"></i> </span>:null} 
+                                  <button className="btn btn-grad ml-2" onClick={()=>handleBtnClick(test)} > {test.status=="Draft"?("Publish"):(test.status=="Published"?"Close Test":"View Result")} </button> 
+                                </div>
                             </div>
                         </div>
                       ))}
