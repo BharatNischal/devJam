@@ -3,11 +3,11 @@ import Modal from '../ui/modal/modal';
 import Nav from '../profile/Nav/Nav';
 import Select from "react-select";
 import axios from "axios";
-
+var allTests = [];
 function Test(props) {
 
   const [tests,setTests] = useState([]);
-  var allTests = [];
+ 
 
   // Get data from the database
   useEffect(()=>{
@@ -65,6 +65,12 @@ function Test(props) {
       })
   }
 
+  const filterOptions=[
+    {value:"Draft",label:"Draft"},
+    {value:"Published",label:"Published"},
+    {value:"Closed",label:"Closed"}
+  ]
+
     return (
         <React.Fragment>
             <Nav show={true} menu={true} />
@@ -77,14 +83,12 @@ function Test(props) {
                     <div className="col-lg-4 mt-1 order-lg-2">
                         <div className="p-3 shadow mt-lg-5" style={{borderRadius:"18px",minHeight:"200px",backgroundColor:"#f8f8f8"}}>
                             <h4 className="mb-2">Filters</h4>
-
-                            <Select
-                                className="mb-2"
-                                placeholder="Sort "
-
-                             />
                             <Select
                                className="Filter"
+                               placeholder="Select Filter"
+                               options={filterOptions}
+                               
+                               onChange={(e)=>handleFilter(e.value)}
                             />
                             {/* {showNumberOptions!=0?
                             <form className="values mt-2" onSubmit={filterAdvanceHandler}>
@@ -93,20 +97,19 @@ function Test(props) {
                             </form>
                             :null
                             } */}
-                            <button className="btn btn-link text-danger" >Clear</button>
+                            <button className="btn btn-link text-danger" onClick={()=>handleFilter("none")} >Clear</button>
                         </div>
                     </div>
                     <div className="col-lg-8 mt-2 mb-5 " >
                       {tests.map(test=>(
                         <div className="p-3 my-2" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}} key={test._id}>
                             <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
-                                <h3 className="topicTitle cursor-pointer" style={{fontSize:"20px"}} > {test.title}</h3><span>{test.status}</span>
+                                <div className="cursor-pointer w-75 hover-pink text-left pt-1" onClick={()=>props.history.push(`/test/${test._id}`)} ><h3 className="topicTitle  d-inline mr-2" style={{fontSize:"20px"}} > {test.title}</h3><i style={{color:"#444"}} >{test.status}</i></div>
                                 <div> <button className="btn btn-grad" > {test.status=="Draft"?("Publish"):(test.status=="Published"?"View Result":"Close Test")} </button> </div>
                             </div>
                         </div>
                       ))}
-
-                </div>
+                    </div>
             </div>
             </div>
         </React.Fragment>
