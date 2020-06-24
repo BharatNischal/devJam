@@ -16,9 +16,6 @@ function Paragraph(props) {
     const newAnswers = JSON.parse(JSON.stringify(props.answers));
     newAnswers[props.curIndex].answer = para;
     props.setAnswers(newAnswers);
-    setTimeout(()=>{
-      props.save();
-    },500);
   }
 
     return (

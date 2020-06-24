@@ -101,7 +101,7 @@ router.put('/test/close/:id',function (req,res) {
 });
 
 // For Live test startup page
-router.get('/livetest/:id',middleware.isStudent,function (req,res) {
+router.get('/livetest/:id/new',middleware.isStudent,function (req,res) {
   db.Test.findById(req.params.id).populate('questions')
     .then(test=>{
       console.log("students",test.students);
