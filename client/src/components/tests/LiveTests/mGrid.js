@@ -23,9 +23,6 @@ function MGrid(props) {
       const newAnswers = JSON.parse(JSON.stringify(props.answers));
       newAnswers[props.curIndex].answer = answer;
       props.setAnswers(newAnswers);
-      setTimeout(()=>{
-        props.save();
-      },500);
     }
   }
 

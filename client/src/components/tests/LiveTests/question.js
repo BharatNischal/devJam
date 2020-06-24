@@ -7,21 +7,31 @@ import MGrid from './mGrid';
 
 function Question(props) {
 
+  function secondsToHms(d) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+    return `${h}:${m}:${s}`;
+}
+
+
+
 
     return (
        <React.Fragment>
            <div className="d-flex justify-content-between">
-               <h1 className="timer">{"22:00"}</h1>
+               <h1 className="timer">{secondsToHms(props.timer)}</h1>
                <div> <button className="btn btn-outline-grad"> Finish </button></div>
            </div>
            <hr/>
            <div className="progress" style={{height:"15px",backgroundColor:"#dabec2"}}>
-                <div className="progress-bar progress-bar-striped bgd-gradient" style={{width:`50%`}} role="progressbar"  aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
+                <div className="progress-bar progress-bar-striped bgd-gradient" style={{width:`${props.attempted/props.totalQues*100}%`}} role="progressbar"  aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
            </div>
            <div className="text-left p-3"> Question <b>{props.curIndex+1}/{props.totalQues}</b></div>
-           {props.question.type=="mcq"?<MCQ question={props.question} setCurIndex={props.setCurIndex} curIndex={props.curIndex} totalQues={props.totalQues} setAnswers={props.setAnswers} answers={props.answers} save={props.save}/>
-         :(props.question.type=="mcqGrid"?<MGrid question={props.question} setCurIndex={props.setCurIndex} curIndex={props.curIndex} totalQues={props.totalQues} setAnswers={props.setAnswers} answers={props.answers} save={props.save}/>
-       :<Paragraph question={props.question} setCurIndex={props.setCurIndex} curIndex={props.curIndex} totalQues={props.totalQues} setAnswers={props.setAnswers} answers={props.answers} save={props.save}/>)}
+           {props.question.type=="mcq"?<MCQ question={props.question} setCurIndex={props.setCurIndex} curIndex={props.curIndex} totalQues={props.totalQues} setAnswers={props.setAnswers} answers={props.answers} />
+         :(props.question.type=="mcqGrid"?<MGrid question={props.question} setCurIndex={props.setCurIndex} curIndex={props.curIndex} totalQues={props.totalQues} setAnswers={props.setAnswers} answers={props.answers} />
+       :<Paragraph question={props.question} setCurIndex={props.setCurIndex} curIndex={props.curIndex} totalQues={props.totalQues} setAnswers={props.setAnswers} answers={props.answers} />)}
 
             <div className="navigator row mt-5">
                 <div className="col-md-4 text-left">
