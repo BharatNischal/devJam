@@ -42,10 +42,10 @@ function PublishTest(props) {
         Axios.put(`/test/publish/${props.match.params.id}`,data)
         .then(res=>{
            setShowConfirmation(false);
-            if(res.success){
-                alert("Published Test");
+            if(res.data.success){
+                console.log("Successful");
             }else{
-                alert(res.msg);
+                alert(res.data.msg);
             }
 
         }).catch(err=>{

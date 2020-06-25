@@ -168,7 +168,9 @@ function LiveTest(props) {
             }
 
             // Shuffle the questions
-            shuffle(res.data.test.questions);
+            if(res.data.test.shuffle){
+                shuffle(res.data.test.questions);
+            }
             setQuestions(res.data.test.questions);
             setAnswers(res.data.test.questions.map(q=>(
               {questionId:q._id,answer:""}

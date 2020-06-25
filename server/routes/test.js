@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const router=express.Router();
 const db=require("../models/index");
 const middleware = require("../middleware");
+const mailFunction = require("../mail");
 
 
 // Route to get all the tests
@@ -57,15 +58,44 @@ router.put('/test/:id',function (req,res) {
       })
 });
 
-// Route to give authorizaion to students for test and publish it publish
+// Route to give authorizaion to students for test and publish it ,send emails and notification
 router.put('/test/publish/:id',function (req,res) {
     db.Test.findById(req.params.id)
       .then(test=>{
-        const newStudents = req.body.students.map(student=>({userId:student}));
+        let studentIds = [];
+        const newStudents = req.body.students.map(student=>{
+          studentIds.push(db.User.findById(student));
+          return{userId:student}
+        });
         test.students = newStudents;
         test.status = "Published";
         test.save();
-        res.json({success:true,test});
+        Promise.all(studentIds)
+          .then(responses=>{
+            console.log(responses);
+            let authorizedStudents = [];
+            responses.forEach(response=>{
+              response.username?authorizedStudents.push(response.username):console.log("username unavailable for",response.username-id);
+            })
+            // Send emails
+            var fullUrl = `${req.protocol}://${req.get('host')}/livetest/${req.params.id}`;
+            const msg = {
+              from: '"Learner Platform" <manjotsingh16july@gmail.com>', // sender address (who sends)
+              to: authorizedStudents.join(","), // list of receivers (who receives)
+              subject: 'Get ready for test', // Subject line
+              text: `Dear student \n Next test is out for your course. Please schedule some free time and give the test by clicking the following link\n
+                      ${fullUrl}`
+            };
+
+            mailFunction(msg,(err,info)=>{
+              if(!err){
+                  console.log(info);
+                  res.json({success:true,test});
+              }else{
+                res.json({success:false,msg:err.message});
+              }
+            });
+          })
       })
       .catch(err=>{
         res.json({success:false,msg:err.message});
