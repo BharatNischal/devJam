@@ -236,4 +236,24 @@ router.get('/allTests',function (req,res) {
       })
 });
 
+//Route to get all test submissions of specific test
+router.get("/submissions/test/:testId" , function(req,res){
+  db.Test.findById(req.params.testId)
+  .populate([
+    {
+      path:"students.userId",
+      model:"User"
+    },
+    {
+      path:"students.testSubmissionId",
+      model:"testSubmission"
+    }
+  ])
+  .then(FoundTest=>{
+    res.json({success:true,test:FoundTest});
+  }).catch(err=>{
+    res.json({success:false,msg:err.message});
+  })
+}); 
+
 module.exports =router;
