@@ -38,7 +38,7 @@ router.get('/test/:id',function (req,res) {
     })
 })
 
-// Route to save a test as draft and publish based on data recieved
+// Route to save a test as draft
 router.put('/test/:id',function (req,res) {
     // Save the questions
     let questionIds=[],promises=[];
@@ -57,12 +57,13 @@ router.put('/test/:id',function (req,res) {
       })
 });
 
-// Route to give authorizaion to students for test after publish
+// Route to give authorizaion to students for test and publish it publish
 router.put('/test/publish/:id',function (req,res) {
     db.Test.findById(req.params.id)
       .then(test=>{
         const newStudents = req.body.students.map(student=>({userId:student}));
         test.students = newStudents;
+        test.status = "Published";
         test.save();
         res.json({success:true,test});
       })
@@ -73,25 +74,42 @@ router.put('/test/publish/:id',function (req,res) {
 
 // Route to close a test and evaluate marks for each submission
 router.put('/test/close/:id',function (req,res) {
-  db.Test.findByIdAndUpdate(req.params.id,{status:"Closed"})
+  db.Test.findByIdAndUpdate(req.params.id,{status:"Closed"}).populate(['questions','students.testSubmissionId'])
     .then(test=>{
-        test.students.forEach(student=>{
-          if(!student.testSubmissionId){  //Not attempted
-            continue;
+        // Sort the question order
+        let ques = test.questions;
+        ques.sort(function (a,b) {
+          if(a._id.toString()<b._id.toString()){
+            return -1;
           }
-          let marks=0;
-          test.questions.forEach((question,i)=>{
-              if(question.mcq){
-                          // -1 means not attempted
-                if(Number(student.testSubmissionId.answers[i])>=0 && Number(student.testSubmissionId.answers[i])==question.correctOption-1){
+          return 1;
+        });
+        test.students.forEach(student=>{
+          if(student.testSubmissionId){  //attempted
+            let ans = student.testSubmissionId.answers;
+            // Sort the answers based on questions
+            ans.sort(function (a,b) {
+              if(a.questionId.toString()<b.questionId.toString()){
+                return -1;
+              }
+              return 1;
+            });
+            console.log(ans);
+            let marks=0;
+            ques.forEach((question,i)=>{
+                if(question.type=="mcq"){
+                  if(!question.autoGrade ||(question.autoGrade && +ans[i].answer>=0 && +ans[i].answer==question.correctOption)){
+                    marks++;
+                  }
+                }else if(ans[i].answer){
                   marks++;
                 }
-              }else{
-                marks++;
-              }
-          })
-          student.testSubmissionId.marks = marks;
-        })
+            })
+            student.testSubmissionId.marks = marks;
+            student.testSubmissionId.save();
+        }
+      })
+        console.log(test);
         test.save();
         res.json({success:true});
     })
@@ -106,7 +124,7 @@ router.get('/livetest/:id/new',middleware.isStudent,function (req,res) {
     .then(test=>{
       console.log("students",test.students);
       const ind = test.students.findIndex(student=>student.userId.equals(req.user._id));
-      if(ind!=-1){
+      if(ind!=-1 && test.status=="Published"){
           if(test.students[ind].testSubmissionId){  //User has alredy startded the test
             db.TestSubmission.findById(test.students[ind].testSubmissionId)
               .then(testSubmission=>{

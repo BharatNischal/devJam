@@ -23,19 +23,18 @@ function LiveTest(props) {
   useEffect(()=>{
     axios.get(`/livetest/${props.match.params.id}/new`)
       .then(res=>{
-        console.log(res.data.testSubmission.answers);
         if(res.data.success){
           // Already started Test
           if(res.data.testSubmission){
-            const {_id,startTime} = res.data.testSubmission;
+            const {_id,startTime,onTime} = res.data.testSubmission;
 
                 // Timer
                 const curtime = new Date();
                 const starttime = new Date(startTime);
                 let timeDiff = Math.floor((curtime.getTime()-starttime.getTime())/1000);
                 timeLeft = res.data.test.duration*60-timeDiff;
-                if(res.data.test.duration!=-1 && res.data.test.duration*60<=timeDiff){
-                  alert("Timeout");
+                if((res.data.test.duration!=-1 && res.data.test.duration*60<=timeDiff) ||onTime ){
+                  alert("Timeout or finished");
                 }else{
                   // Starting timer
                   if(res.data.test.duration!=-1 ){  //Not a timed test for -1
@@ -126,6 +125,7 @@ function LiveTest(props) {
             setSubmission({_id,startTime});
             setStartupPage(false);
           }else{
+            console.log("setErr");
             setErr(res.data.msg);
           }
       })
@@ -145,7 +145,7 @@ function LiveTest(props) {
 
                     {/* Start Page Should only be shown when user has not started test yet, not when he refresh page */}
                      {startupPage?<StartPage title={test.title} instruction={test.instructions} duration={test.duration==-1?"Infinite":test.duration} err={err} startTest={startTest}/>
-                   :<Question question={questions[curIndex]} curIndex={curIndex} totalQues={questions.length} setCurIndex={setCurIndex} setAnswers={setAnswers} answers={answers} attempted={attempted} timer={timer}/>}
+                   :<Question question={questions[curIndex]} curIndex={curIndex} totalQues={questions.length} setCurIndex={setCurIndex} setAnswers={setAnswers} answers={answers} attempted={attempted} timer={timer} submissionId={submission._id}/>}
                 </div>
 
         </React.Fragment>

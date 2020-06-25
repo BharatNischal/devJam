@@ -104,14 +104,14 @@ function CreateTest(props) {
             <Nav show={true} menu={true}/>
             <div className="bgwhiteoverlay"></div>
             <div className="container" style={{marginTop:"120px"}} >
-               
+
                 <div className="d-flex justify-content-between">
                   <h1 className="topicTitle mainH text-left text-pink">Create Test  <span style={{fontSize:"16px"}} >( {questions.length} Questions )</span></h1>
                   <div>
                     <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer"></i></span>
                     <button className="btn btn-outline-grad ml-2" onClick={saveTest}> Save </button>
-                    <button className="btn bg-grad text-white ml-2"> Publish  </button>
-                    
+                    <button className="btn bg-grad text-white ml-2" onClick={()=>props.history.push(`/publish/test/${props.match.params.id}`)}> Publish  </button>
+
                   </div>
                 </div>
 

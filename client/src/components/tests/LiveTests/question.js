@@ -4,6 +4,7 @@ import placeholder from "../Placeholder.png";
 import MCQ from './mcq';
 import Paragraph from './paragraph';
 import MGrid from './mGrid';
+import axios from "axios";
 
 function Question(props) {
 
@@ -15,14 +16,26 @@ function Question(props) {
     return `${h}:${m}:${s}`;
 }
 
-
+    function handleFinishTest() {
+      axios.put(`/testSubmission/${props.submissionId}/complete`)
+        .then(res=>{
+          if(res.data.success){
+            alert("Finished");
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    }
 
 
     return (
        <React.Fragment>
            <div className="d-flex justify-content-between">
                <h1 className="timer">{secondsToHms(props.timer)}</h1>
-               <div> <button className="btn btn-outline-grad"> Finish </button></div>
+               <div> <button className="btn btn-outline-grad" onClick={handleFinishTest}> Finish </button></div>
            </div>
            <hr/>
            <div className="progress" style={{height:"15px",backgroundColor:"#dabec2"}}>
