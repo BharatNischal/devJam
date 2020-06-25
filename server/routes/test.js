@@ -86,26 +86,31 @@ router.put('/test/close/:id',function (req,res) {
         });
         test.students.forEach(student=>{
           if(student.testSubmissionId){  //attempted
-            let ans = student.testSubmissionId.answers;
             // Sort the answers based on questions
-            ans.sort(function (a,b) {
+            student.testSubmissionId.answers.sort(function (a,b) {
               if(a.questionId.toString()<b.questionId.toString()){
                 return -1;
               }
               return 1;
             });
-            console.log(ans);
             let marks=0;
             ques.forEach((question,i)=>{
                 if(question.type=="mcq"){
-                  if(!question.autoGrade ||(question.autoGrade && +ans[i].answer>=0 && +ans[i].answer==question.correctOption)){
+                  if(!question.autoGrade ||(question.autoGrade && +student.testSubmissionId.answers[i].answer>=0 && +student.testSubmissionId.answers[i].answer==question.correctOption)){
                     marks++;
+                    student.testSubmissionId.answers[i].marks = 1;
+                  }else{
+                    student.testSubmissionId.answers[i].marks = 0;
                   }
                 }else if(ans[i].answer){
                   marks++;
+                  student.testSubmissionId.answers[i].marks = 1;
+                }else{
+                  student.testSubmissionId.answers[i].marks = 0;
                 }
             })
             student.testSubmissionId.marks = marks;
+            student.testSubmissionId.finalMarks = marks;
             student.testSubmissionId.save();
         }
       })

@@ -9,6 +9,8 @@ import { withRouter } from 'react-router-dom';
 
 function Question(props) {
 
+  const [filterBy,setFilterBy] = useState("none");
+
   function secondsToHms(d) {
     d = Number(d);
     var h = Math.floor(d / 3600);
@@ -53,16 +55,17 @@ function Question(props) {
                     <div><span className="onlyind not-submitted-q" style={{width:"30px",height:"30px",padding:"0"}}> &nbsp; </span> Not Submitted </div>
 
                     <h5 className="mt-2" >Filter</h5>
-                    <select className="form-control">
-                        <option value="all"> All</option>
+                    <select className="form-control" onChange={(e)=>{setFilterBy(e.target.value)}}>
+                        <option value="none"> All</option>
                         <option value="submitted"> Submitted</option>
-                        <option value="notSubmitted"> Not Submitted</option>
+                        <option value="not submitted"> Not Submitted</option>
                     </select>
                 </div>
                 <div className="col-md-8 d-flex flex-wrap">
-                  {props.answers.map((ans,i)=>(
-                    <div className={ans.answer?"ind submitted-q":"ind not-submitted-q"} onClick={()=>props.setCurIndex(i)}>{i+1}</div>
-                  ))}
+                  {props.answers.map((ans,i)=>{
+                    let classes = filterBy!="none"?(((filterBy=="submitted"&&!ans.answer)||(filterBy=="not submitted"&&ans.answer))?"d-none ":""):"";
+                    return (<div className={classes + (ans.answer?"ind submitted-q":"ind not-submitted-q")} onClick={()=>props.setCurIndex(i)}>{i+1}</div>)
+                  })}
                 </div>
             </div>
        </React.Fragment>

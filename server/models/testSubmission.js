@@ -11,16 +11,18 @@ const testSubmissionSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref:'User'
     },
-    marks:Number,
+    marks:Number,   //Autograde marks
+    finalMarks:Number,
     maxMarks:Number,
-    answers:[{
+    answers:[{  //Incase of mcq it will be index, in case of mcqGrid ','separated column index for eachrow and for paragraph its the answer
       questionId:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'question'
       },
-      answer:String
-    }],  //Incase of mcq it will be index, in case of mcqGrid ','separated column index for eachrow and for paragraph its the answer
-    feedback:[String], //individual feedback for questions
+      answer:String,
+      marks:Number,
+      feedback:String//individual feedback for questions
+    }],
     onTime:{  //Refering to submission time
       type:Boolean,
       default: false
