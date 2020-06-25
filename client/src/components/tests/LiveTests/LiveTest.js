@@ -4,6 +4,7 @@ import "./liveTest.css";
 import StartPage from './startPage';
 import Question from './question';
 import axios from "axios";
+import TestFinished from './testFinished';
 
 function LiveTest(props) {
 
@@ -146,6 +147,10 @@ function LiveTest(props) {
                     {/* Start Page Should only be shown when user has not started test yet, not when he refresh page */}
                      {startupPage?<StartPage title={test.title} instruction={test.instructions} duration={test.duration==-1?"Infinite":test.duration} err={err} startTest={startTest}/>
                    :<Question question={questions[curIndex]} curIndex={curIndex} totalQues={questions.length} setCurIndex={setCurIndex} setAnswers={setAnswers} answers={answers} attempted={attempted} timer={timer}/>}
+                    
+                    {/* Should Be shown When Test is Finished */}
+                    {/* <TestFinished/> */}
+
                 </div>
 
         </React.Fragment>
