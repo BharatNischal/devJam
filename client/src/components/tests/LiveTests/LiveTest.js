@@ -145,7 +145,7 @@ function LiveTest(props) {
                 <div className="frame p-4">
 
                     {/* Start Page Should only be shown when user has not started test yet, not when he refresh page */}
-                     {startupPage?<StartPage title={test.title} instruction={test.instructions} duration={test.duration==-1?"Infinite":test.duration} err={err} startTest={startTest}/>
+                     {startupPage?<StartPage title={test.title} instruction={test.instructions} duration={test.duration==-1?"":test.duration} err={err} startTest={startTest}/>
                    :<Question question={questions[curIndex]} curIndex={curIndex} totalQues={questions.length} setCurIndex={setCurIndex} setAnswers={setAnswers} answers={answers} attempted={attempted} timer={timer} submissionId={submission._id}/>}
                 </div>
 
