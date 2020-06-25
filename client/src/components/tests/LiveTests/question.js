@@ -20,7 +20,7 @@ function Question(props) {
       axios.put(`/testSubmission/${props.submissionId}/complete`)
         .then(res=>{
           if(res.data.success){
-            alert("Finished");
+            props.history.push('/test/finished');
           }else{
             console.log(res.data.msg);
           }

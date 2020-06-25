@@ -45,12 +45,13 @@ function CreateTest(props) {
         })
     },[])
 
-    function saveTest() {
-      console.log(test);
+    function saveTest(type) {
       axios.put(`/test/${props.match.params.id}`,{test,questions})
         .then(res=>{
           if(res.data.success){
-            console.log("Saved");
+            if(type=="publish"){
+              props.history.push(`/publish/test/${props.match.params.id}`);
+            }
           }else{
             console.log(res.data.msg);
           }
@@ -110,7 +111,7 @@ function CreateTest(props) {
                   <div>
                     <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer"></i></span>
                     <button className="btn btn-outline-grad ml-2" onClick={saveTest}> Save </button>
-                    <button className="btn bg-grad text-white ml-2" onClick={()=>props.history.push(`/publish/test/${props.match.params.id}`)}> Publish  </button>
+                    <button className="btn bg-grad text-white ml-2" onClick={()=>saveTest("publish")}> Publish  </button>
 
                   </div>
                 </div>

@@ -35,7 +35,7 @@ function LiveTest(props) {
                 let timeDiff = Math.floor((curtime.getTime()-starttime.getTime())/1000);
                 timeLeft = res.data.test.duration*60-timeDiff;
                 if((res.data.test.duration!=-1 && res.data.test.duration*60<=timeDiff) ||onTime ){
-                  alert("Timeout or finished");
+                  props.history.push('/test/finished');
                 }else{
                   // Starting timer
                   if(res.data.test.duration!=-1 ){  //Not a timed test for -1
@@ -101,8 +101,8 @@ function LiveTest(props) {
 
   useEffect(()=>{
     if(timer<0){
-      alert("Timeout");
       clearInterval(timerRef.current);
+      props.history.push('/test/finished');
     }
   })
 
