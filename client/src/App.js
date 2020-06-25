@@ -30,6 +30,7 @@ import PublishTest from './components/tests/publishTest';
 import LiveTest from './components/tests/LiveTests/LiveTest';
 import TestFinished from './components/tests/LiveTests/testFinished';
 import Results from './components/tests/results/results';
+import ResultSingle from './components/tests/results/resultSingle/resultSingle';
 
 axios.defaults.withCredentials = true;
 
@@ -87,6 +88,7 @@ function App(props) {
             <Route path="/publish/test/:id" exact component={PublishTest} />
             <Route path="/livetest/:id" exact component={LiveTest} />
             <Route path="/result/test/:id" exact component={Results} />
+            <Route path="/resultSingle/:studentName/:studentId/:testId" exact component={ResultSingle} />
           </Switch>
           )}
 
