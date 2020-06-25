@@ -254,6 +254,47 @@ router.get("/submissions/test/:testId" , function(req,res){
   }).catch(err=>{
     res.json({success:false,msg:err.message});
   })
-}); 
+});
+
+
+// Route to release Result
+router.post('/test/results/release/:id',function (req,res) {
+  console.log(req.body);
+  db.Test.findById(req.params.id)
+    .populate(['students.testSubmissionId','students.userId'])
+    .then(test=>{
+        console.log(test);
+        // Send emails
+
+        let promises = []
+
+        req.body.students.forEach(s=>{
+          // Find index of user in database to check if email is already sent or not
+          const ind = test.students.findIndex((t)=>(t.userId._id.equals(s)));
+          console.log(ind);
+          if(ind!=-1 && !test.students[ind].released && test.students[ind].userId.username){
+              console.log("inside mail route");
+              // var fullUrl = `${req.protocol}://${req.get('host')}/livetest/${req.params.id}`;
+              const msg = {
+                from: '"Learner Platform" <manjotsingh16july@gmail.com>', // sender address (who sends)
+                to: test.students[ind].userId.username, // list of receivers (who receives)
+                subject: 'Results are out', // Subject line
+                text: `Dear student \nThe results for ${test.title} is out. Your score is ${test.students[ind].testSubmissionId?test.students[ind].testSubmissionId.finalMarks:0}/${test.questions.length} \n
+                To get a detail result please click the link below`
+              };
+              promises.push(mailFunction(msg));
+              test.students[ind].released = true;
+          }
+        });
+        test.save();
+        Promise.all(promises)
+          .then(responses=>{
+            res.json({success:true,msg:"Mails sent"});
+          })
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
 
 module.exports =router;

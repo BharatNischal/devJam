@@ -28,6 +28,10 @@ const testSchema = new mongoose.Schema({
       testSubmissionId:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'testSubmission'
+      },
+      released:{
+        type:Boolean,
+        default:false
       }
     }]
 });
