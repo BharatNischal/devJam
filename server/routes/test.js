@@ -102,7 +102,7 @@ router.put('/test/close/:id',function (req,res) {
                   }else{
                     student.testSubmissionId.answers[i].marks = 0;
                   }
-                }else if(ans[i].answer){
+                }else if(student.testSubmissionId.answers[i].answer){
                   marks++;
                   student.testSubmissionId.answers[i].marks = 1;
                 }else{

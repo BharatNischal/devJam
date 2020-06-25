@@ -1,22 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Nav from "../../profile/Nav/Nav";
 import Select from "react-select";
-
+import Axios from 'axios';
+var allStudents=[];
 function Results(props) {
+
+    const [test,setTest] = useState({});
+    const [filteredStudents,setFilteredStudents] = useState([]);
+
+    useEffect(function(){
+        Axios.get(`/submissions/test/${props.match.params.id}`)
+        .then(function(res){
+            if(res.data.success){
+                 const {title,duration,instructions} = res.data.test;
+                 setTest({title,duration,instructions});
+                 
+                 allStudents=res.data.test.students;
+                 setFilteredStudents(res.data.test.students);
+            }else{
+                alert(res.data.msg);
+            }
+        }).catch(function(err){
+            alert(err.message);
+        })
+
+    },[])
+
     return (
         <React.Fragment>
             <Nav show={true} menu={true}/>
             <div className="bgwhiteoverlay"></div>
             <div className="container text-left" style={{marginTop:"120px"}} >
-                <h1 className="topicTitle mainH text-left text-pink">Test Title </h1>
+                <h1 className="topicTitle mainH text-left text-pink"> {test.title || "" } </h1>
                 <h1 className="topicTitle mainH text-left mt-3 ml-2" style={{fontSize:"22px"}}>Introduction </h1>
                 <p className="mt-2 ml-3 ">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat autem rerum molestias aut modi labore, excepturi reiciendis asperiores! Rerum nesciunt
+                {test.instructions||""}
                 </p>
                 <h1 className="topicTitle mainH text-left mt-3 ml-2 mb-0" style={{fontSize:"22px"}}>Duration </h1>
                 <p className="mt-1 ml-3 ">
-                    X Minutes<br/>
-                    No Timer
+                    {test.duration?`${test.duration} Minutes`:"No Timer"}
                 </p>
                 <div className="row">
                 <div className="col-lg-4 mt-1 order-lg-2">
@@ -62,18 +84,15 @@ function Results(props) {
                                   <td>x / 50</td>
                                   <td> </td>
                                 </tr>
-                                <tr>
-                                  <td><b>Manjot</b></td>
-                                  <td>10/50</td>
-                                  <td>20/50</td>
-                                  <td> <button className="btn bg-grad text-white"> Release</button> </td>
-                                </tr>
-                                <tr>
-                                  <td><b>Manjot</b></td>
-                                  <td>10/50</td>
-                                  <td>20/50</td>
-                                  <td> <span className="mr-2 hover-pink pointer"><i className="fa fa-copy"></i> </span> Released  </td>
-                                </tr>
+                                
+                                {filteredStudents.map((stu,i)=>(
+                                    <tr key={i}>
+                                        <td> <b>{stu.userId.name} </b></td>
+                                        <td> {stu.testSubmissionId?stu.testSubmissionId.marks:-1}/{stu.testSubmissionId?stu.testSubmissionId.maxMarks:-1} </td>
+                                        <td> {stu.testSubmissionId?stu.testSubmissionId.finalMarks:-1}/{stu.testSubmissionId?stu.testSubmissionId.maxMarks:-1} </td>
+                                        <td> <button className="btn btn-grad" > Release </button> </td>
+                                    </tr>
+                                ))}
 
                                 </tbody>
                             </table>
