@@ -91,11 +91,11 @@ function handleSort(choice,array=filteredStudents) {
           ));
         }else if(choice=="Released"){
           array = allStudents.filter(student=>(
-            student.testSubmissionId && student.testSubmissionId.released
+            student.released
           ));
         }else if(choice=="Not released"){
           array = allStudents.filter(student=>(
-            student.testSubmissionId && !student.testSubmissionId.released
+            !student.released
           ));
         }else if(choice=="Greater than"){
           console.log("Greater than");
@@ -143,7 +143,21 @@ function handleSort(choice,array=filteredStudents) {
         handleSort(sortVal,array);
     }
 
-
+    function handleRelease(data) {
+      console.log(data);
+      const students = data.map(s=>(s.userId._id));
+      Axios.post(`/test/results/release/${props.match.params.id}`,{students})
+        .then(res=>{
+          if(res.data.success){
+            console.log("Successful");
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    }
 
 
     const filterOptions=[
@@ -231,7 +245,7 @@ function handleSort(choice,array=filteredStudents) {
                         </div>
                     </div>
                     <div className="col-lg-8 mt-2 mb-5 " >
-                        <div className="my-2 text-right"> <button className="btn btn-grad "> Release All </button> </div>
+                        <div className="my-2 text-right"> <button className="btn btn-grad " onClick={()=>handleRelease(allStudents)}> Release All </button> </div>
                         <div className="p-2" style={{position:"relative"}}>
                             <table className="table table-striped">
                                 <thead style={{boxShadow:"0px 4px 8px rgba(0,0,0,0.5)"}}>
@@ -255,7 +269,7 @@ function handleSort(choice,array=filteredStudents) {
                                         <td className="pointer hover-pink"> <b>{stu.userId.name} </b></td>
                                         <td> {stu.testSubmissionId?stu.testSubmissionId.marks:-1}/{test.marks} </td>
                                         <td> {stu.testSubmissionId?stu.testSubmissionId.finalMarks:-1}/{test.marks} </td>
-                                        <td> <button className="btn btn-outline-grad" > Release </button> </td>
+                                        <td> {stu.released?<button className="btn btn-grad cursor-disabled" disabled>Released</button>:<button className="btn btn-outline-grad" onClick={()=>handleRelease([stu])}> Release </button>} </td>
                                     </tr>
                                 ))}
 
