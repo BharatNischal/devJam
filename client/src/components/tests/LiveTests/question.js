@@ -5,6 +5,7 @@ import MCQ from './mcq';
 import Paragraph from './paragraph';
 import MGrid from './mGrid';
 import axios from "axios";
+import { withRouter } from 'react-router-dom';
 
 function Question(props) {
 
@@ -69,4 +70,4 @@ function Question(props) {
 }
 
 
-export default Question;
+export default withRouter(Question);

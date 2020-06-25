@@ -10,6 +10,13 @@ function MCQ(props) {
         setOption(+props.answers[props.curIndex].answer)
       }
     },[])
+    useEffect(()=>{
+      if(props.answers[props.curIndex].answer){
+        setOption(+props.answers[props.curIndex].answer)
+      }else{
+        setOption("");
+      }
+    },[props.question])
 
     function handleSubmit() {
       console.log("option selected",option);

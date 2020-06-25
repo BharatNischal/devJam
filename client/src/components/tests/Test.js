@@ -152,7 +152,7 @@ function Test(props) {
                         <div className="p-3 my-2 pointer" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}} key={test._id} >
                             <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
                                 <div className="pt-2 hover-pink" onClick={()=>props.history.push(`/test/${test._id}`)} ><h3 className="topicTitle d-inline mr-2" style={{fontSize:"20px"}}> {test.title}</h3><i style={{fontSize:"14px",color:"#333"}} >{test.status}</i></div>
-                                <div> {test.status=="Publish"? <span className="hover-pink pointer" onClick={()=>copyToClipBoard(test._id)}  > <i className="fa fa-copy"></i> </span>:null}
+                                <div> {test.status=="Published"? <span className="hover-pink pointer" onClick={()=>copyToClipBoard(test._id)}  > <i className="fa fa-copy"></i> </span>:null}
                                   {test.status=="Draft"?<button className="btn btn-grad ml-2" onClick={()=>props.history.push(`/publish/test/${test._id}`)}>Publish</button>
                                 :(test.status=="Published"?<button className="btn btn-grad ml-2" onClick={()=>handleClose(test._id)}>Close Test</button>
                               :<button className="btn btn-grad ml-2" onClick={()=>console.log("View Result")}>View Result</button>)}
