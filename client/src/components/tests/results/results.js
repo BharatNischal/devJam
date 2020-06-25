@@ -2,21 +2,39 @@ import React, { useState, useEffect } from 'react';
 import Nav from "../../profile/Nav/Nav";
 import Select from "react-select";
 import Axios from 'axios';
+
 var allStudents=[];
+
 function Results(props) {
 
     const [test,setTest] = useState({});
     const [filteredStudents,setFilteredStudents] = useState([]);
+    const [avg,setAvg] = useState({marks:0,finalMarks:0});
 
     useEffect(function(){
         Axios.get(`/submissions/test/${props.match.params.id}`)
         .then(function(res){
             if(res.data.success){
                  const {title,duration,instructions} = res.data.test;
-                 setTest({title,duration,instructions});
-                 
+                 const marks = res.data.test.questions.length;
+                 setTest({title,duration,instructions,marks});
                  allStudents=res.data.test.students;
                  setFilteredStudents(res.data.test.students);
+                
+                 var totalmarks=0,totalFinalMarks=0,totalMaxMarks=0;
+                 res.data.test.students.forEach(el => {
+                    if(el.testSubmissionId){
+                        totalmarks+=el.testSubmissionId.marks;
+                        totalFinalMarks+=el.testSubmissionId.finalMarks;
+                    } 
+                    totalMaxMarks+=marks;
+                 });
+                 setAvg({
+                     marks:totalmarks/totalMaxMarks,
+                     finalMarks:totalFinalMarks/totalMaxMarks
+                 })
+                 
+
             }else{
                 alert(res.data.msg);
             }
@@ -25,6 +43,11 @@ function Results(props) {
         })
 
     },[])
+
+    const filterOptions=[
+        {label:"Ran Out Of Time",value:"Ran Out Of Time"},
+        {label:"Completed in Time", value:"Completed in Time"}
+    ]
 
     return (
         <React.Fragment>
@@ -47,11 +70,12 @@ function Results(props) {
 
                             <Select
                                 className="mb-2"
-                                placeholder="Sort "
-                                // options={sortOptions}
+                                placeholder="filter By "
+                                options={filterOptions}
                                 // onChange={(e)=>handleSort(e.value)}
                              />
                             <Select
+                                placeholder="Numeric Filter"
                                 // options={filterOoptions}
                                 // value={{label:filterVal,value:filterVal}}
                                 // onChange={filterChangeHandler}
@@ -66,9 +90,10 @@ function Results(props) {
                             <button className="btn btn-link text-danger" >Clear</button>
                         </div>
                     </div>
-                    <div className="col-lg-8 mt-1 mb-5 " >
+                    <div className="col-lg-8 mt-2 mb-5 " >
+                        <div className="my-2 text-right"> <button className="btn btn-grad "> Release All </button> </div>
                         <div className="p-2" style={{position:"relative"}}>
-                            <table class="table table-striped">
+                            <table className="table table-striped">
                                 <thead style={{boxShadow:"0px 4px 8px rgba(0,0,0,0.5)"}}>
                                 <tr>
                                     <th></th>
@@ -80,17 +105,17 @@ function Results(props) {
                                 <tbody>
                                 <tr>
                                   <td><b>Average</b></td>
-                                  <td>x / 50</td>
-                                  <td>x / 50</td>
+                                  <td> {avg.marks} / {test.marks}  </td>
+                                  <td> {avg.finalMarks} / {test.marks} </td>
                                   <td> </td>
                                 </tr>
                                 
                                 {filteredStudents.map((stu,i)=>(
                                     <tr key={i}>
-                                        <td> <b>{stu.userId.name} </b></td>
-                                        <td> {stu.testSubmissionId?stu.testSubmissionId.marks:-1}/{stu.testSubmissionId?stu.testSubmissionId.maxMarks:-1} </td>
-                                        <td> {stu.testSubmissionId?stu.testSubmissionId.finalMarks:-1}/{stu.testSubmissionId?stu.testSubmissionId.maxMarks:-1} </td>
-                                        <td> <button className="btn btn-grad" > Release </button> </td>
+                                        <td className="pointer hover-pink"> <b>{stu.userId.name} </b></td>
+                                        <td> {stu.testSubmissionId?stu.testSubmissionId.marks:-1}/{test.marks} </td>
+                                        <td> {stu.testSubmissionId?stu.testSubmissionId.finalMarks:-1}/{test.marks} </td>
+                                        <td> <button className="btn btn-outline-grad" > Release </button> </td>
                                     </tr>
                                 ))}
 
