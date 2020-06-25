@@ -4,9 +4,7 @@ import { storage } from '../../firebase';
 function ImgUploader(props) {
     const [imageAsFile,setImgAsFile] = useState(null);
 
-    useEffect(()=>{
-        console.log("UseEffect: ", imageAsFile);
-    },[imageAsFile])
+   
 
     const uploadHandler = function(){
         storage.child(Date.now()+imageAsFile.name).put(imageAsFile).then(async function(snapshot) {
@@ -26,7 +24,7 @@ function ImgUploader(props) {
              <div className="backdropAlert"></div>
              <div className="custAlert shadow">
                  <div className="p-5">
-                     <h4 className="mb-4" >Upload Image</h4>
+                     <h4 className="mb-4 text-center" >Upload Image</h4>
 
                     {imageAsFile?
                     <div className="mb-2">
@@ -34,10 +32,10 @@ function ImgUploader(props) {
                     </div>:null}
                  <div className="custom-file">
                     <input type="file" accept="image/*" className="custom-file-input" onChange={(e)=>setImgAsFile(e.target.files[0])} id="customFile"/>
-                    <label className="custom-file-label" for="customFile">Upload File</label>
+                    <label className="custom-file-label" htmlFor="customFile">Upload File</label>
                     </div>
                  </div>
-                 <div className="mb-3" >
+                 <div className="mb-3 text-center" >
                     <button className="splBtn btn btn-outline-cancel mr-2" onClick={props.cancel}> Cancel </button>
                     <button className="splBtn btn btn-outline-grad mr-2" onClick={uploadHandler}> Upload </button>
                  </div>

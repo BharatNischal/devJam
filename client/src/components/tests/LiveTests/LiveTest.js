@@ -4,6 +4,7 @@ import "./liveTest.css";
 import StartPage from './startPage';
 import Question from './question';
 import axios from "axios";
+import TestFinished from './testFinished';
 
 function LiveTest(props) {
 
