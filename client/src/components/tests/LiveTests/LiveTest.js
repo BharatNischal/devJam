@@ -21,6 +21,39 @@ function LiveTest(props) {
   let timeLeft=0;
 
 
+    // Function to shuffle an array
+    function shuffle(obj1, obj2) {
+    var index = obj1.length;
+    var rnd, tmp1;
+
+    while (index) {
+      rnd = Math.floor(Math.random() * index);
+      index -= 1;
+      tmp1 = obj1[index];
+      obj1[index] = obj1[rnd];
+      obj1[rnd] = tmp1;
+    }
+  }
+
+
+    // Function to shuffle 2 arrays in random way but both array synced
+    function shuffle2(obj1, obj2) {
+    var index = obj1.length;
+    var rnd, tmp1, tmp2;
+
+    while (index) {
+      rnd = Math.floor(Math.random() * index);
+      index -= 1;
+      tmp1 = obj1[index];
+      tmp2 = obj2[index];
+      obj1[index] = obj1[rnd];
+      obj2[index] = obj2[rnd];
+      obj1[rnd] = tmp1;
+      obj2[rnd] = tmp2;
+    }
+  }
+
+
   useEffect(()=>{
     axios.get(`/livetest/${props.match.params.id}/new`)
       .then(res=>{
@@ -46,10 +79,20 @@ function LiveTest(props) {
                   }
                 }
 
+                // If the student has not submitted any answer previously
+                if(!res.data.testSubmission.answers||res.data.testSubmission.answers.length==0){
+                  // Shuffle the questions
+                  shuffle(res.data.test.questions);
+                  setAnswers(res.data.test.questions.map(q=>(
+                    {questionId:q._id,answer:""}
+                  )));
+                }else{
+                  // Shuffle both questions and previous answers
+                  shuffle2(res.data.test.questions,res.data.testSubmission.answers);
+                  setAnswers(res.data.testSubmission.answers);
+                }
+
                 setQuestions(res.data.test.questions);
-                setAnswers((res.data.testSubmission.answers&&res.data.testSubmission.answers.length>0)?res.data.testSubmission.answers:res.data.test.questions.map(q=>(
-                  {questionId:q._id,answer:""}
-                )));
                 setSubmission({_id,startTime});
                 // Calculate questions attempted
                 let attempt=0;
