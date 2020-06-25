@@ -30,6 +30,10 @@ const testSubmissionSchema = new mongoose.Schema({
     startTime:{
       type:Date,
       default:Date.now
+    },
+    released:{
+      type:Boolean,
+      default: false
     }
 });
 
