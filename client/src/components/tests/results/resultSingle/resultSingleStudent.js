@@ -18,26 +18,30 @@ function ResultSingle(props) {
 
     // Get data from database
     useEffect(()=>{
-      axios.get(`/testResults/individual/${props.match.params.testId}`)
-        .then(res=>{
-          if(res.data.success){
-            console.log(res.data.test);
-            let newQuestions=[];
-            res.data.test.answers.forEach(ans=>{
-              newQuestions.push(ans.questionId);
-            });
-            setQuestions(newQuestions);
-            setAnswers(res.data.test.answers);
-            setTitle(res.data.test.testId.title);
-            setTotalMarks(res.data.test.testId.questions.length);
-            setMarks(res.data.test.finalMarks);
-          }else{
-            console.log(res.data.msg);
-          }
-        })
-        .catch(err=>{
-          console.log(err.message);
-        })
+      if(props.match.params.testId=="Undefined"||props.match.params.testId=="undefined"){
+
+      }else{
+        axios.get(`/testResults/individual/${props.match.params.testId}`)
+          .then(res=>{
+            if(res.data.success){
+              console.log(res.data.test);
+              let newQuestions=[];
+              res.data.test.answers.forEach(ans=>{
+                newQuestions.push(ans.questionId);
+              });
+              setQuestions(newQuestions);
+              setAnswers(res.data.test.answers);
+              setTitle(res.data.test.testId.title);
+              setTotalMarks(res.data.test.testId.questions.length);
+              setMarks(res.data.test.finalMarks);
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+      }
     },[])
 
 
@@ -85,7 +89,16 @@ function ResultSingle(props) {
                       </div>
                   </div>
               </div>
-          </React.Fragment>:<div></div>}
+          </React.Fragment>:
+          <React.Fragment>
+                <Nav show={true} menu={true}/>
+                <div className="bgwhiteoverlay" ></div>
+                <div className="container text-left" style={{marginTop:"100px"}}>
+                  <h2 className="text-center">You Did not take the test.</h2>
+                  <h2 className="text-center">Your Score: 0</h2>
+                </div>
+          </React.Fragment>
+        }
         </React.Fragment>
     )
 }
