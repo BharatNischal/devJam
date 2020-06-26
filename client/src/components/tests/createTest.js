@@ -124,12 +124,12 @@ function CreateTest(props) {
                 <div className="d-flex justify-content-between">
                   <h1 className="topicTitle mainH text-left text-pink">Create Test  <span style={{fontSize:"16px"}} >( {questions.length} Questions )</span></h1>
                   <div>
-                    {test.status=="Draft"&&!preview?[<span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer"></i></span>,
+                    {test.status=="Draft"&&!preview?[<span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer" onClick={()=>setPreview(!preview)} ></i></span>,
                       <button className="btn btn-outline-grad ml-2" onClick={saveTest}> Save </button>,
                         <button className="btn bg-grad text-white ml-2" onClick={()=>saveTest("publish")}> Publish  </button>]
                         :(test.status=="Published"?
                             <button className="btn bg-grad text-white ml-2" onClick={handleClose}> Close  </button>
-                            :<button className="btn bg-grad text-white ml-2" onClick={()=>props.history.push(`/result/test/${props.match.params.id}`)}> Results  </button>)}
+                            :[<span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye-slash  hover-pink pointer" onClick={()=>setPreview(!preview)} ></i></span>,<button className="btn bg-grad text-white ml-2" onClick={()=>props.history.push(`/result/test/${props.match.params.id}`)}> Results  </button>])}
 
                   </div>
                 </div>
