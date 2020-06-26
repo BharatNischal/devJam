@@ -42,7 +42,7 @@ function App(props) {
         axios.get("/curUser")
           .then(res=>{
             if(res.data.user){
-              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student});
+              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student,notifications:res.data.user.notifications});
             }else{
               setUser({loggedIn:false,superAdmin:"",name:"",profilePic:null,student:false});
             }

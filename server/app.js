@@ -44,9 +44,14 @@ passport.serializeUser(function(user,done){
   done(null,user._id);
 });
 passport.deserializeUser(function(id, done) {
-  db.User.findById(id, function(err, user) {
-      done(err, user);
-  });
+  db.User.findById(id)
+  .populate([
+    {path:"notifications.notification",model:"notification"}
+  ]).then(user=>{
+      done(null, user);
+  }).catch(err=>{
+    done(err);
+  })
 });
 
 

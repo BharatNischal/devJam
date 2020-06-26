@@ -114,6 +114,19 @@ router.post('/forget', function(req, res, next) {
   });
 });
 
+router.post("/changeNotificationStatus",function(req,res){
+  db.User.findById(req.user._id)
+  .then(async (user)=>{
+    const notifications=req.body.user.notifications.map(n=>({notification:n.notification._id,read:n.read,_id:n._id}));
+    user.notifications=notifications;
+    await user.save();
+    res.json({success:true,user:user});
+  }).catch(err=>{
+    res.json({success:false,msg:err.message});
+    console.log(err);
+  })
+})
+
 // Reset password
 router.post('/reset/:token', function(req, res) {
   async.waterfall([
@@ -154,6 +167,7 @@ router.post('/reset/:token', function(req, res) {
 
 // To get the current user
 router.get("/curUser",(req,res)=>{
+  
   res.json({user:req.user});
 })
 

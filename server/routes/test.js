@@ -75,7 +75,7 @@ router.put('/test/publish/:id',function (req,res) {
             console.log(responses);
             let authorizedStudents = [];
             responses.forEach(response=>{
-              response.username?authorizedStudents.push(response.username):console.log("username unavailable for",response.username-id);
+              response.username?authorizedStudents.push(response.username):console.log("username unavailable for",response._id);
             })
             // Send emails
             var fullUrl = `${req.protocol}://${req.get('host')}/livetest/${req.params.id}`;
@@ -86,6 +86,8 @@ router.put('/test/publish/:id',function (req,res) {
               text: `Dear student \n Next test is out for your course. Please schedule some free time and give the test by clicking the following link\n
                       ${fullUrl}`
             };
+            
+            
 
             mailFunction(msg,(err,info)=>{
               if(!err){
@@ -95,6 +97,23 @@ router.put('/test/publish/:id',function (req,res) {
                 res.json({success:false,msg:err.message});
               }
             });
+
+            db.Notification.create({
+              title:`${test.title} test is out for your course. Please Give the test by clicking the following Button `,
+              link:fullUrl,
+              type:"test"
+            }).then(notification=>{
+              responses.forEach(st=>{
+                st.notifications.push(
+                  {notification:notification}
+                );
+                st.save();
+              })
+            }).catch(Err=>{
+              console.log(Err);
+            });
+
+            
           })
       })
       .catch(err=>{
@@ -287,9 +306,15 @@ router.post('/test/results/release/:id',function (req,res) {
   console.log(req.body);
   db.Test.findById(req.params.id)
     .populate(['students.testSubmissionId','students.userId'])
-    .then(test=>{
+    .then(async (test)=>{
         console.log(test);
         // Send emails
+        
+        const notification=await db.Notification.create({
+          title:`The results for ${test.title} is out. Please Click the button to see details.`,
+          type:"result",
+          link:"#"
+        });
 
         let promises = []
 
@@ -307,8 +332,18 @@ router.post('/test/results/release/:id',function (req,res) {
                 text: `Dear student \nThe results for ${test.title} is out. Your score is ${test.students[ind].testSubmissionId?test.students[ind].testSubmissionId.finalMarks:0}/${test.questions.length} \n
                 To get a detail result please click the link below`
               };
-              promises.push(mailFunction(msg));
+              mailFunction(msg,function(err,info){
+                if(err){
+                  console.log(err);
+                }else{
+                  console.log(info);
+                }
+              });
               test.students[ind].released = true;
+              test.students[ind].userId.notifications.push({
+                notification:notification
+              });
+              test.students[ind].userId.save();
           }
         });
         test.save();
@@ -318,6 +353,7 @@ router.post('/test/results/release/:id',function (req,res) {
           })
     })
     .catch(err=>{
+      console.log(err);
       res.json({success:false,msg:err.message});
     })
 })
