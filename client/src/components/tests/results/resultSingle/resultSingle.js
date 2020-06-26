@@ -28,6 +28,8 @@ function ResultSingle(props) {
             allQuestions = res.data.test.questions;
             let ques=[];
             for(let i=0;i<res.data.test.questions.length;i++){
+              
+              
               ques.push(i);
             }
             setQuestions(ques);
@@ -147,12 +149,22 @@ function ResultSingle(props) {
               <div className="mr-2"><img src={student.userId.profilePic} style={{width:"30px",height:"30px",objectFit:"cover"}} className="rounded-circle" /> </div>
                   <div>{student.userId.name}</div>
               </div>
-              <div className="mr-2" style={{fontSize:"13px"}}><p><b>{student.testSubmissionId?student.testSubmissionId.finalMarks:-1}/{totalMarks}</b></p> <p>{student.testSubmissionId?(student.testSubmissionId.onTime?"Completed In Time":"Did not Complete in Time"):"Did Not Submitted"} </p>  </div>
+              <div className="mr-2" style={{fontSize:"13px"}}><b>{student.testSubmissionId?student.testSubmissionId.finalMarks:-1}/{totalMarks}</b><br/> {student.testSubmissionId?(student.testSubmissionId.onTime?"Completed In Time":"Did not Complete in Time"):"Did Not Submitted"}  </div>
           </div>
       )}
     ));
-
-
+    const customStyles = {
+      control: base => ({
+        ...base,
+        height: 80,
+        padding:5
+      }),
+      valueContainer: base =>({
+        ...base,
+        height:70
+      })
+    };
+          
     return (
         <React.Fragment>
         {students.length>0?
@@ -179,6 +191,7 @@ function ResultSingle(props) {
                               getOptionLabel={option => option.label}
                               classNamePrefix="react-select"
                               className="p-2"
+                              styles={customStyles}
                           />
                       </div>
                       <div className="col-lg-6 mt-2 mt-lg-3 d-flex align-items-center justify-content-between">

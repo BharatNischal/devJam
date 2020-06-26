@@ -36,7 +36,7 @@ const TopBar = (props)=>{
             <div>
                 <div className="dpWrapper cursor-pointer mr-2 d-inline-block" style={{position:"relative"}} onClick={()=>setShowNotification(true)} >
                      <img alt="profilePic" src={BellImg} /> 
-                     <span className="numIndicator rounded-circle" > {user.notifications?user.notifications.length:""} </span> </div>
+                     <span className="numIndicator rounded-circle" > {user.notifications?user.notifications.filter(n=>n.read==false).length:""} </span> </div>
                 <div className="dpWrapper cursor-pointer d-inline-block" onClick={()=>setShowDropDown(true)}> <img alt="profilePic" src={user.profilePic?user.profilePic:Dp} /></div>
             </div>
         </div>

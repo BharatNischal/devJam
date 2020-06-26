@@ -34,7 +34,7 @@ export default function Question(props) {
                 <img src={props.question.img} style={{maxHeight:"200px"}} className="img-fluid" />
             </div>
             {props.question.type=="mcq"?<MCQ options={props.question.options} autoGrade={props.question.autoGrade} correctOption={props.question.correctOption} answer={props.answer.answer}/>
-            :(props.question.type="mcqGrid"?<MGrid options={props.question.options} answer={props.answer.answer} rows={props.question.rows}/>
+            :(props.question.type=="mcqGrid"?<MGrid options={props.question.options} answer={props.answer.answer} rows={props.question.rows}/>
             :<div>
                 <h4>Answer: </h4>
                 <p>{props.answer.answer}</p>
