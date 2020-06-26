@@ -16,6 +16,7 @@ function Results(props) {
     // UI states
     const [showNumberOptions, setshowNumberOptions] = useState(0);
     const [numbers,setNumbers]=useState([0,0]);
+    const [copyAlert,setCopyAlert] = useState(false);
 
 
     useEffect(function(){
@@ -202,10 +203,22 @@ function handleSort(choice,array=filteredStudents) {
         handleFilter(filterVal,numbers[0],numbers[1]);
         //setshowNumberOptions(-1);
     }
+    const copyToClipBoard=function(){
+      var textField = document.createElement('textarea')
+      textField.innerText =`${window.location.host}/resultSingleStudent/${props.match.params.id}` ;
+      document.body.appendChild(textField);
+      textField.select();
+      document.execCommand('copy');
+      textField.remove();
+      console.log("Coppied");
+      setCopyAlert(true);
+      setTimeout(()=>{setCopyAlert(false)},2000);
+  }
 
     return (
         <React.Fragment>
             <Nav show={true} menu={true}/>
+            {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
             <div className="bgwhiteoverlay"></div>
             <div className="container text-left" style={{marginTop:"120px"}} >
                 <h1 className="topicTitle mainH text-left text-pink"> {test.title || "" } </h1>
@@ -269,7 +282,7 @@ function handleSort(choice,array=filteredStudents) {
                                         <td className="pointer hover-pink" onClick={()=>props.history.push(`/resultSingle/${stu.userId._id}/${props.match.params.id}`)}> <b>{stu.userId.name} </b></td>
                                         <td> {stu.testSubmissionId?stu.testSubmissionId.marks:-1}/{test.marks} </td>
                                         <td> {stu.testSubmissionId?stu.testSubmissionId.finalMarks:-1}/{test.marks} </td>
-                                        <td> {stu.released?<button className="btn btn-grad cursor-disabled" disabled>Released</button>:<button className="btn btn-outline-grad" onClick={()=>handleRelease([stu])}> Release </button>} </td>
+                                        <td> {stu.released?<span> <i className="fa fa-copy hover-pink mr-2 pointer" onClick={copyToClipBoard} ></i> Released</span>:<button className="btn btn-outline-grad" onClick={()=>handleRelease([stu])}> Release </button>} </td>
                                     </tr>
                                 ))}
 
