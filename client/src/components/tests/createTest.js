@@ -13,7 +13,7 @@ function CreateTest(props) {
     // Data State
     const [questions,setQuestions] = useState([]);
     const [test,setTest] = useState({title:"",status:"Draft",instructions:"",duration:-1,shuffle:false});
-
+    const [preview,setPreview] = useState(false);
 
     useEffect(()=>{
       axios.get(`/test/${props.match.params.id}`)
@@ -108,7 +108,7 @@ function CreateTest(props) {
         };
 
     // React HOC for drag and drop items
-        const SortableItem = sortableElement(({question,i}) => (<Question index={i} id={i} add={addQuestion} remove={delQuestion} update={updateQuestion} question={question} disableDel={questions.length==1?true:false} test={test}/>));
+        const SortableItem = sortableElement(({question,i}) => (<Question index={i} id={i} add={addQuestion} remove={delQuestion} update={updateQuestion} question={question} disableDel={questions.length==1?true:false} test={test} preview={preview}/>));
 
     // React HOC for drag and drop items
         const SortableContainer = sortableContainer(({children}) => {
@@ -124,7 +124,7 @@ function CreateTest(props) {
                 <div className="d-flex justify-content-between">
                   <h1 className="topicTitle mainH text-left text-pink">Create Test  <span style={{fontSize:"16px"}} >( {questions.length} Questions )</span></h1>
                   <div>
-                    {test.status=="Draft"?[<span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer"></i></span>,
+                    {test.status=="Draft"&&!preview?[<span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer"></i></span>,
                       <button className="btn btn-outline-grad ml-2" onClick={saveTest}> Save </button>,
                         <button className="btn bg-grad text-white ml-2" onClick={()=>saveTest("publish")}> Publish  </button>]
                         :(test.status=="Published"?
@@ -138,24 +138,24 @@ function CreateTest(props) {
                     <div className="col-12" >
                         <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
-                            <input type="text" className="form-control" value={test.title?test.title:""} onChange={(e)=>setTest({...test,title:e.target.value})}  placeholder="Enter Test Title" />
+                            <input type="text" className="form-control" value={test.title?test.title:""} onChange={(e)=>setTest({...test,title:e.target.value})}  placeholder="Enter Test Title" readOnly={test.status=="Draft"&&!preview?false:true}  />
                         </div>
                         <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-align-justify" ></i></div>
-                            <textarea rows="5" value={test.instructions?test.instructions:""} onChange={(e)=>setTest({...test,instructions:e.target.value})} placeholder="Enter Test Instructions " className="form-control" ></textarea>
+                            <textarea rows="5" value={test.instructions?test.instructions:""} onChange={(e)=>setTest({...test,instructions:e.target.value})} placeholder="Enter Test Instructions " className="form-control" readOnly={test.status=="Draft"&&!preview?false:true}></textarea>
 
                         </div>
                         <div className="row text-left">
                             <div className="col-md-6  px-lg-5">
                                 <div className="custom-control custom-checkbox d-inline" >
-                                    <input type="checkbox" className="custom-control-input" id="customCheck1" checked={isTimed} onChange={(e)=> setIsTimed(e.target.checked)} />
+                                    <input type="checkbox" className="custom-control-input" id="customCheck1" checked={isTimed} onChange={(e)=> setIsTimed(e.target.checked)} disabled={test.status=="Draft"&&!preview?false:true}/>
                                     <label className="custom-control-label" htmlFor="customCheck1">Timed</label>
                                 </div>
-                                {isTimed?<input type="number"  value={test.duration==-1?0:test.duration} onChange={(e)=>setTest({...test,duration:e.target.value})} min="0" className="form-control d-inline" style={{width:"80px",marginLeft:"10px",height:"25px"}}  ></input>:null}
+                                {isTimed?<input type="number"  value={test.duration==-1?0:test.duration} onChange={(e)=>setTest({...test,duration:e.target.value})} min="0" className="form-control d-inline" style={{width:"80px",marginLeft:"10px",height:"25px"}} readOnly={test.status=="Draft"&&!preview?false:true} ></input>:null}
                             </div>
                             <div className="col-md-6">
                                 <div className="custom-control custom-checkbox d-inline" >
-                                    <input type="checkbox" checked={test.shuffle} onChange={(e)=>setTest({...test,shuffle:e.target.checked})} className="custom-control-input" id="customCheck2" />
+                                    <input type="checkbox" checked={test.shuffle} onChange={(e)=>setTest({...test,shuffle:e.target.checked})} className="custom-control-input" id="customCheck2" disabled={test.status=="Draft"&&!preview?false:true}/>
                                     <label className="custom-control-label" htmlFor="customCheck2">Shuffled</label>
                                 </div>
                             </div>
