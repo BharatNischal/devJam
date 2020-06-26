@@ -79,7 +79,7 @@
   transition: 0.3s;
 }
 .btn-outline-grad:hover,.btn-grad:hover{
-  
+
   background: linear-gradient(137.9deg, #642B73 13.76%, #C6426E 85.26%);
   color:white;
   box-shadow: 0px 2px 10px #35353586;
@@ -119,4 +119,12 @@ h1{
 .horizontol-center{
   margin-left:50%;
   transform: translateX(-50%);
+}
+
+.wrong{
+  background-color:"#f7cbcb";
+}
+
+.correct{
+  background-color:"#b7eba9";
 }

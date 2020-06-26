@@ -257,6 +257,31 @@ router.get("/submissions/test/:testId" , function(req,res){
 });
 
 
+//Route to get all test submissions of specific test along with questions
+router.get("/submissions/testdetails/:testId" , function(req,res){
+  db.Test.findById(req.params.testId)
+  .populate([
+    {
+      path:"students.userId",
+      model:"User"
+    },
+    {
+      path:"students.testSubmissionId",
+      model:"testSubmission"
+    },
+    {
+      path:"questions",
+      model:"question"
+    }
+  ])
+  .then(FoundTest=>{
+    console.log(FoundTest);
+    res.json({success:true,test:FoundTest});
+  }).catch(err=>{
+    res.json({success:false,msg:err.message});
+  })
+});
+
 // Route to release Result
 router.post('/test/results/release/:id',function (req,res) {
   console.log(req.body);
@@ -291,6 +316,17 @@ router.post('/test/results/release/:id',function (req,res) {
           .then(responses=>{
             res.json({success:true,msg:"Mails sent"});
           })
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
+
+
+router.put('/testSubmission/result/:id',function (req,res) {
+  db.TestSubmission.findByIdAndUpdate(req.params.id,req.body.submission)
+    .then(test=>{
+      res.json({success:true});
     })
     .catch(err=>{
       res.json({success:false,msg:err.message});

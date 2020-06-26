@@ -88,7 +88,7 @@ function App(props) {
             <Route path="/publish/test/:id" exact component={PublishTest} />
             <Route path="/livetest/:id" exact component={LiveTest} />
             <Route path="/result/test/:id" exact component={Results} />
-            <Route path="/resultSingle/:studentName/:studentId/:testId" exact component={ResultSingle} />
+            <Route path="/resultSingle/:userId/:testId" exact component={ResultSingle} />
           </Switch>
           )}
 
