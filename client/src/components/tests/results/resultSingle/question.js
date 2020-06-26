@@ -7,11 +7,12 @@ export default function Question(props) {
 
   const [feedback,setFeedback] = useState("");
   const [marks,setMarks] = useState(0);
+  const [showFeedback,setShowFeedback] = useState(true);
 
   useEffect(()=>{
     setMarks(props.answer.marks);
-    setFeedback(props.answer.feedback)
-  },[])
+    setFeedback(props.answer.feedback);
+  },[props.answer.feedback,props.answer.index])
 
 
 
@@ -39,10 +40,22 @@ export default function Question(props) {
                 <h4>Answer: </h4>
                 <p>{props.answer.answer}</p>
             </div>)}
-
-            <div className="mt-3">
-                <form onSubmit={(e)=>{e.preventDefault();props.handleUpdate(props.index,-1,feedback)}}><input className="comment-inp w-100" value={feedback} onChange={(e)=>setFeedback(e.target.value)} placeholder="Add Individual Feedback " ></input></form>
-            </div>
+            {(props.answer.feedback && showFeedback)?
+                <div className="mt-3 d-flex justify-content-between">
+                    <div>
+                        <h4>Feedback</h4>
+                        <p>{props.answer.feedback}</p>
+                    </div>
+                    <div>
+                        <i className="fa fa-pencil pointer hover-pink" onClick={()=>setShowFeedback(false)} ></i><br/>
+                        <i className="fa fa-trash pointer hover-pink" onClick={()=>{setFeedback(""); props.handleUpdate(props.index,-1,"");}} ></i>
+                    </div>
+                </div>
+            :
+                <div className="mt-3">
+                    <form onSubmit={(e)=>{e.preventDefault();setShowFeedback(true);props.handleUpdate(props.index,-1,feedback)}}><input className="comment-inp w-100" value={feedback} onChange={(e)=>setFeedback(e.target.value)} placeholder="Add Individual Feedback " ></input></form>
+                </div>
+            }
 
         </div>
         </div>
