@@ -155,7 +155,7 @@ function Test(props) {
                                 <div> {test.status=="Published"? <span className="hover-pink pointer" onClick={()=>copyToClipBoard(test._id)}  > <i className="fa fa-copy"></i> </span>:null}
                                   {test.status=="Draft"?<button className="btn btn-grad ml-2" onClick={()=>props.history.push(`/publish/test/${test._id}`)}>Publish</button>
                                 :(test.status=="Published"?<button className="btn btn-grad ml-2" onClick={()=>handleClose(test._id)}>Close Test</button>
-                              :<button className="btn btn-grad ml-2" onClick={()=>console.log("View Result")}>View Result</button>)}
+                              :<button className="btn btn-grad ml-2" onClick={()=>props.history.push(`/result/test/${test._id}`)}>View Result</button>)}
                                 </div>
                             </div>
                         </div>

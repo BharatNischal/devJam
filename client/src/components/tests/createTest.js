@@ -73,6 +73,21 @@ function CreateTest(props) {
       setQuestions(newQuestions);
     }
 
+    function handleClose() {
+        axios.put(`/test/close/${props.match.params.id}`)
+          .then(res=>{
+            if(res.data.success){
+              console.log("Closed");
+              setTest({...test,status:"Closed"});
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+    }
+
     function updateQuestion(index,ques) {
       const newQuestions = questions.map((q,i)=>{
         if(i==index){
@@ -110,8 +125,11 @@ function CreateTest(props) {
                   <h1 className="topicTitle mainH text-left text-pink">Create Test  <span style={{fontSize:"16px"}} >( {questions.length} Questions )</span></h1>
                   <div>
                     <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer"></i></span>
-                    <button className="btn btn-outline-grad ml-2" onClick={saveTest}> Save </button>
-                    <button className="btn bg-grad text-white ml-2" onClick={()=>saveTest("publish")}> Publish  </button>
+                    {test.status=="Draft"?[<button className="btn btn-outline-grad ml-2" onClick={saveTest}> Save </button>,
+                        <button className="btn bg-grad text-white ml-2" onClick={()=>saveTest("publish")}> Publish  </button>]
+                        :(test.status=="Published"?
+                            <button className="btn bg-grad text-white ml-2" onClick={handleClose}> Close  </button>
+                            :<button className="btn bg-grad text-white ml-2" onClick={()=>props.history.push(`/result/test/${props.match.params.id}`)}> Results  </button>)}
 
                   </div>
                 </div>

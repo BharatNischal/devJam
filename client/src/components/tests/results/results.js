@@ -266,7 +266,7 @@ function handleSort(choice,array=filteredStudents) {
 
                                 {filteredStudents.map((stu,i)=>(
                                     <tr key={i}>
-                                        <td className="pointer hover-pink"> <b>{stu.userId.name} </b></td>
+                                        <td className="pointer hover-pink" onClick={()=>props.history.push(`/resultSingle/${stu.userId._id}/${props.match.params.id}`)}> <b>{stu.userId.name} </b></td>
                                         <td> {stu.testSubmissionId?stu.testSubmissionId.marks:-1}/{test.marks} </td>
                                         <td> {stu.testSubmissionId?stu.testSubmissionId.finalMarks:-1}/{test.marks} </td>
                                         <td> {stu.released?<button className="btn btn-grad cursor-disabled" disabled>Released</button>:<button className="btn btn-outline-grad" onClick={()=>handleRelease([stu])}> Release </button>} </td>
