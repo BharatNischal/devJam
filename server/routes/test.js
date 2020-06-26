@@ -86,8 +86,8 @@ router.put('/test/publish/:id',function (req,res) {
               text: `Dear student \n Next test is out for your course. Please schedule some free time and give the test by clicking the following link\n
                       ${fullUrl}`
             };
-            
-            
+
+
 
             mailFunction(msg,(err,info)=>{
               if(!err){
@@ -113,7 +113,7 @@ router.put('/test/publish/:id',function (req,res) {
               console.log(Err);
             });
 
-            
+
           })
       })
       .catch(err=>{
@@ -309,7 +309,7 @@ router.post('/test/results/release/:id',function (req,res) {
     .then(async (test)=>{
         console.log(test);
         // Send emails
-        
+
         const notification=await db.Notification.create({
           title:`The results for ${test.title} is out. Please Click the button to see details.`,
           type:"result",
@@ -358,6 +358,19 @@ router.post('/test/results/release/:id',function (req,res) {
     })
 })
 
+
+// Get Details of Results of a test for a particular student
+router.get('/testResults/individual/:testId',function (req,res) {
+    db.TestSubmission.findById(req.params.testId)
+    .populate(['testId','answers.questionId'])
+      .then(test=>{
+        console.log(test);
+        res.json({success:true,test});
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
+})
 
 router.put('/testSubmission/result/:id',function (req,res) {
   db.TestSubmission.findByIdAndUpdate(req.params.id,req.body.submission)
