@@ -21,7 +21,7 @@ export default function Question(props) {
         <div style={{border:"1px solid #c1c1c1",backgroundColor:"#f9f9f9", borderRadius:"18px",padding:"20px"}} >
             <div className="row p-0 " style={{alignItems:"center"}} >
                 <div className="col-md-8 col-lg-9">
-                    <h5 className="text-success" ><b> <i className="fa fa-check mr-1"></i> {props.question.question} </b></h5>
+                    <h5 className={props.answer.marks==1&&props.question.autoGrade?"text-success":(props.answer.marks==0&&props.question.autoGrade?"text-danger":"")} ><b> <i className={props.answer.marks==1&&props.question.autoGrade?"fa fa-check mr-1":(props.answer.marks==0&&props.question.autoGrade?"fa fa-close":"")}></i> {props.question.question} </b></h5>
                 </div>
                 <div className="col-md-4 col-lg-3 text-right">
                      <input type="number" value={marks} onChange={(e)=>{setMarks(e.target.value);props.handleUpdate(props.index,e.target.value)}} className="comment-inp text-right" style={{width:"70px"}} min="0" max="1"/>
