@@ -14,15 +14,15 @@ function Option(props) {
                     <label className="custom-control-label" htmlFor={"a"+props.id}>{props.option.title}  </label>
                 </div>
                 {props.option.img?<div className="ml-4 mt-1" >
-                    <span style={{position:"relative",display:"inline-block"}}> 
-                       <span className="closeImg fa fa-times-circle-o " onClick={()=>props.update("",props.id,true)} ></span> 
+                    <span style={{position:"relative",display:"inline-block"}}>
+                       {props.test.status=="Draft"?<span className="closeImg fa fa-times-circle-o " onClick={()=>props.update("",props.id,true)} ></span>:null}
                        <img src={props.option.img} style={{maxHeight:"100px"}} className="img-fluid" />
                     </span>
                 </div>:null}
             </div>
             <div className="col-2">
-                    <i className="fa fa-image pointer hover-pink" onClick={()=>setShowImgUploader(true)}></i>
-                    <i className="fa fa-close pointer hover-danger ml-md-2" onClick={()=>{props.removeOption(props.id)}}></i>
+                    {props.test.status=="Draft"?<i className="fa fa-image pointer hover-pink" onClick={()=>setShowImgUploader(true)}></i>:null}
+                    {props.test.status=="Draft"?<i className="fa fa-close pointer hover-danger ml-md-2" onClick={()=>{props.removeOption(props.id)}}></i>:null}
             </div>
         </div>
         </div>

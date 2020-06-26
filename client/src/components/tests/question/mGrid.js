@@ -35,11 +35,13 @@ function MGrid(props) {
                       <div className="col-10">
                           {i+1}.  {row}
                       </div>
-                      <div className="col-2" onClick={()=>{removeRow(i)}}> <i className="fa fa-close hover-danger pointer"></i> </div>
+                      {props.test.status=="Draft"&&!props.preview?<div className="col-2" onClick={()=>{removeRow(i)}}> <i className="fa fa-close hover-danger pointer"></i> </div>:null}
                   </div>
                 )):null}
                 <div className="mt-2">
-                <form onSubmit={addRow}> <input className="w-75 p-2" value={row} onChange={e=>setRow(e.target.value)} style={{border:"none",borderBottom:"2px solid #a1a1a1a1"}} placeholder="Add Row"/></form>
+                {props.test.status=="Draft"&&!props.preview?
+                  <form onSubmit={addRow}> <input className="w-75 p-2" value={row} onChange={e=>setRow(e.target.value)} style={{border:"none",borderBottom:"2px solid #a1a1a1a1"}} placeholder="Add Row"/></form>
+                  :null}
                 </div>
             </div>
 
@@ -54,11 +56,13 @@ function MGrid(props) {
                               <label className="custom-control-label" htmlFor="o1"> {col.title} </label>
                           </div>
                       </div>
-                      <div className="col-2" onClick={()=>{removeCol(i)}}> <i className="fa fa-close hover-danger pointer"></i> </div>
+                      {props.test.status=="Draft"&&!props.preview?<div className="col-2" onClick={()=>{removeCol(i)}}> <i className="fa fa-close hover-danger pointer"></i> </div>:null}
                   </div>
                 )):null}
                 <div className="mt-2">
+                  {props.test.status=="Draft"&&!props.preview?
                     <form onSubmit={addCol}> <input className="w-75 p-2" value={col} onChange={e=>setCol(e.target.value)} style={{border:"none",borderBottom:"2px solid #a1a1a1a1"}} placeholder="Add Collumn"/></form>
+                    :null}
                 </div>
             </div>
 

@@ -118,11 +118,11 @@ function Question(props) {
                 <div style={{border:"1px solid #c1c1c1",backgroundColor:"#f9f9f9", borderRadius:"18px",padding:"20px"}} >
                     <div className="row p-0 " style={{alignItems:"center"}} >
                         <div className="col-md-7 col-lg-8">
-                        <input type="text" name="question" onBlur={handleUpdate} value={title} onChange={(e)=>{setTitle(e.target.value)}} placeholder="Enter Question" className="w-100 comment-inp"/>
+                        <input type="text" name="question" onBlur={handleUpdate} value={title} onChange={(e)=>{setTitle(e.target.value)}} placeholder="Enter Question" className="w-100 comment-inp" readOnly={props.test.status=="Draft"&&!props.preview?false:true}/>
                         </div>
                         <div className="col-md-5 col-lg-4 mt-2 mt-md-0">
-                            <span className="pointer hover-pink" style={{fontSize:"24px"}} onClick={()=>setShowImgUploader(true)} ><i className="fa fa-image"></i></span>
-                            <select name="type" className="form-control d-inline ml-2" style={{maxWidth:"200px"}} value={props.question.type} onChange={handleUpdate}>
+                            {props.test.status=="Draft"&&!props.preview?<span className="pointer hover-pink" style={{fontSize:"24px"}} onClick={()=>setShowImgUploader(true)} ><i className="fa fa-image"></i></span>:null}
+                            <select name="type" className="form-control d-inline ml-2" style={{maxWidth:"200px"}} value={props.question.type} onChange={handleUpdate} disabled={props.test.status=="Draft"&&!props.preview?false:true}>
                                 <option value="mcq"  >Multiple Choice</option>
                                 <option value="mcqGrid">Multiple Choice Grid</option>
                                 <option value="paragraph">Paragraph</option>
@@ -132,15 +132,15 @@ function Question(props) {
                     </div>
                     {props.question.img?
                     <div className="qImg mt-3"  >
-                       <span style={{position:"relative",display:"inline-block"}}><span className="closeImg fa fa-times-circle-o " onClick={()=>handleQuesImgUpdate(null,true)} ></span>  <img src={props.question.img} style={{maxHeight:"200px"}} className="img-fluid" /></span>
+                       <span style={{position:"relative",display:"inline-block"}}>{props.test.status=="Draft"&&!props.preview?<span className="closeImg fa fa-times-circle-o " onClick={()=>handleQuesImgUpdate(null,true)} ></span>:null}  <img src={props.question.img} style={{maxHeight:"200px"}} className="img-fluid" /></span>
                     </div>:null}
-                    {props.question.type=="mcq"?<MCQ id={props.id} updateOptImg={handleOptImgUpdate} options={props.question.options} autoGrade={props.question.autoGrade} handleUpdate={handleUpdate} correctOption={props.question.correctOption} autoGradeUpdate={autoGradeUpdate} />:null}
-                    {props.question.type=="mcqGrid"?<MGrid rows={props.question.rows} cols={props.question.options} handleUpdate={handleUpdate}/>:null}
+                    {props.question.type=="mcq"?<MCQ id={props.id} updateOptImg={handleOptImgUpdate} options={props.question.options} autoGrade={props.question.autoGrade} handleUpdate={handleUpdate} correctOption={props.question.correctOption} autoGradeUpdate={autoGradeUpdate} test={props.test} preview={props.preview}/>:null}
+                    {props.question.type=="mcqGrid"?<MGrid rows={props.question.rows} cols={props.question.options} handleUpdate={handleUpdate} test={props.test} preview={props.preview}/>:null}
                     {props.question.type=="paragraph"? <Paragraph/> :null}
                 </div>
             </div>
             <div className="col-2 col-lg-1 px-2">
-                  {props.test.status=="Draft"?
+                  {props.test.status=="Draft"&&!props.preview?
                     <div className="round py-2 qOpt" >
                       <div className=" pointer hover-pink" onClick={()=>duplicateQuestion(props.question)}><i className="fa fa-copy"></i></div>
                       <div className=" pointer hover-pink" onClick={addQuestion}> <i className="fa fa-plus-circle" ></i> </div>
