@@ -108,7 +108,7 @@ function CreateTest(props) {
         };
 
     // React HOC for drag and drop items
-        const SortableItem = sortableElement(({question,i}) => (<Question index={i} id={i} add={addQuestion} remove={delQuestion} update={updateQuestion} question={question} disableDel={questions.length==1?true:false}/>));
+        const SortableItem = sortableElement(({question,i}) => (<Question index={i} id={i} add={addQuestion} remove={delQuestion} update={updateQuestion} question={question} disableDel={questions.length==1?true:false} test={test}/>));
 
     // React HOC for drag and drop items
         const SortableContainer = sortableContainer(({children}) => {
@@ -124,8 +124,8 @@ function CreateTest(props) {
                 <div className="d-flex justify-content-between">
                   <h1 className="topicTitle mainH text-left text-pink">Create Test  <span style={{fontSize:"16px"}} >( {questions.length} Questions )</span></h1>
                   <div>
-                    <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer"></i></span>
-                    {test.status=="Draft"?[<button className="btn btn-outline-grad ml-2" onClick={saveTest}> Save </button>,
+                    {test.status=="Draft"?[<span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer"></i></span>,
+                      <button className="btn btn-outline-grad ml-2" onClick={saveTest}> Save </button>,
                         <button className="btn bg-grad text-white ml-2" onClick={()=>saveTest("publish")}> Publish  </button>]
                         :(test.status=="Published"?
                             <button className="btn bg-grad text-white ml-2" onClick={handleClose}> Close  </button>

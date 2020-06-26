@@ -140,11 +140,13 @@ function Question(props) {
                 </div>
             </div>
             <div className="col-2 col-lg-1 px-2">
-                  <div className="round py-2 qOpt" >
-                    <div className=" pointer hover-pink" onClick={()=>duplicateQuestion(props.question)}><i className="fa fa-copy"></i></div>
-                    <div className=" pointer hover-pink" onClick={addQuestion}> <i className="fa fa-plus-circle" ></i> </div>
-                    {props.disableDel?null:<div className="text-danger pointer" onClick={deleteQuestion}> <i className="fa fa-trash" ></i> </div>}
-                  </div>
+                  {props.test.status=="Draft"?
+                    <div className="round py-2 qOpt" >
+                      <div className=" pointer hover-pink" onClick={()=>duplicateQuestion(props.question)}><i className="fa fa-copy"></i></div>
+                      <div className=" pointer hover-pink" onClick={addQuestion}> <i className="fa fa-plus-circle" ></i> </div>
+                      {props.disableDel?null:<div className="text-danger pointer" onClick={deleteQuestion}> <i className="fa fa-trash" ></i> </div>}
+                    </div>
+                    :null}
             </div>
         </div>
         </React.Fragment>
