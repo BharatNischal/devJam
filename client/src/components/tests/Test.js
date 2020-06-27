@@ -14,6 +14,7 @@ function Test(props) {
   //UI STATES
   const [copyAlert,setCopyAlert] = useState(false);
   const [showConfirmAlert,setShowConfirmAlert] = useState(false);
+  const [alertId,setAlertId] = useState("");
 
   // Login State
   const {user} = useContext(CurUserContext)
@@ -107,13 +108,15 @@ function Test(props) {
     }
   }
 
-  function handleClose(id){
-    axios.put(`/test/close/${id}`)
+  function handleClose(){
+    axios.put(`/test/close/${alertId}`)
       .then(res=>{
         if(res.data.success){
+          setShowConfirmAlert(false);
           setTests(tests.slice().map(test=>{
-            if(test._id==id){
+            if(test._id==alertId){
               test.status = "Closed";
+              setAlertId("");
             }
             return test;
           }))
@@ -130,7 +133,7 @@ function Test(props) {
         <React.Fragment>
             <Nav show={true} menu={true} />
             {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
-            {showConfirmAlert?<Alert msg={<React.Fragment> <h3>Are You Sure to continue?</h3><p> Click Ok to Proceed.</p> </React.Fragment>} ok={null} cancel={()=>setShowConfirmAlert(false)} />:null}
+            {showConfirmAlert?<Alert msg={<React.Fragment> <h3>Are You Sure to continue?</h3><p> Click Ok to Proceed.</p> </React.Fragment>} ok={handleClose} cancel={()=>setShowConfirmAlert(false)} />:null}
             <div className="bgwhiteoverlay"></div>
             <div className="container" style={{marginTop:"120px"}} >
                 <div style={{display:"flex",justifyContent:"space-between"}} ><h1 className="topicTitle mainH text-left text-pink">Tests </h1>  <div> <button className="btn btn-outline-grad" onClick={handleNew}> Create </button> </div> </div>
@@ -164,7 +167,7 @@ function Test(props) {
                                 <div className="pt-2 hover-pink" onClick={()=>props.history.push(`/test/${test._id}`)} ><h3 className="topicTitle d-inline mr-2" style={{fontSize:"20px"}}> {test.title}</h3><i style={{fontSize:"14px",color:"#333"}} >{test.status}</i></div>
                                 <div> {test.status=="Published"? <span className="hover-pink pointer" onClick={()=>copyToClipBoard(test._id)}  > <i className="fa fa-copy"></i> </span>:null}
                                   {test.status=="Draft"?<button className="btn btn-grad ml-2" onClick={()=>props.history.push(`/publish/test/${test._id}`)}>Publish</button>
-                                :(test.status=="Published"?<button className="btn btn-grad ml-2" onClick={()=>handleClose(test._id)}>Close Test</button>
+                                :(test.status=="Published"?<button className="btn btn-grad ml-2" onClick={()=>{setAlertId(test._id);setShowConfirmAlert(true)}}>Close Test</button>
                               :<button className="btn btn-grad ml-2" onClick={()=>props.history.push(`/result/test/${test._id}`)}>View Result</button>)}
                                 </div>
                             </div>
