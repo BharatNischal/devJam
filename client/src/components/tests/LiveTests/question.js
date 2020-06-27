@@ -37,7 +37,7 @@ function Question(props) {
     return (
        <React.Fragment>
            <div className="d-flex justify-content-between">
-               <h1 className="timer">{secondsToHms(props.timer)}</h1>
+               <h1 className="timer">{props.timer?secondsToHms(props.timer):""}</h1>
                <div> <button className="btn btn-outline-grad" onClick={handleFinishTest}> Finish </button></div>
            </div>
            <hr/>
