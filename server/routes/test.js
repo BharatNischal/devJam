@@ -382,4 +382,17 @@ router.put('/testSubmission/result/:id',function (req,res) {
     })
 })
 
+router.get("/allReleasedTests",middleware.isAdmin, function(req,res){
+    db.Test.find({"students":{$elemMatch:{"userId":req.user._id,"released":true}}})
+    .then(tests=>{
+      for(let i=0;i<tests.length;i++){
+        tests[i].students=tests[i].students.filter(st=>st.userId.equals(req.user._id));
+      }
+      res.json({success:true,tests:tests});
+    }).catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+
+});
+
 module.exports =router;

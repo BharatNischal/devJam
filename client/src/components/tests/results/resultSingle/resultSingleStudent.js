@@ -4,6 +4,7 @@ import UserImg from "../../../profile/CLIP.png";
 import Placeholder from "../../Placeholder.png";
 import Question from "./question2";
 import axios from "axios";
+import TopBar from '../../../learnerPlatform/TopBar';
 
 
 function ResultSingle(props) {
@@ -49,7 +50,7 @@ function ResultSingle(props) {
       <React.Fragment>
         {answers.length>0?
           <React.Fragment>
-              <Nav show={true} menu={true}/>
+              <TopBar/>
               <div className="bgwhiteoverlay" ></div>
               <div className="container text-left" style={{marginTop:"100px"}}>
                   <div className="row">
@@ -91,7 +92,7 @@ function ResultSingle(props) {
               </div>
           </React.Fragment>:
           <React.Fragment>
-                <Nav show={true} menu={true}/>
+                <TopBar/>
                 <div className="bgwhiteoverlay" ></div>
                 <div className="container text-left" style={{marginTop:"100px"}}>
                   <h2 className="text-center">You Did not take the test.</h2>

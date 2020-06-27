@@ -6,6 +6,7 @@ import {CurUserContext} from "../../contexts/curUser";
 import BellImg  from "./bellLogo.png";
 import Notification from "./Notification";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 
 const TopBar = (props)=>{
     const [showDropDown,setShowDropDown] = useState(false);
@@ -32,8 +33,9 @@ const TopBar = (props)=>{
     return(
         <React.Fragment>
         <div className="topBar">
-            <h1 >LrnrHub</h1>
+            <Link to="/studDash" ><h1 >LrnrHub</h1></Link>
             <div>
+                <span className="mr-2 "> <Link to="/allTests" className="text-white"> <b>Tests</b> </Link> </span>
                 <div className="dpWrapper cursor-pointer mr-2 d-inline-block" style={{position:"relative"}} onClick={()=>setShowNotification(true)} >
                      <img alt="profilePic" src={BellImg} /> 
                      <span className="numIndicator rounded-circle" > {user.notifications?user.notifications.filter(n=>n.read==false).length:""} </span> </div>
