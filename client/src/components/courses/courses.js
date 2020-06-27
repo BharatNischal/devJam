@@ -22,7 +22,7 @@ function Courses(props) {
 
     useEffect(()=>{
       // if(user.loggedIn && !user.student){
-      //   axios.get('/courses')
+      //   axios.get('/all/courses')
       //     .then(res=>{
       //       if(res.data.success){
                 // allCourses = res.data.courses

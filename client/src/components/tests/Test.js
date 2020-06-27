@@ -23,7 +23,7 @@ function Test(props) {
   useEffect(()=>{
 
     if(user.loggedIn && !user.student){
-      axios.get('/tests')
+      axios.get('/all/tests')
         .then(res=>{
           if(res.data.success){
             allTests = res.data.tests;

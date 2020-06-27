@@ -7,7 +7,7 @@ const mailFunction = require("../mail");
 
 
 // Route to get all the tests
-router.get('/tests',middleware.isAdmin,function (req,res) {
+router.get('/all/tests',middleware.isAdmin,function (req,res) {
   db.Test.find({})
     .then(tests=>{
       res.json({success:true,tests});
@@ -29,7 +29,7 @@ router.get('/test/new',middleware.isAdmin,function (req,res) {
 });
 
 // To get the details of a test
-router.get('/test/:id',middleware.isAdmin,function (req,res) {
+router.get('/test/find/:id',middleware.isAdmin,function (req,res) {
   db.Test.findById(req.params.id).populate('questions')
     .then(test=>{
       res.json({success:true,test});

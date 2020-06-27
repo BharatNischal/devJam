@@ -9,11 +9,26 @@ const courseSchema = new mongoose.Schema({
     instructions:String,
     // Authorized Students
     students:[{
-        userId:{
           type:mongoose.Schema.Types.ObjectId,
           ref: 'User'
-        }
       }],
+    events:[{
+      date:Date,
+      item:{
+          video:{
+              type:mongoose.Schema.Types.ObjectId,
+              ref:'Video'
+          },
+          deliverable:{
+              type:mongoose.Schema.Types.ObjectId,
+              ref:'deliverable'
+          },
+          test:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'test'
+          }
+      }
+    }],
     startTime:Date,
     endTime:Date
 });

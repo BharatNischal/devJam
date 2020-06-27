@@ -26,7 +26,7 @@ function CreateTest(props) {
 
       if(user.loggedIn && !user.student){
 
-        axios.get(`/test/${props.match.params.id}`)
+        axios.get(`/test/find/${props.match.params.id}`)
           .then(res=>{
             if(res.data.success){
                 if(!res.data.test.questions || res.data.test.questions.length==0){
