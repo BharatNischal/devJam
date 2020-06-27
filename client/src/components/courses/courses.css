@@ -1,0 +1,16 @@
+.calendar-grid{
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-rows: 50px repeat(5,150px);
+    box-shadow:0px 4px 8px #00000031;
+    border-radius: 14px;
+    overflow: hidden;
+}
+.cal-header{
+    box-shadow:0px 4px 8px #00000050;
+    background-color: rgb(190, 64, 110);
+    color:white;
+    padding-top: 6px;
+    font-size: 18px;
+    font-weight: 600;
+}
