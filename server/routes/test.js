@@ -89,7 +89,7 @@ router.put('/test/publish/:id',function (req,res) {
 
 
 
-            mailFunction(msg,(err,info)=>{
+            mailFunction.mailFunction(msg,(err,info)=>{
               if(!err){
                   console.log(info);
                   res.json({success:true,test});
@@ -303,25 +303,23 @@ router.get("/submissions/testdetails/:testId" , function(req,res){
 
 // Route to release Result
 router.post('/test/results/release/:id',function (req,res) {
-  console.log(req.body);
   db.Test.findById(req.params.id)
     .populate(['students.testSubmissionId','students.userId'])
     .then((test)=>{
         console.log(test);
-        // Send emails
 
-        req.body.students.forEach(async s=>{
+        let mailPromises = [];
+        let notificationPromises = [];
+
+        req.body.students.forEach(s=>{
           // Find index of user in database to check if email is already sent or not
           const ind = test.students.findIndex((t)=>(t.userId._id.equals(s)));
-          console.log(ind);
+
+          var fullUrl = `${req.protocol}://${req.get('host')}/resultSingleStudent/${test.students[ind].testSubmissionId?test.students[ind].testSubmissionId._id:"undefined"}`;
+
+          // Send emails
           if(ind!=-1 && !test.students[ind].released && test.students[ind].userId.username){
-              console.log("inside mail route");
-              var fullUrl = `${req.protocol}://${req.get('host')}/resultSingleStudent/${test.students[ind].testSubmissionId?test.students[ind].testSubmissionId._id:"undefined"}`;
-              const notification=await db.Notification.create({
-                title:`The results for ${test.title} is out. Please Click the button to see details.`,
-                type:"result",
-                link:fullUrl
-              });
+
               const msg = {
                 from: '"Learner Platform" <manjotsingh16july@gmail.com>', // sender address (who sends)
                 to: test.students[ind].userId.username, // list of receivers (who receives)
@@ -329,22 +327,39 @@ router.post('/test/results/release/:id',function (req,res) {
                 text: `Dear student \nThe results for ${test.title} is out. Your score is ${test.students[ind].testSubmissionId?test.students[ind].testSubmissionId.finalMarks:0}/${test.questions.length} \n
                 To get a detail result please click the link below \n ${fullUrl}`
               };
-              mailFunction(msg,function(err,info){
-                if(err){
-                  console.log(err);
-                }else{
-                  console.log(info);
-                }
-              });
-              test.students[ind].released = true;
-              test.students[ind].userId.notifications.push({
-                notification:notification
-              });
-              test.students[ind].userId.save();
-              test.save();
+
+              mailPromises.push(mailFunction.mailFunctionPromise(msg));
+          }
+          // To send notifications
+          if(ind!=-1 && !test.students[ind].released){
+
+            notificationPromises.push(db.Notification.create({
+              title:`The results for ${test.title} is out. Please Click the button to see details.`,
+              type:"result",
+              link:fullUrl
+            }));
+
           }
         });
-        res.json({success:true,test});
+        let index=0;
+        Promise.all([...notificationPromises,...mailPromises])
+          .then(responses=>{
+
+              req.body.students.forEach(s=>{
+
+                const ind = test.students.findIndex((t)=>(t.userId._id.equals(s)));
+                if(ind!=-1 && !test.students[ind].released){
+                    test.students[ind].userId.notifications.push({
+                      notification:responses[index++]
+                    });
+                    test.students[ind].released = true;
+                    test.students[ind].userId.save();
+                }
+
+              })
+              test.save();
+              res.json({success:true,test});
+          })
     })
     .catch(err=>{
       console.log(err);
