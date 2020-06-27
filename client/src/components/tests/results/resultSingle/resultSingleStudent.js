@@ -12,6 +12,7 @@ function ResultSingle(props) {
     const [questions,setQuestions] = useState([]);
     const [answers,setAnswers] = useState([]);
     const [title,setTitle] = useState("");
+    const [notAttempt,setNotAttempt] = useState(false);
     const [totalMarks,setTotalMarks] = useState(0);
     const [marks,setMarks] = useState(0);
 
@@ -19,7 +20,7 @@ function ResultSingle(props) {
     // Get data from database
     useEffect(()=>{
       if(props.match.params.testId=="Undefined"||props.match.params.testId=="undefined"){
-
+        setNotAttempt(true);
       }else{
         axios.get(`/testResults/individual/${props.match.params.testId}`)
           .then(res=>{
@@ -94,8 +95,10 @@ function ResultSingle(props) {
                 <Nav show={true} menu={true}/>
                 <div className="bgwhiteoverlay" ></div>
                 <div className="container text-left" style={{marginTop:"100px"}}>
-                  <h2 className="text-center">You Did not take the test.</h2>
-                  <h2 className="text-center">Your Score: 0</h2>
+                  {notAttempt?
+                    [<h2 className="text-center">You Did not take the test.</h2>,
+                    <h2 className="text-center">Your Score: 0</h2>]
+                  :null}
                 </div>
           </React.Fragment>
         }

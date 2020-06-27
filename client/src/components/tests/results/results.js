@@ -34,14 +34,14 @@ function Results(props) {
                  var totalmarks=0,totalFinalMarks=0,totalMaxMarks=0;
                  res.data.test.students.forEach(el => {
                     if(el.testSubmissionId){
-                        totalmarks+=el.testSubmissionId.marks;
-                        totalFinalMarks+=el.testSubmissionId.finalMarks;
+                        totalmarks+= +el.testSubmissionId.marks;
+                        totalFinalMarks+= +el.testSubmissionId.finalMarks;
                     }
-                    totalMaxMarks+=marks;
+                    totalMaxMarks+= marks;
                  });
                  setAvg({
-                     marks:(totalmarks/totalMaxMarks).toFixed(2),
-                     finalMarks:(totalFinalMarks/totalMaxMarks).toFixed(2)
+                     marks:(totalMaxMarks?totalmarks/totalMaxMarks:0).toFixed(2),
+                     finalMarks:(totalMaxMarks?totalFinalMarks/totalMaxMarks:0).toFixed(2)
                  })
 
 
@@ -145,11 +145,34 @@ function handleSort(choice,array=filteredStudents) {
     }
 
     function handleRelease(data) {
-      console.log(data);
+      console.log("data",data);
       const students = data.map(s=>(s.userId._id));
       Axios.post(`/test/results/release/${props.match.params.id}`,{students})
         .then(res=>{
           if(res.data.success){
+            if(students.length==1){
+
+              allStudents.forEach(student=>{
+                if(student.userId._id==students[0])
+                  student.released = true;
+              });
+
+              setFilteredStudents([...filteredStudents].map(s=>{
+                if(s.userId._id==students[0]){
+                    s.released = true;
+                }
+                return s;
+              }))
+
+            }else{
+              allStudents.forEach(student=>{
+                student.released = true;
+              });
+              setFilteredStudents([...students].map(s=>{
+                s.released = true;
+                return s;
+              }))
+            }
             console.log("Successful");
           }else{
             console.log(res.data.msg);
@@ -203,9 +226,9 @@ function handleSort(choice,array=filteredStudents) {
         handleFilter(filterVal,numbers[0],numbers[1]);
         //setshowNumberOptions(-1);
     }
-    const copyToClipBoard=function(){
+    const copyToClipBoard=function(id){
       var textField = document.createElement('textarea')
-      textField.innerText =`${window.location.host}/resultSingleStudent/${props.match.params.id}` ;
+      textField.innerText =`${window.location.host}/resultSingleStudent/${id}` ;
       document.body.appendChild(textField);
       textField.select();
       document.execCommand('copy');
@@ -228,7 +251,7 @@ function handleSort(choice,array=filteredStudents) {
                 </p>
                 <h1 className="topicTitle mainH text-left mt-3 ml-2 mb-0" style={{fontSize:"22px"}}>Duration </h1>
                 <p className="mt-1 ml-3 ">
-                    {test.duration?`${test.duration} Minutes`:"No Timer"}
+                    {test.duration!=-1?`${test.duration} Minutes`:"No Timer"}
                 </p>
                 <div className="row">
                 <div className="col-lg-4 mt-1 order-lg-2">
@@ -237,7 +260,7 @@ function handleSort(choice,array=filteredStudents) {
 
                             <Select
                                 className="mb-2"
-                                placeholder="filter By "
+                                placeholder="Sort By "
                                 options={sortOptions}
                                 onChange={(e)=>handleSort(e.value)}
                              />
@@ -282,7 +305,7 @@ function handleSort(choice,array=filteredStudents) {
                                         <td className="pointer hover-pink" onClick={()=>props.history.push(`/resultSingle/${stu.userId._id}/${props.match.params.id}`)}> <b>{stu.userId.name} </b></td>
                                         <td> {stu.testSubmissionId?stu.testSubmissionId.marks:-1}/{test.marks} </td>
                                         <td> {stu.testSubmissionId?stu.testSubmissionId.finalMarks:-1}/{test.marks} </td>
-                                        <td> {stu.released?<span> <i className="fa fa-copy hover-pink mr-2 pointer" onClick={copyToClipBoard} ></i> Released</span>:<button className="btn btn-outline-grad" onClick={()=>handleRelease([stu])}> Release </button>} </td>
+                                        <td> {stu.released?<span> <i className="fa fa-copy hover-pink mr-2 pointer" onClick={()=>copyToClipBoard(stu.testSubmissionId?stu.testSubmissionId._id:"undefined")} ></i> Released</span>:<button className="btn btn-outline-grad" onClick={()=>handleRelease([stu])}> Release </button>} </td>
                                     </tr>
                                 ))}
 
