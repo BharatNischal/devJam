@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import Nav from "../../profile/Nav/Nav";
 import Select from "react-select";
 import Axios from 'axios';
+import {CurUserContext} from "../../../contexts/curUser";
 
 var allStudents=[];
 
@@ -18,8 +19,12 @@ function Results(props) {
     const [numbers,setNumbers]=useState([0,0]);
     const [copyAlert,setCopyAlert] = useState(false);
 
+    // Login State
+    const {user} = useContext(CurUserContext)
 
     useEffect(function(){
+
+      if(user.loggedIn && !user.student){
         Axios.get(`/submissions/test/${props.match.params.id}`)
         .then(function(res){
             if(res.data.success){
@@ -51,6 +56,9 @@ function Results(props) {
         }).catch(function(err){
             alert(err.message);
         })
+      }else{
+        props.history.push(user.loggedIn?'/studDash':'/login');
+      }
 
     },[])
 

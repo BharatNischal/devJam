@@ -1,10 +1,11 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import Nav from '../../../profile/Nav/Nav';
 import UserImg from "../../../profile/CLIP.png";
 import Select from "react-select";
 import Placeholder from "../../Placeholder.png";
 import Question from "./question";
 import axios from "axios";
+import {CurUserContext} from "../../../../contexts/curUser";
 
 
 let allQuestions = [];
@@ -18,9 +19,13 @@ function ResultSingle(props) {
     const [totalMarks,setTotalMarks] = useState(0);
     const [filterBy,setFilterBy] = useState("none");
 
+    // Login State
+    const {user} = useContext(CurUserContext)
 
     // Get data from database
     useEffect(()=>{
+
+    if(user.loggedIn && !user.student){
       axios.get(`/submissions/testdetails/${props.match.params.testId}`)
         .then(res=>{
           if(res.data.success){
@@ -28,8 +33,8 @@ function ResultSingle(props) {
             allQuestions = res.data.test.questions;
             let ques=[];
             for(let i=0;i<res.data.test.questions.length;i++){
-              
-              
+
+
               ques.push(i);
             }
             setQuestions(ques);
@@ -56,6 +61,9 @@ function ResultSingle(props) {
         .catch(err=>{
           console.log(err.message);
         })
+      }else{
+        props.history.push(user.loggedIn?'/studDash':'/login');
+      }
     },[])
 
     // Shufffle answers acc to questions
@@ -164,7 +172,7 @@ function ResultSingle(props) {
         height:70
       })
     };
-          
+
     return (
         <React.Fragment>
         {students.length>0?

@@ -7,7 +7,7 @@ const mailFunction = require("../mail");
 
 
 // Route to get all the tests
-router.get('/tests',function (req,res) {
+router.get('/tests',middleware.isAdmin,function (req,res) {
   db.Test.find({})
     .then(tests=>{
       res.json({success:true,tests});
@@ -18,7 +18,7 @@ router.get('/tests',function (req,res) {
 });
 
 // Route to create new test
-router.get('/test/new',function (req,res) {
+router.get('/test/new',middleware.isAdmin,function (req,res) {
   db.Test.create({})
     .then(test=>{
       res.json({success:true,test});
@@ -29,7 +29,7 @@ router.get('/test/new',function (req,res) {
 });
 
 // To get the details of a test
-router.get('/test/:id',function (req,res) {
+router.get('/test/:id',middleware.isAdmin,function (req,res) {
   db.Test.findById(req.params.id).populate('questions')
     .then(test=>{
       res.json({success:true,test});
@@ -40,7 +40,7 @@ router.get('/test/:id',function (req,res) {
 })
 
 // Route to save a test as draft
-router.put('/test/:id',function (req,res) {
+router.put('/test/:id',middleware.isAdmin,function (req,res) {
     // Save the questions
     let questionIds=[],promises=[];
     req.body.questions.forEach(question=>{
@@ -59,7 +59,7 @@ router.put('/test/:id',function (req,res) {
 });
 
 // Route to give authorizaion to students for test and publish it ,send emails and notification
-router.put('/test/publish/:id',function (req,res) {
+router.put('/test/publish/:id',middleware.isAdmin,function (req,res) {
     db.Test.findById(req.params.id)
       .then(test=>{
         let studentIds = [];
@@ -122,7 +122,7 @@ router.put('/test/publish/:id',function (req,res) {
 })
 
 // Route to close a test and evaluate marks for each submission
-router.put('/test/close/:id',function (req,res) {
+router.put('/test/close/:id',middleware.isAdmin,function (req,res) {
   db.Test.findByIdAndUpdate(req.params.id,{status:"Closed"}).populate(['questions','students.testSubmissionId'])
     .then(test=>{
         // Sort the question order
@@ -222,7 +222,7 @@ router.get('/test/:id/testSubmission/new',middleware.isStudent,function (req,res
 })
 
 // To save the test Progress. **Send the answers array in the correct format
-router.put('/testsubmission/:id',function (req,res) {
+router.put('/testsubmission/:id',middleware.isStudent,function (req,res) {
   db.TestSubmission.findByIdAndUpdate(req.params.id,{answers:req.body.answers})
     .then(testSubmission=>{
       res.json({success:true,testSubmission});
@@ -233,7 +233,7 @@ router.put('/testsubmission/:id',function (req,res) {
 });
 
 // Submit the test
-router.put('/testSubmission/:id/complete',function (req,res) {
+router.put('/testSubmission/:id/complete',middleware.isStudent,function (req,res) {
   db.TestSubmission.findByIdAndUpdate(req.params.id,{onTime:true})
   .then(testSubmission=>{
     res.json({success:true,testSubmission});
@@ -245,7 +245,7 @@ router.put('/testSubmission/:id/complete',function (req,res) {
 
 
 // To get all the tests that the student has given
-router.get('/allTests',function (req,res) {
+router.get('/allTests',middleware.isAdmin,function (req,res) {
     db.TestSubmission.find({user:req.user._id}).populate('testId')
       .then(testSubmissions=>{
         res.json({success:true,testSubmissions});
@@ -256,7 +256,7 @@ router.get('/allTests',function (req,res) {
 });
 
 //Route to get all test submissions of specific test
-router.get("/submissions/test/:testId" , function(req,res){
+router.get("/submissions/test/:testId" ,middleware.isAdmin, function(req,res){
   db.Test.findById(req.params.testId)
   .populate([
     {
@@ -277,7 +277,7 @@ router.get("/submissions/test/:testId" , function(req,res){
 
 
 //Route to get all test submissions of specific test along with questions
-router.get("/submissions/testdetails/:testId" , function(req,res){
+router.get("/submissions/testdetails/:testId" ,middleware.isAdmin, function(req,res){
   db.Test.findById(req.params.testId)
   .populate([
     {
@@ -302,7 +302,7 @@ router.get("/submissions/testdetails/:testId" , function(req,res){
 });
 
 // Route to release Result
-router.post('/test/results/release/:id',function (req,res) {
+router.post('/test/results/release/:id',middleware.isAdmin,function (req,res) {
   db.Test.findById(req.params.id)
     .populate(['students.testSubmissionId','students.userId'])
     .then((test)=>{
@@ -369,7 +369,7 @@ router.post('/test/results/release/:id',function (req,res) {
 
 
 // Get Details of Results of a test for a particular student
-router.get('/testResults/individual/:testId',function (req,res) {
+router.get('/testResults/individual/:testId',middleware.isAdmin,function (req,res) {
     db.TestSubmission.findById(req.params.testId)
     .populate(['testId','answers.questionId'])
       .then(test=>{
@@ -381,7 +381,7 @@ router.get('/testResults/individual/:testId',function (req,res) {
       })
 })
 
-router.put('/testSubmission/result/:id',function (req,res) {
+router.put('/testSubmission/result/:id',middleware.isAdmin,function (req,res) {
   db.TestSubmission.findByIdAndUpdate(req.params.id,req.body.submission)
     .then(test=>{
       res.json({success:true});

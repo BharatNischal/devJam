@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import TopBar from "../../learnerPlatform/TopBar";
 import Axios from 'axios';
+import {CurUserContext} from '../../../contexts/curUser';
 
 function Tests(props) {
     const [tests,setTests] = useState([]);
 
+    // Login state
+    const {user} = useContext(CurUserContext);
+
     useEffect(function(){
+      if(user.loggedIn && user.student){
         Axios.get("/allReleasedTests")
         .then(function(res){
             if(res.data.success){
-                setTests(res.data.tests);                
+                setTests(res.data.tests);
             }else{
                 console.error(res.data.msg);
                 alert(res.data.msg);
@@ -17,6 +22,10 @@ function Tests(props) {
         }).catch(function(err){
             alert(err.message);
         })
+      }else{
+        props.history.push(user.loggedIn?'/profiles':'/login')
+      }
+
     },[])
 
     return (
@@ -35,7 +44,7 @@ function Tests(props) {
                                 </div>
                             </div>
                         ))}
-                        
+
                     </div>
                 </div>
             </div>
@@ -45,4 +54,3 @@ function Tests(props) {
 
 
 export default Tests
-

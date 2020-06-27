@@ -1,10 +1,11 @@
-import React,{useEffect,useState,useRef} from 'react';
+import React,{useEffect,useState,useRef,useContext} from 'react';
 import TopBar from "../../learnerPlatform/TopBar";
 import "./liveTest.css";
 import StartPage from './startPage';
 import Question from './question';
 import axios from "axios";
 import TestFinished from './testFinished';
+import {CurUserContext} from "../../../contexts/curUser";
 
 function LiveTest(props) {
 
@@ -18,6 +19,10 @@ function LiveTest(props) {
   const [attempted,setAttempted] = useState(0);
   const [timer,setTimer] = useState(0); //Time in seconds
   const timerRef = useRef(null);
+
+  // Login State
+  const {user} = useContext(CurUserContext)
+
   let timeLeft=0;
 
 
@@ -48,75 +53,83 @@ function LiveTest(props) {
 
 
   useEffect(()=>{
-    axios.get(`/livetest/${props.match.params.id}/new`)
-      .then(res=>{
-        if(res.data.success){
-          // Already started Test
-          if(res.data.testSubmission){
-            const {_id,startTime,onTime} = res.data.testSubmission;
 
-                // Timer
-                const curtime = new Date();
-                const starttime = new Date(startTime);
-                let timeDiff = Math.floor((curtime.getTime()-starttime.getTime())/1000);
-                timeLeft = res.data.test.duration*60-timeDiff;
-                if((res.data.test.duration!=-1 && res.data.test.duration*60<=timeDiff) ||onTime ){
-                  props.history.push('/test/finished');
-                }else{
-                  // Starting timer
-                  if(res.data.test.duration!=-1 ){  //Not a timed test for -1
-                    setTimer(+res.data.test.duration*60-timeDiff);
-                    timerRef.current =setInterval(()=>{
-                      setTimer(--timeLeft)
-                    },1000);
+    if(user.loggedIn && user.student){
+
+      axios.get(`/livetest/${props.match.params.id}/new`)
+        .then(res=>{
+          if(res.data.success){
+            // Already started Test
+            if(res.data.testSubmission){
+              const {_id,startTime,onTime} = res.data.testSubmission;
+
+                  // Timer
+                  const curtime = new Date();
+                  const starttime = new Date(startTime);
+                  let timeDiff = Math.floor((curtime.getTime()-starttime.getTime())/1000);
+                  timeLeft = res.data.test.duration*60-timeDiff;
+                  if((res.data.test.duration!=-1 && res.data.test.duration*60<=timeDiff) ||onTime ){
+                    props.history.push('/test/finished');
+                  }else{
+                    // Starting timer
+                    if(res.data.test.duration!=-1 ){  //Not a timed test for -1
+                      setTimer(+res.data.test.duration*60-timeDiff);
+                      timerRef.current =setInterval(()=>{
+                        setTimer(--timeLeft)
+                      },1000);
+                    }
                   }
-                }
 
 
-                if(res.data.test.shuffle){  //Shuffle the questions
+                  if(res.data.test.shuffle){  //Shuffle the questions
 
-                      // If the student has not submitted any answer previously
-                      if(!res.data.testSubmission.answers||res.data.testSubmission.answers.length==0){
-                        // Shuffle the questions
-                        shuffle(res.data.test.questions);
-                        setAnswers(res.data.test.questions.map(q=>(
-                          {questionId:q._id,answer:""}
-                        )));
-                        setQuestions(res.data.test.questions);
-                      }else{
-                        // Shuffle both questions and answers
-                        shuffle(res.data.testSubmission.answers);
-                        setQuestions(shuffle2(res.data.testSubmission.answers,res.data.test.questions));
-                        setAnswers(res.data.testSubmission.answers);
-                      }
+                        // If the student has not submitted any answer previously
+                        if(!res.data.testSubmission.answers||res.data.testSubmission.answers.length==0){
+                          // Shuffle the questions
+                          shuffle(res.data.test.questions);
+                          setAnswers(res.data.test.questions.map(q=>(
+                            {questionId:q._id,answer:""}
+                          )));
+                          setQuestions(res.data.test.questions);
+                        }else{
+                          // Shuffle both questions and answers
+                          shuffle(res.data.testSubmission.answers);
+                          setQuestions(shuffle2(res.data.testSubmission.answers,res.data.test.questions));
+                          setAnswers(res.data.testSubmission.answers);
+                        }
 
-                }else{
-                  setQuestions(res.data.test.questions);
-                  setAnswers(res.data.testSubmission.answers&&res.data.testSubmission.answers.length>0?res.data.testSubmission.answers
-                                                                                                      :res.data.test.questions.map(q=>(
-                                                                                                      {questionId:q._id,answer:""}
-                  )));
-                }
-                setSubmission({_id,startTime});
-                // Calculate questions attempted
-                let attempt=0;
-                res.data.testSubmission.answers.forEach(ans=>{
-                  if(ans.answer){
-                    attempt++;
+                  }else{
+                    setQuestions(res.data.test.questions);
+                    setAnswers(res.data.testSubmission.answers&&res.data.testSubmission.answers.length>0?res.data.testSubmission.answers
+                                                                                                        :res.data.test.questions.map(q=>(
+                                                                                                        {questionId:q._id,answer:""}
+                    )));
                   }
-                });
-                setAttempted(attempt);
-                setStartupPage(false);
+                  setSubmission({_id,startTime});
+                  // Calculate questions attempted
+                  let attempt=0;
+                  res.data.testSubmission.answers.forEach(ans=>{
+                    if(ans.answer){
+                      attempt++;
+                    }
+                  });
+                  setAttempted(attempt);
+                  setStartupPage(false);
+            }
+            const {title,instructions,duration} = res.data.test;
+            setTest({title,instructions,duration});
+          }else{
+            setErr(res.data.msg);
           }
-          const {title,instructions,duration} = res.data.test;
-          setTest({title,instructions,duration});
-        }else{
-          setErr(res.data.msg);
-        }
-      })
-      .catch(err=>{
-        console.log(err.message);
-      })
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+
+    }else{
+      props.history.push(user.loggedIn?'/profiles':'/login');
+    }
+
   },[])
 
 

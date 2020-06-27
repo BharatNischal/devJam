@@ -1,11 +1,11 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import Nav from '../../../profile/Nav/Nav';
 import UserImg from "../../../profile/CLIP.png";
 import Placeholder from "../../Placeholder.png";
 import Question from "./question2";
 import axios from "axios";
 import TopBar from '../../../learnerPlatform/TopBar';
-
+import {CurUserContext} from "../../../../contexts/curUser";
 
 function ResultSingle(props) {
 
@@ -17,10 +17,15 @@ function ResultSingle(props) {
     const [totalMarks,setTotalMarks] = useState(0);
     const [marks,setMarks] = useState(0);
 
+    // Login State
+    const {user} = useContext(CurUserContext)
 
     // Get data from database
     useEffect(()=>{
-      if(props.match.params.testId=="Undefined"||props.match.params.testId=="undefined"){
+      if(!user.loggedIn){
+        props.history.push('/login');
+      }
+      else if(props.match.params.testId=="Undefined"||props.match.params.testId=="undefined"){
         setNotAttempt(true);
       }else{
         axios.get(`/testResults/individual/${props.match.params.testId}`)

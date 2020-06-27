@@ -103,7 +103,7 @@ router.post('/forget', function(req, res, next) {
                 If you did not request this, please ignore this email and your password will remain unchanged.\n`
       };
 
-      mailFunction(msg,(err,info)=>{
+      mailFunction.mailFunction(msg,(err,info)=>{
         done(err,'done');
       });
 
@@ -154,7 +154,7 @@ router.post('/reset/:token', function(req, res) {
         subject: 'Your password has been changed', // Subject line
         text: `This is a confirmation that the password for your account ${user.username} has just been changed. `
       };
-      mailFunction(msg,(err,info)=>{
+      mailFunction.mailFunction(msg,(err,info)=>{
         done(err,'done');
       });
       res.json({msg:`Success! Your password for username has been changed.`,success:true});
@@ -167,7 +167,7 @@ router.post('/reset/:token', function(req, res) {
 
 // To get the current user
 router.get("/curUser",(req,res)=>{
-  
+
   res.json({user:req.user});
 })
 
