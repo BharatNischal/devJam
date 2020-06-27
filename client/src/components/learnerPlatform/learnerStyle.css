@@ -287,6 +287,12 @@
         margin-left:0;
         margin-right:0;
     }
+    .dpWrapper{
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 5px solid rgba(227, 227, 227, 0.2);
+    }
     
 }
 
