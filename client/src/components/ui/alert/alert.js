@@ -7,7 +7,7 @@ const Alert =(props)=>{
     <div className="backdropAlert"></div>
     <div className="custAlert shadow">
         <div className="p-2">
-            {props.msg}
+            {props.msg || props.children}
         </div>
         <div className="footer">
              {props.cancel?<button className="splBtn btn btn-outline-cancel mr-2" onClick={props.cancel}> Cancel </button>:null}

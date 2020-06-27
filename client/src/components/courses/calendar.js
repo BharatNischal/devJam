@@ -1,16 +1,18 @@
 import React from 'react';
+import DateEl from "./date";
 
 function Calendar(props) {
 
 
     const days=[];
-    for(let i=1;i<=35;i++){
-        if(i<props.start){
-            days.push((<div className="border p-2 disabled"> <b>{props.lastEnd-props.start+i+1 }</b> </div>))
-        }else if(i<props.start+props.end){
-            days.push((<div className="border p-2 "> <b>{i-props.start+1}</b> </div>))
+    var start=props.start==0?7:props.start;
+    for(let i=1;i<=42;i++){
+        if(i<start){
+            days.push((<div className="border date p-2 disabled"> <b>{props.lastEnd-start+i+1 }</b> </div>))
+        }else if(i<start+props.end){
+            days.push((<DateEl date={i-start+1} setVideoAlert={props.setVideoAlert} month={props.month} setDeliverableAlert={props.setDeliverableAlert} setEventAlert={props.setEventAlert} setTestAlert={props.setTestAlert} ></DateEl>))
         }else{
-            days.push((<div className="border p-2 disabled"> <b>{i-props.start-props.end+1}</b> </div>))
+            days.push((<div className="border date p-2 disabled"> <b>{i-start-props.end+1}</b> </div>))
         }
        
     }
