@@ -168,7 +168,7 @@ function handleSort(choice,array=filteredStudents) {
               allStudents.forEach(student=>{
                 student.released = true;
               });
-              setFilteredStudents([...students].map(s=>{
+              setFilteredStudents([...filteredStudents].map(s=>{
                 s.released = true;
                 return s;
               }))
