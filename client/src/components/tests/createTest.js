@@ -5,12 +5,15 @@ import axios from "axios";
 import {sortableContainer, sortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import {CurUserContext} from "../../contexts/curUser";
+import Alert from "../ui/alert/alert";
+
 
 
 function CreateTest(props) {
 
     //UI STATES
     const [isTimed,setIsTimed] = useState(false);
+    const [showConfirmAlert,setShowConfirmAlert] = useState(false);
     // Data State
     const [questions,setQuestions] = useState([]);
     const [test,setTest] = useState({title:"",status:"Draft",instructions:"",duration:-1,shuffle:false});
@@ -91,6 +94,7 @@ function CreateTest(props) {
             if(res.data.success){
               console.log("Closed");
               setTest({...test,status:"Closed"});
+              setShowConfirmAlert(false);
             }else{
               console.log(res.data.msg);
             }
@@ -132,15 +136,15 @@ function CreateTest(props) {
             <Nav show={true} menu={true}/>
             <div className="bgwhiteoverlay"></div>
             <div className="container" style={{marginTop:"120px"}} >
-
+              {showConfirmAlert?<Alert msg={<React.Fragment> <h3>Are You Sure to continue?</h3><p> Click Ok to Proceed.</p> </React.Fragment>} ok={handleClose} cancel={()=>setShowConfirmAlert(false)} />:null}
                 <div className="d-flex justify-content-between">
-                  <h1 className="topicTitle mainH text-left text-pink">Create Test  <span style={{fontSize:"16px"}} >( {questions.length} Questions )</span></h1>
+                  <h1 className="topicTitle mainH text-left text-pink">{test.status=="Draft"?"Create Test":"View Test"}  <span style={{fontSize:"16px"}} >( {questions.length} Questions )</span></h1>
                   <div>
                     {test.status=="Draft"&&!preview?[<span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer" onClick={()=>setPreview(!preview)} ></i></span>,
                       <button className="btn btn-outline-grad ml-2" onClick={saveTest}> Save </button>,
                         <button className="btn bg-grad text-white ml-2" onClick={()=>saveTest("publish")}> Publish  </button>]
                         :(test.status=="Published"?
-                            <button className="btn bg-grad text-white ml-2" onClick={handleClose}> Close  </button>
+                            <button className="btn bg-grad text-white ml-2" onClick={()=>setShowConfirmAlert(true)}> Close Test </button>
                             :[<span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye-slash  hover-pink pointer" onClick={()=>setPreview(!preview)} ></i></span>,<button className="btn bg-grad text-white ml-2" onClick={()=>props.history.push(`/result/test/${props.match.params.id}`)}> Results  </button>])}
 
                   </div>
