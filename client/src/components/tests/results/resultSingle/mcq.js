@@ -3,14 +3,14 @@ import Placeholder from "../../Placeholder.png";
 
 function MCQ(props) {
 
-    console.log(props.answer);
+    console.log("ans",props.correctOption);
 
     return (
         <div className="row mt-3 text-left" style={{position:"relative"}}>
 
             {props.options.map((opt,i)=>(
               <div className={props.autoGrade?
-                  ((props.correctOption==i+1 && +props.answer==i+1)?
+                  ((props.correctOption==i+1)?
                     "col-md-6 mb-2 p-3 correct"
                     :((props.correctOption!=i+1 && +props.answer>0 && +props.answer==i+1)?
                         "col-md-6 mb-2 p-3 wrong"
@@ -24,7 +24,7 @@ function MCQ(props) {
                          <img src={opt.img} style={{maxHeight:"100px"}} className="img-fluid" />
                   </div>
                   {props.autoGrade?
-                      ((props.correctOption==i+1 && +props.answer==i+1)?
+                      ((props.correctOption==i+1)?
                         <span className="text-success h4" style={{position:"absolute",top:"8px",right:"8px"}}> <i className="fa fa-check"></i> </span>
                         :((props.correctOption!=i+1 && +props.answer>0 && +props.answer==i+1)?
                             <span className="text-danger h4" style={{position:"absolute",top:"8px",right:"8px"}}> <i className="fa fa-close"></i> </span>

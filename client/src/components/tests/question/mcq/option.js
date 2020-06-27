@@ -15,14 +15,14 @@ function Option(props) {
                 </div>
                 {props.option.img?<div className="ml-4 mt-1" >
                     <span style={{position:"relative",display:"inline-block"}}>
-                       {props.test.status=="Draft"?<span className="closeImg fa fa-times-circle-o " onClick={()=>props.update("",props.id,true)} ></span>:null}
+                       {props.test.status=="Draft"&&!props.preview?<span className="closeImg fa fa-times-circle-o " onClick={()=>props.update("",props.id,true)} ></span>:null}
                        <img src={props.option.img} style={{maxHeight:"100px"}} className="img-fluid" />
                     </span>
                 </div>:null}
             </div>
             <div className="col-2">
-                    {props.test.status=="Draft"?<i className="fa fa-image pointer hover-pink" onClick={()=>setShowImgUploader(true)}></i>:null}
-                    {props.test.status=="Draft"?<i className="fa fa-close pointer hover-danger ml-md-2" onClick={()=>{props.removeOption(props.id)}}></i>:null}
+                    {props.test.status=="Draft"&&!props.preview?<i className="fa fa-image pointer hover-pink" onClick={()=>setShowImgUploader(true)}></i>:null}
+                    {props.test.status=="Draft"&&!props.preview?<i className="fa fa-close pointer hover-danger ml-md-2" onClick={()=>{props.removeOption(props.id)}}></i>:null}
             </div>
         </div>
         </div>

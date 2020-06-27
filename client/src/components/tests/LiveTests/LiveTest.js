@@ -172,11 +172,23 @@ function LiveTest(props) {
                 shuffle(res.data.test.questions);
             }
             setQuestions(res.data.test.questions);
-            setAnswers(res.data.test.questions.map(q=>(
+            const ans = res.data.test.questions.map(q=>(
               {questionId:q._id,answer:""}
-            )));
+            ))
+            setAnswers(ans);
             setSubmission({_id,startTime});
             setStartupPage(false);
+            axios.put(`/testsubmission/${_id}`,{answers:ans})
+              .then(res=>{
+                if(res.data.success){
+                  console.log("saved progress");
+                }else{
+                  alert(res.data.msg);
+                }
+              })
+              .catch(err=>{
+                alert(err.message);
+              })
           }else{
             console.log("setErr");
             setErr(res.data.msg);

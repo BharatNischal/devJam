@@ -306,31 +306,28 @@ router.post('/test/results/release/:id',function (req,res) {
   console.log(req.body);
   db.Test.findById(req.params.id)
     .populate(['students.testSubmissionId','students.userId'])
-    .then(async (test)=>{
+    .then((test)=>{
         console.log(test);
         // Send emails
 
-        const notification=await db.Notification.create({
-          title:`The results for ${test.title} is out. Please Click the button to see details.`,
-          type:"result",
-          link:"#"
-        });
-
-        let promises = []
-
-        req.body.students.forEach(s=>{
+        req.body.students.forEach(async s=>{
           // Find index of user in database to check if email is already sent or not
           const ind = test.students.findIndex((t)=>(t.userId._id.equals(s)));
           console.log(ind);
           if(ind!=-1 && !test.students[ind].released && test.students[ind].userId.username){
               console.log("inside mail route");
-              // var fullUrl = `${req.protocol}://${req.get('host')}/livetest/${req.params.id}`;
+              var fullUrl = `${req.protocol}://${req.get('host')}/resultSingleStudent/${test.students[ind].testSubmissionId?test.students[ind].testSubmissionId._id:"undefined"}`;
+              const notification=await db.Notification.create({
+                title:`The results for ${test.title} is out. Please Click the button to see details.`,
+                type:"result",
+                link:fullUrl
+              });
               const msg = {
                 from: '"Learner Platform" <manjotsingh16july@gmail.com>', // sender address (who sends)
                 to: test.students[ind].userId.username, // list of receivers (who receives)
                 subject: 'Results are out', // Subject line
                 text: `Dear student \nThe results for ${test.title} is out. Your score is ${test.students[ind].testSubmissionId?test.students[ind].testSubmissionId.finalMarks:0}/${test.questions.length} \n
-                To get a detail result please click the link below`
+                To get a detail result please click the link below \n ${fullUrl}`
               };
               mailFunction(msg,function(err,info){
                 if(err){
@@ -344,13 +341,10 @@ router.post('/test/results/release/:id',function (req,res) {
                 notification:notification
               });
               test.students[ind].userId.save();
+              test.save();
           }
         });
-        test.save();
-        Promise.all(promises)
-          .then(responses=>{
-            res.json({success:true,msg:"Mails sent"});
-          })
+        res.json({success:true,test});
     })
     .catch(err=>{
       console.log(err);

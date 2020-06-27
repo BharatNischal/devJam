@@ -7,21 +7,21 @@ function Notification(props) {
             <div className="d-backdrop" onClick={props.close}></div>
             <div className="dropdown" style={{width:"280px" ,height:"400px",overflow:"hidden",top:"80px"}}>
                 <div className="p-2" style={{width:"100%",height:"100%",overflowY:"scroll"}}>
-                    
-                    {props.data.map((notification,i)=>(
+
+                    {props.data?props.data.reverse().map((notification,i)=>(
                          <div key={i} className={notification.read?"d-flex p-2 mb-3 notification-card":"d-flex p-2 mb-3 notification-card unread" }>
                             <div>
-                            <img alt="icon" src={BellImg} style={{width:"60px"}}/> 
+                            <img alt="icon" src={BellImg} style={{width:"60px"}}/>
                             </div>
                             <div className="text-left ml-1" style={{fontSize:"12px"}}>
                                 <p className="m-0"> {notification.notification.title} </p>
                                 <div className="text-right" > <a className="btn btn-grad p-1" style={{fontSize:"14px"}} target="_blank" href={notification.notification.link} onClick={()=>{props.changeStatus(i)}} > {notification.notification.type?(notification.notification.type=="test"?"Give Test":"View Results"):"Give Test"} </a> </div>
                             </div>
                         </div>
-                    ))}
-                   
-                   
-                    
+                    )):null}
+
+
+
                 </div>
             </div>
         </React.Fragment>
@@ -30,4 +30,3 @@ function Notification(props) {
 
 
 export default Notification
-

@@ -43,7 +43,7 @@ function PublishTest(props) {
         .then(res=>{
            setShowConfirmation(false);
             if(res.data.success){
-                console.log("Successful");
+                props.history.push('/test');
             }else{
                 alert(res.data.msg);
             }
