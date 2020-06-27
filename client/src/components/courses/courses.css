@@ -14,3 +14,8 @@
     font-size: 18px;
     font-weight: 600;
 }
+
+.calendar-grid .disabled{
+    background-color: #e6e4e6;
+    color:#8d8d8d
+}
