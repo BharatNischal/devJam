@@ -1,9 +1,10 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import Nav from '../profile/Nav/Nav';
 import Question from './question/question';
 import axios from "axios";
 import {sortableContainer, sortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
+import {CurUserContext} from "../../contexts/curUser";
 
 
 function CreateTest(props) {
@@ -15,34 +16,45 @@ function CreateTest(props) {
     const [test,setTest] = useState({title:"",status:"Draft",instructions:"",duration:-1,shuffle:false});
     const [preview,setPreview] = useState(false);
 
+    // Login State
+    const {user} = useContext(CurUserContext)
+
     useEffect(()=>{
-      axios.get(`/test/${props.match.params.id}`)
-        .then(res=>{
-          if(res.data.success){
-              if(!res.data.test.questions || res.data.test.questions.length==0){
-                // If there is no question add one
-                axios.get('/question/mcq/new')
-                  .then(res=>{
-                    setQuestions([res.data.question]);
-                  })
-                  .catch(err=>{
-                    console.log(err.message);
-                  })
-              }else{
-                setQuestions(res.data.test.questions);
-              }
-              const {title,status,instructions,duration,shuffle} = res.data.test;
-              if(duration>-1){
-                setIsTimed(true);
-              }
-              setTest({title,status,instructions,duration,shuffle});
-          }else{
-            console.log(res.data.msg);
-          }
-        })
-        .catch(err=>{
-          console.log(err.message);
-        })
+
+      if(user.loggedIn && !user.student){
+
+        axios.get(`/test/${props.match.params.id}`)
+          .then(res=>{
+            if(res.data.success){
+                if(!res.data.test.questions || res.data.test.questions.length==0){
+                  // If there is no question add one
+                  axios.get('/question/mcq/new')
+                    .then(res=>{
+                      setQuestions([res.data.question]);
+                    })
+                    .catch(err=>{
+                      console.log(err.message);
+                    })
+                }else{
+                  setQuestions(res.data.test.questions);
+                }
+                const {title,status,instructions,duration,shuffle} = res.data.test;
+                if(duration>-1){
+                  setIsTimed(true);
+                }
+                setTest({title,status,instructions,duration,shuffle});
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+
+      }else{
+        props.history.push(user.loggedIn?'/studDash':'/login');
+      }
+
     },[])
 
     function saveTest(type) {

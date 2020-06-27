@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import Nav from '../profile/Nav/Nav';
 import placeholder from "./Placeholder.png";
 import Axios from 'axios';
 import Alert from '../ui/alert/alert';
+import {CurUserContext} from '../../contexts/curUser';
 
 function PublishTest(props) {
     const [students,setStudents]=useState([]);
@@ -13,7 +14,13 @@ function PublishTest(props) {
     const [selectAll,setSelectAll] = useState(false);
     const [showConfirmation,setShowConfirmation] = useState(false);
 
+    // Login State
+    const {user} = useContext(CurUserContext)
+
     useEffect(()=>{
+
+      if(user.loggedIn && !user.student){
+
         Axios.get("/students")
         .then(res=>{
             if(res.data.success){
@@ -27,6 +34,10 @@ function PublishTest(props) {
         }).catch(err=>{
             console.log(err);
         })
+
+      }else{
+        props.history.push(user.loggedIn?'/studDash':'/login');
+      }
     },[]);
 
     const handlePublish=function(){

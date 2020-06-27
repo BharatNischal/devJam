@@ -1,9 +1,10 @@
-import React,{useEffect,useState} from 'react';
+import React,{useEffect,useState,useContext} from 'react';
 import Modal from '../ui/modal/modal';
 import Nav from '../profile/Nav/Nav';
 import Select from "react-select";
 import axios from "axios";
 import Alert from "../ui/alert/alert";
+import {CurUserContext} from "../../contexts/curUser";
 
 var allTests = [];
 function Test(props) {
@@ -14,20 +15,29 @@ function Test(props) {
   const [copyAlert,setCopyAlert] = useState(false);
   const [showConfirmAlert,setShowConfirmAlert] = useState(false);
 
+  // Login State
+  const {user} = useContext(CurUserContext)
+
   // Get data from the database
   useEffect(()=>{
-    axios.get('/tests')
-      .then(res=>{
-        if(res.data.success){
-          allTests = res.data.tests;
-          setTests(res.data.tests);
-        }else{
-          console.log(res.data.msg);
-        }
-      })
-      .catch(err=>{
-        console.log(err.message);
-      })
+
+    if(user.loggedIn && !user.student){
+      axios.get('/tests')
+        .then(res=>{
+          if(res.data.success){
+            allTests = res.data.tests;
+            setTests(res.data.tests);
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    }else{
+      props.history.push(user.loggedIn?'/studDash':'/login');
+    }
+
   },[]);
 
 
