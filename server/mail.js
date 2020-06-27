@@ -25,7 +25,7 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-module.exports=function(mailOptions,callback){
+module.exports.mailFunction=function(mailOptions,callback){
     transporter.sendMail(mailOptions, function(error, info){
         if(error){
             console.log(error);
@@ -37,4 +37,16 @@ module.exports=function(mailOptions,callback){
             callback(error,null);
         }
     });
+}
+
+module.exports.mailFunctionPromise=function(mailOptions){
+    return new Promise(function(resolve,reject){
+        transporter.sendMail(mailOptions,function(error,info){
+            if(error){
+                reject(error);
+            }else{
+                resolve(info.response);
+            }
+        })
+    })
 }
