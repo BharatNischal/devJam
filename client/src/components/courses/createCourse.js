@@ -15,11 +15,7 @@ function CreateCourse(props) {
     const [testAlert,setTestAlert] = useState({show:false,date:null});
     const [eventAlert,setEventAlert] = useState({show:false,date:null});
     const [course,setCourse] = useState({title:"",status:"Draft",instructions:""});
-    const [events,setEvents] = useState({
-        "2020-06-01":[{video:{title:"video"}}],
-        "2020-06-11":[{deliverable:{title:"deliverable"}},{test:{title:"test"}}],
-        "2020-08-03":[{video:{title:"video"}}]
-    });
+    const [events,setEvents] = useState({});
 
     const [saveAlert,setSaveAlert] = useState(false);
 
@@ -28,15 +24,17 @@ function CreateCourse(props) {
       .then(res=>{
         if(res.data.success){
           const {title,status,instructions} = res.data.course;
-          // setCourse({title,status,instructions});
-          // setEvents(res.data.course.events);
-          // let obj ={};
-          // res.data.course.events.forEach(event=>{
-          //   obj[event.date] = event.items;
-          // })
-          // setEvents(obj);
-          // setStartingMonth(res.data.course.startMonth);
-          // setEndingMonth(res.data.course.endMonth);
+          setCourse({title,status,instructions});
+          setEvents(res.data.course.events);
+          let obj ={};
+          res.data.course.events.forEach(event=>{
+            obj[event.date.substr(0,10)] = event.items;
+          })
+          console.log("event",obj);
+          console.log("backend",res.data.course.events);
+          setEvents(obj);
+          setStartingMonth(res.data.course.startMonth);
+          setEndingMonth(res.data.course.endMonth);
         }else{
           console.log(res.data.msg);
         }
@@ -74,11 +72,23 @@ function CreateCourse(props) {
       const eventData = Object.keys(events).map(event=>(
         {
           date:event,
-          items:events[event]
+          items:events[event].map(item=>{
+            console.log(item);
+            if(item.video){
+              return {video:item.video._id}
+            }else if(item.deliverable){
+              return {deliverable:item.deliverable._id}
+            }else if(item.test){
+              return {test:item.test._id}
+            }else{
+              return {}
+            }
+          })
         }
       ))
       const {title,status,instructions} = course;
       const newCourse = {title,status,instructions,events:eventData,startMonth:startingMonth,endMonth:endingMonth};
+      console.log(newCourse);
       axios.put(`/course/${props.match.params.id}`,{course:newCourse})
       .then(res=>{
           console.log(res.data.success);
