@@ -29,7 +29,7 @@ router.get('/course/new',function (req,res) {
 
 // To get a specific course
 router.get('/course/find/:id',function (req,res) {
-    db.Course.findById(req.params.id)
+    db.Course.findById(req.params.id).populate(['events.item.video','events.item.deliverable','events.item.test'])
     .then(course=>{
       res.json({success:true,course});
     })

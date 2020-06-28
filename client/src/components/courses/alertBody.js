@@ -13,7 +13,7 @@ export default function AlertBody(props) {
   const [showConfirmation,setShowConfirmation] = useState(false);
 
   useEffect(()=>{
-    if(true){
+    if(props.type=="video"){
       axios.get('/videos/all')
         .then(res=>{
           if(res.data.success){
@@ -26,7 +26,7 @@ export default function AlertBody(props) {
         .catch(err=>{
           console.log(err.message);
         })
-    }else if(props.type=="Deliverable"){
+    }else if(props.type=="deliverable"){
       axios.get('/deliverables/all')
       .then(res=>{
         if(res.data.success){
@@ -39,7 +39,7 @@ export default function AlertBody(props) {
       .catch(err=>{
         console.log(err.message);
       })
-    }else if(props.type=="Test"){
+    }else if(props.type=="test"){
       axios.get('/tests/all')
       .then(res=>{
         if(res.data.success){
@@ -57,13 +57,29 @@ export default function AlertBody(props) {
     }
   },[])
 
+  function handleFilter(choice) {
+    if(choice=="All"){
+      setFilteredData(data);
+      return;
+    }
+    setFilteredData(data.filter(d=>(
+      d.title==choice
+    )))
+  }
+
+
+  const topicOptions = [{value:"All",label:"All"},
+                        ...data.map(d=>(
+                          {value:d.title,label:d.title}
+                        ))]
+
   return (
     <div className="container">
     <div className="row">
     <div className="col-12 mt-4">
         <div className="round border p-3" style={{minHeight:"200px",backgroundColor:"#fcfcfc"}}>
             <div className="d-flex justify-content-between align-content-center ">
-                <h2> {props.type} </h2>
+                <h2> ADD {props.type.toUpperCase()} </h2>
                 <div><button className="btn btn-outline-grad" onClick={console.log("add")} > Add </button></div>
             </div>
             <div className="row align-content-center justify-content-center mt-3">
@@ -75,28 +91,47 @@ export default function AlertBody(props) {
 
                 </div>
                 <div className="col-md-9">
-                    
-                    <Select className="mb-2" />
+
+                    <Select className="mb-2"
+                      options={topicOptions}
+
+                      onChange={(e)=>handleFilter(e.value)}
+                    />
 
                     <div className={focusInp?"srch focus w-100 ml-0":"srch w-100 ml-0"} style={{height:"40px"}}>
                         <input type="text" onFocus={()=>{setFocusInp(true)}} onBlur={()=>{setFocusInp(false)}}   placeholder="Type to Search Students" value={srchTxt} onChange={(e)=>setSrchTxt(e.target.value)} ></input>
                         <span className="float-right pr-3 srchIcon"><i className="fa fa-search"></i></span>
                     </div>
                 </div>
-                <div className="col-md-6  pl-5" style={{height:"500px"}}>
+                {props.type=="video"||props.type=="deliverable"?
+                  <div className="col-md-6  pl-5" style={{height:"500px"}}>
+                    {filteredData.map(topic=>(
+                        topic.items.map(item=>(
+                          item[props.type]?
+                          (<div key={item[props.type]._id} className={(srchTxt!=""?(item[props.type].title.toLowerCase().includes(srchTxt.toLowerCase())?"custom-control custom-checkbox mt-3":"custom-control custom-checkbox mt-3 d-none"):"custom-control custom-checkbox mt-3")} >
+                              <input type="checkbox" className="custom-control-input" id={"s"+item[props.type]._id}  checked={item[props.type].selected} onChange={()=>console.log("checked")} />
+                              <label className="custom-control-label" htmlFor={"s"+item[props.type]._id} >
+                                  {item[props.type].title}
+                              </label>
+                          </div>)
+                          :<React.Fragment></React.Fragment>
+                        ))
+                    ))}
+                </div>:null}
 
-                    {/*{data.map((student,i)=>(
-                        <div key={student._id} className={(srchTxt!=""?(student.name.toLowerCase().includes(srchTxt.toLowerCase())?"custom-control custom-checkbox mt-3":"custom-control custom-checkbox mt-3 d-none"):"custom-control custom-checkbox mt-3")} >
-                            <input type="checkbox" className="custom-control-input" id={"s"+student._id}  checked={student.selected} onChange={(e)=>{const sts=[...students]; sts[i].selected=!sts[i].selected; setStudents(sts)}} />
-                            <label className="custom-control-label" htmlFor={"s"+student._id} >
-                                <img src={student.profilePic} style={{width:"40px",height:"40px",objectFit:"cover"}} className="rounded-circle shadow" />
-                                &nbsp;&nbsp; {student.name}
-                            </label>
-                        </div>
-                    ))}*/}
+                {props.type=="test"?
+                  <div className="col-md-6  pl-5" style={{height:"500px"}}>
+                    {filteredData.map(test=>(
+                      <div key={test._id} className={(srchTxt!=""?(test.title.toLowerCase().includes(srchTxt.toLowerCase())?"custom-control custom-checkbox mt-3":"custom-control custom-checkbox mt-3 d-none"):"custom-control custom-checkbox mt-3")} >
+                          <input type="checkbox" className="custom-control-input" id={"s"+test._id}  checked={test.selected} onChange={()=>console.log("checked")} />
+                          <label className="custom-control-label" htmlFor={"s"+test._id} >
+                              {test.title}
+                          </label>
+                      </div>
+                    ))}
 
+                  </div>:null}
 
-                </div>
             </div>
         </div>
     </div>

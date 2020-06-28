@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Nav from '../profile/Nav/Nav';
 import "./courses.css";
 import Calendar from './calendar';
 import monthMap from "./monthMap";
 import Alert from '../ui/alert/alert';
 import AlertBody from './alertBody';
+import axios from "axios";
 
 function CreateCourse(props) {
     const [startingMonth,setStartingMonth] = useState(-1);
@@ -13,7 +14,24 @@ function CreateCourse(props) {
     const [deliverableAlert,setDeliverableAlert] = useState({show:false,date:null});
     const [testAlert,setTestAlert] = useState({show:false,date:null});
     const [eventAlert,setEventAlert] = useState({show:false,date:null});
+    const [course,setCourse] = useState({title:"",status:"Draft",instructions:""});
+    const [courseData,setCourseData] = useState([]);
 
+    useEffect(()=>{
+      axios.get(`/course/find/${props.match.params.id}`)
+      .then(res=>{
+        if(res.data.success){
+          const {title,status,instructions} = res.data.course;
+          setCourse({title,status,instructions});
+          setCourseData(res.data.course.events);
+        }else{
+          console.log(res.data.msg);
+        }
+      })
+      .catch(err=>{
+        console.log(err.message);
+      })
+    },[])
 
     const calendars=[];
     if(+startingMonth!=-1 && +endingMonth!=-1 &&+startingMonth<+endingMonth){
@@ -26,23 +44,35 @@ function CreateCourse(props) {
             ))
         }
     }
+
+
+    function handleSave() {
+      axios.put(`/course/${props.match.params.id}`,{courseData})
+      .then(res=>{
+        if(res.data.success){
+          console.log("Saved");
+        }else{
+          console.log(res.data.msg);
+        }
+      })
+      .catch(err=>{
+        console.log(err.message);
+      })
+    }
+
     return (
         <React.Fragment>
             <Nav show={true} menu={true}/>
             <div className="bgwhiteoverlay"></div>
 
             {videoAlert.show?<Alert cancel={()=>setVideoAlert({show:false,date:null})}>
-                <h2 className="topicTitle mainH"> Add Video </h2>
-                <p>  {videoAlert.date} </p>
-                <AlertBody />
+                <AlertBody date={videoAlert.date} type="video"/>
             </Alert>:null}
             {deliverableAlert.show?<Alert cancel={()=>setDeliverableAlert({show:false,date:null})}>
-                <h2 className="topicTitle mainH"> Add Deliverable </h2>
-                <p>  {deliverableAlert.date} </p>
+                <AlertBody date={videoAlert.date} type="deliverable"/>
             </Alert>:null}
             {testAlert.show?<Alert cancel={()=>setTestAlert({show:false,date:null})}>
-                <h2 className="topicTitle mainH"> Add Test </h2>
-                <p>  {testAlert.date} </p>
+                <AlertBody date={videoAlert.date} type="test"/>
             </Alert>:null}
             {eventAlert.show?<Alert cancel={()=>setEventAlert({show:false,date:null})}>
                 <h2 className="topicTitle mainH"> Add Event </h2>
@@ -51,10 +81,10 @@ function CreateCourse(props) {
 
             <div className="container" style={{marginTop:"120px"}} >
                 <div className="d-flex justify-content-between">
-                    <h1 className="topicTitle mainH text-left text-pink">Create Test  <span style={{fontSize:"16px"}} >( X Months )</span></h1>
+                    <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( X Months )</span></h1>
                     <div>
                         <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer" ></i></span>
-                        <button className="btn btn-outline-grad ml-2" > Save </button>
+                        <button className="btn btn-outline-grad ml-2" onClick={handleSave}> Save </button>
                         <button className="btn btn-outline-grad ml-2" > Publish / Close </button>
                         <button className="btn btn-outline-grad ml-2" > Generate Reminder </button>
 
@@ -64,11 +94,11 @@ function CreateCourse(props) {
                     <div className="col-12" >
                         <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
-                            <input type="text" className="form-control"   placeholder="Enter Course Title" />
+                            <input type="text" className="form-control"   placeholder="Enter Course Title" value={course.title} onChange={(e)=>setCourse({...course,title:e.target.value})}/>
                         </div>
                         <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-align-justify" ></i></div>
-                            <textarea rows="5" placeholder="Enter Course Description  " className="form-control"></textarea>
+                            <textarea rows="5" placeholder="Enter Course Description  " className="form-control" value={course.instructions} onChange={(e)=>setCourse({...course,instructions:e.target.value})}></textarea>
 
                         </div>
 
