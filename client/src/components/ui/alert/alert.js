@@ -6,7 +6,7 @@ const Alert =(props)=>{
     <React.Fragment>
     <div className="backdropAlert"></div>
     <div className="custAlert shadow">
-        <div className="p-2">
+        <div className="p-2 alertbody">
             {props.msg || props.children}
         </div>
         <div className="footer">

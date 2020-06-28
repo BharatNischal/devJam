@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from 'react';
+import Select from "react-select";
 import axios from "axios";
 
 var data = [];
@@ -57,6 +58,8 @@ export default function AlertBody(props) {
   },[])
 
   return (
+    <div className="container">
+    <div className="row">
     <div className="col-12 mt-4">
         <div className="round border p-3" style={{minHeight:"200px",backgroundColor:"#fcfcfc"}}>
             <div className="d-flex justify-content-between align-content-center ">
@@ -66,12 +69,15 @@ export default function AlertBody(props) {
             <div className="row align-content-center justify-content-center mt-3">
                 <div className="col-md-3 pt-2">
                     <div className="custom-control custom-checkbox d-inline" >
-                        <input type="checkbox" className="custom-control-input" id="isSelectAll"  checked={selectAll} onChange={ setSelectAll(!selectAll) } />
+                        <input type="checkbox" className="custom-control-input" id="isSelectAll"  checked={selectAll} onChange={()=>setSelectAll(!selectAll) } />
                         <label className="custom-control-label" htmlFor="isSelectAll" >Select All</label>
                     </div>
 
                 </div>
                 <div className="col-md-9">
+                    
+                    <Select className="mb-2" />
+
                     <div className={focusInp?"srch focus w-100 ml-0":"srch w-100 ml-0"} style={{height:"40px"}}>
                         <input type="text" onFocus={()=>{setFocusInp(true)}} onBlur={()=>{setFocusInp(false)}}   placeholder="Type to Search Students" value={srchTxt} onChange={(e)=>setSrchTxt(e.target.value)} ></input>
                         <span className="float-right pr-3 srchIcon"><i className="fa fa-search"></i></span>
@@ -94,5 +100,7 @@ export default function AlertBody(props) {
             </div>
         </div>
     </div>
-  )
+    </div>
+    </div>
+  );
 }
