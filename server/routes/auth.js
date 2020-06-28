@@ -49,11 +49,7 @@ router.get("/logout",(req,res)=>{
 router.post("/login",passport.authenticate("local",{
       failureRedirect:"/api/err"
   }),(req,res)=>{
-      res.json({
-        success:true,
-        msg:"You logged in successfully with username "+req.user.username,
-        user:req.user
-      });
+      res.redirect('/curUser');
 });
 
 
@@ -168,7 +164,7 @@ router.post('/reset/:token', function(req, res) {
 // To get the current user
 router.get("/curUser",(req,res)=>{
 
-  res.json({user:req.user});
+  res.json({success:true,user:req.user});
 })
 
 router.get("/api/err",(req,res)=>{

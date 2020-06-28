@@ -30,6 +30,11 @@ function CreateCourse(props) {
           const {title,status,instructions} = res.data.course;
           setCourse({title,status,instructions});
           setEvents(res.data.course.events);
+          let obj ={};
+          res.data.course.events.forEach(event=>{
+            obj[event.date] = event.items;
+          })
+          setEvents(obj);
           setStartingMonth(res.data.course.startMonth);
           setEndingMonth(res.data.course.endMonth);
         }else{
@@ -53,9 +58,27 @@ function CreateCourse(props) {
         }
     }
 
+    function handleAdd(data,date) {
+      const newEvents = JSON.parse(JSON.stringify(events));
+      if(newEvents[date]){
+        newEvents[date].push(...data);
+      }else{
+        newEvents[date] = data;
+      }
+      setEvents(newEvents);
+    }
+
 
     function handleSave() {
-      axios.put(`/course/${props.match.params.id}`,{events})
+      const eventData = Object.keys(events).map(event=>(
+        {
+          date:event,
+          items:events[event]
+        }
+      ))
+      const {title,status,instructions} = course;
+      const newCourse = {title,status,instructions,events:eventData,startMonth:startingMonth,endMonth:endingMonth};
+      axios.put(`/course/${props.match.params.id}`,{course:newCourse})
       .then(res=>{
           console.log(res.data.success);
         if(res.data.success){
@@ -80,14 +103,14 @@ function CreateCourse(props) {
             <div className="bgwhiteoverlay"></div>
 
             {videoAlert.show?<Alert cancel={()=>setVideoAlert({show:false,date:null})}>
-               
-                <AlertBody date={videoAlert.date} type="video"/>
+
+                <AlertBody date={videoAlert.date} type="video" add={handleAdd}/>
             </Alert>:null}
             {deliverableAlert.show?<Alert cancel={()=>setDeliverableAlert({show:false,date:null})}>
-                <AlertBody date={videoAlert.date} type="deliverable"/>
+                <AlertBody date={deliverableAlert.date} type="deliverable" add={handleAdd}/>
             </Alert>:null}
             {testAlert.show?<Alert cancel={()=>setTestAlert({show:false,date:null})}>
-                <AlertBody date={videoAlert.date} type="test"/>
+                <AlertBody date={testAlert.date} type="test" add={handleAdd}/>
             </Alert>:null}
             {eventAlert.show?<Alert cancel={()=>setEventAlert({show:false,date:null})}>
                 <h2 className="topicTitle mainH"> Add Event </h2>

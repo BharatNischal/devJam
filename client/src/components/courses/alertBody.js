@@ -140,6 +140,7 @@ export default function AlertBody(props) {
     }else{
 
     }
+    props.add(list,props.date);
     console.log(list);
   }
 

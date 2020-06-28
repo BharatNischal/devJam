@@ -157,15 +157,6 @@ function Courses(props) {
                           </div>
                         ))}
 
-                        <div className="p-3 my-2 pointer" style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}} >
-                            <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
-                                <div className="pt-2 hover-pink"  ><h3 className="topicTitle d-inline mr-2" style={{fontSize:"20px"}}>Maths Course</h3><i style={{fontSize:"14px",color:"#333"}} >Draft</i></div>
-                                <div>
-
-                                     <button className="btn btn-grad ml-2" >Publish</button>
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
             </div>
