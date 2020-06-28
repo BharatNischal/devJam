@@ -149,6 +149,7 @@ function CreateTest(props) {
 
                   </div>
                 </div>
+                <div className="text-left" >  <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/test")}><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/> </div>
 
                 <div className="row my-5" >
                     <div className="col-12" >
