@@ -192,7 +192,7 @@ export default function AlertBody(props) {
                 {props.type=="video"||props.type=="deliverable"?
                   <React.Fragment>
                   <div className="col-md-3"></div>
-                  <div className="col-md-6  pl-5 text-left " >
+                  <div className="col-md-8  pl-5 text-left " >
                     {filteredData.map(topic=>(
                         topic.items.map(item=>(
                           item[props.type]?
@@ -215,7 +215,7 @@ export default function AlertBody(props) {
                       </React.Fragment>
                     :null}
                 </div>
-                <div className="col-md-3"></div>
+                <div className="col-md-1"></div>
                 </React.Fragment>:null}
 
                 {props.type=="test"?
