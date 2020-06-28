@@ -16,9 +16,9 @@ function CreateCourse(props) {
     const [eventAlert,setEventAlert] = useState({show:false,date:null});
     const [course,setCourse] = useState({title:"",status:"Draft",instructions:""});
     const [events,setEvents] = useState({
-        "06-01-2020":[{video:{title:"video"}}],
-        "06-11-2020":[{deliverable:{title:"deliverable"}},{test:{title:"test"}}],
-        "08-13-2020":[{video:{title:"video"}}]
+        "2020-06-01":[{video:{title:"video"}}],
+        "2020-06-11":[{deliverable:{title:"deliverable"}},{test:{title:"test"}}],
+        "2020-08-03":[{video:{title:"video"}}]
     });
 
     const [saveAlert,setSaveAlert] = useState(false);

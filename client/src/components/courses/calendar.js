@@ -17,7 +17,7 @@ function Calendar(props) {
             mm="0"+props.month;
             mm=mm.slice(mm.length-2);
 
-            date=`${mm}-${dd}-${new Date().getFullYear()}`;
+            date=`${new Date().getFullYear()}-${mm}-${dd}`;
             
             days.push((<DateEl date={date} setVideoAlert={props.setVideoAlert} month={props.month} setDeliverableAlert={props.setDeliverableAlert} setEventAlert={props.setEventAlert} setTestAlert={props.setTestAlert} data={props.events[date]} ></DateEl>));
         }else{
