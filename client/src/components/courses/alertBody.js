@@ -120,7 +120,7 @@ export default function AlertBody(props) {
                 </div>:null}
 
                 {props.type=="test"?
-                  <div className="col-md-6  pl-5" style={{height:"500px"}}>
+                  <div className="col-md-6  pl-5 text-left" style={{height:"500px"}}>
                     {filteredData.map(test=>(
                       <div key={test._id} className={(srchTxt!=""?(test.title.toLowerCase().includes(srchTxt.toLowerCase())?"custom-control custom-checkbox mt-3":"custom-control custom-checkbox mt-3 d-none"):"custom-control custom-checkbox mt-3")} >
                           <input type="checkbox" className="custom-control-input" id={"s"+test._id}  checked={test.selected} onChange={()=>console.log("checked")} />
