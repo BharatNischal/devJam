@@ -102,7 +102,19 @@ function Courses(props) {
       {value:"Closed",label:"Closed"}
     ]
 
-
+    function handleNew() {
+      axios.get('/course/new')
+        .then(res=>{
+          if(res.data.success){
+            props.history.push(`/course/${res.data.course._id}`);
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    }
 
 
     return (
@@ -112,7 +124,7 @@ function Courses(props) {
             {showConfirmAlert?<Alert msg={<React.Fragment> <h3>Are You Sure to continue?</h3><p> Click Ok to Proceed.</p> </React.Fragment>} ok={null} cancel={()=>setShowConfirmAlert(false)} />:null}
             <div className="bgwhiteoverlay"></div>
             <div className="container" style={{marginTop:"120px"}} >
-                <div style={{display:"flex",justifyContent:"space-between"}} ><h1 className="topicTitle mainH text-left text-pink">Courses </h1>  <div> <button className="btn btn-outline-grad"> Create </button> </div> </div>
+                <div style={{display:"flex",justifyContent:"space-between"}} ><h1 className="topicTitle mainH text-left text-pink">Courses </h1>  <div> <button className="btn btn-outline-grad" onClick={handleNew}> Create </button> </div> </div>
                 <div className="row my-5" >
 
 

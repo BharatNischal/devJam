@@ -40,7 +40,7 @@ router.get('/course/find/:id',function (req,res) {
 
 // To save the course as draft
 router.put('/course/:id',function (req,res) {
-    db.Course.findByIdAndUpdate(req.params.id,{req.body.course})
+    db.Course.findByIdAndUpdate(req.params.id,req.body.course)
     .then(course=>{
       res.json({success:true});
     })
@@ -167,4 +167,4 @@ router.put('/deliverables/dateChange',function (req,res) {
     })
 })
 
-module.exports router;
+module.exports = router;

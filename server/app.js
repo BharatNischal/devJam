@@ -19,7 +19,8 @@ const          express = require('express'),
          SubmissionRoutes = require("./routes/submission"),
          TestRoutes = require("./routes/test"),
          QuestionRoutes = require("./routes/questions"),
-            AuthRoutes = require("./routes/auth");
+            AuthRoutes = require("./routes/auth"),
+            CourseRoutes = require("./routes/course");
 
 
 
@@ -172,6 +173,9 @@ app.use("/",TestRoutes);
 
 // Question Routes
 app.use("/",QuestionRoutes);
+
+// Courses Routes
+app.use("/",CourseRoutes);
 
 const redirectHost=process.env.NODE_ENV === 'production'?"":"http://localhost:3000";
 
