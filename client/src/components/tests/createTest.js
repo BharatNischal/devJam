@@ -14,6 +14,7 @@ function CreateTest(props) {
     //UI STATES
     const [isTimed,setIsTimed] = useState(false);
     const [showConfirmAlert,setShowConfirmAlert] = useState(false);
+    const [saveAlert,setSaveAlert] = useState(false);
     // Data State
     const [questions,setQuestions] = useState([]);
     const [test,setTest] = useState({title:"",status:"Draft",instructions:"",duration:-1,shuffle:false});
@@ -64,6 +65,8 @@ function CreateTest(props) {
       axios.put(`/test/${props.match.params.id}`,{test,questions})
         .then(res=>{
           if(res.data.success){
+            setSaveAlert(true);
+            setTimeout(()=>{ setSaveAlert(false) },2000)
             if(type=="publish"){
               props.history.push(`/publish/test/${props.match.params.id}`);
             }
@@ -134,6 +137,7 @@ function CreateTest(props) {
     return (
         <React.Fragment>
             <Nav show={true} menu={true}/>
+            {saveAlert?<div className="custom-alert"> Test Saved</div>:null}
             <div className="bgwhiteoverlay"></div>
             <div className="container" style={{marginTop:"120px"}} >
               {showConfirmAlert?<Alert msg={<React.Fragment> <h3>Are You Sure to continue?</h3><p> Click Ok to Proceed.</p> </React.Fragment>} ok={handleClose} cancel={()=>setShowConfirmAlert(false)} />:null}
@@ -149,6 +153,7 @@ function CreateTest(props) {
 
                   </div>
                 </div>
+                <div className="text-left" >  <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/test")}><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/> </div>
 
                 <div className="row my-5" >
                     <div className="col-12" >

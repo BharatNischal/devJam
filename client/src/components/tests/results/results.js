@@ -253,6 +253,7 @@ function handleSort(choice,array=filteredStudents) {
             <div className="bgwhiteoverlay"></div>
             <div className="container text-left" style={{marginTop:"120px"}} >
                 <h1 className="topicTitle mainH text-left text-pink"> {test.title || "" } </h1>
+                <div><span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/test")}><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/></div>
                 <h1 className="topicTitle mainH text-left mt-3 ml-2" style={{fontSize:"22px"}}>Introduction </h1>
                 <p className="mt-2 ml-3 ">
                 {test.instructions||""}

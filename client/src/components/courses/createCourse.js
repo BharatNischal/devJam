@@ -17,6 +17,8 @@ function CreateCourse(props) {
     const [course,setCourse] = useState({title:"",status:"Draft",instructions:""});
     const [events,setEvents] = useState([{date:"Date",items:[{video:{title:"video"}}]},{date:"Date",items:[{deliverable:{title:"deliverable"}},{test:{title:"test"}}]},{date:"Date",item:[{video:{title:"video"}}]}]);
 
+    const [saveAlert,setSaveAlert] = useState(false);
+
     useEffect(()=>{
       axios.get(`/course/find/${props.match.params.id}`)
       .then(res=>{
@@ -49,8 +51,13 @@ function CreateCourse(props) {
     function handleSave() {
       axios.put(`/course/${props.match.params.id}`,{events})
       .then(res=>{
+          console.log(res.data.success);
         if(res.data.success){
           console.log("Saved");
+          setSaveAlert(true);
+          setTimeout(()=>{
+              setSaveAlert(false);
+          },2000)
         }else{
           console.log(res.data.msg);
         }
@@ -63,6 +70,7 @@ function CreateCourse(props) {
     return (
         <React.Fragment>
             <Nav show={true} menu={true}/>
+            {saveAlert?<div className="custom-alert"> Course Saved</div>:null}
             <div className="bgwhiteoverlay"></div>
 
             {videoAlert.show?<Alert cancel={()=>setVideoAlert({show:false,date:null})}>
