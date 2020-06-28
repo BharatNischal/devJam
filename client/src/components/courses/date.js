@@ -6,19 +6,32 @@ function DateEl(props) {
     const thisDate=`${props.date}-${props.month}-${new Date().getFullYear()}`;
     return (
         <div className="border date p-2">
-            <div><b>{props.date}</b></div>
-            <div className="event pill p-1">
-                Event Name Hello.....
-            </div>
-            <div className="deliverable pill p-1">
-                Event Name Hello.....
-            </div>
-            <div className="test pill p-1">
-                Event Name Hello.....
-            </div>
-            <div className="video pill p-1">
-                Event Name Hello.....
-            </div>
+            <div><b>{props.date.slice(3,5)}</b></div>
+            {props.data?
+               props.data.map((d,i)=>(
+                   <React.Fragment key={i} >
+                   {d.deliverable?
+                        <div className="deliverable pill p-1">
+                            {d.deliverable.title}...
+                        </div>
+                     :
+                     d.test?
+                        <div className="test pill p-1">
+                            {d.test.title}...
+                        </div>
+                    :d.video?
+                        <div className="video pill p-1">
+                            {d.video.title}...
+                        </div> 
+                    :
+                        <div className="event pill p-1">
+                            {d.event.title}...
+                        </div>   
+                    }
+                   </React.Fragment>
+               )) 
+            :null}
+          
 
 
 
@@ -29,10 +42,10 @@ function DateEl(props) {
                 <React.Fragment>
                     <div className="d-backdrop" onClick={()=>setShowOption(false)}></div>
                     <div className="optionDiv">
-                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setVideoAlert({show:true,date:thisDate});}} >Add Video</div>
-                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setTestAlert({show:true,date:thisDate});}} >Add Test</div>
-                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setDeliverableAlert({show:true,date:thisDate});}} >Add Deliverable</div>
-                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setEventAlert({show:true,date:thisDate});}} >Add Events</div>
+                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setVideoAlert({show:true,date:props.date});}} >Add Video</div>
+                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setTestAlert({show:true,date:props.date});}} >Add Test</div>
+                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setDeliverableAlert({show:true,date:props.date});}} >Add Deliverable</div>
+                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setEventAlert({show:true,date:props.date});}} >Add Events</div>
                     </div>
                 </React.Fragment>
             :null}

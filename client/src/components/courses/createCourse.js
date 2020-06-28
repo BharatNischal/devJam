@@ -15,7 +15,11 @@ function CreateCourse(props) {
     const [testAlert,setTestAlert] = useState({show:false,date:null});
     const [eventAlert,setEventAlert] = useState({show:false,date:null});
     const [course,setCourse] = useState({title:"",status:"Draft",instructions:""});
-    const [events,setEvents] = useState([{date:"Date",items:[{video:{title:"video"}}]},{date:"Date",items:[{deliverable:{title:"deliverable"}},{test:{title:"test"}}]},{date:"Date",item:[{video:{title:"video"}}]}]);
+    const [events,setEvents] = useState({
+        "06-01-2020":[{video:{title:"video"}}],
+        "06-11-2020":[{deliverable:{title:"deliverable"}},{test:{title:"test"}}],
+        "08-13-2020":[{video:{title:"video"}}]
+    });
 
     const [saveAlert,setSaveAlert] = useState(false);
 
@@ -38,12 +42,12 @@ function CreateCourse(props) {
     },[])
 
     const calendars=[];
-    if(+startingMonth!=-1 && +endingMonth!=-1 &&+startingMonth<+endingMonth){
+    if(+startingMonth!=-1 && +endingMonth!=-1 &&+startingMonth<=+endingMonth){
         for(let i=+startingMonth;i<=+endingMonth;i++){
             calendars.push((
                 <div className="mt-4 mb-5" >
                     <h2 className="topicTitle mainH text-left"> {monthMap[i].name} </h2>
-                    <Calendar start={new Date(`${i}-01-${new Date().getFullYear()}`).getDay()} lastEnd={i==1?monthMap[12].days:monthMap[i-1].days} end={monthMap[i].days}  month={i} setVideoAlert={setVideoAlert} setDeliverableAlert={setDeliverableAlert} setEventAlert={setEventAlert} setTestAlert={setTestAlert} />
+                    <Calendar start={new Date(`${i}-01-${new Date().getFullYear()}`).getDay()} lastEnd={i==1?monthMap[12].days:monthMap[i-1].days} end={monthMap[i].days}  month={i} setVideoAlert={setVideoAlert} setDeliverableAlert={setDeliverableAlert} setEventAlert={setEventAlert} setTestAlert={setTestAlert} events={events} />
                 </div>
             ))
         }
@@ -76,6 +80,7 @@ function CreateCourse(props) {
             <div className="bgwhiteoverlay"></div>
 
             {videoAlert.show?<Alert cancel={()=>setVideoAlert({show:false,date:null})}>
+               
                 <AlertBody date={videoAlert.date} type="video"/>
             </Alert>:null}
             {deliverableAlert.show?<Alert cancel={()=>setDeliverableAlert({show:false,date:null})}>

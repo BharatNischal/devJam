@@ -6,11 +6,20 @@ function Calendar(props) {
 
     const days=[];
     var start=props.start==0?7:props.start;
+    var dd="";
+    var mm="",date="";
     for(let i=1;i<=42;i++){
         if(i<start){
             days.push((<div className="border date p-2 disabled"> <b>{props.lastEnd-start+i+1 }</b> </div>))
         }else if(i<start+props.end){
-            days.push((<DateEl date={i-start+1} setVideoAlert={props.setVideoAlert} month={props.month} setDeliverableAlert={props.setDeliverableAlert} setEventAlert={props.setEventAlert} setTestAlert={props.setTestAlert} ></DateEl>))
+            dd="0"+(i-start+1);
+            dd=dd.slice(dd.length-2);
+            mm="0"+props.month;
+            mm=mm.slice(mm.length-2);
+
+            date=`${mm}-${dd}-${new Date().getFullYear()}`;
+            
+            days.push((<DateEl date={date} setVideoAlert={props.setVideoAlert} month={props.month} setDeliverableAlert={props.setDeliverableAlert} setEventAlert={props.setEventAlert} setTestAlert={props.setTestAlert} data={props.events[date]} ></DateEl>));
         }else{
             days.push((<div className="border date p-2 disabled"> <b>{i-start-props.end+1}</b> </div>))
         }
