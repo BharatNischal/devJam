@@ -84,14 +84,13 @@ function CreateCourse(props) {
                 <AlertBody date={videoAlert.date} type="video"/>
             </Alert>:null}
             {deliverableAlert.show?<Alert cancel={()=>setDeliverableAlert({show:false,date:null})}>
-                <AlertBody date={videoAlert.date} type="deliverable"/>
+                <AlertBody date={deliverableAlert.date} type="deliverable"/>
             </Alert>:null}
             {testAlert.show?<Alert cancel={()=>setTestAlert({show:false,date:null})}>
-                <AlertBody date={videoAlert.date} type="test"/>
+                <AlertBody date={testAlert.date} type="test"/>
             </Alert>:null}
             {eventAlert.show?<Alert cancel={()=>setEventAlert({show:false,date:null})}>
-                <h2 className="topicTitle mainH"> Add Event </h2>
-                <p>  {eventAlert.date} </p>
+                <AlertBody date={eventAlert.date} type="event" />
             </Alert>:null}
 
             <div className="container" style={{marginTop:"120px"}} >
