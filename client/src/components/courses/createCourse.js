@@ -65,6 +65,7 @@ function CreateCourse(props) {
       }else{
         newEvents[date] = data;
       }
+      console.log(newEvents);
       setEvents(newEvents);
     }
 

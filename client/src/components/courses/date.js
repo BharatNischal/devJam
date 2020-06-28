@@ -6,7 +6,7 @@ function DateEl(props) {
     const thisDate=`${props.date}-${props.month}-${new Date().getFullYear()}`;
     return (
         <div className="border date p-2">
-            <div><b>{props.date.slice(3,5)}</b></div>
+            <div><b>{props.date.substr(8,2)}</b></div>
             {props.data?
                props.data.map((d,i)=>(
                    <React.Fragment key={i} >
