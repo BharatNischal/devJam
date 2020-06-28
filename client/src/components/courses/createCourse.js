@@ -26,6 +26,8 @@ function CreateCourse(props) {
           const {title,status,instructions} = res.data.course;
           setCourse({title,status,instructions});
           setEvents(res.data.course.events);
+          setStartingMonth(res.data.course.startMonth);
+          setEndingMonth(res.data.course.endMonth);
         }else{
           console.log(res.data.msg);
         }

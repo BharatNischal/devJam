@@ -32,8 +32,8 @@ const courseSchema = new mongoose.Schema({
           }
       }]
     }],
-    startTime:Date,
-    endTime:Date
+    startMonth:Number,
+    endMonth:Number
 });
 
 module.exports = mongoose.model("course",courseSchema);
