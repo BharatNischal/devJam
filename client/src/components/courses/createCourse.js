@@ -124,8 +124,7 @@ function CreateCourse(props) {
                 <AlertBody date={testAlert.date} type="test" add={handleAdd}/>
             </Alert>:null}
             {eventAlert.show?<Alert cancel={()=>setEventAlert({show:false,date:null})}>
-                <h2 className="topicTitle mainH"> Add Event </h2>
-                <p>  {eventAlert.date} </p>
+                <AlertBody date={eventAlert.date} type="event" />
             </Alert>:null}
 
             <div className="container" style={{marginTop:"120px"}} >
