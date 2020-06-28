@@ -15,7 +15,7 @@ function CreateCourse(props) {
     const [testAlert,setTestAlert] = useState({show:false,date:null});
     const [eventAlert,setEventAlert] = useState({show:false,date:null});
     const [course,setCourse] = useState({title:"",status:"Draft",instructions:""});
-    const [courseData,setCourseData] = useState([]);
+    const [events,setEvents] = useState([{date:"Date",items:[{video:{title:"video"}}]},{date:"Date",items:[{deliverable:{title:"deliverable"}},{test:{title:"test"}}]},{date:"Date",item:[{video:{title:"video"}}]}]);
 
     useEffect(()=>{
       axios.get(`/course/find/${props.match.params.id}`)
@@ -23,7 +23,7 @@ function CreateCourse(props) {
         if(res.data.success){
           const {title,status,instructions} = res.data.course;
           setCourse({title,status,instructions});
-          setCourseData(res.data.course.events);
+          setEvents(res.data.course.events);
         }else{
           console.log(res.data.msg);
         }
@@ -47,7 +47,7 @@ function CreateCourse(props) {
 
 
     function handleSave() {
-      axios.put(`/course/${props.match.params.id}`,{courseData})
+      axios.put(`/course/${props.match.params.id}`,{events})
       .then(res=>{
         if(res.data.success){
           console.log("Saved");

@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 
 const courseSchema = new mongoose.Schema({
-    title:String,
+    title:{
+      type:String,
+      default:""
+    },
     status:{
       type:String, //Published/Closed/Draft
       default:"Draft"
@@ -14,7 +17,7 @@ const courseSchema = new mongoose.Schema({
       }],
     events:[{
       date:Date,
-      item:{
+      items:[{
           video:{
               type:mongoose.Schema.Types.ObjectId,
               ref:'Video'
@@ -27,7 +30,7 @@ const courseSchema = new mongoose.Schema({
             type:mongoose.Schema.Types.ObjectId,
             ref:'test'
           }
-      }
+      }]
     }],
     startTime:Date,
     endTime:Date

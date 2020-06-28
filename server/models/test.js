@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 
 const testSchema = new mongoose.Schema({
-    title:String,
+    title:{
+      type:String,
+      default:""
+    },
     status:{
       type:String, //Published/Closed/Draft
       default:"Draft"

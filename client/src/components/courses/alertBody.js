@@ -92,11 +92,13 @@ export default function AlertBody(props) {
                 </div>
                 <div className="col-md-9">
 
-                    <Select className="mb-2"
-                      options={topicOptions}
+                    {props.type=="video"||props.type=="deliverable"?
+                      <Select className="mb-2"
+                        options={topicOptions}
 
-                      onChange={(e)=>handleFilter(e.value)}
-                    />
+                        onChange={(e)=>handleFilter(e.value)}
+                      />
+                      :null}
 
                     <div className={focusInp?"srch focus w-100 ml-0":"srch w-100 ml-0"} style={{height:"40px"}}>
                         <input type="text" onFocus={()=>{setFocusInp(true)}} onBlur={()=>{setFocusInp(false)}}   placeholder="Type to Search Students" value={srchTxt} onChange={(e)=>setSrchTxt(e.target.value)} ></input>
@@ -108,7 +110,7 @@ export default function AlertBody(props) {
                     {filteredData.map(topic=>(
                         topic.items.map(item=>(
                           item[props.type]?
-                          (<div key={item[props.type]._id} className={(srchTxt!=""?(item[props.type].title.toLowerCase().includes(srchTxt.toLowerCase())?"custom-control custom-checkbox mt-3":"custom-control custom-checkbox mt-3 d-none"):"custom-control custom-checkbox mt-3")} >
+                          (<div key={item[props.type]._id} className={(srchTxt!=""?(item[props.type].title&&item[props.type].title.toLowerCase().includes(srchTxt.toLowerCase())?"custom-control custom-checkbox mt-3":"custom-control custom-checkbox mt-3 d-none"):"custom-control custom-checkbox mt-3")} >
                               <input type="checkbox" className="custom-control-input" id={"s"+item[props.type]._id}  checked={item[props.type].selected} onChange={()=>console.log("checked")} />
                               <label className="custom-control-label" htmlFor={"s"+item[props.type]._id} >
                                   {item[props.type].title}
@@ -122,7 +124,7 @@ export default function AlertBody(props) {
                 {props.type=="test"?
                   <div className="col-md-6  pl-5" style={{height:"500px"}}>
                     {filteredData.map(test=>(
-                      <div key={test._id} className={(srchTxt!=""?(test.title.toLowerCase().includes(srchTxt.toLowerCase())?"custom-control custom-checkbox mt-3":"custom-control custom-checkbox mt-3 d-none"):"custom-control custom-checkbox mt-3")} >
+                      <div key={test._id} className={(srchTxt!=""?(test.title && test.title.toLowerCase().includes(srchTxt.toLowerCase())?"custom-control custom-checkbox mt-3":"custom-control custom-checkbox mt-3 d-none"):"custom-control custom-checkbox mt-3")} >
                           <input type="checkbox" className="custom-control-input" id={"s"+test._id}  checked={test.selected} onChange={()=>console.log("checked")} />
                           <label className="custom-control-label" htmlFor={"s"+test._id} >
                               {test.title}
