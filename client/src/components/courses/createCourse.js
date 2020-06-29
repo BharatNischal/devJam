@@ -150,7 +150,7 @@ function CreateCourse(props) {
 
       }else if(type="test"){
 
-        axios.put('/course/tests/dateChange',{tests:[events[date][index][type]._id],startTime:events[date][index][type].startTime,endTime:events[date][index][type].endTime})
+        axios.put('/course/test/dateChange',{tests:[events[date][index][type]._id],startTime:events[date][index][type].startTime,endTime:events[date][index][type].endTime})
         .then(res=>{
           if(res.data.success){
               setEventModal({...eventModal,show:false});
@@ -197,7 +197,7 @@ function CreateCourse(props) {
                                     <b>Start Time: </b><br/>
                                     <div className="form-group input-group px-lg-2">
                                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                                        <input className="form-control" type="time"  readOnly={user.student} />
+                                        <input className="form-control" type="time"  readOnly={user.student} value={events[eventModal.date][eventModal.index][eventModal.type].startTime} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].startTime=e.target.value; setEvents(copyEv);}}/>
                                     </div>
                                 </div>
                                 <div className="col-md-6 mb-2" >

@@ -69,7 +69,7 @@ router.put('/course/publish/:id',middleware.isAdmin,function (req,res) {
               response.username?authorizedStudents.push(response.username):console.log("username unavailable for",response._id);
             })
             // Send emails
-            var fullUrl = `${req.protocol}://${req.get('host')}/learner/course/${req.params.id}`;
+            var fullUrl = `${req.protocol}://${req.get('host')}/course/${req.params.id}`;
             const msg = {
               from: '"Learner Platform" <manjotsingh16july@gmail.com>', // sender address (who sends)
               to: authorizedStudents.join(","), // list of receivers (who receives)
