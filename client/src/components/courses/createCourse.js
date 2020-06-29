@@ -26,28 +26,35 @@ function CreateCourse(props) {
 
 
     useEffect(()=>{
-      axios.get(`/course/find/${props.match.params.id}`)
-      .then(res=>{
-        if(res.data.success){
-          const {title,status,instructions} = res.data.course;
-          setCourse({title,status,instructions});
-          setEvents(res.data.course.events);
-          let obj ={};
-          res.data.course.events.forEach(event=>{
-            obj[event.date.substr(0,10)] = event.items;
-          })
-          console.log("event",obj);
-          console.log("backend",res.data.course.events);
-          setEvents(obj);
-          setStartingMonth(res.data.course.startMonth);
-          setEndingMonth(res.data.course.endMonth);
-        }else{
-          console.log(res.data.msg);
-        }
-      })
-      .catch(err=>{
-        console.log(err.message);
-      })
+      if(user.loggedIn){
+
+        axios.get(`/course/find/${props.match.params.id}`)
+        .then(res=>{
+          if(res.data.success){
+            const {title,status,instructions} = res.data.course;
+            setCourse({title,status,instructions});
+            setEvents(res.data.course.events);
+            let obj ={};
+            res.data.course.events.forEach(event=>{
+              obj[event.date.substr(0,10)] = event.items;
+            })
+            console.log("event",obj);
+            console.log("backend",res.data.course.events);
+            setEvents(obj);
+            setStartingMonth(res.data.course.startMonth);
+            setEndingMonth(res.data.course.endMonth);
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+
+      }else{
+        props.history.push('/login')
+      }
+
     },[])
 
     const calendars=[];

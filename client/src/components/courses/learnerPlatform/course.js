@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import TopBar from "../../learnerPlatform/TopBar";
 import Axios from 'axios';
+import {CurUserContext} from '../../../contexts/curUser';
 
 function Course(props) {
     const [courses,setCourses] = useState([]);
+    const {user} = useContext(CurUserContext);
 
     useEffect(function(){
+      if(user.loggedIn){
         Axios.get("/allPublishedCourses")
         .then(res=>{
             if(res.data.success){
@@ -16,6 +19,9 @@ function Course(props) {
         }).catch(err=>{
             alert(err.message);
         })
+      }else{
+        props.history.push('/login')
+      }
     },[])
 
     return (
@@ -44,4 +50,3 @@ function Course(props) {
 
 
 export default Course;
-
