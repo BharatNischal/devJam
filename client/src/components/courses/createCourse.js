@@ -174,6 +174,8 @@ function CreateCourse(props) {
         .catch(err=>{
           console.log(err.message);
         })
+      }else{
+        setEventModal({...eventModal,show:false});
       }
     }
 
