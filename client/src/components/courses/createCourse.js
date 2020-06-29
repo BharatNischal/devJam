@@ -375,7 +375,7 @@ function CreateCourse(props) {
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(false)}> Save </button>:null}
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(true)}> Publish </button>:null}
                                 {course.status=="Published"?<button className="btn btn-outline-grad ml-2" onClick={handleClose}> Close </button>:null}
-                                <button className="btn btn-outline-grad ml-2" onClick={handleReminder} > Generate Reminder </button>
+                                {course.status=="Published"?<button className="btn btn-outline-grad ml-2" onClick={handleReminder} > Generate Reminder </button>:null}
 
                             </div>
                         </div>
