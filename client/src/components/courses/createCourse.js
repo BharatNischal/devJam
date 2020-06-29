@@ -71,6 +71,10 @@ function CreateCourse(props) {
           }
           console.log(newEvents);
           setEvents(newEvents);
+          setVideoAlert({show:false,date:null});
+          setTestAlert({show:false,date:null});
+          setDeliverableAlert({show:false,date:null});
+          setEventAlert({show:false,date:null});
       }else{
           alert("Not Allowed");
       }
@@ -151,7 +155,7 @@ function CreateCourse(props) {
                                     <b>Start Time: </b><br/>
                                     <div className="form-group input-group px-lg-2">
                                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                                        <input className="form-control" type="time" readOnly={user.student} />
+                                        <input className="form-control" type="time"  readOnly={user.student} />
                                     </div>
                                 </div>
                                 <div className="col-md-6 mb-2" >
@@ -171,26 +175,26 @@ function CreateCourse(props) {
                             <div className="col-md-9">
                                 <div className="form-group input-group px-lg-4">
                                     <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
-                                    <input type="text" className="form-control"   placeholder="Enter Course Title" readOnly={user.student} />
+                                    <input type="text" className="form-control"  value={events[eventModal.date][eventModal.index][eventModal.type].title} placeholder="Enter Course Title" readOnly={user.student} />
                                 </div>
                                 <div className="form-group input-group px-lg-4">
                                     <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-align-justify" ></i></div>
-                                    <textarea rows="3" placeholder="Enter Course Description  " className="form-control" readOnly={user.student} ></textarea>
+                                    <textarea rows="3" placeholder="Enter Course Description  " className="form-control" value={events[eventModal.date][eventModal.index][eventModal.type].description} readOnly={user.student} ></textarea>
 
                                 </div>
                                 <div className="row">
                                     <div className="col-md-6 mb-2" >
                                         <b>Start Time: </b><br/>
                                         <div className="form-group input-group px-lg-2">
-                                            <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                                            <input className="form-control" type="time" readOnly={user.student} />
-                                            {calendars}   </div>
+                                            <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 "  ><i className="fa fa-clock" ></i></div>
+                                            <input className="form-control" type="time" value={events[eventModal.date][eventModal.index][eventModal.type].startTime} readOnly={user.student} />
+                                            </div>
                                     </div>
                                     <div className="col-md-6 mb-2" >
                                         <b>End Time: </b><br/>
                                         <div className="form-group input-group ">
                                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                                            <input className="form-control" type="time" readOnly={user.student} />
+                                            <input className="form-control" type="time" value={events[eventModal.date][eventModal.index][eventModal.type].endTime} readOnly={user.student} />
                                         </div>
                                     </div>
                                 </div>
@@ -239,8 +243,10 @@ function CreateCourse(props) {
                             <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( X Months )</span></h1>
                             <div>
                                 <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer" ></i></span>
-                                <button className="btn btn-outline-grad ml-2" onClick={handleSave}> Save </button>
                                 <button className="btn btn-outline-grad ml-2" > Publish / Close </button>
+                                {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(false)}> Save </button>:null}
+                                {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(true)}> Publish </button>:null}
+                                {course.status=="Published"?<button className="btn btn-outline-grad ml-2" onClick={console.log("close")}> Close </button>:null}
                                 <button className="btn btn-outline-grad ml-2" > Generate Reminder </button>
 
                             </div>
