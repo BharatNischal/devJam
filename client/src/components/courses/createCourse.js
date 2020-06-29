@@ -146,7 +146,7 @@ function CreateCourse(props) {
 
       }else if(type="test"){
 
-        axios.put('/course/tests/dateChange',{tests:[events[date][index][type]._id],startTime:events[date][index][type].startTime,endTime:events[date][index][type].endTime})
+        axios.put('/course/test/dateChange',{tests:[events[date][index][type]._id],startTime:events[date][index][type].startTime,endTime:events[date][index][type].endTime})
         .then(res=>{
           if(res.data.success){
               setEventModal({...eventModal,show:false});
@@ -281,8 +281,9 @@ function CreateCourse(props) {
                             <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( X Months )</span></h1>
                             <div>
                                 <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer" ></i></span>
-                                <button className="btn btn-outline-grad ml-2" onClick={handleSave}> Save </button>
-                                <button className="btn btn-outline-grad ml-2" > Publish / Close </button>
+                                <button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(false)}> Save </button>
+                                <button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(true)}> Publish </button>
+                                <button className="btn btn-outline-grad ml-2" > Generate Reminder </button>
                                 <button className="btn btn-outline-grad ml-2" > Generate Reminder </button>
 
                             </div>
