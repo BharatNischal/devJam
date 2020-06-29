@@ -6,7 +6,7 @@ const middleware = require("../middleware");
 const mailFunction = require("../mail");
 
 // Router to get all the courses
-router.get('/all/courses',function (req,res) {
+router.get('/all/courses',middleware.isAdmin,function (req,res) {
     db.Course.find({})
       .then(courses=>{
         res.json({success:true,courses});
@@ -17,7 +17,7 @@ router.get('/all/courses',function (req,res) {
 })
 
 // Route to create a new course
-router.get('/course/new',function (req,res) {
+router.get('/course/new',middleware.isAdmin,function (req,res) {
   db.Course.create({})
   .then(course=>{
     res.json({success:true,course});
@@ -39,7 +39,7 @@ router.get('/course/find/:id',function (req,res) {
 })
 
 // To save the course as draft
-router.put('/course/:id',function (req,res) {
+router.put('/course/:id',middleware.isAdmin,function (req,res) {
     db.Course.findByIdAndUpdate(req.params.id,req.body.course)
     .then(course=>{
       res.json({success:true});
@@ -50,7 +50,7 @@ router.put('/course/:id',function (req,res) {
 })
 
 // Route to give authorizaion to students for course and publish it ,send emails and notification
-router.put('/course/publish/:id',middleware.isAdmin,function (req,res) {
+router.put('/course/publish/:id',middleware.isAdmin,middleware.isAdmin,function (req,res) {
     db.Course.findById(req.params.id)
       .then(course=>{
         let studentIds = [];
@@ -111,7 +111,7 @@ router.put('/course/publish/:id',middleware.isAdmin,function (req,res) {
 })
 
 // Route to close a course
-router.get('/course/close/:id',function (req,res) {
+router.get('/course/close/:id',middleware.isAdmin,function (req,res) {
   db.Course.findByIdAndUpdate(req.params.id,{status:"Closed"})
   .then(course=>{
     res.json({success:true});
@@ -122,7 +122,7 @@ router.get('/course/close/:id',function (req,res) {
 })
 
 // Route to get all the videos topicwise
-router.get('/videos/all',function (req,res) {
+router.get('/videos/all',middleware.isAdmin,function (req,res) {
   db.Topic.find({}).populate('items.video')
     .then(topics=>{
       res.json({success:true,topics})
@@ -133,7 +133,7 @@ router.get('/videos/all',function (req,res) {
 })
 
 // Route to get all the videos topicwise
-router.get('/deliverables/all',function (req,res) {
+router.get('/deliverables/all',middleware.isAdmin,function (req,res) {
   db.Topic.find({}).populate('items.deliverable')
     .then(topics=>{
       res.json({success:true,topics})
@@ -144,7 +144,7 @@ router.get('/deliverables/all',function (req,res) {
 })
 
 // Router to get all the tests
-router.get('/tests/all',function (req,res) {
+router.get('/tests/all',middleware.isAdmin,function (req,res) {
   db.Test.find({})
   .then(tests=>{
     res.json({success:true,tests})
@@ -155,7 +155,7 @@ router.get('/tests/all',function (req,res) {
 })
 
 // Router to change dueDate of deliverables
-router.put('/course/deliverables/dateChange',function (req,res) {
+router.put('/course/deliverables/dateChange',middleware.isAdmin,function (req,res) {
   Promise.all(req.body.deliverables.map(d=>(
         db.Deliverable.findByIdAndUpdate(d,{dueDate:req.body.date})
       )))
@@ -168,7 +168,7 @@ router.put('/course/deliverables/dateChange',function (req,res) {
 })
 
 // Router to change start and end time of tests
-router.put('/course/test/dateChange',function (req,res) {
+router.put('/course/test/dateChange',middleware.isAdmin,function (req,res) {
   console.log("inside test time route",req.body.tests);
   Promise.all(req.body.tests.map(t=>(
         db.Test.findByIdAndUpdate(t,{startTime:req.body.startTime,endTime:req.body.endTime})
@@ -182,8 +182,7 @@ router.put('/course/test/dateChange',function (req,res) {
 })
 
 // To create a new Generic Event
-router.post('/gevent/new',function (req,res) {
-    console.log("inside gevent create route",req.body.event);
+router.post('/gevent/new',middleware.isAdmin,function (req,res) {
     db.GEvent.create(req.body.event)
       .then(event=>{
         res.json({success:true,event});
@@ -192,6 +191,17 @@ router.post('/gevent/new',function (req,res) {
         res.json({success:false,msg:err.message});
       })
 })
+
+// Route to update a generic event
+router.put('/gevent/:id',middleware.isAdmin,function (req,res) {
+    db.GEvent.findByIdAndUpdate(req.params.id,req.body.event)
+    .then(event=>{
+      res.json({success:true,event});
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+});
 
 router.get("/allPublishedCourses",middleware.isAdmin, function(req,res){
   db.Course.find({students:req.user._id})
