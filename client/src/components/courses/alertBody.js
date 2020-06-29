@@ -14,6 +14,7 @@ export default function AlertBody(props) {
   const [dueDate,setDueDate] = useState("");
   const [startTime,setStartTime] = useState("");
   const [endTime,setEndTime] = useState("");
+  const [event,setEvent] = useState({title:"",description:""});
 
   useEffect(()=>{
     if(props.type=="video"){
@@ -138,7 +139,7 @@ export default function AlertBody(props) {
           axios.put('/deliverables/dateChange',{date:dueDate?dueDate:props.date,deliverables:list.map(d=>d._id)})
             .then(res=>{
               if(res.data.success){
-                console.log("success");
+                props.add(list,props.date);
               }else{
                 console.log(res.data.msg);
               }
@@ -146,6 +147,8 @@ export default function AlertBody(props) {
             .catch(err=>{
               console.log(err.message);
             })
+        }else{
+          props.add(list,props.date);
         }
     }else if(props.type=="test"){
         data.forEach(test=>{
@@ -157,7 +160,7 @@ export default function AlertBody(props) {
         axios.put('/course/test/dateChange',{tests:list.map(l=>(l.test._id)),startTime,endTime})
           .then(res=>{
             if(res.data.success){
-              console.log("Success");
+              props.add(list,props.date);
             }else{
               console.log(res.data.msg);
             }
@@ -166,10 +169,20 @@ export default function AlertBody(props) {
             console.log(err.message);
           })
     }else{
-
+        axios.post('/gevent/new',{event:{...event,startTime,endTime}})
+          .then(res=>{
+            if(res.data.success){
+              list = [{event:res.data.event}];
+              props.add(list,props.date);
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
     }
-    props.add(list,props.date);
-    console.log(list);
+
   }
 
   const topicOptions = [{value:"All",label:"All"},
@@ -279,11 +292,11 @@ export default function AlertBody(props) {
                     <React.Fragment>
                       <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
-                            <input type="text" className="form-control"   placeholder="Enter Course Title" />
+                            <input type="text" className="form-control"   placeholder="Event Title" value={event.title} onChange={(e)=>{setEvent({...event,title:e.target.value})}}/>
                         </div>
                         <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-align-justify" ></i></div>
-                            <textarea rows="3" placeholder="Enter Course Description  " className="form-control" ></textarea>
+                            <textarea rows="3" placeholder="Event Description  " className="form-control" value={event.description} onChange={(e)=>{setEvent({...event,description:e.target.value})}} ></textarea>
 
                         </div>
                     </React.Fragment>

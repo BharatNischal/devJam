@@ -20,7 +20,7 @@ function CreateCourse(props) {
     const [saveAlert,setSaveAlert] = useState(false);
 
 
-     
+
 
     useEffect(()=>{
       axios.get(`/course/find/${props.match.params.id}`)
@@ -84,7 +84,7 @@ function CreateCourse(props) {
             }else if(item.test){
               return {test:item.test._id}
             }else{
-              return {}
+              return {event:item.event._id}
             }
           })
         }
@@ -131,7 +131,7 @@ function CreateCourse(props) {
                 <AlertBody date={testAlert.date} type="test" add={handleAdd}/>
             </Alert>:null}
             {eventAlert.show?<Alert cancel={()=>setEventAlert({show:false,date:null})}>
-                <AlertBody date={eventAlert.date} type="event" />
+                <AlertBody date={eventAlert.date} type="event" add={handleAdd}/>
             </Alert>:null}
 
             {eventModal.show?
@@ -142,10 +142,10 @@ function CreateCourse(props) {
                             <b>Due Date</b><br/>
                             <div className="form-group input-group ml-4 mt-2">
                                 <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-calendar" ></i></div>
-                                <input 
+                                <input
                                     className="form-control" type="date"
-                                    value={events[eventModal.date][eventModal.index][eventModal.type].dueDate.substr(0,10)} 
-                                    onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].dueDate=e.target.value; setEvents(copyEv);}} 
+                                    value={events[eventModal.date][eventModal.index][eventModal.type].dueDate.substr(0,10)}
+                                    onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].dueDate=e.target.value; setEvents(copyEv);}}
                                 />
                             </div>
 
@@ -169,7 +169,7 @@ function CreateCourse(props) {
                                 </div>
                             </div>
                         </div>
-                        
+
                     :eventModal.type == "event"?
                         <div className="row">
                             <div className="col-md-3">

@@ -181,4 +181,16 @@ router.put('/course/test/dateChange',function (req,res) {
     })
 })
 
+// To create a new Generic Event
+router.post('/gevent/new',function (req,res) {
+    console.log("inside gevent create route",req.body.event);
+    db.GEvent.create(req.body.event)
+      .then(event=>{
+        res.json({success:true,event});
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
+})
+
 module.exports = router;
