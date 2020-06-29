@@ -68,7 +68,7 @@ function CreateCourse(props) {
     }
 
 
-    function handleSave() {
+    function handleSave(publish) {
       const eventData = Object.keys(events).map(event=>(
         {
           date:event,
@@ -95,9 +95,13 @@ function CreateCourse(props) {
         if(res.data.success){
           console.log("Saved");
           setSaveAlert(true);
-          setTimeout(()=>{
-              setSaveAlert(false);
-          },2000)
+          if(publish){
+            props.history.push(`/publish/course/${props.match.params.id}`);
+          }else{
+            setTimeout(()=>{
+                setSaveAlert(false);
+            },2000)
+          }
         }else{
           console.log(res.data.msg);
         }
@@ -130,11 +134,12 @@ function CreateCourse(props) {
 
             <div className="container" style={{marginTop:"120px"}} >
                 <div className="d-flex justify-content-between">
-                    <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( X Months )</span></h1>
+                    <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( {Math.max(0,endingMonth-startingMonth+1)} Months )</span></h1>
                     <div>
                         <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer" ></i></span>
-                        <button className="btn btn-outline-grad ml-2" onClick={handleSave}> Save </button>
-                        <button className="btn btn-outline-grad ml-2" > Publish / Close </button>
+                        {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(false)}> Save </button>:null}
+                        {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(true)}> Publish </button>:null}
+                        {course.status=="Published"?<button className="btn btn-outline-grad ml-2" onClick={console.log("close")}> Close </button>:null}
                         <button className="btn btn-outline-grad ml-2" > Generate Reminder </button>
 
                     </div>

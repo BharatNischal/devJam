@@ -11,6 +11,9 @@ export default function AlertBody(props) {
   const [srchTxt,setSrchTxt] = useState("");
   const [selectAll,setSelectAll] = useState(false);
   const [isEventTimed,setIsEventTimed] = useState(false);
+  const [dueDate,setDueDate] = useState("");
+  const [startTime,setStartTime] = useState("");
+  const [endTime,setEndTime] = useState("");
 
   useEffect(()=>{
     if(props.type=="video"){
@@ -131,6 +134,19 @@ export default function AlertBody(props) {
               }
             })
         })
+        if(props.type=="deliverable"){
+          axios.put('/deliverables/dateChange',{date:dueDate?dueDate:props.date,deliverables:list.map(d=>d._id)})
+            .then(res=>{
+              if(res.data.success){
+                console.log("success");
+              }else{
+                console.log(res.data.msg);
+              }
+            })
+            .catch(err=>{
+              console.log(err.message);
+            })
+        }
     }else if(props.type=="test"){
         data.forEach(test=>{
           if(test.selected){
@@ -138,6 +154,17 @@ export default function AlertBody(props) {
             // test.selected = false;
           }
         })
+        axios.put('/course/test/dateChange',{tests:list.map(l=>(l.test._id)),startTime,endTime})
+          .then(res=>{
+            if(res.data.success){
+              console.log("Success");
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
     }else{
 
     }
@@ -159,7 +186,7 @@ export default function AlertBody(props) {
                 <h2> ADD {props.type.toUpperCase()} </h2>
                 <div><button className="btn btn-outline-grad" onClick={handleAdd} > Add </button></div>
             </div>
-            
+
             <div className="row align-content-center justify-content-center mt-3">
                 {props.type!="event"?
                 <React.Fragment>
@@ -185,7 +212,7 @@ export default function AlertBody(props) {
                           <span className="float-right pr-3 srchIcon"><i className="fa fa-search"></i></span>
                       </div>
 
-                    
+
                   </div>
                 </React.Fragment>
                 :null}
@@ -210,7 +237,7 @@ export default function AlertBody(props) {
                         <b className="mt-2">Add Due Date</b>
                         <div className="form-group input-group ml-4 mt-2">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-calendar" ></i></div>
-                            <input className="form-control" type="date" />
+                            <input className="form-control" type="date" value={dueDate} onChange={(e)=>setDueDate(e.target.value)} />
                         </div>
                       </React.Fragment>
                     :null}
@@ -222,7 +249,7 @@ export default function AlertBody(props) {
                 <React.Fragment>
                   <div className="col-md-3"></div>
                   <div className="col-md-6  pl-5 text-left" >
-                    
+
                     {filteredData.map(test=>(
                       <div key={test._id} className={(srchTxt!=""?(test.title && test.title.toLowerCase().includes(srchTxt.toLowerCase())?"custom-control custom-checkbox mt-3":"custom-control custom-checkbox mt-3 d-none"):"custom-control custom-checkbox mt-3")} >
                           <input type="checkbox" className="custom-control-input" id={"s"+test._id}  checked={test.selected} onChange={(e)=>handleChange(e.target.checked,test._id)} />
@@ -235,8 +262,8 @@ export default function AlertBody(props) {
                   </div>
                   <div className="col-md-3"></div>
                   </React.Fragment>:null}
-                  
-                 
+
+
                  <div className="col-md-3" style={{position:"relative"}}>
                    {props.type=="event"?
                     <div  className="custom-control custom-checkbox mt-2" style={{position:"absolute",bottom:"30px"}} >
@@ -267,19 +294,19 @@ export default function AlertBody(props) {
                           <b>Start Time: </b><br/>
                           <div className="form-group input-group px-lg-2">
                               <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                              <input className="form-control" type="time" />
+                              <input className="form-control" type="time" value={startTime} onChange={(e)=>setStartTime(e.target.value)}/>
                           </div>
                         </div>
                         <div className="col-md-6 mb-2" >
                           <b>End Time: </b><br/>
                         <div className="form-group input-group ">
                               <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                              <input className="form-control" type="time" />
+                              <input className="form-control" type="time" value={endTime} onChange={(e)=>setEndTime(e.target.value)} />
                           </div>
                         </div>
                       </div>
                     :null}
-                </div> 
+                </div>
             </div>
         </div>
     </div>

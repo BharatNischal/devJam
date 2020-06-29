@@ -36,7 +36,9 @@ const testSchema = new mongoose.Schema({
         type:Boolean,
         default:false
       }
-    }]
+    }],
+    startTime:String,
+    endTime:String
 });
 
 module.exports = mongoose.model("test",testSchema);

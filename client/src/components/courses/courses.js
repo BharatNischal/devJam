@@ -21,22 +21,22 @@ function Courses(props) {
     const {user} = useContext(CurUserContext);
 
     useEffect(()=>{
-      // if(user.loggedIn && !user.student){
-      //   axios.get('/all/courses')
-      //     .then(res=>{
-      //       if(res.data.success){
-                // allCourses = res.data.courses
-      //         setCourses(res.data.courses);
-      //       }else{
-      //         console.log(res.data.msg);
-      //       }
-      //     })
-      //     .catch(err=>{
-      //       console.log(err.message);
-      //     })
-      // }else{
-      //   props.history.push(user.loggedIn?'/studDash':'/login');
-      // }
+      if(user.loggedIn && !user.student){
+        axios.get('/all/courses')
+          .then(res=>{
+            if(res.data.success){
+                allCourses = res.data.courses
+              setCourses(res.data.courses);
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+      }else{
+        props.history.push(user.loggedIn?'/studDash':'/login');
+      }
 
     },[])
 
@@ -139,7 +139,7 @@ function Courses(props) {
                                onChange={(e)=>handleFilter(e.value)}
                             />
 
-                            <button className="btn btn-link text-danger" >Clear</button>
+                          <button className="btn btn-link text-danger" onClick={()=>setCourses(allCourses)}>Clear</button>
                         </div>
                     </div>
                     <div className="col-lg-8 mt-2 mb-5 " >
