@@ -195,7 +195,7 @@ function CreateCourse(props) {
                             <div className="col-8 text-left row">
                                 <div className="col-md-6 mb-2" >
                                     <b>Start Time: </b><br/>
-                                    <div className="form-group input-group px-lg-2">
+                                    <div className="form-group input-group ">
                                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
                                         <input className="form-control" type="time"  readOnly={user.student} value={events[eventModal.date][eventModal.index][eventModal.type].startTime} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].startTime=e.target.value; setEvents(copyEv);}}/>
                                     </div>
