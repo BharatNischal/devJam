@@ -97,7 +97,8 @@ function timeAlert() {
           Promise.all(promises)
             .then(responses=>{
               responses.forEach((res,i)=>{
-                newStudents[i].notifications.push(res);
+                console.log(res);
+                newStudents[i].notifications.push({notification:res._id});
                 newStudents[i].save();
               })
             })
