@@ -22,7 +22,7 @@ function CreateCourse(props) {
     const [saveAlert,setSaveAlert] = useState(false);
 
     const {user} = useContext(CurUserContext);
-     
+
 
     useEffect(()=>{
       axios.get(`/course/find/${props.match.params.id}`)
@@ -61,6 +61,7 @@ function CreateCourse(props) {
         }
     }
 
+    // Add an event to frontend
     function handleAdd(data,date) {
       if(!user.student){
           const newEvents = JSON.parse(JSON.stringify(events));
@@ -80,9 +81,9 @@ function CreateCourse(props) {
       }
     }
 
-
+    // Save the page
     function handleSave(publish) {
-      if(!user.student){  
+      if(!user.student){
         const eventData = Object.keys(events).map(event=>(
             {
             date:event,
@@ -99,7 +100,7 @@ function CreateCourse(props) {
                 }
             })
             }
-            
+
         ))
         const {title,status,instructions} = course;
         const newCourse = {title,status,instructions,events:eventData,startMonth:startingMonth,endMonth:endingMonth};
@@ -129,6 +130,47 @@ function CreateCourse(props) {
       }
     }
 
+    // To edit the details of an event
+    function handleSaveEvent(type,date,index) {
+      // Save deliverable
+      console.log(type,date,index);
+      if(type=="deliverable"){
+
+        axios.put('/course/deliverables/dateChange',{deliverables:[events[date][index][type]._id],date:events[date][index][type].dueDate})
+        .then(res=>{
+          if(res.data.success){
+              setEventModal({...eventModal,show:false});
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+
+      }else if(type="test"){
+
+        axios.put('/course/tests/dateChange',{tests:[events[date][index][type]._id],startTime:events[date][index][type].startTime,endTime:events[date][index][type].endTime})
+        .then(res=>{
+          if(res.data.success){
+              setEventModal({...eventModal,show:false});
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+
+      }else if(type=="event"){
+
+      }
+    }
+
+    function handleDelEvent(type,date,index) {
+      console.log(type,date,index);
+    }
+
     return (
         <React.Fragment>
             {eventModal.show?
@@ -141,8 +183,8 @@ function CreateCourse(props) {
                                 <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-calendar" ></i></div>
                                 <input
                                     className="form-control" type="date"
-                                    value={events[eventModal.date][eventModal.index][eventModal.type].dueDate.substr(0,10)} 
-                                    onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].dueDate=e.target.value; setEvents(copyEv);}} 
+                                    value={events[eventModal.date][eventModal.index][eventModal.type].dueDate.substr(0,10)}
+                                    onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].dueDate=e.target.value; setEvents(copyEv);}}
                                     readOnly={user.student}
                                 />
                             </div>
@@ -162,7 +204,7 @@ function CreateCourse(props) {
                                     <b>End Time: </b><br/>
                                     <div className="form-group input-group ">
                                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                                        <input className="form-control" type="time" readOnly={user.student} />
+                                        <input className="form-control" type="time" readOnly={user.student} value={events[eventModal.date][eventModal.index][eventModal.type].endTime} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].endTime=e.target.value; setEvents(copyEv);}}/>
                                     </div>
                                 </div>
                             </div>
@@ -204,11 +246,11 @@ function CreateCourse(props) {
                     }
                     <div className="mt-2" >
                     {eventModal.type=="deliverable" || eventModal.type=="video"? <button className="btn btn-outline-grad ml-2"> View {eventModal.type=="deliverable"?"Deliverable":" Video" } </button>:null}
-                    
-                    {!user.student? 
+
+                    {!user.student?
                         <React.Fragment>
-                            <button className="btn btn-outline-grad ml-2"> Save Event </button>
-                            <button className="btn btn-outline-grad ml-2"> Delete Event </button>
+                            <button className="btn btn-outline-grad ml-2" onClick={()=>handleSaveEvent(eventModal.type,eventModal.date,eventModal.index)}> Save Event </button>
+                            <button className="btn btn-outline-grad ml-2" onClick={()=>handleDelEvent(eventModal.type,eventModal.date,eventModal.index)}> Delete Event </button>
                         </React.Fragment>
                     :null}
 
@@ -236,7 +278,7 @@ function CreateCourse(props) {
                         <AlertBody date={eventAlert.date} type="event" add={handleAdd} />
                     </Alert>:null}<span style={{fontSize:"16px"}} >( X Months )</span>
 
-                    
+
 
                     <div className="container" style={{marginTop:"120px"}} >
                         <div className="d-flex justify-content-between">
@@ -309,7 +351,7 @@ function CreateCourse(props) {
                         {calendars}
                     </div>
                 </React.Fragment>
-            
+
             :
                 <React.Fragment>
                     <TopBar/>
@@ -318,7 +360,7 @@ function CreateCourse(props) {
                         <div className="d-flex justify-content-between">
                             <h1 className="topicTitle mainH text-left text-pink"> {course.title} <span style={{fontSize:"16px"}} >( {endingMonth-startingMonth+1} Months )</span> </h1>
                             <div>
-                               
+
                                 <button className="btn btn-outline-grad ml-2" > View Upcoming </button>
 
                             </div>
@@ -329,7 +371,7 @@ function CreateCourse(props) {
                         </div>
                         {calendars}
                     </div>
-                    
+
                 </React.Fragment>
             }
         </React.Fragment>
