@@ -188,7 +188,7 @@ function CreateCourse(props) {
       setEvents(copyEv);
       handleSave();
     }
-    
+
     return (
         <React.Fragment>
             {showDeliverableAlert.show?
@@ -268,16 +268,18 @@ function CreateCourse(props) {
                     :null
                     }
                     <div className="mt-2" >
-                    {eventModal.type=="deliverable" || eventModal.type=="video"? 
-                        <button 
-                            className="btn btn-outline-grad ml-2" 
+                    {eventModal.type=="deliverable" || eventModal.type=="video"?
+                        <button
+                            className="btn btn-outline-grad ml-2"
                             onClick={()=>{
-                                if(eventModal.type=="deliverable" ){ 
+                                if(eventModal.type=="deliverable" ){
                                     setShowDeliverableAlert({show:true,deliverable:events[eventModal.date][eventModal.index][eventModal.type]})
                                     setEventModal({show:false,type:null,index:null,date:null});
+                                }else{
+                                  window.open(events[eventModal.date][eventModal.index][eventModal.type].url?"https://res.cloudinary.com/nischalbharat/video/upload/"+events[eventModal.date][eventModal.index][eventModal.type].url:"", "_blank")
                                 }
-                            }}> 
-                            View {eventModal.type=="deliverable"?"Deliverable":" Video" } 
+                            }}>
+                            View {eventModal.type=="deliverable"?"Deliverable":" Video" }
                         </button>:null}
 
                     {!user.student?
