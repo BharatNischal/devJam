@@ -73,6 +73,20 @@ function CreateCourse(props) {
         }
     }
 
+    function handleClose(id){
+      axios.put(`/course/close/${props.match.params.id}`)
+        .then(res=>{
+          if(res.data.success){
+            setCourse({...course,status:"Closed"})
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.msg);
+        })
+    }
+
     // Add an event to frontend
     function handleAdd(data,date) {
       if(!user.student&&!preview){
@@ -335,7 +349,7 @@ function CreateCourse(props) {
 
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(false)}> Save </button>:null}
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(true)}> Publish </button>:null}
-                                {course.status=="Published"?<button className="btn btn-outline-grad ml-2" onClick={console.log("close")}> Close </button>:null}
+                                {course.status=="Published"?<button className="btn btn-outline-grad ml-2" onClick={handleClose}> Close </button>:null}
                                 <button className="btn btn-outline-grad ml-2" > Generate Reminder </button>
 
                             </div>
