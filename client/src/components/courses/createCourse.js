@@ -9,6 +9,7 @@ import axios from "axios";
 import {CurUserContext} from "../../contexts/curUser";
 import TopBar from "../learnerPlatform/TopBar";
 import Deliverable from '../learnerPlatform/topic/deliverable';
+import UpcomingEvent from './UpcomingEvent';
 
 function CreateCourse(props) {
     const [startingMonth,setStartingMonth] = useState(-1);
@@ -24,6 +25,7 @@ function CreateCourse(props) {
     const [showDeliverableAlert,setShowDeliverableAlert] = useState({show:false,deliverable:null});
     const [preview,setPreview] = useState(false);
     const {user} = useContext(CurUserContext);
+    const [showUpcomingAlert,setShowUpcomingAlert] = useState(false);
 
 
     useEffect(()=>{
@@ -216,6 +218,14 @@ function CreateCourse(props) {
 
     return (
         <React.Fragment>
+
+            {showUpcomingAlert?
+                <Alert cancel={()=>setShowUpcomingAlert(false)} >
+                    <h2> Upcoming Events</h2>
+                    <UpcomingEvent events={events} />
+                </Alert>
+            :null}
+
             {showDeliverableAlert.show?
                 <Alert cancel={()=>setShowDeliverableAlert({show:false,deliverable:null})} >
                     <Deliverable deliverable={showDeliverableAlert.deliverable} />
@@ -424,7 +434,7 @@ function CreateCourse(props) {
                             <h1 className="topicTitle mainH text-left text-pink"> {course.title} <span style={{fontSize:"16px"}} >( {endingMonth-startingMonth+1} Months )</span> </h1>
                             <div>
                                 {preview?<span className="h3" style={{position:"relative", top:"5px" }} onClick={()=>setPreview(false)} > <i className="fa fa-eye-slash  hover-pink pointer" ></i></span>:null}
-                                <button className="btn btn-outline-grad ml-2" > View Upcoming </button>
+                                <button className="btn btn-outline-grad ml-2" onClick={()=>setShowUpcomingAlert(true)} > View Upcoming </button>
 
                             </div>
                         </div>
