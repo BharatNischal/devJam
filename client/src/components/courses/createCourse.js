@@ -8,6 +8,7 @@ import AlertBody from './alertBody';
 import axios from "axios";
 import {CurUserContext} from "../../contexts/curUser";
 import TopBar from "../learnerPlatform/TopBar";
+import Deliverable from '../learnerPlatform/topic/deliverable';
 
 function CreateCourse(props) {
     const [startingMonth,setStartingMonth] = useState(-1);
@@ -20,7 +21,7 @@ function CreateCourse(props) {
     const [events,setEvents] = useState({});
     const [eventModal,setEventModal] = useState({show:false,type:null,index:null,date:null});
     const [saveAlert,setSaveAlert] = useState(false);
-
+    const [showDeliverableAlert,setShowDeliverableAlert] = useState({show:false,deliverable:null});
     const {user} = useContext(CurUserContext);
 
 
@@ -170,9 +171,14 @@ function CreateCourse(props) {
     function handleDelEvent(type,date,index) {
       console.log(type,date,index);
     }
-
+    
     return (
         <React.Fragment>
+            {showDeliverableAlert.show?
+                <Alert cancel={()=>setShowDeliverableAlert({show:false,deliverable:null})} >
+                    <Deliverable deliverable={showDeliverableAlert.deliverable} />
+                </Alert>
+            :null}
             {eventModal.show?
                 <Alert cancel={()=>setEventModal({show:false,type:null,index:null,date:null})}>
                     <h2>{events[eventModal.date][eventModal.index][eventModal.type].title}</h2>
@@ -245,7 +251,17 @@ function CreateCourse(props) {
                     :null
                     }
                     <div className="mt-2" >
-                    {eventModal.type=="deliverable" || eventModal.type=="video"? <button className="btn btn-outline-grad ml-2"> View {eventModal.type=="deliverable"?"Deliverable":" Video" } </button>:null}
+                    {eventModal.type=="deliverable" || eventModal.type=="video"? 
+                        <button 
+                            className="btn btn-outline-grad ml-2" 
+                            onClick={()=>{
+                                if(eventModal.type=="deliverable" ){ 
+                                    setShowDeliverableAlert({show:true,deliverable:events[eventModal.date][eventModal.index][eventModal.type]})
+                                    setEventModal({show:false,type:null,index:null,date:null});
+                                }
+                            }}> 
+                            View {eventModal.type=="deliverable"?"Deliverable":" Video" } 
+                        </button>:null}
 
                     {!user.student?
                         <React.Fragment>
