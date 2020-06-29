@@ -19,7 +19,7 @@ function Calendar(props) {
 
             date=`${new Date().getFullYear()}-${mm}-${dd}`;
             
-            days.push((<DateEl date={date} setVideoAlert={props.setVideoAlert} month={props.month} setDeliverableAlert={props.setDeliverableAlert} setEventAlert={props.setEventAlert} setTestAlert={props.setTestAlert} data={props.events[date]} ></DateEl>));
+            days.push((<DateEl date={date} setVideoAlert={props.setVideoAlert} month={props.month} setDeliverableAlert={props.setDeliverableAlert} setEventAlert={props.setEventAlert} setTestAlert={props.setTestAlert} data={props.events[date]} setEventModal={props.setEventModal} ></DateEl>));
         }else{
             days.push((<div className="border date p-2 disabled"> <b>{i-start-props.end+1}</b> </div>))
         }

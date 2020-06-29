@@ -16,8 +16,11 @@ function CreateCourse(props) {
     const [eventAlert,setEventAlert] = useState({show:false,date:null});
     const [course,setCourse] = useState({title:"",status:"Draft",instructions:""});
     const [events,setEvents] = useState({});
-
+    const [eventModal,setEventModal] = useState({show:false,type:null,index:null,date:null});
     const [saveAlert,setSaveAlert] = useState(false);
+
+
+     
 
     useEffect(()=>{
       axios.get(`/course/find/${props.match.params.id}`)
@@ -50,7 +53,7 @@ function CreateCourse(props) {
             calendars.push((
                 <div className="mt-4 mb-5" >
                     <h2 className="topicTitle mainH text-left"> {monthMap[i].name} </h2>
-                    <Calendar start={new Date(`${i}-01-${new Date().getFullYear()}`).getDay()} lastEnd={i==1?monthMap[12].days:monthMap[i-1].days} end={monthMap[i].days}  month={i} setVideoAlert={setVideoAlert} setDeliverableAlert={setDeliverableAlert} setEventAlert={setEventAlert} setTestAlert={setTestAlert} events={events} />
+                    <Calendar start={new Date(`${i}-01-${new Date().getFullYear()}`).getDay()} lastEnd={i==1?monthMap[12].days:monthMap[i-1].days} end={monthMap[i].days}  month={i} setVideoAlert={setVideoAlert} setDeliverableAlert={setDeliverableAlert} setEventAlert={setEventAlert} setTestAlert={setTestAlert} events={events} setEventModal={setEventModal} />
                 </div>
             ))
         }
@@ -128,9 +131,86 @@ function CreateCourse(props) {
                 <AlertBody date={testAlert.date} type="test" add={handleAdd}/>
             </Alert>:null}
             {eventAlert.show?<Alert cancel={()=>setEventAlert({show:false,date:null})}>
-                <h2 className="topicTitle mainH"> Add Event </h2>
-                <p>  {eventAlert.date} </p>
+                <AlertBody date={eventAlert.date} type="event" />
             </Alert>:null}
+
+            {eventModal.show?
+                <Alert cancel={()=>setEventModal({show:false,type:null,index:null,date:null})}>
+                    <h2>{events[eventModal.date][eventModal.index][eventModal.type].title}</h2>
+                    {eventModal.type=="deliverable"?
+                        <div className="mx-3 p-3" >
+                            <b>Due Date</b><br/>
+                            <div className="form-group input-group ml-4 mt-2">
+                                <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-calendar" ></i></div>
+                                <input 
+                                    className="form-control" type="date"
+                                    value={events[eventModal.date][eventModal.index][eventModal.type].dueDate.substr(0,10)} 
+                                    onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].dueDate=e.target.value; setEvents(copyEv);}} 
+                                />
+                            </div>
+
+                        </div>
+                    :eventModal.type == "test"?
+                        <div className="row justify-content-center">
+                            <div className="col-8 text-left row">
+                                <div className="col-md-6 mb-2" >
+                                    <b>Start Time: </b><br/>
+                                    <div className="form-group input-group px-lg-2">
+                                        <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
+                                        <input className="form-control" type="time" />
+                                    </div>
+                                </div>
+                                <div className="col-md-6 mb-2" >
+                                    <b>End Time: </b><br/>
+                                    <div className="form-group input-group ">
+                                        <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
+                                        <input className="form-control" type="time" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    :eventModal.type == "event"?
+                        <div className="row">
+                            <div className="col-md-3">
+                            </div>
+                            <div className="col-md-9">
+                                <div className="form-group input-group px-lg-4">
+                                    <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
+                                    <input type="text" className="form-control"   placeholder="Enter Course Title" />
+                                </div>
+                                <div className="form-group input-group px-lg-4">
+                                    <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-align-justify" ></i></div>
+                                    <textarea rows="3" placeholder="Enter Course Description  " className="form-control" ></textarea>
+
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-6 mb-2" >
+                                        <b>Start Time: </b><br/>
+                                        <div className="form-group input-group px-lg-2">
+                                            <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
+                                            <input className="form-control" type="time" />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6 mb-2" >
+                                        <b>End Time: </b><br/>
+                                        <div className="form-group input-group ">
+                                            <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
+                                            <input className="form-control" type="time" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    :null
+                    }
+                    <div className="mt-2" >
+                        {eventModal.type=="deliverable" || eventModal.type=="video"? <button className="btn btn-outline-grad ml-2"> View Deliverable </button>:null}
+                        <button className="btn btn-outline-grad ml-2"> Save Event </button>
+                        <button className="btn btn-outline-grad ml-2"> Delete Event </button>
+                    </div>
+                </Alert>
+            :null}
 
             <div className="container" style={{marginTop:"120px"}} >
                 <div className="d-flex justify-content-between">

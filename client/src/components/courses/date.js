@@ -11,20 +11,20 @@ function DateEl(props) {
                props.data.map((d,i)=>(
                    <React.Fragment key={i} >
                    {d.deliverable?
-                        <div className="deliverable pill p-1">
+                        <div className="deliverable pill p-1" onClick={()=>props.setEventModal({show:true,date:props.date,type:"deliverable",index:i})}>
                             {d.deliverable.title}...
                         </div>
                      :
                      d.test?
-                        <div className="test pill p-1">
+                        <div className="test pill p-1" onClick={()=>props.setEventModal({show:true,date:props.date,type:"test",index:i})}>
                             {d.test.title}...
                         </div>
                     :d.video?
-                        <div className="video pill p-1">
+                        <div className="video pill p-1" onClick={()=>props.setEventModal({show:true,date:props.date,type:"video",index:i})}>
                             {d.video.title}...
                         </div> 
                     :
-                        <div className="event pill p-1">
+                        <div className="event pill p-1" onClick={()=>props.setEventModal({show:true,date:props.date,type:"event",index:i})} >
                             {d.event.title}...
                         </div>   
                     }
