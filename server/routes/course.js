@@ -212,4 +212,86 @@ router.get("/allPublishedCourses",middleware.isAdmin, function(req,res){
   })
 })
 
+
+// Route to generate Reminder
+router.get('/reminder/course/:id',function (req,res) {
+    db.Course.findById(req.params.id).populate(['students','events.items.video','events.items.deliverable','events.items.test','events.items.event'])
+      .then(course=>{
+        // Get Tasks for Next Day
+        var date = new Date();
+        var tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate()+1,0);
+        let promises = [];
+        let listedEvents = [];
+        var newStudents = [];
+        var fullUrl = `${req.protocol}://${req.get('host')}/course/${req.params.id}`;
+        course.events.forEach(e=>{
+          if(e.date.toISOString().substr(0,10)==formatDate(tomorrow)){
+              listedEvents = e.items.map(item=>{
+                if(item.video){
+                  return "Video "+item.video.title;
+                }else if(item.deliverable){
+                  return "Deliverable "+item.deliverable.title;
+                }else if(item.test){
+                  return "Test "+item.test.title;
+                }else{
+                  return "Event "+item.event.title;
+                }
+              });
+          }
+        })
+
+        const text = listedEvents.join("\n");
+        course.students.forEach(student=>{
+
+              const msg = {
+                from: '"Learner Platform" <manjotsingh16july@gmail.com>', // sender address (who sends)
+                to: student.username, // list of receivers (who receives)
+                subject: 'Daily Reminder', // Subject line
+                text: `Dear student your schedule for tomorrow for Course ${course.title} is \n${text} \n ${fullUrl}`
+              };
+
+              mailFunction.mailFunction(msg,(err,info)=>{
+                if(err){
+                  console.log(err.message);
+                }
+              });
+
+              promises.push(db.Notification.create({
+                title:`Dear student your schedule for tommor for Course ${course.title} is\n ${text}`,
+                link:fullUrl,
+                type:"course"
+              }));
+              newStudents.push(student);
+        })
+        Promise.all(promises)
+          .then(responses=>{
+            responses.forEach((res,i)=>{
+              console.log(res);
+              newStudents[i].notifications.push({notification:res._id});
+              newStudents[i].save();
+            });
+            res.json({success:true})
+          })
+
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message})
+      })
+})
+
+
+function formatDate(date) {
+  var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+  if (month.length < 2)
+      month = '0' + month;
+  if (day.length < 2)
+      day = '0' + day;
+
+  return [year, month, day].join('-');
+}
+
 module.exports = router;

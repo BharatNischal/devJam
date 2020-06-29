@@ -89,6 +89,21 @@ function CreateCourse(props) {
         })
     }
 
+    // To make reminders
+    function handleReminder() {
+      axios.get(`/reminder/course/${props.match.params.id}`)
+        .then(res=>{
+          if(res.data.success){
+            console.log("Done");
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    }
+
     // Add an event to frontend
     function handleAdd(data,date) {
       if(!user.student&&!preview){
@@ -354,13 +369,13 @@ function CreateCourse(props) {
                         <div className="d-flex justify-content-between">
                             <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( {isNaN(Math.max(0,endingMonth-startingMonth+1))?0:Math.max(0,endingMonth-startingMonth+1)} Months )</span></h1>
                             <div>
-                                
+
                                 <span className="h3" style={{position:"relative", top:"5px" }} onClick={()=>setPreview(true)} > <i className="fa fa-eye  hover-pink pointer" ></i></span>
 
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(false)}> Save </button>:null}
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(true)}> Publish </button>:null}
                                 {course.status=="Published"?<button className="btn btn-outline-grad ml-2" onClick={handleClose}> Close </button>:null}
-                                <button className="btn btn-outline-grad ml-2" > Generate Reminder </button>
+                                <button className="btn btn-outline-grad ml-2" onClick={handleReminder} > Generate Reminder </button>
 
                             </div>
                         </div>

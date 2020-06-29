@@ -51,6 +51,7 @@ function timeAlert() {
             // Get Tasks for Next Day
             var tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate()+1,0);
             let listedEvents = [];
+            var fullUrl = `${req.protocol}://${req.get('host')}/course/${course._id}`;
             course.events.forEach(e=>{
               console.log("db",e.date.toISOString().substr(0,10),"format",formatDate(tomorrow));
               if(e.date.toISOString().substr(0,10)==formatDate(tomorrow)){
@@ -76,7 +77,7 @@ function timeAlert() {
                     from: '"Learner Platform" <manjotsingh16july@gmail.com>', // sender address (who sends)
                     to: student.username, // list of receivers (who receives)
                     subject: 'Daily Reminder', // Subject line
-                    text: `Dear student your schedule for tomorrow for Course ${course.title} is \n${text}`
+                    text: `Dear student your schedule for tomorrow for Course ${course.title} is \n${text} \n ${fullUrl}`
                   };
 
                   mailFunction.mailFunction(msg,(err,info)=>{
@@ -87,7 +88,7 @@ function timeAlert() {
 
                   promises.push(db.Notification.create({
                     title:`Dear student your schedule for tommor for Course ${course.title} is\n ${text}`,
-                    link:"#",
+                    link:fullUrl,
                     type:"course"
                   }));
                   newStudents.push(student);
