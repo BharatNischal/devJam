@@ -14,9 +14,9 @@ const TopBar = (props)=>{
     const {setUser,user} = useContext(CurUserContext);
 
     function changeStatus(index){
-        if(!user.notifications[index].read){
+        if(!user.notifications[user.notifications.length-index-1].read){
             const duplicate=JSON.parse(JSON.stringify(user));
-            duplicate.notifications[index].read=true;
+            duplicate.notifications[user.notifications.length-index-1].read=true;
             Axios.post(`/changeNotificationStatus`,{user:duplicate})
             .then(res=>{
                 if(res.data.success){
