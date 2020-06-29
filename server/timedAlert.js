@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const db=require("./models/index");
 const mailFunction = require("./mail");
 
+// Format the date
 function formatDate(date) {
   var d = new Date(date),
       month = '' + (d.getMonth() + 1),
