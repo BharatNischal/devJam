@@ -12,6 +12,7 @@ function PublishCourse(props) {
     const [srchTxt,setSrchTxt] = useState("");
     const [selectAll,setSelectAll] = useState(false);
     const [showConfirmation,setShowConfirmation] = useState(false);
+    const [showLoader,setShowLoader] = useState(false);
 
     // Login State
     const {user} = useContext(CurUserContext)
@@ -48,7 +49,7 @@ function PublishCourse(props) {
 
         console.log(data);
         // Publish request to server.....
-
+        setShowLoader(true);
         Axios.put(`/course/publish/${props.match.params.id}`,data)
         .then(res=>{
            setShowConfirmation(false);
@@ -57,12 +58,15 @@ function PublishCourse(props) {
             }else{
                 alert(res.data.msg);
             }
-
+            setShowLoader(false);
         }).catch(err=>{
            setShowConfirmation(false);
             alert(err.message);
+            setShowLoader(false);
         })
         setShowConfirmation(false);
+        
+        
     }
 
 
@@ -70,6 +74,7 @@ function PublishCourse(props) {
     return (
         <React.Fragment>
             <Nav show={true}/>
+            {showLoader?<div className="d-backdrop text-center pt-5" onClick={props.close}><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="mt-5"/></div>:null}
             <div className="bgwhiteoverlay" ></div>
             {showConfirmation?<Alert msg={(
                 <React.Fragment>

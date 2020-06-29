@@ -379,6 +379,7 @@ function CreateCourse(props) {
 
                             </div>
                         </div>
+                        <div className="pl-2 text-left"> <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/courses")}><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/></div>
                         <div className="row my-5" >
                             <div className="col-12" >
                                 <div className="form-group input-group px-lg-4">
@@ -453,6 +454,7 @@ function CreateCourse(props) {
 
                             </div>
                         </div>
+                        <div className="pl-2 text-left"> <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/learner/courses")}><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/></div>
                         <div className="my-2 text-left">
                             <h2> Instructions </h2>
                             <p className="ml-2"> {course.instructions} </p>
