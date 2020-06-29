@@ -25,3 +25,4 @@ module.exports.TestSubmission = require("./testSubmission");
 module.exports.Notification = require("./notification");
 module.exports.Question = require("./question");
 module.exports.Course = require("./course");
+module.exports.GEvent = require("./genericEvent");

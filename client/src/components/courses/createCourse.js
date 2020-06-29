@@ -77,7 +77,7 @@ function CreateCourse(props) {
     }
 
 
-    function handleSave() {
+    function handleSave(publish) {
       if(!user.student){  
         const eventData = Object.keys(events).map(event=>(
             {
@@ -91,7 +91,7 @@ function CreateCourse(props) {
                 }else if(item.test){
                 return {test:item.test._id}
                 }else{
-                return {}
+                    return {event:item.event._id}
                 }
             })
             }
@@ -106,9 +106,13 @@ function CreateCourse(props) {
             if(res.data.success){
             console.log("Saved");
             setSaveAlert(true);
-            setTimeout(()=>{
-                setSaveAlert(false);
-            },2000)
+            if(publish){
+                props.history.push(`/publish/course/${props.match.params.id}`);
+              }else{
+                setTimeout(()=>{
+                    setSaveAlert(false);
+                },2000)
+              }
             }else{
             console.log(res.data.msg);
             }
@@ -131,7 +135,7 @@ function CreateCourse(props) {
                             <b>Due Date</b><br/>
                             <div className="form-group input-group ml-4 mt-2">
                                 <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-calendar" ></i></div>
-                                <input 
+                                <input
                                     className="form-control" type="date"
                                     value={events[eventModal.date][eventModal.index][eventModal.type].dueDate.substr(0,10)} 
                                     onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].dueDate=e.target.value; setEvents(copyEv);}} 
@@ -159,7 +163,7 @@ function CreateCourse(props) {
                                 </div>
                             </div>
                         </div>
-                        
+
                     :eventModal.type == "event"?
                         <div className="row">
                             <div className="col-md-3">
@@ -225,7 +229,7 @@ function CreateCourse(props) {
                         <AlertBody date={testAlert.date} type="test" add={handleAdd}/>
                     </Alert>:null}
                     {eventAlert.show?<Alert cancel={()=>setEventAlert({show:false,date:null})}>
-                        <AlertBody date={eventAlert.date} type="event" />
+                        <AlertBody date={eventAlert.date} type="event" add={handleAdd} />
                     </Alert>:null}<span style={{fontSize:"16px"}} >( X Months )</span>
 
                     

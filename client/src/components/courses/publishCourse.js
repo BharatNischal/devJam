@@ -1,11 +1,10 @@
 import React, { useState, useEffect,useContext } from 'react';
 import Nav from '../profile/Nav/Nav';
-import placeholder from "./Placeholder.png";
 import Axios from 'axios';
 import Alert from '../ui/alert/alert';
 import {CurUserContext} from '../../contexts/curUser';
 
-function PublishTest(props) {
+function PublishCourse(props) {
     const [students,setStudents]=useState([]);
 
     //UI STATES
@@ -50,11 +49,11 @@ function PublishTest(props) {
         console.log(data);
         // Publish request to server.....
 
-        Axios.put(`/test/publish/${props.match.params.id}`,data)
+        Axios.put(`/course/publish/${props.match.params.id}`,data)
         .then(res=>{
            setShowConfirmation(false);
             if(res.data.success){
-                props.history.push('/test');
+                props.history.push('/courses');
             }else{
                 alert(res.data.msg);
             }
@@ -93,7 +92,7 @@ function PublishTest(props) {
                     <div className="col-12 p-3">
                         <div className=" p-3  shadow" style={{borderRadius:"18px",backgroundColor:"rgb(255, 235, 249)"}}>
                             <h2 className="topicTitle mainH text-left text-pink" >
-                                    Select Students for the Test 
+                                    Select Students for the Course
                             </h2>
                                 <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/test")}><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/>
                         </div>
@@ -143,4 +142,4 @@ function PublishTest(props) {
 }
 
 
-export default PublishTest;
+export default PublishCourse;

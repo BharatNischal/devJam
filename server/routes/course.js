@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const router=express.Router();
 const db=require("../models/index");
 const middleware = require("../middleware");
-
+const mailFunction = require("../mail");
 
 // Router to get all the courses
 router.get('/all/courses',function (req,res) {
@@ -160,11 +160,37 @@ router.put('/deliverables/dateChange',function (req,res) {
         db.Deliverable.findByIdAndUpdate(d,{dueDate:req.body.date})
       )))
     .then(responses=>{
-      res.json({success:true,tests})
+      res.json({success:true})
     })
     .catch(err=>{
       res.json({success:false,msg:err.message});
     })
+})
+
+// Router to change start and end time of tests
+router.put('/course/test/dateChange',function (req,res) {
+  console.log("inside test time route",req.body.tests);
+  Promise.all(req.body.tests.map(t=>(
+        db.Deliverable.findByIdAndUpdate(t,{startTime:req.body.startTime,endTime:req.body.endTime})
+      )))
+    .then(responses=>{
+      res.json({success:true})
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
+
+// To create a new Generic Event
+router.post('/gevent/new',function (req,res) {
+    console.log("inside gevent create route",req.body.event);
+    db.GEvent.create(req.body.event)
+      .then(event=>{
+        res.json({success:true,event});
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
 })
 
 module.exports = router;
