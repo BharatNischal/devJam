@@ -35,6 +35,7 @@ const TopBar = (props)=>{
         <div className="topBar">
             <Link to="/studDash" ><h1 >LrnrHub</h1></Link>
             <div>
+                <span className="mr-2 "> <Link to="/learner/courses" className="text-white"> <b>Courses</b> </Link> </span>
                 <span className="mr-2 "> <Link to="/allTests" className="text-white"> <b>Tests</b> </Link> </span>
                 <div className="dpWrapper cursor-pointer mr-2 d-inline-block" style={{position:"relative"}} onClick={()=>setShowNotification(true)} >
                      <img alt="profilePic" src={BellImg} /> 

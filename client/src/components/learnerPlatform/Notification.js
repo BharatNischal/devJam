@@ -15,7 +15,7 @@ function Notification(props) {
                             </div>
                             <div className="text-left ml-1" style={{fontSize:"12px"}}>
                                 <p className="m-0"> {notification.notification.title} </p>
-                                <div className="text-right" > <a className="btn btn-grad p-1" style={{fontSize:"14px"}} target="_blank" href={notification.notification.link} onClick={()=>{props.changeStatus(i)}} > {notification.notification.type?(notification.notification.type=="test"?"Give Test":"View Results"):"Give Test"} </a> </div>
+                                <div className="text-right" > <a className="btn btn-grad p-1" style={{fontSize:"14px"}} target="_blank" href={notification.notification.link} onClick={()=>{props.changeStatus(i)}} > {notification.notification.type?(notification.notification.type=="test"?"Give Test":notification.notification.type=="result"?"View Results":"View Course"):"Give Test"} </a> </div>
                             </div>
                         </div>
                     )):null}

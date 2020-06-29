@@ -37,6 +37,7 @@ import Tests from './components/tests/learnerPlatform/tests';
 import Courses from './components/courses/courses';
 import CreateCourse from './components/courses/createCourse';
 import PublishCourse from './components/courses/publishCourse'
+import Course from './components/courses/learnerPlatform/course';
 
 axios.defaults.withCredentials = true;
 
@@ -99,8 +100,10 @@ function App(props) {
             <Route path="/allTests/" exact component={Tests} />
 
             <Route path="/courses/" exact component={Courses} />
+            <Route path="/learner/courses/" exact component={Course} />
             <Route path="/course/:id" exact component={CreateCourse} />
             <Route path="/publish/course/:id" exact component={PublishCourse} />
+            
 
           </Switch>
           )}
