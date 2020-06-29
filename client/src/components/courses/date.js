@@ -35,20 +35,24 @@ function DateEl(props) {
 
 
 
-
-            <span className="dots hover-pink" onClick={()=>setShowOption(true)}> <i className="fa fa-ellipsis-v "></i> </span>
-
-            {showOptions?
+            {!props.isStudent?
                 <React.Fragment>
-                    <div className="d-backdrop" onClick={()=>setShowOption(false)}></div>
-                    <div className="optionDiv">
-                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setVideoAlert({show:true,date:props.date});}} >Add Video</div>
-                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setTestAlert({show:true,date:props.date});}} >Add Test</div>
-                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setDeliverableAlert({show:true,date:props.date});}} >Add Deliverable</div>
-                        <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setEventAlert({show:true,date:props.date});}} >Add Events</div>
-                    </div>
+                <span className="dots hover-pink" onClick={()=>setShowOption(true)}> <i className="fa fa-ellipsis-v "></i> </span>
+
+                {showOptions?
+                    <React.Fragment>
+                        <div className="d-backdrop" onClick={()=>setShowOption(false)}></div>
+                        <div className="optionDiv">
+                            <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setVideoAlert({show:true,date:props.date});}} >Add Video</div>
+                            <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setTestAlert({show:true,date:props.date});}} >Add Test</div>
+                            <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setDeliverableAlert({show:true,date:props.date});}} >Add Deliverable</div>
+                            <div className="opt hover-pink pointer" onClick={()=>{setShowOption(false);props.setEventAlert({show:true,date:props.date});}} >Add Events</div>
+                        </div>
+                    </React.Fragment>
+                :null}
                 </React.Fragment>
-            :null}
+            :null
+            }
         </div>
     )
 }
