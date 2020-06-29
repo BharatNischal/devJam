@@ -22,7 +22,7 @@ const          express = require('express'),
             AuthRoutes = require("./routes/auth"),
             CourseRoutes = require("./routes/course");
 
-
+require("./timedAlert");
 
 // Setting Up Dotenv for .env files environment variable
 const dotenv = require('dotenv');
