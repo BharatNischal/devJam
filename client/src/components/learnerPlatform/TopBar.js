@@ -43,7 +43,7 @@ const TopBar = (props)=>{
                 <div className="dpWrapper cursor-pointer d-inline-block" onClick={()=>setShowDropDown(true)}> <img alt="profilePic" src={user.profilePic?user.profilePic:Dp} /></div>
             </div>
         </div>
-            {showNotification?<Notification close={()=>setShowNotification(false)} changeStatus={changeStatus} data={user.notifications} />:null}
+            {showNotification?<Notification close={()=>setShowNotification(false)} changeStatus={changeStatus} data={user.notifications.slice().reverse()} />:null}
             {showDropDown?<Dropdown close={()=>setShowDropDown(false)}  />:null}
         </React.Fragment>
     )

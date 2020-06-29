@@ -8,7 +8,7 @@ function Notification(props) {
             <div className="dropdown" style={{width:"280px" ,height:"400px",overflow:"hidden",top:"80px"}}>
                 <div className="p-2" style={{width:"100%",height:"100%",overflowY:"scroll"}}>
 
-                    {props.data?props.data.reverse().map((notification,i)=>(
+                    {props.data?props.data.map((notification,i)=>(
                          <div key={i} className={notification.read?"d-flex p-2 mb-3 notification-card":"d-flex p-2 mb-3 notification-card unread" }>
                             <div>
                             <img alt="icon" src={BellImg} style={{width:"60px"}}/>
