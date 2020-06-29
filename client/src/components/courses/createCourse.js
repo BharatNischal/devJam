@@ -344,8 +344,8 @@ function CreateCourse(props) {
                         <div className="d-flex justify-content-between">
                             <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( {isNaN(Math.max(0,endingMonth-startingMonth+1))?0:Math.max(0,endingMonth-startingMonth+1)} Months )</span></h1>
                             <div>
-                                {preview&&!user.student?<span className="h3" style={{position:"relative", top:"5px" }} onClick={()=>setPreview(false)} > <i className="fa fa-eye-slash  hover-pink pointer" ></i></span>
-                              :<span className="h3" style={{position:"relative", top:"5px" }} onClick={()=>setPreview(true)} > <i className="fa fa-eye  hover-pink pointer" ></i></span>}
+                                
+                                <span className="h3" style={{position:"relative", top:"5px" }} onClick={()=>setPreview(true)} > <i className="fa fa-eye  hover-pink pointer" ></i></span>
 
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(false)}> Save </button>:null}
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(true)}> Publish </button>:null}
@@ -423,7 +423,7 @@ function CreateCourse(props) {
                         <div className="d-flex justify-content-between">
                             <h1 className="topicTitle mainH text-left text-pink"> {course.title} <span style={{fontSize:"16px"}} >( {endingMonth-startingMonth+1} Months )</span> </h1>
                             <div>
-
+                                {preview?<span className="h3" style={{position:"relative", top:"5px" }} onClick={()=>setPreview(false)} > <i className="fa fa-eye-slash  hover-pink pointer" ></i></span>:null}
                                 <button className="btn btn-outline-grad ml-2" > View Upcoming </button>
 
                             </div>
