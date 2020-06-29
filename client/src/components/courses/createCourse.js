@@ -148,7 +148,7 @@ function CreateCourse(props) {
           console.log(err.message);
         })
 
-      }else if(type="test"){
+      }else if(type=="test"){
 
         axios.put('/course/test/dateChange',{tests:[events[date][index][type]._id],startTime:events[date][index][type].startTime,endTime:events[date][index][type].endTime})
         .then(res=>{
@@ -163,12 +163,27 @@ function CreateCourse(props) {
         })
 
       }else if(type=="event"){
-
+        axios.put(`/gevent/${events[date][index][type]._id}`,{event:events[date][index][type]})
+        .then(res=>{
+          if(res.data.success){
+              setEventModal({...eventModal,show:false});
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
       }
     }
 
     function handleDelEvent(type,date,index) {
       console.log(type,date,index);
+      const copyEv = {...events};
+      copyEv[date].splice(index,1);
+      setEventModal({...eventModal,show:false})
+      setEvents(copyEv);
+      handleSave();
     }
 
     return (
@@ -183,7 +198,7 @@ function CreateCourse(props) {
                                 <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-calendar" ></i></div>
                                 <input
                                     className="form-control" type="date"
-                                    value={events[eventModal.date][eventModal.index][eventModal.type].dueDate.substr(0,10)}
+                                    value={events[eventModal.date][eventModal.index][eventModal.type].dueDate?events[eventModal.date][eventModal.index][eventModal.type].dueDate.substr(0,10):"".substr(0,10)}
                                     onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].dueDate=e.target.value; setEvents(copyEv);}}
                                     readOnly={user.student}
                                 />
@@ -217,11 +232,11 @@ function CreateCourse(props) {
                             <div className="col-md-9">
                                 <div className="form-group input-group px-lg-4">
                                     <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
-                                    <input type="text" className="form-control"  value={events[eventModal.date][eventModal.index][eventModal.type].title} placeholder="Enter Course Title" readOnly={user.student} />
+                                    <input type="text" className="form-control"  value={events[eventModal.date][eventModal.index][eventModal.type].title} placeholder="Enter Course Title" readOnly={user.student} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].title=e.target.value; setEvents(copyEv);}} />
                                 </div>
                                 <div className="form-group input-group px-lg-4">
                                     <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-align-justify" ></i></div>
-                                    <textarea rows="3" placeholder="Enter Course Description  " className="form-control" value={events[eventModal.date][eventModal.index][eventModal.type].description} readOnly={user.student} ></textarea>
+                                    <textarea rows="3" placeholder="Enter Course Description  " className="form-control" value={events[eventModal.date][eventModal.index][eventModal.type].description} readOnly={user.student} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].description=e.target.value; setEvents(copyEv);}} ></textarea>
 
                                 </div>
                                 <div className="row">
@@ -229,14 +244,14 @@ function CreateCourse(props) {
                                         <b>Start Time: </b><br/>
                                         <div className="form-group input-group px-lg-2">
                                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 "  ><i className="fa fa-clock" ></i></div>
-                                            <input className="form-control" type="time" value={events[eventModal.date][eventModal.index][eventModal.type].startTime} readOnly={user.student} />
+                                            <input className="form-control" type="time" value={events[eventModal.date][eventModal.index][eventModal.type].startTime} readOnly={user.student} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].startTime=e.target.value; setEvents(copyEv);}} />
                                             </div>
                                     </div>
                                     <div className="col-md-6 mb-2" >
                                         <b>End Time: </b><br/>
                                         <div className="form-group input-group ">
                                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                                            <input className="form-control" type="time" value={events[eventModal.date][eventModal.index][eventModal.type].endTime} readOnly={user.student} />
+                                            <input className="form-control" type="time" value={events[eventModal.date][eventModal.index][eventModal.type].endTime} readOnly={user.student} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].endTime=e.target.value; setEvents(copyEv);}} />
                                         </div>
                                     </div>
                                 </div>
@@ -285,7 +300,7 @@ function CreateCourse(props) {
                             <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( X Months )</span></h1>
                             <div>
                                 <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer" ></i></span>
-                                
+
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(false)}> Save </button>:null}
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(true)}> Publish </button>:null}
                                 {course.status=="Published"?<button className="btn btn-outline-grad ml-2" onClick={console.log("close")}> Close </button>:null}
