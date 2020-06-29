@@ -22,6 +22,7 @@ function CreateCourse(props) {
     const [eventModal,setEventModal] = useState({show:false,type:null,index:null,date:null});
     const [saveAlert,setSaveAlert] = useState(false);
     const [showDeliverableAlert,setShowDeliverableAlert] = useState({show:false,deliverable:null});
+    const [preview,setPreview] = useState(false);
     const {user} = useContext(CurUserContext);
 
 
@@ -32,6 +33,9 @@ function CreateCourse(props) {
         .then(res=>{
           if(res.data.success){
             const {title,status,instructions} = res.data.course;
+            if(status!="Published" && user.student){
+              props.history.push('/studDash');
+            }
             setCourse({title,status,instructions});
             setEvents(res.data.course.events);
             let obj ={};
@@ -63,7 +67,7 @@ function CreateCourse(props) {
             calendars.push((
                 <div className="mt-4 mb-5" >
                     <h2 className="topicTitle mainH text-left"> {monthMap[i].name} </h2>
-                    <Calendar start={new Date(`${i}-01-${new Date().getFullYear()}`).getDay()} lastEnd={i==1?monthMap[12].days:monthMap[i-1].days} end={monthMap[i].days}  month={i} setVideoAlert={setVideoAlert} setDeliverableAlert={setDeliverableAlert} setEventAlert={setEventAlert} setTestAlert={setTestAlert} events={events} setEventModal={setEventModal} isStudent={user.student} />
+                    <Calendar start={new Date(`${i}-01-${new Date().getFullYear()}`).getDay()} lastEnd={i==1?monthMap[12].days:monthMap[i-1].days} end={monthMap[i].days}  month={i} setVideoAlert={setVideoAlert} setDeliverableAlert={setDeliverableAlert} setEventAlert={setEventAlert} setTestAlert={setTestAlert} events={events} setEventModal={setEventModal} isStudent={user.student||preview} />
                 </div>
             ))
         }
@@ -71,7 +75,7 @@ function CreateCourse(props) {
 
     // Add an event to frontend
     function handleAdd(data,date) {
-      if(!user.student){
+      if(!user.student&&!preview){
           const newEvents = JSON.parse(JSON.stringify(events));
           if(newEvents[date]){
             newEvents[date].push(...data);
@@ -213,9 +217,9 @@ function CreateCourse(props) {
                                 <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-calendar" ></i></div>
                                 <input
                                     className="form-control" type="date"
-                                    value={events[eventModal.date][eventModal.index][eventModal.type].dueDate?events[eventModal.date][eventModal.index][eventModal.type].dueDate.substr(0,10):"".substr(0,10)}
+                                    value={events[eventModal.date][eventModal.index][eventModal.type].dueDate?events[eventModal.date][eventModal.index][eventModal.type].dueDate.substr(0,10):""}
                                     onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].dueDate=e.target.value; setEvents(copyEv);}}
-                                    readOnly={user.student}
+                                    readOnly={user.student||preview}
                                 />
                             </div>
 
@@ -227,14 +231,14 @@ function CreateCourse(props) {
                                     <b>Start Time: </b><br/>
                                     <div className="form-group input-group ">
                                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                                        <input className="form-control" type="time"  readOnly={user.student} value={events[eventModal.date][eventModal.index][eventModal.type].startTime} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].startTime=e.target.value; setEvents(copyEv);}}/>
+                                        <input className="form-control" type="time"  readOnly={user.student||preview} value={events[eventModal.date][eventModal.index][eventModal.type].startTime} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].startTime=e.target.value; setEvents(copyEv);}}/>
                                     </div>
                                 </div>
                                 <div className="col-md-6 mb-2" >
                                     <b>End Time: </b><br/>
                                     <div className="form-group input-group ">
                                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                                        <input className="form-control" type="time" readOnly={user.student} value={events[eventModal.date][eventModal.index][eventModal.type].endTime} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].endTime=e.target.value; setEvents(copyEv);}}/>
+                                        <input className="form-control" type="time" readOnly={user.student||preview} value={events[eventModal.date][eventModal.index][eventModal.type].endTime} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].endTime=e.target.value; setEvents(copyEv);}}/>
                                     </div>
                                 </div>
                             </div>
@@ -247,11 +251,11 @@ function CreateCourse(props) {
                             <div className="col-md-9">
                                 <div className="form-group input-group px-lg-4">
                                     <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
-                                    <input type="text" className="form-control"  value={events[eventModal.date][eventModal.index][eventModal.type].title} placeholder="Enter Course Title" readOnly={user.student} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].title=e.target.value; setEvents(copyEv);}} />
+                                    <input type="text" className="form-control"  value={events[eventModal.date][eventModal.index][eventModal.type].title} placeholder="Enter Course Title" readOnly={user.student||preview} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].title=e.target.value; setEvents(copyEv);}} />
                                 </div>
                                 <div className="form-group input-group px-lg-4">
                                     <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-align-justify" ></i></div>
-                                    <textarea rows="3" placeholder="Enter Course Description  " className="form-control" value={events[eventModal.date][eventModal.index][eventModal.type].description} readOnly={user.student} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].description=e.target.value; setEvents(copyEv);}} ></textarea>
+                                    <textarea rows="3" placeholder="Enter Course Description  " className="form-control" value={events[eventModal.date][eventModal.index][eventModal.type].description} readOnly={user.student||preview} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].description=e.target.value; setEvents(copyEv);}} ></textarea>
 
                                 </div>
                                 <div className="row">
@@ -259,14 +263,14 @@ function CreateCourse(props) {
                                         <b>Start Time: </b><br/>
                                         <div className="form-group input-group px-lg-2">
                                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 "  ><i className="fa fa-clock" ></i></div>
-                                            <input className="form-control" type="time" value={events[eventModal.date][eventModal.index][eventModal.type].startTime} readOnly={user.student} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].startTime=e.target.value; setEvents(copyEv);}} />
+                                            <input className="form-control" type="time" value={events[eventModal.date][eventModal.index][eventModal.type].startTime} readOnly={user.student||preview} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].startTime=e.target.value; setEvents(copyEv);}} />
                                             </div>
                                     </div>
                                     <div className="col-md-6 mb-2" >
                                         <b>End Time: </b><br/>
                                         <div className="form-group input-group ">
                                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-clock" ></i></div>
-                                            <input className="form-control" type="time" value={events[eventModal.date][eventModal.index][eventModal.type].endTime} readOnly={user.student} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].endTime=e.target.value; setEvents(copyEv);}} />
+                                            <input className="form-control" type="time" value={events[eventModal.date][eventModal.index][eventModal.type].endTime} readOnly={user.student||preview} onChange={(e)=>{const copyEv={...events}; copyEv[eventModal.date][eventModal.index][eventModal.type].endTime=e.target.value; setEvents(copyEv);}} />
                                         </div>
                                     </div>
                                 </div>
@@ -289,7 +293,7 @@ function CreateCourse(props) {
                             View {eventModal.type=="deliverable"?"Deliverable":" Video" }
                         </button>:null}
 
-                    {!user.student?
+                    {!user.student&&!preview?
                         <React.Fragment>
                             <button className="btn btn-outline-grad ml-2" onClick={()=>handleSaveEvent(eventModal.type,eventModal.date,eventModal.index)}> Save Event </button>
                             <button className="btn btn-outline-grad ml-2" onClick={()=>handleDelEvent(eventModal.type,eventModal.date,eventModal.index)}> Delete Event </button>
@@ -300,7 +304,7 @@ function CreateCourse(props) {
                 </Alert>
             :null}
 
-            {!user.student?
+            {!user.student&&!preview?
                 <React.Fragment>
                     <Nav show={true} menu={true}/>
                     {saveAlert?<div className="custom-alert"> Course Saved</div>:null}
@@ -318,15 +322,16 @@ function CreateCourse(props) {
                     </Alert>:null}
                     {eventAlert.show?<Alert cancel={()=>setEventAlert({show:false,date:null})}>
                         <AlertBody date={eventAlert.date} type="event" add={handleAdd} />
-                    </Alert>:null}<span style={{fontSize:"16px"}} >( X Months )</span>
+                    </Alert>:null}<span style={{fontSize:"16px"}} >( {isNaN(Math.max(0,endingMonth-startingMonth+1))?0:Math.max(0,endingMonth-startingMonth+1)} Months )</span>
 
 
 
                     <div className="container" style={{marginTop:"120px"}} >
                         <div className="d-flex justify-content-between">
-                            <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( X Months )</span></h1>
+                            <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( {isNaN(Math.max(0,endingMonth-startingMonth+1))?0:Math.max(0,endingMonth-startingMonth+1)} Months )</span></h1>
                             <div>
-                                <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer" ></i></span>
+                                {preview&&!user.student?<span className="h3" style={{position:"relative", top:"5px" }} onClick={()=>setPreview(false)} > <i className="fa fa-eye-slash  hover-pink pointer" ></i></span>
+                              :<span className="h3" style={{position:"relative", top:"5px" }} onClick={()=>setPreview(true)} > <i className="fa fa-eye  hover-pink pointer" ></i></span>}
 
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(false)}> Save </button>:null}
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(true)}> Publish </button>:null}
@@ -372,7 +377,7 @@ function CreateCourse(props) {
                             <div className="form-group input-group px-lg-4">
                                     <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-calendar-alt" ></i></div>
                                     <select className="form-control" value={endingMonth} onChange={(e)=>setEndingMonth(e.target.value)}  >
-                                        <option value="-1" > Select Starting Month </option>
+                                        <option value="-1" > Select Ending Month </option>
                                         <option value="1" > January </option>
                                         <option value="2" > Feburary </option>
                                         <option value="3" > March </option>
@@ -396,7 +401,9 @@ function CreateCourse(props) {
 
             :
                 <React.Fragment>
-                    <TopBar/>
+                  {user.student?<TopBar/>
+                    :<Nav show={true} menu={true}/>}
+
                     <div className="bgwhiteoverlay"></div>
                     <div className="container" style={{marginTop:"120px"}} >
                         <div className="d-flex justify-content-between">

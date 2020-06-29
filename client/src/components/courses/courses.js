@@ -11,11 +11,9 @@ function Courses(props) {
 
     //UI STATES
     const [copyAlert,setCopyAlert] = useState(false);
-    const [showConfirmAlert,setShowConfirmAlert] = useState(false);
 
     // Data State
     const [courses,setCourses] = useState([]);
-    const [alertId,setAlertId] = useState("");
 
     // Login State
     const {user} = useContext(CurUserContext);
@@ -52,15 +50,13 @@ function Courses(props) {
         setTimeout(()=>{setCopyAlert(false)},2000);
     }
 
-    function handleClose(){
-      axios.put(`/course/close/${alertId}`)
+    function handleClose(id){
+      axios.put(`/course/close/${id}`)
         .then(res=>{
           if(res.data.success){
-            setShowConfirmAlert(false);
             setCourses(courses.slice().map(course=>{
-              if(course._id==alertId){
+              if(course._id==id){
                 course.status = "Closed";
-                setAlertId("");
               }
               return course;
             }))
@@ -121,7 +117,6 @@ function Courses(props) {
         <React.Fragment>
             <Nav show={true} menu={true} />
             {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
-            {showConfirmAlert?<Alert msg={<React.Fragment> <h3>Are You Sure to continue?</h3><p> Click Ok to Proceed.</p> </React.Fragment>} ok={null} cancel={()=>setShowConfirmAlert(false)} />:null}
             <div className="bgwhiteoverlay"></div>
             <div className="container" style={{marginTop:"120px"}} >
                 <div style={{display:"flex",justifyContent:"space-between"}} ><h1 className="topicTitle mainH text-left text-pink">Courses </h1>  <div> <button className="btn btn-outline-grad" onClick={handleNew}> Create </button> </div> </div>
@@ -150,8 +145,8 @@ function Courses(props) {
                                   <div className="pt-2 hover-pink" onClick={()=>props.history.push(`/course/${course._id}`)} ><h3 className="topicTitle d-inline mr-2" style={{fontSize:"20px"}}> {course.title}</h3><i style={{fontSize:"14px",color:"#333"}} >{course.status}</i></div>
                                   <div> {course.status=="Published"? <span className="hover-pink pointer" onClick={()=>copyToClipBoard(course._id)}  > <i className="fa fa-copy"></i> </span>:null}
                                     {course.status=="Draft"?<button className="btn btn-grad ml-2" onClick={()=>props.history.push(`/publish/course/${course._id}`)}>Publish</button>
-                                  :(course.status=="Published"?<button className="btn btn-grad ml-2" onClick={()=>{setAlertId(course._id);setShowConfirmAlert(true)}}>Close Course</button>
-                                :<button className="btn btn-grad ml-2" onClick={()=>props.history.push(`/result/course/${course._id}`)}>View Result</button>)}
+                                  :(course.status=="Published"?<button className="btn btn-grad ml-2" onClick={()=>{handleClose(course._id)}}>Close Course</button>
+                                :null)}
                                   </div>
                               </div>
                           </div>

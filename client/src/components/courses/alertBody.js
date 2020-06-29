@@ -153,6 +153,8 @@ export default function AlertBody(props) {
     }else if(props.type=="test"){
         data.forEach(test=>{
           if(test.selected){
+            test.startTime=startTime;
+            test.endTime = endTime;
             list.push({test})
             // test.selected = false;
           }

@@ -111,7 +111,7 @@ router.put('/course/publish/:id',middleware.isAdmin,middleware.isAdmin,function 
 })
 
 // Route to close a course
-router.get('/course/close/:id',middleware.isAdmin,function (req,res) {
+router.put('/course/close/:id',middleware.isAdmin,function (req,res) {
   db.Course.findByIdAndUpdate(req.params.id,{status:"Closed"})
   .then(course=>{
     res.json({success:true});
