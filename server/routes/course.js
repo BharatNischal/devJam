@@ -193,4 +193,13 @@ router.post('/gevent/new',function (req,res) {
       })
 })
 
+router.get("/allPublishedCourses",middleware.isAdmin, function(req,res){
+  db.Course.find({students:req.user._id})
+  .then(foundCourses=>{
+    res.json({success:true,courses:foundCourses});
+  }).catch(err=>{
+    res.json({success:false,msg:err.message});
+  })
+})
+
 module.exports = router;

@@ -94,7 +94,7 @@ function PublishCourse(props) {
                             <h2 className="topicTitle mainH text-left text-pink" >
                                     Select Students for the Course
                             </h2>
-                                <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/test")}><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/>
+                                <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push("/courses")}><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/>
                         </div>
                     </div>
                     <div className="col-12 mt-4">
