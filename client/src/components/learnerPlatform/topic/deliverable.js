@@ -57,7 +57,7 @@ function Deliverable(props) {
         
      }
     return (
-        <div >
+        <div className="text-left">
             {showLoader?<div className="d-backdrop text-center pt-5" onClick={props.close}><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="mt-5"/></div>:null}
              {showSubmitAlert?<div className="custom-alert"> <i className="fa fa-check-circle text-success" ></i> Work Submitted Successfully </div>:null}
             <h3 className="topicTitle "><span className="pr-3" style={{borderBottom:"2px solid pink"}}>{props.deliverable?props.deliverable.title:""}</span></h3>
