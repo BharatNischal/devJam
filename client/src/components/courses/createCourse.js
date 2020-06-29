@@ -285,7 +285,7 @@ function CreateCourse(props) {
                             <h1 className="topicTitle mainH text-left text-pink">{course.status=="Draft"?"Create Course":"View Course"}  <span style={{fontSize:"16px"}} >( X Months )</span></h1>
                             <div>
                                 <span className="h3" style={{position:"relative", top:"5px" }} > <i className="fa fa-eye  hover-pink pointer" ></i></span>
-                                <button className="btn btn-outline-grad ml-2" > Publish / Close </button>
+                                
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(false)}> Save </button>:null}
                                 {course.status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={()=>handleSave(true)}> Publish </button>:null}
                                 {course.status=="Published"?<button className="btn btn-outline-grad ml-2" onClick={console.log("close")}> Close </button>:null}

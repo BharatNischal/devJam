@@ -29,6 +29,10 @@ const courseSchema = new mongoose.Schema({
           test:{
             type:mongoose.Schema.Types.ObjectId,
             ref:'test'
+          },
+          event:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'gEvent'
           }
       }]
     }],

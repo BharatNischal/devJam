@@ -29,7 +29,7 @@ router.get('/course/new',function (req,res) {
 
 // To get a specific course
 router.get('/course/find/:id',function (req,res) {
-    db.Course.findById(req.params.id).populate(['events.items.video','events.items.deliverable','events.items.test'])
+    db.Course.findById(req.params.id).populate(['events.items.video','events.items.deliverable','events.items.test','events.items.event'])
     .then(course=>{
       res.json({success:true,course});
     })
@@ -171,7 +171,7 @@ router.put('/course/deliverables/dateChange',function (req,res) {
 router.put('/course/test/dateChange',function (req,res) {
   console.log("inside test time route",req.body.tests);
   Promise.all(req.body.tests.map(t=>(
-        db.Deliverable.findByIdAndUpdate(t,{startTime:req.body.startTime,endTime:req.body.endTime})
+        db.Test.findByIdAndUpdate(t,{startTime:req.body.startTime,endTime:req.body.endTime})
       )))
     .then(responses=>{
       res.json({success:true})
