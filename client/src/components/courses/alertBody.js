@@ -130,7 +130,12 @@ export default function AlertBody(props) {
         data.forEach(topic=>{
             topic.items.forEach(item=>{
               if(item.selected){
-                props.type=="video"?list.push({video:item.video}):list.push({deliverable:item.deliverable});
+                if(props.type=="video"){
+                  list.push({video:item.video})
+                }else{
+                  item.deliverable.dueDate=dueDate;
+                  list.push({deliverable:item.deliverable});
+                }
                 // item.selected = false;
               }
             })

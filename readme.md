@@ -23,6 +23,8 @@ This is project which we are making during Devjam Competition organized by zaio.
 Adding Content  | [click to see](#adding-content)
 Learner's Portal | [click to see](#learners-portal)
 Marking System on Admin Portal | [click to see](#marking-system-on-admin-portal)
+Testing System | [click to see](#Testing-System)
+Course System | [click to see](#Course-System)
 
 ## How To Run ?
   To Know functionality of this project there are two ways you can either view deployed version or run it locally.  
@@ -112,3 +114,35 @@ The admin portal will now be used to view each of the students deliverable submi
  - __Database Model Design__: The design of the database model is designed in such a way that the data is fetched from database without any complex queries and complex constraints to join the collections. In our case the data is stored in a very convinient way and we just need to populate the data.
  - __Fast Filering and Sorting__: For filtering and sorting we have stick to the client side, so this will save the time to give a request to database about a query -> Sorting data -> Send the response data.
  The client side JS handles the Sorting and Filtering thus saving time.
+
+## Testing System
+The main deliverable for this week revolves around creating a testing system that enables the admin to create a test & publish it to specific students. The students can login, take the test and their submissions will be autograded. The admin can then provide feedback that is viewable by the student themselves. 
+#### Routes
+Sr. No. | Path | Description
+ --------|------|------------
+ 1.| /test | This Route will show all tests with their status.
+ 2.| /test/:testId | This Route opens create test page where you can add different types of questions, preview the test, add autograding, select time for test etc.
+ 3.| /livetest/:testId | This route gives the authorized students an access to take the test and also saves the progress of the test.
+ 4.| /publish/:testId | This route publish the test and help admins to select the students who can take test.
+ 5.| /result/test/:testId | This test gives details about which students have given the test and what are their scores. You can click on the name of student to get detailsed information on marking which redirects to route /resultSingle/:studentId/:testSubmissionId
+ 6.| /resultSingle/:studentId/:testSubmissionId | The admin can see the details about what are the answers given by the students and can edit marks and add feedback.
+ 7.| /allTests | Students can see their results and marking of the tests which are released.
+ 
+## Course System
+A MEGA Bonus Challenge is open & this can help push your team into the next round! You'll need to create a course scheduler by setting the start date & time. The admin can add videos, deliverables and test to the schedule on specific days. The scheduler can also automatically show due dates. Admins can subscribe specific students to each schedule. The student can then view the schedule & receive reminders linked to specific events. The items details should be accessible by clicking.
+
+#### Routes
+Sr. No. | Path | Description
+ --------|------|------------
+ 1.| /courses | This Route will show all courses with their status.
+ 2.| /course/:courseId | This Route opens create course page where you can add set the timing of the course, add deliverables/ videos/ tests / general events and edit them as well.
+ 3.| /learner/courses | This route will show all the courses which the user can access. 
+ 
+ #### Specials
+ 1. The test saves the progress automatically (when a user submit a question the progress is saved to database thus avoiding regular timed updates) and questions can be shuffled.
+ 2. There is a upcoming feature which will tell the students about the all the events in the coming week.
+ 3. Daily reports about the upcoming events for the next day at 6:00pm . Note that we have deployed our app at heroku which sleeps the server after every 30 mins of inactivity so please open the app few time before 6:00pm to see the results(for code see timedAlert.js file).
+ 4. Notifications of every alerts using email and lerner portals notifications.
+ 5. Student avatars are provided in the marks and submission page.
+ 6. The navigation to the different pages in the webapp is made very easy. Links and back buttons are added in every page and are placed in such a way that the user can find them easily.
+ 7. For filtering and sorting we have stick to the client side, so this will save the time to give a request to database about a query -> Sorting data -> Send the response data.
