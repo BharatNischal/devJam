@@ -86,8 +86,8 @@ function timeAlert() {
                   });
 
                   promises.push(db.Notification.create({
-                    title:`Dear student your schedule for tommor for Course${course.title} is ${text}`,
-                    link:"",
+                    title:`Dear student your schedule for tommor for Course ${course.title} is\n ${text}`,
+                    link:"#",
                     type:"course"
                   }));
                   newStudents.push(student);
