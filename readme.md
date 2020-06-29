@@ -112,3 +112,6 @@ The admin portal will now be used to view each of the students deliverable submi
  - __Database Model Design__: The design of the database model is designed in such a way that the data is fetched from database without any complex queries and complex constraints to join the collections. In our case the data is stored in a very convinient way and we just need to populate the data.
  - __Fast Filering and Sorting__: For filtering and sorting we have stick to the client side, so this will save the time to give a request to database about a query -> Sorting data -> Send the response data.
  The client side JS handles the Sorting and Filtering thus saving time.
+
+## Note
+All the functionality based on timing like generate alert, regular alert, view upcoming etc are based on timezone of our heroku app which is currently USA based but may change . So please keep that while testing.
