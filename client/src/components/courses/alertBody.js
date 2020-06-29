@@ -136,7 +136,7 @@ export default function AlertBody(props) {
             })
         })
         if(props.type=="deliverable"){
-          axios.put('/deliverables/dateChange',{date:dueDate?dueDate:props.date,deliverables:list.map(d=>d._id)})
+          axios.put('/course/deliverables/dateChange',{date:dueDate?dueDate:props.date,deliverables:list.map(d=>d._id)})
             .then(res=>{
               if(res.data.success){
                 props.add(list,props.date);

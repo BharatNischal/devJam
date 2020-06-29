@@ -59,6 +59,7 @@ function CreateCourse(props) {
         }
     }
 
+    // Add an event to frontend
     function handleAdd(data,date) {
       const newEvents = JSON.parse(JSON.stringify(events));
       if(newEvents[date]){
@@ -70,7 +71,7 @@ function CreateCourse(props) {
       setEvents(newEvents);
     }
 
-
+    // Save the page
     function handleSave(publish) {
       const eventData = Object.keys(events).map(event=>(
         {
@@ -112,6 +113,35 @@ function CreateCourse(props) {
       .catch(err=>{
         console.log(err.message);
       })
+    }
+
+    // To edit the details of an event
+    function handleSaveEvent(type,date,index) {
+      // Save deliverable
+      console.log(type,date,index);
+      if(type=="deliverable"){
+
+        axios.put('/course/deliverables/dateChange',{deliverables:[events[date][index][type]._id],date:events[date][index][type].dueDate})
+        .then(res=>{
+          if(res.data.success){
+              setEventModal({...eventModal,show:false});
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+
+      }else if(type="test"){
+
+      }else if(type=="event"){
+
+      }
+    }
+
+    function handleDelEvent(type,date,index) {
+      console.log(type,date,index);
     }
 
     return (
@@ -206,8 +236,8 @@ function CreateCourse(props) {
                     }
                     <div className="mt-2" >
                         {eventModal.type=="deliverable" || eventModal.type=="video"? <button className="btn btn-outline-grad ml-2"> View Deliverable </button>:null}
-                        <button className="btn btn-outline-grad ml-2"> Save Event </button>
-                        <button className="btn btn-outline-grad ml-2"> Delete Event </button>
+                        <button className="btn btn-outline-grad ml-2" onClick={()=>handleSaveEvent(eventModal.type,eventModal.date,eventModal.index)}> Save Event </button>
+                        <button className="btn btn-outline-grad ml-2" onClick={()=>handleDelEvent(eventModal.type,eventModal.date,eventModal.index)}> Delete Event </button>
                     </div>
                 </Alert>
             :null}

@@ -155,7 +155,7 @@ router.get('/tests/all',function (req,res) {
 })
 
 // Router to change dueDate of deliverables
-router.put('/deliverables/dateChange',function (req,res) {
+router.put('/course/deliverables/dateChange',function (req,res) {
   Promise.all(req.body.deliverables.map(d=>(
         db.Deliverable.findByIdAndUpdate(d,{dueDate:req.body.date})
       )))
