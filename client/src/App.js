@@ -38,6 +38,7 @@ import Courses from './components/courses/courses';
 import CreateCourse from './components/courses/createCourse';
 import PublishCourse from './components/courses/publishCourse'
 import Course from './components/courses/learnerPlatform/course';
+import AddQuestion from './components/codingPlatform/addQuestion';
 
 axios.defaults.withCredentials = true;
 
@@ -103,6 +104,9 @@ function App(props) {
             <Route path="/learner/courses/" exact component={Course} />
             <Route path="/course/:id" exact component={CreateCourse} />
             <Route path="/publish/course/:id" exact component={PublishCourse} />
+            
+            <Route path="/addQuestion" exact component={AddQuestion} />
+
             
 
           </Switch>

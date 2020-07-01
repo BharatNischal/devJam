@@ -20,7 +20,7 @@ const Nav =(props)=>{
         })
         .catch(err=>{
           setUser({loggedIn:false,superAdmin:false});
-          props.history.push("/login");
+        //   props.history.push("/login");
         })
     },[]);
 
