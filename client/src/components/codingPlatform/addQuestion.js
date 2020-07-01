@@ -120,7 +120,7 @@ function AddQuestion(props) {
                             <TestCases cases={question?question.testCases:[]}/>
                         :null}
                         {activeTab=="limits"?
-                            <Limits/>
+                            <Limits constraints={question?question.constraints:""} memoryLimit={question?question.memoryLimit:256} timeLimit={question?question.timeLimit:5}/>
                         :null}
                     </div>
                 </div>

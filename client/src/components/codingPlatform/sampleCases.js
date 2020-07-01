@@ -7,13 +7,11 @@ import htmlToDraft from 'html-to-draftjs';
 
 export default function SampleCases(props) {
 
-  const [descriptionEditorState,setDescriptionEditorState] = useState(EditorState.createEmpty());
   const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
 
   useEffect(()=>{
 
-    const html = '<p>Hey this <strong>editor</strong> rocks 😀</p>';
-    const contentBlock = htmlToDraft(html);
+    const contentBlock = htmlToDraft(props.sample);
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
