@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const router=express.Router();
 const db=require("../models/index");
 const middleware = require("../middleware");
+const axios = require("axios");
 
 
 // To get all the tests whether published or unpublished
@@ -102,5 +103,41 @@ router.get('/coding/question/:id/submission',middleware.isAdmin,function (req,re
 })
 
 
+router.post("/submitquestion/:quesId",function(req,res){
+ 
+    // axios({
+    //   "method":"POST",
+    //   "url":"https://judge0.p.rapidapi.com/submissions",
+    //   "headers":{
+    //   "content-type":"application/json",
+    //   "x-rapidapi-host":"judge0.p.rapidapi.com",
+    //   "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
+    //   "accept":"application/json",
+    //   "useQueryString":true
+    //   },
+    //   "data":{
+    //     "language_id":50,
+    //     "source_code":`#include <stdio.h>
+    //     int main(void) {
+    //       char name[10];
+    //       scanf("%s",name);
+    //       printf("hello %s",name);
+    //       return 0;
+    //   }`,
+    //   "stdin":"world"
+    //   }
+    //   })
+    //   .then((response)=>{
+    //     console.log(response);
+
+    //     res.json({success:true,response:response});
+    //   })
+    //   .catch((error)=>{
+    //     console.log(error);
+    //     res.json({success:false,error:error});
+    //   })
+    res.json({success:true});
+  
+});
 
 module.exports = router;
