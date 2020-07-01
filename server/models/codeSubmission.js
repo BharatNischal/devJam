@@ -1,0 +1,22 @@
+var mongoose=require("mongoose");
+
+var codingSubmissionSchema=new mongoose.Schema({
+    userId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'User'
+    },
+    testId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'codingtest'
+    },
+    testCases:[{
+      passed:Boolean
+    }],
+    marks:Number,
+    code:String,
+    languageCode:Number,
+    token:String,
+    timeStamp:Date.now
+});
+
+module.exports=mongoose.model("codingtest",codingSubmissionSchema);
