@@ -16,7 +16,10 @@ var codingSubmissionSchema=new mongoose.Schema({
     code:String,
     languageCode:Number,
     token:String,
-    timeStamp:Date.now
+    timeStamp:{
+      type:Date,
+      default:Date.now
+    }
 });
 
 module.exports=mongoose.model("codingtest",codingSubmissionSchema);

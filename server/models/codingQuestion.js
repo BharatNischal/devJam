@@ -17,7 +17,10 @@ var codingQuestionSchema=new mongoose.Schema({
     memoryLimit:Number,
     topic:String,
     difficulty:Number,
-    timeStamp: Date.now,
+    timeStamp: {
+      type:Date,
+      default:Date.now
+    },
     students:[{
       userId:{
         type:mongoose.Schema.Types.ObjectId,
