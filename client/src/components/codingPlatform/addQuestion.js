@@ -7,6 +7,7 @@ import InputOutput from './inputOutput';
 import SampleCases from './sampleCases';
 import axios from 'axios';
 import Limits from './limits';
+import Solution from './Solution';
 
 function AddQuestion(props) {
     const [activeTab,setActiveTab] =useState("description");
@@ -104,7 +105,7 @@ function AddQuestion(props) {
                         <div className={activeTab=="inputOutput"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("inputOutput")} > Input / Output </div>
                         <div className={activeTab=="testCases"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("testCases")} > Test Cases </div>
                         <div className={activeTab=="limits"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("limits")} > Limits & Constraints </div>
-                        <div className={activeTab=="solution"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("limits")} > Solution </div>
+                        <div className={activeTab=="solution"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("solution")} > Solution </div>
                     </div>
                     <div className="tabCont p-3">
                         {activeTab=="description"?
@@ -121,6 +122,9 @@ function AddQuestion(props) {
                         :null}
                         {activeTab=="limits"?
                             <Limits constraints={question?question.constraints:""} memoryLimit={question?question.memoryLimit:256} timeLimit={question?question.timeLimit:5}/>
+                        :null}
+                        {activeTab=="solution"?
+                            <Solution/>
                         :null}
                     </div>
                 </div>
