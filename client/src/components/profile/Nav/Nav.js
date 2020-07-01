@@ -51,6 +51,12 @@ const Nav =(props)=>{
                         {user.loggedIn?(
                             <React.Fragment>
                                 <li className="nav-item ">
+                                    <Link className="nav-link" to="/courses">Courses</Link>
+                                </li>
+                                <li className="nav-item ">
+                                    <Link className="nav-link" to="/test">Tests</Link>
+                                </li>
+                                <li className="nav-item ">
                                     <Link className="nav-link" to="/marks">Marks</Link>
                                 </li>
                                 <li className="nav-item ">

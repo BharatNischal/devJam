@@ -17,9 +17,12 @@ const          express = require('express'),
          ProfileRoutes = require("./routes/profile"),
          CommentRoutes = require("./routes/comments"),
          SubmissionRoutes = require("./routes/submission"),
-            AuthRoutes = require("./routes/auth");
+         TestRoutes = require("./routes/test"),
+         QuestionRoutes = require("./routes/questions"),
+            AuthRoutes = require("./routes/auth"),
+            CourseRoutes = require("./routes/course");
 
-
+require("./timedAlert");
 
 // Setting Up Dotenv for .env files environment variable
 const dotenv = require('dotenv');
@@ -42,9 +45,14 @@ passport.serializeUser(function(user,done){
   done(null,user._id);
 });
 passport.deserializeUser(function(id, done) {
-  db.User.findById(id, function(err, user) {
-      done(err, user);
-  });
+  db.User.findById(id)
+  .populate([
+    {path:"notifications.notification",model:"notification"}
+  ]).then(user=>{
+      done(null, user);
+  }).catch(err=>{
+    done(err);
+  })
 });
 
 
@@ -159,6 +167,15 @@ app.use("/",CommentRoutes);
 
 // Submissions Routes
 app.use("/",SubmissionRoutes);
+
+// Test Routes
+app.use("/",TestRoutes);
+
+// Question Routes
+app.use("/",QuestionRoutes);
+
+// Courses Routes
+app.use("/",CourseRoutes);
 
 const redirectHost=process.env.NODE_ENV === 'production'?"":"http://localhost:3000";
 

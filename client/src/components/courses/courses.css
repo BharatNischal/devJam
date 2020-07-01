@@ -1,0 +1,99 @@
+.calendar-grid{
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-rows: 50px repeat(6,150px);
+    box-shadow:0px 4px 8px #00000031;
+    border-radius: 14px;
+    overflow: hidden;
+}
+.cal-header{
+    box-shadow:0px 4px 8px #00000050;
+    background-color: rgb(190, 64, 110);
+    color:white;
+    padding-top: 6px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.calendar-grid .disabled{
+    background-color: #e6e4e6;
+    color:#8d8d8d
+}
+.calendar-grid .date{
+    overflow-y: auto;
+    position: relative;
+}
+.calendar-grid .date:hover .dots{
+    opacity: 1;
+}
+.dots{
+    opacity: 0;
+    color:rgb(54, 54, 54);
+    position: absolute;
+    right:5px;
+    top:3px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 22px;
+}
+.date .d-backdrop{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom: 0;
+    background-color: rgba(32, 32, 32, 0.411);
+    z-index: 18;
+}
+.date .optionDiv{
+    position:absolute;
+    font-size: 11px;
+    width:100px;
+    background-color: white;
+    border-radius: 9px;
+    z-index: 20;
+    right:10px;
+    top:5px;
+}
+.optionDiv .opt{
+    padding:3px 3px;
+    border-bottom: 1px solid rgb(184, 168, 177);
+}
+
+.date .pill{
+    font-size: 11px;
+    margin:3px;
+    padding:1px;
+    border-radius: 8px;
+    border:1px solid rgb(199, 199, 199);
+    cursor: pointer;
+    
+}
+.date .pill.event{
+    background-color: rgb(141, 240, 243);
+    color:rgb(15, 15, 15);
+}
+.date .pill.event:hover{
+    background-color: rgb(122, 211, 214);
+}
+.date .pill.deliverable{
+    background-color: rgb(6, 55, 218);
+    color: white;
+}
+.date .pill.deliverable:hover{
+    background-color: rgb(68, 98, 199);
+}
+.date .pill.test{
+    background-color: rgb(195, 245, 167);
+    color:rgb(15, 15, 15);
+}
+.date .pill.test:hover{
+    background-color: rgb(174, 214, 151);
+}
+.date .pill.video{
+    background-color: rgb(243, 70, 84);
+    color:white
+}
+.date .pill.video:hover{
+    background-color: rgb(250, 115, 126);
+}

@@ -49,11 +49,7 @@ router.get("/logout",(req,res)=>{
 router.post("/login",passport.authenticate("local",{
       failureRedirect:"/api/err"
   }),(req,res)=>{
-      res.json({
-        success:true,
-        msg:"You logged in successfully with username "+req.user.username,
-        user:req.user
-      });
+      res.redirect('/curUser');
 });
 
 
@@ -103,7 +99,7 @@ router.post('/forget', function(req, res, next) {
                 If you did not request this, please ignore this email and your password will remain unchanged.\n`
       };
 
-      mailFunction(msg,(err,info)=>{
+      mailFunction.mailFunction(msg,(err,info)=>{
         done(err,'done');
       });
 
@@ -113,6 +109,19 @@ router.post('/forget', function(req, res, next) {
     res.json({success:true,msg:"Mail has been Sent"});
   });
 });
+
+router.post("/changeNotificationStatus",function(req,res){
+  db.User.findById(req.user._id)
+  .then(async (user)=>{
+    const notifications=req.body.user.notifications.map(n=>({notification:n.notification._id,read:n.read,_id:n._id}));
+    user.notifications=notifications;
+    await user.save();
+    res.json({success:true,user:user});
+  }).catch(err=>{
+    res.json({success:false,msg:err.message});
+    console.log(err);
+  })
+})
 
 // Reset password
 router.post('/reset/:token', function(req, res) {
@@ -141,7 +150,7 @@ router.post('/reset/:token', function(req, res) {
         subject: 'Your password has been changed', // Subject line
         text: `This is a confirmation that the password for your account ${user.username} has just been changed. `
       };
-      mailFunction(msg,(err,info)=>{
+      mailFunction.mailFunction(msg,(err,info)=>{
         done(err,'done');
       });
       res.json({msg:`Success! Your password for username has been changed.`,success:true});
@@ -154,7 +163,8 @@ router.post('/reset/:token', function(req, res) {
 
 // To get the current user
 router.get("/curUser",(req,res)=>{
-  res.json({user:req.user});
+
+  res.json({success:true,user:req.user});
 })
 
 router.get("/api/err",(req,res)=>{
@@ -162,7 +172,7 @@ router.get("/api/err",(req,res)=>{
 });
 
 router.get("/students",function(req,res){
-  db.user.find({student:true})
+  db.User.find({student:true})
   .then(students=>{
     res.json({success:true,students:students});
   }).catch(Err=>{
