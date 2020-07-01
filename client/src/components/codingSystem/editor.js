@@ -41,7 +41,7 @@ export default function Editor(props) {
             <option value="javascript">Javascript</option>
           </select>
           <select onChange={(e)=>setFontsize(e.target.value)}>
-            <option value="14">14</option>
+            <option value={14}>14</option>
             <option value="18">18</option>
             <option value="18">20</option>
             <option value="24">24</option>
@@ -70,10 +70,11 @@ export default function Editor(props) {
           showLineNumbers: true,
         }}
         placeholder="Write your code here"
-        fontSize={fontsize}
-        showPrintMargin={true}
+        fontSize={+fontsize}
+        showPrintMargin={false}
         showGutter={true}
         highlightActiveLine={true}
+        width="100%"
       />
   </div>
   )

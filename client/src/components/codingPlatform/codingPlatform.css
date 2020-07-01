@@ -30,6 +30,18 @@
     background-color: rgb(255, 255, 255);
     
 }
+.constraintWrapper{
+    max-width: 800px;
+    margin:10px;
+    border-radius: 18px;
+    min-height: 250px;
+    border: 1px solid #e4e4e4;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+}
+.constraintWrapper .editorClassName{
+    padding:10px;
+} 
 .wrapperClassName .editorClassName{
     padding:10px;
 }

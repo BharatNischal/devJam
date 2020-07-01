@@ -6,6 +6,7 @@ import TestCases from './TestCases';
 import InputOutput from './inputOutput';
 import SampleCases from './sampleCases';
 import axios from 'axios';
+import Limits from './limits';
 
 function AddQuestion(props) {
     const [activeTab,setActiveTab] =useState("description");
@@ -118,7 +119,9 @@ function AddQuestion(props) {
                         {activeTab=="testCases"?
                             <TestCases cases={question?question.testCases:[]}/>
                         :null}
-                        {activeTab=="limits"?<h1>Limits & Constraints</h1>:null}
+                        {activeTab=="limits"?
+                            <Limits/>
+                        :null}
                     </div>
                 </div>
             </div>
