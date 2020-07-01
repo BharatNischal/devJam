@@ -63,6 +63,7 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.mail_client_secret,
     callbackURL: process.env.NODE_ENV === 'production'?"http://devjam-code-swat.herokuapp.com/auth/google/redirect":`http://localhost:8080/auth/google/redirect`
   },
+  
   function(accessToken, refreshToken, profile, done) {
        db.User.findOne({googleId:profile.id})
        .then(async function(foundUser){
