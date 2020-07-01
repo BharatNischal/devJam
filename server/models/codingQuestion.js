@@ -35,7 +35,8 @@ var codingQuestionSchema=new mongoose.Schema({
         ref: 'codesubmission'
       }]
     }],
-    solution:String
+    solution:String,
+    editorial:String
 });
 
 module.exports=mongoose.model("codingquestion",codingQuestionSchema);

@@ -124,7 +124,7 @@ function AddQuestion(props) {
                             <Limits constraints={question?question.constraints:""} memoryLimit={question?question.memoryLimit:256} timeLimit={question?question.timeLimit:5}/>
                         :null}
                         {activeTab=="solution"?
-                            <Solution/>
+                            <Solution soln={question?question.solution:""} editorial={question?question.editorial:""}/>
                         :null}
                     </div>
                 </div>

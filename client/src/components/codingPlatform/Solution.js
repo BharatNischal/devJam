@@ -1,7 +1,10 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import AceEditor from "react-ace";
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+
 
 // Editor languages
 import "ace-builds/src-noconflict/mode-java";
@@ -24,11 +27,29 @@ import "ace-builds/src-noconflict/theme-xcode";
 import "ace-builds/src-noconflict/ext-language_tools";
 
 function Solution(props) {
+
     const [mode,setMode] = useState("javascript");
     const [theme,setTheme] = useState("monokai");
     const [fontsize,setFontsize] = useState(20);
     const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
+    const [solution,setSolution] = useState("");
 
+
+    useEffect(()=>{
+
+        setSolution(props.soln);
+        const contentBlock = htmlToDraft(props.editorial);
+        if (contentBlock) {
+          const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+          const editorState = EditorState.createWithContent(contentState);
+          setSampleEditorState(editorState);
+        }
+
+    },[])
+
+    function toHTML() {
+      draftToHtml(convertToRaw(sampleEditorState.getCurrentContent()))
+    }
 
     function onChange(newValue) {
         console.log("change", newValue);
@@ -36,7 +57,7 @@ function Solution(props) {
     return (
         <div>
             <h2 className="topicTitle text-pink mb-2"  ><b>Solution </b></h2>
-            
+
             <h4 className="mt-3 ml-3" ><b> Editorial </b></h4>
             <Editor
                 toolbarClassName="toolbarClassName"
@@ -53,7 +74,7 @@ function Solution(props) {
             <div className="mt-2 mx-4 mb-4  editor-wrapper" >
 
                 <div className="editor-header d-flex align-items-center justify-content-between" >
-                    
+
                     <div style={{width:"200px"}} >
                     <div className="text-left" style={{fontSize:"12px"}} >
                         <b>Select Theme</b>
@@ -67,7 +88,7 @@ function Solution(props) {
                         <option value="xcode">xcode</option>
                         </select>
                     </div>
-                    
+
                     </div>
                     <div>
                     <div className="text-right" style={{fontSize:"12px"}} >
@@ -98,6 +119,7 @@ function Solution(props) {
                 showGutter={true}
                 highlightActiveLine={true}
                 width="100%"
+                defaultValue={solution}
                 />
                 <div className="editor-footer text-right" >
                 <button className="btn btn-outline-grad ml-2" > Run All Tests </button>
@@ -113,7 +135,7 @@ function Solution(props) {
                         <th>Test Case</th>
                         <th> <i className="fa fa-clock"></i> Time(sec) </th>
                         <th> <i className="fa fa-memory" ></i>  Memory(KB) </th>
-                        
+
                     </tr>
                     </thead>
                     <tbody>
@@ -136,11 +158,10 @@ function Solution(props) {
                     </tbody>
                 </table>
             </div>
-            
+
 
         </div>
     )
 }
 
 export default Solution
-

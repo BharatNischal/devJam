@@ -24,6 +24,10 @@ function Limits(props) {
     },[])
 
 
+    function toHTML() {
+      draftToHtml(convertToRaw(sampleEditorState.getCurrentContent()))
+    }
+
     return (
         <React.Fragment>
             <h2 className="topicTitle text-pink mb-2"  ><b>Constraints</b></h2>
