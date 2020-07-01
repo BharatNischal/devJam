@@ -11,12 +11,13 @@ import Solution from './Solution';
 import StarterCode from './starterCode';
 import Select from 'react-select';
 
-
 function AddQuestion(props) {
     const [activeTab,setActiveTab] =useState("description");
     const [title,setTitle] = useState("");
     const [points,setPoints] = useState(0);
     const [isTimed,setIsTimed] = useState(false);
+    const [status,setStatus] = useState("Draft");
+    const [question,setQuestion] = useState(null);
 
     // Get data from database
     useEffect(()=>{
@@ -24,7 +25,11 @@ function AddQuestion(props) {
       axios.get(`/coding/question/${props.match.params.id}`)
         .then(res=>{
           if(res.data.success){
-
+              setQuestion(res.data.question);
+              const {title,points,status,difficulty,topic} = res.data.question;
+              setStatus(status);
+              setTitle(title);
+              setPoints(points);
           }else{
             console.log(res.data.msg);
           }
@@ -35,6 +40,35 @@ function AddQuestion(props) {
 
     },[])
 
+    // Save the progress
+    function handleSave() {
+        axios.put(`/coding/question/${props.match.params.id}`,{})
+          .then(res=>{
+            if(res.data.success){
+              console.log("Saved");
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+    }
+
+    // Publishes a new Question which is then accessible to students
+    function handlePublish() {
+      axios.put(`/coding/question/${props.match.params.id}/status`)
+        .then(res=>{
+          if(res.data.success){
+            setStatus("Published");
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    }
 
     return (
         <React.Fragment>
@@ -47,7 +81,7 @@ function AddQuestion(props) {
                         <span className="h3" style={{position:"relative", top:"5px" }}  > <i className="fa fa-eye  hover-pink pointer" ></i></span>
 
                         <button className="btn btn-outline-grad ml-2" > Save </button>
-                        <button className="btn btn-outline-grad ml-2" > Publish </button>
+                        <button className="btn btn-outline-grad ml-2" onClick={handlePublish}> Publish </button>
 
 
                     </div>
@@ -107,22 +141,22 @@ function AddQuestion(props) {
                     </div>
                     <div className="tabCont p-3">
                         {activeTab=="description"?
-                            <Description />
+                            <Description desc={question?question.description:""}/>
                         :null}
                         {activeTab=="sampleCases"?
-                            <SampleCases />
+                            <SampleCases sample={question?question.sample:""}/>
                         :null}
                         {activeTab=="inputOutput"?
-                            <InputOutput />
+                            <InputOutput input={question?question.inputFormat:""} output={question?question.outputFormat:""}/>
                         :null}
                         {activeTab=="testCases"?
-                            <TestCases />
+                            <TestCases cases={question?question.testCases:[]}/>
                         :null}
                         {activeTab=="limits"?
-                            <Limits/>
+                            <Limits constraints={question?question.constraints:""} memoryLimit={question?question.memoryLimit:256} timeLimit={question?question.timeLimit:5}/>
                         :null}
                         {activeTab=="solution"?
-                            <Solution/>
+                            <Solution soln={question?question.solution:""} editorial={question?question.editorial:""}/>
                         :null}
                         {activeTab=="starterCode"?
                             <StarterCode/>

@@ -8,8 +8,12 @@ var codingQuestionSchema=new mongoose.Schema({
     outputFormat:String,
     sample:String,
     testCases:[{
-      data:String,
-      type:String
+      input:String,
+      output:String,
+      hidden:{
+        type:Boolean,
+        default:false
+      }
     }],
     status:String,
     points:Number,
@@ -31,7 +35,8 @@ var codingQuestionSchema=new mongoose.Schema({
         ref: 'codesubmission'
       }]
     }],
-    solution:String
+    solution:String,
+    editorial:String
 });
 
 module.exports=mongoose.model("codingquestion",codingQuestionSchema);

@@ -7,13 +7,11 @@ import htmlToDraft from 'html-to-draftjs';
 
 export default function Description(props) {
 
-  const [descriptionEditorState,setDescriptionEditorState] = useState(EditorState.createEmpty());
   const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
 
   useEffect(()=>{
 
-    const html = '<p>Hey this <strong>editor</strong> rocks 😀</p>';
-    const contentBlock = htmlToDraft(html);
+    const contentBlock = htmlToDraft(props.desc);
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
@@ -34,8 +32,8 @@ export default function Description(props) {
             toolbarClassName="toolbarClassName"
             wrapperClassName="wrapperClassName"
             editorClassName="editorClassName"
-            editorState={descriptionEditorState}
-            onEditorStateChange={(editorState)=>setDescriptionEditorState(editorState)}
+            editorState={sampleEditorState}
+            onEditorStateChange={(editorState)=>setSampleEditorState(editorState)}
             toolbar={{
                 options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
             }}

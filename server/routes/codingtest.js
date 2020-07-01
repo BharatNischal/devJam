@@ -42,8 +42,8 @@ router.get('/coding/question/:id',function (req,res) {
 
 
 // Route to make a new coding question
-router.post('/coding/question/',function (req,res) {
-  db.CodingQuestion.create(req.body.question)
+router.post('/coding/question/new',function (req,res) {
+  db.CodingQuestion.create({})
     .then(question=>{
       res.json({success:true,question});
     })

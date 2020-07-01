@@ -7,19 +7,22 @@ import htmlToDraft from 'html-to-draftjs';
 
 export default function InputOutput(props) {
 
-  const [descriptionEditorState,setDescriptionEditorState] = useState(EditorState.createEmpty());
   const [sampleEditorState1,setSampleEditorState1] = useState(EditorState.createEmpty());
   const [sampleEditorState2,setSampleEditorState2] = useState(EditorState.createEmpty());
 
   useEffect(()=>{
 
-    const html = '<p>Hey this <strong>editor</strong> rocks 😀</p>';
-    const contentBlock = htmlToDraft(html);
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+    const contentBlock1 = htmlToDraft(props.input);
+    if (contentBlock1) {
+      const contentState = ContentState.createFromBlockArray(contentBlock1.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
       setSampleEditorState1(editorState);
-      setSampleEditorState2(editorState);
+    }
+    const contentBlock2 = htmlToDraft(props.output);
+    if (contentBlock2) {
+      const contentState = ContentState.createFromBlockArray(contentBlock2.contentBlocks);
+      const editorState = EditorState.createWithContent(contentState);
+      setSampleEditorState1(editorState);
     }
 
   },[])
