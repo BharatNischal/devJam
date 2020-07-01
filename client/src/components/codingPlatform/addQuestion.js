@@ -1,14 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Nav from "../profile/Nav/Nav";
 import "./codingPlatform.css";
-import { Editor } from 'react-draft-wysiwyg';
-import { EditorState } from 'draft-js';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import Description from './description';
+import TestCases from './TestCases';
+import InputOutput from './inputOutput';
+import SampleCases from './sampleCases';
+import axios from 'axios';
+
 
 function AddQuestion(props) {
     const [activeTab,setActiveTab] =useState("description");
-    const [descriptionEditorState,setDescriptionEditorState] = useState(EditorState.createEmpty());
-    const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
+    const [title,setTitle] = useState("");
+    const [points,setPoints] = useState(0);
+
+
+    // Get data from database
+    useEffect(()=>{
+
+      axios.get(`/coding/question/${props.match.params.id}`)
+        .then(res=>{
+          if(res.data.success){
+
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+
+    },[])
+
 
     return (
         <React.Fragment>
@@ -22,7 +44,7 @@ function AddQuestion(props) {
 
                         <button className="btn btn-outline-grad ml-2" > Save </button>
                         <button className="btn btn-outline-grad ml-2" > Publish </button>
-                        
+
 
                     </div>
                 </div>
@@ -31,13 +53,13 @@ function AddQuestion(props) {
                     <div className="col-md-8">
                         <div className="form-group input-group ">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
-                            <input type="text" className="form-control"   placeholder="Enter Question Title" />
+                            <input type="text" className="form-control"   placeholder="Enter Question Title" value={title} onChange={(e)=>setTitle(e.target.value)} />
                         </div>
                     </div>
                     <div className="col-md-4">
                         <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-1 f-20 " ><b> Points </b></div>
-                            <input type="number" className="form-control"   placeholder="Enter Points" />
+                            <input type="number" className="form-control"   placeholder="Enter Points" value={points} onChange={(e)=>setPoints(e.target.value)} />
                         </div>
                     </div>
                 </div>
@@ -52,137 +74,16 @@ function AddQuestion(props) {
                     </div>
                     <div className="tabCont p-3">
                         {activeTab=="description"?
-                            <React.Fragment>
-                                <h2 className="topicTitle text-pink mb-2"  ><b>Description</b></h2>
-                                
-                                <Editor
-                                    toolbarClassName="toolbarClassName"
-                                    wrapperClassName="wrapperClassName"
-                                    editorClassName="editorClassName"
-                                    editorState={descriptionEditorState}
-                                    onEditorStateChange={(editorState)=>setDescriptionEditorState(editorState)}
-                                    toolbar={{
-                                        options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
-                                    }}
-                                />
-                                
-                            </React.Fragment>
+                            <Description />
                         :null}
                         {activeTab=="sampleCases"?
-                            <React.Fragment>
-                                <h2 className="topicTitle text-pink mb-2"  ><b>Sample Cases</b></h2>
-                                <Editor
-                                    toolbarClassName="toolbarClassName"
-                                    wrapperClassName="wrapperClassName"
-                                    editorClassName="editorClassName"
-                                    editorState={sampleEditorState}
-                                    onEditorStateChange={(editorState)=>setSampleEditorState(editorState)}
-                                    toolbar={{
-                                        options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
-                                    }}
-                                />
-                            </React.Fragment>
+                            <SampleCases />
                         :null}
                         {activeTab=="inputOutput"?
-                            <React.Fragment>
-                                <div className="row">
-                                    <div className="col-lg-6">
-                                        <h2 className="topicTitle text-pink mb-2"  ><b>Input Format</b></h2>
-                                        <Editor
-                                            toolbarClassName="toolbarClassName"
-                                            wrapperClassName="wrapperClassName"
-                                            editorClassName="editorClassName"
-                                            editorState={sampleEditorState}
-                                            onEditorStateChange={(editorState)=>setSampleEditorState(editorState)}
-                                            toolbar={{
-                                                options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="col-lg-6">
-                                        <h2 className="topicTitle text-pink mb-2"  ><b>Output Format</b></h2>
-                                        <Editor
-                                            toolbarClassName="toolbarClassName"
-                                            wrapperClassName="wrapperClassName"
-                                            editorClassName="editorClassName"
-                                            editorState={sampleEditorState}
-                                            onEditorStateChange={(editorState)=>setSampleEditorState(editorState)}
-                                            toolbar={{
-                                                options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </React.Fragment>
+                            <InputOutput />
                         :null}
                         {activeTab=="testCases"?
-                            <React.Fragment>
-                                <h2 className="topicTitle text-pink mb-2"  ><b>Test Cases</b></h2>
-
-                                <div className=" mb-3">
-                                    <div className=" row">
-                                        <div className="col-md-6">
-                                            <h6>Input</h6>
-                                            <div className="form-group">
-                                                <textarea className="form-control" rows="4" ></textarea>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <h6> Output</h6>
-                                            <div className="form-group">
-                                                <textarea className="form-control" rows="4" ></textarea>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div className="d-flex justify-content-between">
-                                        <div className="custom-control custom-switch " >
-                                            <input type="checkbox" className="custom-control-input" id="isHidden" />
-                                            <label className="custom-control-label" htmlFor="isHidden" >Hidden</label>
-                                        </div>
-                                        <div><button className="btn btn-grad float-right"> Add Test Case </button></div>
-                                    </div>
-                                    <hr className="mt-2" />
-                                </div>
-                                <div className=" mb-3">
-                                    <h5>  Test Case #1 <i className="fa fa-lock text-pink ml-2 "></i></h5>
-                                    <div className=" row">
-                                        <div className="col-md-6">
-                                            <h6>Input</h6>
-                                            <div className="form-group">
-                                                <textarea className="form-control" rows="3" disabled={true} ></textarea>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <h6> Output</h6>
-                                            <div className="form-group">
-                                                <textarea className="form-control" rows="3" disabled={true}></textarea>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    
-                                </div>
-                                <div className=" mb-3">
-                                    <h5>  Test Case #2 <i className="fa fa-unlock text-pink ml-2 "></i>  </h5>
-                                    <div className=" row">
-                                        <div className="col-md-6">
-                                            <h6>Input</h6>
-                                            <div className="form-group">
-                                                <textarea className="form-control" rows="3" disabled={true} ></textarea>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <h6> Output</h6>
-                                            <div className="form-group">
-                                                <textarea className="form-control" rows="3" disabled={true}></textarea>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    
-                                </div>
-                            </React.Fragment>
+                            <TestCases />
                         :null}
                         {activeTab=="limits"?<h1>Limits & Constraints</h1>:null}
                     </div>
@@ -194,4 +95,3 @@ function AddQuestion(props) {
 }
 
 export default AddQuestion;
-
