@@ -20,6 +20,7 @@ const          express = require('express'),
          TestRoutes = require("./routes/test"),
          QuestionRoutes = require("./routes/questions"),
             AuthRoutes = require("./routes/auth"),
+            codingRoutes = require("./routes/codingtest"),
             CourseRoutes = require("./routes/course");
 
 require("./timedAlert");
@@ -177,6 +178,9 @@ app.use("/",QuestionRoutes);
 
 // Courses Routes
 app.use("/",CourseRoutes);
+
+// Coding Routes
+app.use("/",codingRoutes);
 
 const redirectHost=process.env.NODE_ENV === 'production'?"":"http://localhost:3000";
 

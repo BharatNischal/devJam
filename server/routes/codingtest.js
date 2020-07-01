@@ -103,41 +103,90 @@ router.get('/coding/question/:id/submission',middleware.isAdmin,function (req,re
 })
 
 
-router.post("/submitquestion/:quesId",function(req,res){
- 
-    // axios({
-    //   "method":"POST",
-    //   "url":"https://judge0.p.rapidapi.com/submissions",
-    //   "headers":{
-    //   "content-type":"application/json",
-    //   "x-rapidapi-host":"judge0.p.rapidapi.com",
-    //   "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
-    //   "accept":"application/json",
-    //   "useQueryString":true
-    //   },
-    //   "data":{
-    //     "language_id":50,
-    //     "source_code":`#include <stdio.h>
-    //     int main(void) {
-    //       char name[10];
-    //       scanf("%s",name);
-    //       printf("hello %s",name);
-    //       return 0;
-    //   }`,
-    //   "stdin":"world"
-    //   }
-    //   })
-    //   .then((response)=>{
-    //     console.log(response);
+router.post("/submitcodingquestion/:quesId",function(req,res){
+    const testCases=[
+      {input:"World1",output:"Hello World1"},
+      {input:"World2",output:"Hello World2"},
+      {input:"World3",output:"Hello World3"},
+      {input:"World4",output:"Hello World4"}
+    ];
 
-    //     res.json({success:true,response:response});
-    //   })
-    //   .catch((error)=>{
-    //     console.log(error);
-    //     res.json({success:false,error:error});
-    //   })
-    res.json({success:true});
+    var postPromise=[];
+
+    testCases.forEach(testCase => {
+      postPromise.push(
+        axios({
+          "method":"POST",
+          "url":"https://judge0.p.rapidapi.com/submissions",
+          "headers":{
+          "content-type":"application/json",
+          "x-rapidapi-host":"judge0.p.rapidapi.com",
+          "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
+          "accept":"application/json",
+          "useQueryString":true
+          },
+          "data":{
+            "language_id":54,
+            "source_code":`#include <bits/stdc++.h>
+            using namespace std;
+            int main() {
+              string name;
+              cin>>name;
+              cout<<"Hello "<<name;
+              return 0;
+          }`,
+          "stdin":testCase.input,
+          "expected_output":testCase.output
+          }
+          })
+      )
+    });
+    
+    var getPromise=[];
+
+    Promise.all(postPromise)
+    .then(responses=>{
+      setTimeout(()=>{
+        responses.forEach((response,i)=>{
+          if(response.data.token){
+            console.log(response.data.token);
+          getPromise.push(
+            axios({
+              "method":"GET",
+              "url":`https://judge0.p.rapidapi.com/submissions/${response.data.token}`,
+              "headers":{
+              "content-type":"application/octet-stream",
+              "x-rapidapi-host":"judge0.p.rapidapi.com",
+              "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
+              "useQueryString":true
+              }
+              })
+          )
+          }
+          if(i==responses.length-1){
+            var results=[];
+            Promise.all(getPromise)
+            .then(responses=>{
+                responses.forEach((response,i)=>{
+                  results.push(response.data);
+                  if(i==responses.length-1){
+                    res.json({success:true,results:results});      
+                  }
+                });
+            })
+          }
+        })
+      },5000);
+    }).catch(err=>{
+      res.json({success:false,msg:err.message});
+      console.log("POST Promise",err);
+    });
+
+   
+
+ 
+    
+      
   
 });
-
 module.exports = router;
