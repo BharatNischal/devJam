@@ -36,6 +36,7 @@ function Solution(props) {
     const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
     const [showResults,setShowResults] = useState(false);
     const [results,setResults] = useState([]);
+    const [activeResult,setActiveResult] = useState(0);
 
 
     useEffect(()=>{
@@ -63,6 +64,7 @@ function Solution(props) {
         axios.post(`/submitcodingquestion/123`,{testCases:props.question.testCases,lang:langCode[mode],sourceCode:props.question.solution})
           .then(res=>{
             if(res.data.success){
+              console.log(res.data.results);
               setResults(res.data.results);
               setShowResults(true);
             }else{
@@ -147,41 +149,67 @@ function Solution(props) {
                 <button className="btn btn-outline-grad ml-2" onClick={runTestCases} > Run All Tests </button>
                 </div>
             </div>
-
           {showResults?
-              <React.Fragment>
+          <React.Fragment>
 
-                <h4 className="ml-3 mt-4" > <b>Test Results</b> </h4>
-                 <div className="ml-4 mr-3 mb-3">
+            <h4 className="ml-3 mt-4" > <b>Test Results</b> </h4> 
+            <div className="ml-4 mr-4 mb-3 row test-results-tabs" style={{flexGrow:"1"}}  >
+                  <div className="col-lg-3 col-md-4 col-5 p-0" style={{maxHeight:"400px",overflow:"auto",backgroundColor:"rgb(235, 235, 235)"}} >
+                      {results.map((result,i)=>(
+                        <div className={result.status.id==3?(activeResult==i?"p-3 test-tab text-success active":"p-3 test-tab text-success"):(activeResult==i?"p-3 test-tab text-danger active":"p-3 test-tab text-danger")}
+                             onClick={()=>setActiveResult(i)}
+                        > 
+                          <b> Test Case #{i+1}  {result.status.id==3?(<i className="fa fa-check"></i>):(<i className="fa fa-close"></i>)} </b>
+                        </div>
+                      ))}
+                     
+                  </div>
+                  <div className="col-lg-9 col-md-8 col-7 p-0 text-left" style={{maxHeight:"400px",overflow:"auto"}} >
+                      <div className="p-3" >
+                        <h4><b> Test Case #{activeResult+1} </b></h4>
+                        <div className="d-flex  my-2" style={{ flexWrap:"wrap" }} >
+                          <div className="p-2 mr-3 mb-2 text-center result-pill" >
+                            <b><i className="fa fa-clock"></i> Time(sec)  </b><br/>
+                            {results[activeResult].time}
+                          </div>
+                          <div className="p-2 mr-3 mb-2 text-center result-pill" >
+                            <b><i className="fa fa-memory" ></i>  Memory(KB)  </b><br/>
+                            {results[activeResult].memory}
+                          </div>
+                          <div className="p-2 mr-3 mb-2 text-center result-pill" >
+                            <b>Status</b><br/>
+                            {results[activeResult].status.description}
+                          </div>
+                        </div>
+                        {results[activeResult].stderr? 
+                          <div className="mb-2 text-danger">
+                            <b>Error </b><br/>
+                            <p className="resulttxt " > {results[activeResult].stderr} </p>
+                          </div>
+                        :
+                        <React.Fragment>
+                          <div className="mb-2">
+                            <b>Input</b><br/>
+                            <p className="resulttxt" > {props.question.testCases[activeResult].input } </p>
+                          </div>
+                          <div className="mb-2">
+                            <b>Expected Output </b><br/>
+                            <p className="resulttxt" > {props.question.testCases[activeResult].output } </p>
+                          </div>
+                          <div className="mb-2">
+                            <b>Your Output </b><br/>
+                            <p className="resulttxt" > {results[activeResult].stdout} </p>
+                          </div>
 
-                 <table className="table table-striped" style={{maxWidth:"600px"}}>
-                         <thead style={{boxShadow:"0px 4px 8px rgba(0,0,0,0.5)"}}>
-                         <tr>
-                             <th>Test Case</th>
-                             <th> <i className="fa fa-clock"></i> Time(sec) </th>
-                             <th> <i className="fa fa-memory" ></i>  Memory(KB) </th>
-                             <th> <i className="fa fa-memory" ></i>  Status </th>
+                        </React.Fragment>
+                        }
+                      </div>
+                  </div>
+            </div>
+          </React.Fragment>
+          :null}
 
-                         </tr>
-                         </thead>
-                         <tbody>
-
-                            {results.map((result,i)=>(
-                              <tr className={result.status.id==3?"bg-success":"bg-danger"}>
-                                  <td> Test Case #{i+1}</td>
-                                  <td> {result.time}</td>
-                                  <td> {result.memory}</td>
-                                  <td> {result.status.description}</td>
-                              </tr>
-                            ))}
-
-
-                         </tbody>
-                     </table>
-                 </div>
-              </React.Fragment>
-
-            :null}
+          
 
 
 

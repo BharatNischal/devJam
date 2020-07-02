@@ -46,6 +46,33 @@
 .wrapperClassName .editorClassName{
     padding:10px;
 }
+.test-tab{
+    background-color: rgb(235, 235, 235);
+    cursor: pointer;
+}
+.test-results-tabs{
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0px 2px 8px #0000004d;
+}
+.test-tab.active,.test-tab:hover{
+    background-color: white;
+    box-shadow: 0px 0px 8px #00000070;
+    
+}
+.result-pill,.resulttxt{
+    border:1px solid #b1aeae;
+    background-color: rgb(236, 236, 236);
+    border-radius: 8px;
+}
+.resulttxt{
+    padding:5px;
+    min-height: 20px;
+    max-height: 120px;
+    overflow: auto;
+    background-color:#fcf7f7;
+}
+
 
 @media (max-width:500px){
     .tabs .tabH{
