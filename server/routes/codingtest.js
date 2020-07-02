@@ -113,27 +113,109 @@ router.get('/codingtest/:id/timer',middleware.isStudent,function (rq,res) {
     })
 })
 
+// Route to submit code and get tokens
+router.post('/coding/question/:id/submission',middleware.isAdmin,function (req,res){
+    db.CodingQuestion.findById(req.params.id)
+      .then(question=>{
+
+        var postPromise=[];
+
+        question.testCases.forEach(testCase => {
+          postPromise.push(
+            axios({
+              "method":"POST",
+              "url":"https://judge0.p.rapidapi.com/submissions",
+              "headers":{
+              "content-type":"application/json",
+              "x-rapidapi-host":"judge0.p.rapidapi.com",
+              "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
+              "accept":"application/json",
+              "useQueryString":true
+              },
+              "data":{
+                "language_id":req.body.lang,
+                "source_code":req.body.sourceCode,
+              "stdin":testCase.input,
+              "expected_output":testCase.output
+              }
+              })
+          )
+          Promise.all(postPromise)
+            .then(responses=>{
+              res.json({success:true,responses})
+            })
+        });
+
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
+})
+
 //Route to create a submission when a student submit a question
-router.get('/coding/question/:id/submission',middleware.isStudent,function (req,res) {
-
-  // Evaluate the submission
-
-  // Save in database
+router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,res) {
+  // Save in database (code and languageCode)
   db.CodingSubmission.create({...req.body.submission,userId:req.user._id,testId:req.params.id})
     .then(submission=>{
       db.CodingQuestion.findById(req.params.id)
         .then(question=>{
-          const index = question.students.findIndex(s=>s.userId.equals(req.user._id));
-          if(index!=-1){
-            question.students[index].submissions.push(submission._id);
-          }else{
-            question.students.push({
-              userId:req.user._id,
-              submissions:[submission._id]
-            })
-          }
-          question.save();
-          res.json({success:true,submission});
+
+          // Evaluate marks
+          getPromise = [];
+          req.body.responses.forEach((response,i)=>{
+            if(response.data.token){
+              console.log(response.data.token);
+            getPromise.push(
+              axios({
+                "method":"GET",
+                "url":`https://judge0.p.rapidapi.com/submissions/${response.data.token}`,
+                "headers":{
+                "content-type":"application/octet-stream",
+                "x-rapidapi-host":"judge0.p.rapidapi.com",
+                "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
+                "useQueryString":true
+                }
+                })
+            )
+            }
+            if(i==responses.length-1){
+              var results=[];
+
+              Promise.all(getPromise)
+              .then(responses=>{
+                  responses.forEach((response,i)=>{
+                    results.push(response.data);
+                    if(i==responses.length-1){
+
+                      const index = question.students.findIndex(s=>s.userId.equals(req.user._id));
+                      if(index!=-1){
+                        question.students[index].submissions.push(submission._id);
+                      }else{
+                        question.students.push({
+                          userId:req.user._id,
+                          submissions:[submission._id]
+                        })
+                      }
+                      question.save();
+                      let correct = 0;
+                      const testCases = results.map(r=>{
+                        if(r.status.id==3){
+                          correct++;
+                        }
+                        return r.status.id==3;
+                      });
+                      submission.marks = ((correct/question.testCases.length)*question.points).toFixed(2);
+                      submission.testCases = testCases;
+                      // Save marks
+                      submission.save();
+                      res.json({success:true,results:results});
+                    }
+                  });
+              })
+            }
+          })
+
+
         })
     })
     .catch(err=>{
