@@ -34,6 +34,8 @@ function Solution(props) {
     const [theme,setTheme] = useState("monokai");
     const [fontsize,setFontsize] = useState(20);
     const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
+    const [showResults,setShowResults] = useState(false);
+    const [results,setResults] = useState([]);
 
 
     useEffect(()=>{
@@ -57,10 +59,12 @@ function Solution(props) {
 
     function runTestCases() {
       if(props.question.testCases&&props.question.testCases.length>0){
+        setShowResults(false);
         axios.post(`/submitcodingquestion/123`,{testCases:props.question.testCases,lang:langCode[mode],sourceCode:props.question.solution})
           .then(res=>{
             if(res.data.success){
-              console.log(res.data.results);
+              setResults(res.data.results);
+              setShowResults(true);
             }else{
               console.log(res.data.msg);
             }
@@ -144,38 +148,41 @@ function Solution(props) {
                 </div>
             </div>
 
-           <h4 className="ml-3 mt-4" > <b>Test Results</b> </h4>
-            <div className="ml-4 mr-3 mb-3">
+          {showResults?
+              <React.Fragment>
 
-            <table className="table table-striped" style={{maxWidth:"600px"}}>
-                    <thead style={{boxShadow:"0px 4px 8px rgba(0,0,0,0.5)"}}>
-                    <tr>
-                        <th>Test Case</th>
-                        <th> <i className="fa fa-clock"></i> Time(sec) </th>
-                        <th> <i className="fa fa-memory" ></i>  Memory(KB) </th>
+                <h4 className="ml-3 mt-4" > <b>Test Results</b> </h4>
+                 <div className="ml-4 mr-3 mb-3">
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td> Test Case #1</td>
-                            <td> 1.22</td>
-                            <td> 3204</td>
-                        </tr>
-                        <tr>
-                            <td> Test Case #1</td>
-                            <td> 1.22</td>
-                            <td> 3204</td>
-                        </tr>
-                        <tr>
-                            <td> Test Case #1</td>
-                            <td> 1.22</td>
-                            <td> 3204</td>
-                        </tr>
+                 <table className="table table-striped" style={{maxWidth:"600px"}}>
+                         <thead style={{boxShadow:"0px 4px 8px rgba(0,0,0,0.5)"}}>
+                         <tr>
+                             <th>Test Case</th>
+                             <th> <i className="fa fa-clock"></i> Time(sec) </th>
+                             <th> <i className="fa fa-memory" ></i>  Memory(KB) </th>
+                             <th> <i className="fa fa-memory" ></i>  Status </th>
 
-                    </tbody>
-                </table>
-            </div>
+                         </tr>
+                         </thead>
+                         <tbody>
+
+                            {results.map((result,i)=>(
+                              <tr className={result.status.id==3?"bg-success":"bg-danger"}>
+                                  <td> Test Case #{i+1}</td>
+                                  <td> {result.time}</td>
+                                  <td> {result.memory}</td>
+                                  <td> {result.status.description}</td>
+                              </tr>
+                            ))}
+
+
+                         </tbody>
+                     </table>
+                 </div>
+              </React.Fragment>
+
+            :null}
+
 
 
         </div>
