@@ -5,7 +5,7 @@ import axios from "axios";
 export default function StudentQuestion(props) {
 
   const [mySubmissions,setMySubmissions] = useState([]);
-  const [question,setQuestion] = useState({title:"",description:"",constraints:"",outputFormat:"",sample:"",testCases:[],points:0);
+  const [question,setQuestion] = useState({title:"",description:"",constraints:"",outputFormat:"",sample:"",testCases:[],points:0});
   const [limits,setLimits] = useState({timeLimit:0,memoryLimit:0})
   const [editorial,setEditorial] = useState({solution:"",editorial:"",editorialLang:"javascript"})
   const [students,setStudents] = useState([]);
