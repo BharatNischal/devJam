@@ -122,6 +122,9 @@ if __name__ == '__main__':
     return (
         <div>
             <h2 className="topicTitle text-pink mb-2"  ><b>Starter Code </b></h2>
+            <p>
+              Add <b>Arguments</b> to function and take <b>input</b> for these arguments in <b>main method</b> and pass that to <b>calling function</b>. Do this for <b>each language</b> and don't forget to click Save Button on top.       
+            </p>
             <div className="mt-2 mx-4 mb-4  editor-wrapper" >
 
                 <div className="editor-header d-flex align-items-center justify-content-between" >
@@ -139,9 +142,9 @@ if __name__ == '__main__':
                         <option value="xcode">xcode</option>
                         </select>
                     </div>
-
                     </div>
-                    <div>
+                    
+                    <div style={{width:"200px"}}>
                     <div className="text-right" style={{fontSize:"12px"}} >
                         <b>Select Language</b>
                     </div>
