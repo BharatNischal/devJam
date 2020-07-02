@@ -21,18 +21,35 @@ function AllCodingQuestions(props) {
 
       if(user.loggedIn){
 
-        axios.get(`/coding/questions/all`)
-          .then(res=>{
-            if(res.data.success){
-              allQuestions = res.data.questions;
-              setFilteredQuestions(allQuestions);
-            }else{
-              console.log(res.data.msg);
-            }
-          })
-          .catch(err=>{
-            console.log(err.message);
-          })
+        if(user.student){
+
+          axios.get(`/coding/questions/published/all`)
+            .then(res=>{
+              if(res.data.success){
+                allQuestions = res.data.questions;
+                setFilteredQuestions(allQuestions);
+              }else{
+                console.log(res.data.msg);
+              }
+            })
+            .catch(err=>{
+              console.log(err.message);
+            })
+        }else{
+
+          axios.get(`/coding/questions/all`)
+            .then(res=>{
+              if(res.data.success){
+                allQuestions = res.data.questions;
+                setFilteredQuestions(allQuestions);
+              }else{
+                console.log(res.data.msg);
+              }
+            })
+            .catch(err=>{
+              console.log(err.message);
+            })
+        }
 
 
       }else{
@@ -51,7 +68,7 @@ function AllCodingQuestions(props) {
 
     function srchHandler(e){
         setSrchResults(filteredQuestions.map(ques=>{
-            return ques.title.toLowerCase().includes(e.target.value.toLowerCase());
+            return ques.title&&ques.title.toLowerCase().includes(e.target.value.toLowerCase());
         }));
         setSrchTxt(e.target.value);
     }

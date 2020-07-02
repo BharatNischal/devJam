@@ -136,7 +136,9 @@ router.post('/coding/question/:id/submission',middleware.isAdmin,function (req,r
                 "language_id":req.body.lang,
                 "source_code":req.body.sourceCode,
               "stdin":testCase.input,
-              "expected_output":testCase.output
+              "expected_output":testCase.output,
+              "cpu_time_limit": req.body.timeLimit,
+              "memory_limit": req.body.memoryLimit
               }
               })
           )
