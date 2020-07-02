@@ -1,4 +1,5 @@
 import React from 'react';
+import Row from './row';
 
 function Submission(props) {
     return (
@@ -11,26 +12,12 @@ function Submission(props) {
                     <div className="col-4"> <b>Points</b>  </div>
                     <div className="col-3"> </div>
                 </div>
-                <div className="row py-2" style={{borderBottom:"1px solid #e1e1e1"}} >
-                    <div className="col-1"> 1. </div>
-                    <div className="col-4"> Javascript </div>
-                    <div className="col-4"> 40 </div>
-                    <div className="col-3 pointer hover-pink"> <b>View Code</b>  </div>
-                </div>
-                <div className="row py-2" style={{borderBottom:"1px solid #e1e1e1"}} >
-                    <div className="col-1"> 1. </div>
-                    <div className="col-4"> Javascript </div>
-                    <div className="col-4"> 40 </div>
-                    <div className="col-3 pointer hover-pink"> <b>View Code</b>  </div>
-                </div>
-                <div className="row py-2" style={{borderBottom:"1px solid #e1e1e1"}} >
-                    <div className="col-1"> 1. </div>
-                    <div className="col-4"> Javascript </div>
-                    <div className="col-4"> 40 </div>
-                    <div className="col-3 pointer hover-pink"> <b>View Code</b>  </div>
-                </div>
+                <Row/>
+                <Row index={2} language={"python"} points={30} code={`print("Hello World")`} />
+                <Row/>
+                <Row/>
+                <Row/>
                 
-
             </div>
         </div>
     )
