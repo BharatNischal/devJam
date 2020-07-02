@@ -15,12 +15,24 @@ var codingQuestionSchema=new mongoose.Schema({
         default:false
       }
     }],
-    status:String,
+    status:{
+      type:String,
+      default:"Draft"
+    },
     points:Number,
-    timeLimit:Number,
-    memoryLimit:Number,
+    timeLimit:{
+      type:Number,
+      default:5
+    },
+    memoryLimit:{
+      type:Number,
+      default:1024
+    },
     topic:String,
-    difficulty:String,
+    difficulty:{
+      type:String,
+      default:"easy"
+    },
     time:Number,
     timeStamp: {
       type:Date,

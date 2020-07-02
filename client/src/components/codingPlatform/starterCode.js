@@ -173,7 +173,6 @@ if __name__ == '__main__':
                 width="100%"
                 />
                 <div className="editor-footer text-right" >
-                <button className="btn btn-outline-grad ml-2" > Save Code </button>
                 </div>
             </div>
         </div>

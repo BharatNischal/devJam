@@ -86,10 +86,9 @@ function AddQuestion(props) {
                 <div className="d-flex justify-content-between">
                     <h1 className="topicTitle mainH text-left text-pink">Add Question</h1>
                     <div>
-                        <span className="h3" style={{position:"relative", top:"5px" }}  > <i className="fa fa-eye  hover-pink pointer" ></i></span>
 
                         <button className="btn btn-outline-grad ml-2" onClick={handleSave}> Save </button>
-                        <button className="btn btn-outline-grad ml-2" onClick={handlePublish}> Publish </button>
+                        {status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={handlePublish}> Publish </button>:null}
 
 
                     </div>

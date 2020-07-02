@@ -46,7 +46,9 @@ function Solution(props) {
           const editorState = EditorState.createWithContent(contentState);
           setSampleEditorState(editorState);
         }
-
+        if(props.question.editorialLang){
+          setMode(props.question.editorialLang);
+        }
     },[])
 
     function handleUpdate(data) {
@@ -116,7 +118,7 @@ function Solution(props) {
                     <div className="text-right" style={{fontSize:"12px"}} >
                         <b>Select Language</b>
                     </div>
-                    <select className="form-control" value={mode} onChange={(e)=>setMode(e.target.value)} >
+                    <select className="form-control" value={mode} onChange={(e)=>{setMode(e.target.value);props.setQuestion({...props.question,editorialLang:e.target.value})}} >
                         <option value="java">Java</option>
                         <option value="python">Python</option>
                         <option value="javascript">Javascript</option>
