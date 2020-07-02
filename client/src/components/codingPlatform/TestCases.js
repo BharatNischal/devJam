@@ -40,8 +40,8 @@ export default function TestCases(props) {
             </div>
             <div className="d-flex justify-content-between">
                 <div className="custom-control custom-switch " >
-                    <input type="checkbox" className="custom-control-input" id="isHidden" />
-                    <label className="custom-control-label" htmlFor="isHidden" checked={hidden} onChange={(e)=>setHidden(e.target.checked)}>Hidden</label>
+                    <input type="checkbox" className="custom-control-input" id="isHidden" checked={hidden} onChange={(e)=>setHidden(e.target.checked)}  />
+                    <label className="custom-control-label" htmlFor="isHidden" >Hidden</label>
                 </div>
                 <div><button className="btn btn-grad float-right" onClick={handleAdd}> Add Test Case </button></div>
             </div>
