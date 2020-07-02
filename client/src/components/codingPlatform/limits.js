@@ -39,6 +39,7 @@ function Limits(props) {
                     options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'emoji', 'remove', 'history']
                 }}
             />
+          <p className="mt-4"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> You can go to solution tab and click <b>Run All Tests</b> to get idea about what time and memory your ideal solution is taking, to set the constraints</p>
             <div className=" row my-4">
                 <div className="col-md-6">
                     <h4 className="text-pink"> <b>Time Limit (Seconds) </b> </h4>
