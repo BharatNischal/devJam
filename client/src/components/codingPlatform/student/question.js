@@ -12,6 +12,7 @@ export default function StudentQuestion(props) {
   const [editorial,setEditorial] = useState({solution:"",editorial:"",editorialLang:"javascript"})
   const [students,setStudents] = useState([]);
   const [starterCode,setStarterCode] = useState([])
+  const [testCases,setTestCases] = useState([])
   const {user} = useContext(CurUserContext);
   const [timer,setTimer] = useState(0); //Time in seconds
   const timerRef = useRef(null);
@@ -20,78 +21,80 @@ export default function StudentQuestion(props) {
   //UI STATES
   const [activeTab,setActiveTab] = useState("problem");
 
-  // useEffect(()=>{
+  useEffect(()=>{
 
-    // axios.get(`/taketest/${props.match.params.id}`)
-    //   .then(res=>{
-    //     if(res.data.success){
+    axios.get(`/taketest/${props.match.params.id}`)
+      .then(res=>{
+        if(res.data.success){
+          console.log(res.data.question);
 
-    //       setStudents(res.data.question.students);
+          setStudents(res.data.question.students);
+          setTestCases(res.data.question.testCases)
 
-    //       // user has already started the test yet
-    //       if(res.data.question.time && res.data.question.students[res.data.userIndex].startTime){
+          // user has already started the test yet
+          if(res.data.question.time && res.data.question.students[res.data.userIndex].startTime){
 
-    //         // Timer
-    //         const curtime = new Date();
-    //         const starttime = new Date(res.data.question.students[res.data.userIndex].startTime);
-    //         let timeDiff = Math.floor((curtime.getTime()-starttime.getTime())/1000);
-    //         timeLeft = res.data.question.time*60-timeDiff;
-    //         if(timeLeft<=0){
-    //           // Test is over
-    //           props.history.push('/test/finished');
-    //         }else{
-    //           timerRef.current =setInterval(()=>{
-    //             setTimer(--timeLeft)
-    //           },1000);
-    //         }
-    //       }
+            // Timer
+            const curtime = new Date();
+            const starttime = new Date(res.data.question.students[res.data.userIndex].startTime);
+            let timeDiff = Math.floor((curtime.getTime()-starttime.getTime())/1000);
+            timeLeft = res.data.question.time*60-timeDiff;
+            if(timeLeft<=0){
+              // Test is over
+              props.history.push('/test/finished');
+            }else{
+              timerRef.current =setInterval(()=>{
+                setTimer(--timeLeft)
+              },1000);
+            }
+          }
 
-    //       const {title,description,constraints,outputFormat,sample,testCases,points,time} = res.data.question;
-    //       setQuestion({title,description,constraints,outputFormat,sample,testCases,points,time});
+          const {title,description,constraints,outputFormat,sample,testCases,points,time} = res.data.question;
+          setQuestion({title,description,constraints,outputFormat,sample,testCases,points,time});
 
-    //       const {timeLimit,memoryLimit} = res.data.question;
-    //       setLimits({timeLimit,memoryLimit});
+          const {timeLimit,memoryLimit} = res.data.question;
+          setLimits({timeLimit,memoryLimit});
 
-    //       const {solution,editorial,editorialLang} = res.data.question;
-    //       setEditorial({solution,editorial,editorialLang});
+          const {solution,editorial,editorialLang} = res.data.question;
+          setEditorial({solution,editorial,editorialLang});
 
-    //       setStarterCode(res.data.starterCode);
+          setStarterCode(res.data.question.starterCode);
 
-    //     }else{
-    //       console.log(res.data.msg);
-    //     }
-    //   })
-    //   .catch(err=>{
-    //     console.log(err.message);
-    //   })
+        }else{
+          console.log(res.data.msg);
+        }
+      })
+      .catch(err=>{
+        console.log(err.message);
+      })
 
-  // },[])
+  },[])
 
 
-  // function startTimer() {
-  //   axios.get(`/codingtest/:id/timer`)
-  //     .then(res=>{
-  //       if(res.data.success){
-  //         console.log(success);
-  //       }else{
-  //         console.log(res.data.msg);
-  //       }
-  //     })
-  //     .catch(err=>{
-  //       console.log(err.message);
-  //     })
-  //     timeLeft = question.time;
-  //     timerRef.current =setInterval(()=>{
-  //       setTimer(--timeLeft)
-  //     },1000);
-  // }
+  function startTimer() {
+    axios.get(`/codingtest/:id/timer`)
+      .then(res=>{
+        if(res.data.success){
+          console.log("success");
+        }else{
+          console.log(res.data.msg);
+        }
+      })
+      .catch(err=>{
+        console.log(err.message);
+      })
+      timeLeft = question.time;
+      timerRef.current =setInterval(()=>{
+        setTimer(--timeLeft)
+      },1000);
+  }
 
-  // useEffect(()=>{
-  //   if(timer<0){
-  //     clearInterval(timerRef.current);
-  //     props.history.push('/test/finished');
-  //   }
-  // },[timer])
+  useEffect(()=>{
+    if(timer<0){
+      clearInterval(timerRef.current);
+      props.history.push('/test/finished');
+    }
+  },[timer])
 
   return (
     <div>
@@ -100,7 +103,7 @@ export default function StudentQuestion(props) {
       <div className="container-fluid" style={{marginTop:"100px"}} >
         <div className=" p-3 text-left m-4  shadow" style={{borderRadius:"18px",backgroundColor:"rgb(255, 235, 249)"}}>
             <h2 className="topicTitle mainH text-left text-pink" >
-                    Hello World
+                    {question.title}
             </h2>
                 <span className="cursor-pointer p-2 pb-4" ><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/>
         </div>
@@ -115,23 +118,23 @@ export default function StudentQuestion(props) {
               </div>
               <div className="tabCont p-3">
                 {activeTab=="problem"?
-                  <Problem question={question} />
+                  <Problem question={question} starterCode={starterCode} setStarterCode={setStarterCode} testCases={testCases}/>
 
                 :null}
-                
+
                 {activeTab=="submissions"?
                   <h1>Submissions</h1>
                 :null}
-                
+
                 {activeTab=="leaderboard"?
                   <h1>leaderboard</h1>
                 :null}
-                
+
                 {activeTab=="editorial"?
                   <h1>editorial</h1>
                 :null}
 
-              </div> 
+              </div>
             </div>
           </div>
         </div>

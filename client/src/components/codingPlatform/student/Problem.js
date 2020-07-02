@@ -1,5 +1,7 @@
 import React,{useState} from 'react'
 import AceEditor from "react-ace";
+import axios from "axios";
+import {withRouter} from "react-router-dom"
 
 // Editor languages
 import "ace-builds/src-noconflict/mode-java";
@@ -33,7 +35,47 @@ function Problem(props) {
 
     const [customInput,setCustomeInput] = useState({add:false,value:""});
     function onChange(newValue) {
-        
+          console.log(newValue);
+          const index = props.starterCode.findIndex(sc=>sc.lang==mode);
+          if(index!=-1){
+            const newCode = [...props.starterCode];
+            newCode[index].code = newValue;
+            props.setStarterCode(newCode);
+          }else{
+            props.setStarterCode([...props.starterCode,{code:newValue,lang:mode}]);
+          }
+
+    }
+
+    function handleEvaluate(responses) {
+      const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
+      axios.post(`/coding/question/${props.match.params.id}/evaluation`,{lang:langCode[mode],sourceCode,responses})
+        .then(res=>{
+          if(res.data.success){
+            console.log(res.data.results);
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    }
+
+    function handleRun() {
+        const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
+        axios.post(`/coding/question/${props.match.params.id}/submission`,{lang:langCode[mode],sourceCode})
+          .then(res=>{
+            if(res.data.success){
+              console.log(res.data.responses);
+              setTimeout(()=>handleEvaluate(res.data.responses),5000);
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
     }
 
     return (
@@ -102,7 +144,7 @@ function Problem(props) {
                             <option value="javascript">Javascript</option>
                         </select>
                         </div>
-                        
+
                     </div>
                     <AceEditor
                     mode={mode}
@@ -118,27 +160,28 @@ function Problem(props) {
                     }}
                     placeholder="Write your code here"
                     fontSize={+fontsize}
+                    onChange={onChange}
                     showPrintMargin={false}
                     showGutter={true}
                     highlightActiveLine={true}
                     width="100%"
-                    
+                    value={props.starterCode&&props.starterCode.findIndex(sc=>sc.lang==mode)!=-1?props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code:""}
                     />
                     <div className="editor-footer text-right" >
-                        <button className="btn btn-outline-grad ml-2"> Run  </button>
-                        <button className="btn btn-outline-grad ml-2"> Submit </button>
+                        <button className="btn btn-outline-grad ml-2" onClick={handleRun}> Run  </button>
+                        <button className="btn btn-outline-grad ml-2" onClick={console.log("submit")}> Submit </button>
                     </div>
                 </div>
-                <div className="pl-5 mt-3 d-flex"> 
+                <div className="pl-5 mt-3 d-flex">
                     <div className="custom-control custom-checkbox " >
                         <input type="checkbox" className="custom-control-input" id="customCheck1"  checked={customInput.add} onChange={(e)=>setCustomeInput({...customInput,add:e.target.checked})} />
                         <label className="custom-control-label" htmlFor="customCheck1">Add Custom Input</label>
-                    </div>              
+                    </div>
                     {customInput.add?
                         <div className="ml-3 ">
                             <textarea className="form-control" rows="4" value={customInput.value} onChange={(e)=>setCustomeInput({...customInput,value:e.target.value})} ></textarea>
                         </div>
-                    :null}  
+                    :null}
                 </div>
             </section>
             {showResults?
@@ -213,5 +256,4 @@ function Problem(props) {
 }
 
 
-export default Problem
-
+export default withRouter(Problem)

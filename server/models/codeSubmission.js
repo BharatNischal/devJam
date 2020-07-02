@@ -22,4 +22,4 @@ var codingSubmissionSchema=new mongoose.Schema({
     }
 });
 
-module.exports=mongoose.model("codingtest",codingSubmissionSchema);
+module.exports=mongoose.model("codingsubmission",codingSubmissionSchema);
