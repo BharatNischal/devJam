@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import AceEditor from "react-ace";
 
 // Editor languages
@@ -26,9 +26,98 @@ function StarterCode(props) {
     const [theme,setTheme] = useState("monokai");
     const [fontsize,setFontsize] = useState(20);
 
-    function onChange(newValue) {
-        props.setQuestion({...props.question,starterCode:newValue});
+
+    useEffect(()=>{
+      if(!props.question.starterCode){
+        props.setQuestion({...props.question,starterCode:[{
+          lang:"javascript",
+          code:`'use strict';
+
+
+/*
+ * Complete the solve function below.
+ */
+function solve() {
+    /*
+     * Write your code here.
+     */
+
+}
+
+function main() {
+
+
+  // take inputs here and pass to function solve
+
+  //Call the solve function
+  solve();
+}
+`
+        },{
+          lang:"java",
+          code:`import java.io.*;
+import java.math.*;
+import java.text.*;
+import java.util.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    /*
+     * Complete the solve function below.
+     */
+    static void solve() {
+        /*
+         * Write your code here.
+         */
+
     }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+
+        // take inputs here and pass to function solve
+
+        //Call the solve function
+        solve();
+    }
+}
+`
+        },{
+          lang:"python",
+          code:`# Complete the solve function below.
+def solve():
+    #
+    # Write your code here.
+    #
+
+if __name__ == '__main__':
+    # take inputs here and pass to function solve
+
+    #call the solve function
+    solve()`
+        }]});
+      }
+    },[])
+
+    function onChange(newValue) {
+        console.log(newValue);
+        if(props.question.starterCode){
+          let SC = [...props.question.starterCode];
+          const index = SC.findIndex(sc=>sc.lang==mode);
+          if(index!=-1){
+            SC[index] = {code:newValue,lang:mode};
+          }else{
+            SC.push({code:newValue,lang:mode});
+          }
+          console.log("sc",SC);
+          props.setQuestion({...props.question,starterCode:SC});
+        }else{
+          props.setQuestion({...props.question,starterCode:[{code:newValue,lang:mode}]});
+        }
+    }
+
 
     return (
         <div>
@@ -80,11 +169,10 @@ function StarterCode(props) {
                 showPrintMargin={false}
                 showGutter={true}
                 highlightActiveLine={true}
-                defaultValue={props.question&&props.question.starterCode?props.question.starterCode:""}
+                value={props.question.starterCode&&props.question.starterCode.findIndex(sc=>sc.lang==mode)!=-1?props.question.starterCode[props.question.starterCode.findIndex(sc=>sc.lang==mode)].code:""}
                 width="100%"
                 />
                 <div className="editor-footer text-right" >
-                <button className="btn btn-outline-grad ml-2" > Save Code </button>
                 </div>
             </div>
         </div>
