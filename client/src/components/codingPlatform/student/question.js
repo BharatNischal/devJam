@@ -5,6 +5,7 @@ import TopBar from '../../learnerPlatform/TopBar';
 import Problem from './Problem';
 import Leaderboard from './Leaderboard';
 import Editorial from './Editorial';
+import Submission from './submission/submission';
 
 export default function StudentQuestion(props) {
 
@@ -122,7 +123,7 @@ export default function StudentQuestion(props) {
                 :null}
                 
                 {activeTab=="submissions"?
-                  <h1>Submissions</h1>
+                  <Submission/>
                 :null}
                 
                 {activeTab=="leaderboard"?
