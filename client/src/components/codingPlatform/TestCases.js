@@ -2,19 +2,17 @@ import React,{useEffect,useState} from 'react'
 
 export default function TestCases(props) {
 
-  const [testCases,setTestCases] = useState([]);
   const [inputText,setInputText] = useState("");
   const [outputText,setOutputText] = useState("");
   const [hidden,setHidden] = useState(false);
 
-  useEffect(()=>{
-
-    setTestCases(props.cases);
-
-  },[])
-
   function handleAdd() {
-    setTestCases([...testCases,{input:inputText,output:outputText,hidden}]);
+    if(props.question&&props.question.testCases){
+      props.setQuestion({...props.question,testCases:[...props.question.testCases,{input:inputText,output:outputText,hidden}]});
+    }else{
+      props.setQuestion({...props.question,testCases:[{input:inputText,output:outputText,hidden}]});
+    }
+
     setInputText("");
     setOutputText("");
     setHidden(false);
@@ -50,7 +48,8 @@ export default function TestCases(props) {
             <hr className="mt-2" />
         </div>
 
-        {testCases.map((tc,i)=>(
+        {props.question&&props.question.testCases?
+          props.question.testCases.map((tc,i)=>(
 
           <div className=" mb-3" key={i}>
               <h5>  Test Case #{i+1} {tc.hidden?<i className="fa fa-lock text-pink ml-2 "></i>:null}</h5>
@@ -72,7 +71,7 @@ export default function TestCases(props) {
 
           </div>
 
-        ))}
+        )):null}
 
     </React.Fragment>
   )

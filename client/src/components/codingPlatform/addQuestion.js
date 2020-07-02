@@ -13,11 +13,10 @@ import Select from 'react-select';
 
 function AddQuestion(props) {
     const [activeTab,setActiveTab] =useState("description");
-    const [title,setTitle] = useState("");
-    const [points,setPoints] = useState(0);
     const [isTimed,setIsTimed] = useState(false);
+    const [time,setTime] = useState(false);
     const [status,setStatus] = useState("Draft");
-    const [question,setQuestion] = useState(null);
+    const [question,setQuestion] = useState({});
 
     // Get data from database
     useEffect(()=>{
@@ -26,10 +25,7 @@ function AddQuestion(props) {
         .then(res=>{
           if(res.data.success){
               setQuestion(res.data.question);
-              const {title,points,status,difficulty,topic} = res.data.question;
-              setStatus(status);
-              setTitle(title);
-              setPoints(points);
+              setStatus(res.data.question.status);
           }else{
             console.log(res.data.msg);
           }
@@ -91,7 +87,7 @@ function AddQuestion(props) {
                     <div className="col-md-8">
                         <div className="form-group input-group ">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
-                            <input type="text" className="form-control"   placeholder="Enter Question Title" value={title} onChange={(e)=>setTitle(e.target.value)} />
+                            <input type="text" className="form-control"   placeholder="Enter Question Title" value={question&&question.title?question.title:""} onChange={(e)=>setQuestion({...question,title:e.target.value})} />
                         </div>
                         <div className="d-flex align-items-center">
                             <div className="mr-2 text-left" style={{width:"100px"}} > <b> Select Topics </b> </div>
@@ -100,14 +96,14 @@ function AddQuestion(props) {
                                     options={[{value:"Algo",label:"Algo"},{value:"Algo1",label:"Algo1"},{value:"Algo2",label:"Algo2"}]}
                                     isMulti
                                     onChange={(e)=>{console.log(e)}}
-                                    
+
                                 />
                             </div>
                         </div>
                         <div className="d-flex mt-2 align-items-center" >
                             <div className="mr-2 text-left" style={{width:"100px"}} > <b> Difficulty </b> </div>
                             <div style={{ minWidth:"200px" }} >
-                                <select className="form-control"  >
+                                <select className="form-control" value={question&&question.difficulty?question.difficulty:"easy"} onChange={(e)=>setQuestion({...question,difficulty:e.target.value})} >
                                     <option value="easy" > Easy </option>
                                     <option value="medium" > Medium </option>
                                     <option value="hard" > Hard </option>
@@ -118,14 +114,14 @@ function AddQuestion(props) {
                     <div className="col-md-4">
                         <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-1 f-20 " ><b> Points </b></div>
-                            <input type="number" className="form-control"   placeholder="Enter Points" value={points} onChange={(e)=>setPoints(e.target.value)} />
+                            <input type="number" className="form-control"   placeholder="Enter Points" value={question&&question.points?question.points:0} onChange={(e)=>setQuestion({...question,points:e.target.value})} />
                         </div>
                         <div className="text-left px-lg-4">
                             <div className="custom-control custom-checkbox d-inline" >
                                 <input type="checkbox" className="custom-control-input" id="customCheck1" checked={isTimed} onChange={(e)=> setIsTimed(e.target.checked)} />
                                 <label className="custom-control-label" htmlFor="customCheck1">Timed</label>
                             </div>
-                            {isTimed?<input type="number"  className="form-control d-inline" placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null} 
+                            {isTimed?<input type="number" value={question&&question.time?question.time:0} onChange={(e)=>setQuestion({...question,time:e.target.value})}  className="form-control d-inline" placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
                         </div>
                     </div>
                 </div>
@@ -141,25 +137,25 @@ function AddQuestion(props) {
                     </div>
                     <div className="tabCont p-3">
                         {activeTab=="description"?
-                            <Description desc={question?question.description:""}/>
+                            <Description question={question} setQuestion={setQuestion}/>
                         :null}
                         {activeTab=="sampleCases"?
-                            <SampleCases sample={question?question.sample:""}/>
+                            <SampleCases question={question} setQuestion={setQuestion}/>
                         :null}
                         {activeTab=="inputOutput"?
-                            <InputOutput input={question?question.inputFormat:""} output={question?question.outputFormat:""}/>
+                            <InputOutput question={question} setQuestion={setQuestion}/>
                         :null}
                         {activeTab=="testCases"?
-                            <TestCases cases={question?question.testCases:[]}/>
+                            <TestCases question={question} setQuestion={setQuestion}/>
                         :null}
                         {activeTab=="limits"?
-                            <Limits constraints={question?question.constraints:""} memoryLimit={question?question.memoryLimit:256} timeLimit={question?question.timeLimit:5}/>
+                            <Limits question={question} setQuestion={setQuestion}/>
                         :null}
                         {activeTab=="solution"?
-                            <Solution soln={question?question.solution:""} editorial={question?question.editorial:""}/>
+                            <Solution question={question} setQuestion={setQuestion}/>
                         :null}
                         {activeTab=="starterCode"?
-                            <StarterCode/>
+                            <StarterCode question={question} setQuestion={setQuestion}/>
                         :null}
                     </div>
                 </div>

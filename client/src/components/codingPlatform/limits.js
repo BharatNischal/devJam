@@ -9,12 +9,10 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 function Limits(props) {
 
     const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
-    const [memoryLimit,setMemoryLimit] = useState(256);
-    const [timeLimit,setTimeLimit] = useState(5);
 
     useEffect(()=>{
 
-      const constraintBlock = htmlToDraft(props.constraints);
+      const constraintBlock = htmlToDraft(props.question&&props.question.constraints?props.question.constraints:"");
       if (constraintBlock) {
         const contentState = ContentState.createFromBlockArray(constraintBlock.contentBlocks);
         const editorState = EditorState.createWithContent(contentState);
@@ -24,8 +22,8 @@ function Limits(props) {
     },[])
 
 
-    function toHTML() {
-      draftToHtml(convertToRaw(sampleEditorState.getCurrentContent()))
+    function handleUpdate(data) {
+        props.setQuestion({...props.question,constraints:draftToHtml(convertToRaw(data.getCurrentContent()))});
     }
 
     return (
@@ -36,7 +34,7 @@ function Limits(props) {
                 wrapperClassName="constraintWrapper"
                 editorClassName="editorClassName"
                 editorState={sampleEditorState}
-                onEditorStateChange={(editorState)=>setSampleEditorState(editorState)}
+                onEditorStateChange={(editorState)=>{handleUpdate(editorState);setSampleEditorState(editorState)}}
                 toolbar={{
                     options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'emoji', 'remove', 'history']
                 }}
@@ -46,14 +44,14 @@ function Limits(props) {
                     <h4 className="text-pink"> <b>Time Limit (Seconds) </b> </h4>
                     <div className="form-group input-group px-lg-4">
                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " > <i className="fa fa-clock"></i> </div>
-                        <input type="number" className="form-control"   placeholder="Enter Time" value={timeLimit} onChange={(e)=>setTimeLimit(e.target.value)}/>
+                      <input type="number" className="form-control"   placeholder="Enter Time" value={props.question&&props.question.timeLimit?props.question.timeLimit:5} onChange={(e)=>props.setQuestion({...props.question,timeLimit:e.target.value})}/>
                     </div>
                 </div>
                 <div className="col-md-6">
                     <h4 className="text-pink"> <b>Memory Limit (KB) </b> </h4>
                     <div className="form-group input-group px-lg-4">
                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " > <i className="fas fa-memory"></i> </div>
-                        <input type="number" className="form-control"   placeholder="Enter Memory Limit" value={memoryLimit} onChange={(e)=>setMemoryLimit(e.target.value)} />
+                        <input type="number" className="form-control"   placeholder="Enter Memory Limit" value={props.question&&props.question.memoryLimit?props.question.memoryLimit:256} onChange={(e)=>props.setQuestion({...props.question,memoryLimit:e.target.value})} />
                     </div>
                 </div>
 

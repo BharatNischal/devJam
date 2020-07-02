@@ -11,7 +11,7 @@ export default function SampleCases(props) {
 
   useEffect(()=>{
 
-    const contentBlock = htmlToDraft(props.sample);
+    const contentBlock = htmlToDraft(props.question&&props.question.sample?props.question.sample:"");
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
@@ -20,8 +20,8 @@ export default function SampleCases(props) {
 
   },[])
 
-  function toHTML() {
-    draftToHtml(convertToRaw(sampleEditorState.getCurrentContent()))
+  function handleUpdate(data) {
+      props.setQuestion({...props.question,sample:draftToHtml(convertToRaw(data.getCurrentContent()))});
   }
 
 
@@ -33,7 +33,7 @@ export default function SampleCases(props) {
             wrapperClassName="wrapperClassName"
             editorClassName="editorClassName"
             editorState={sampleEditorState}
-            onEditorStateChange={(editorState)=>setSampleEditorState(editorState)}
+            onEditorStateChange={(editorState)=>{handleUpdate(editorState);setSampleEditorState(editorState)}}
             toolbar={{
                 options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
             }}

@@ -32,13 +32,11 @@ function Solution(props) {
     const [theme,setTheme] = useState("monokai");
     const [fontsize,setFontsize] = useState(20);
     const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
-    const [solution,setSolution] = useState("");
 
 
     useEffect(()=>{
 
-        setSolution(props.soln);
-        const contentBlock = htmlToDraft(props.editorial);
+        const contentBlock = htmlToDraft(props.question&&props.question.editorial?props.question.editorial:"");
         if (contentBlock) {
           const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
           const editorState = EditorState.createWithContent(contentState);
@@ -47,12 +45,12 @@ function Solution(props) {
 
     },[])
 
-    function toHTML() {
-      draftToHtml(convertToRaw(sampleEditorState.getCurrentContent()))
+    function handleUpdate(data) {
+        props.setQuestion({...props.question,editorial:draftToHtml(convertToRaw(data.getCurrentContent()))});
     }
 
     function onChange(newValue) {
-        console.log("change", newValue);
+        props.setQuestion({...props.question,solution:newValue});
     }
     return (
         <div>
@@ -64,7 +62,7 @@ function Solution(props) {
                 wrapperClassName="constraintWrapper"
                 editorClassName="editorClassName"
                 editorState={sampleEditorState}
-                onEditorStateChange={(editorState)=>setSampleEditorState(editorState)}
+                onEditorStateChange={(editorState)=>{handleUpdate(editorState);setSampleEditorState(editorState)}}
                 toolbar={{
                     options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'emoji', 'remove', 'history']
                 }}
@@ -119,7 +117,7 @@ function Solution(props) {
                 showGutter={true}
                 highlightActiveLine={true}
                 width="100%"
-                defaultValue={solution}
+                defaultValue={props.question&&props.question.solution?props.question.solution:""}
                 />
                 <div className="editor-footer text-right" >
                 <button className="btn btn-outline-grad ml-2" > Run All Tests </button>

@@ -12,13 +12,13 @@ export default function InputOutput(props) {
 
   useEffect(()=>{
 
-    const contentBlock1 = htmlToDraft(props.input);
+    const contentBlock1 = htmlToDraft(props.question&&props.question.input?props.question.input:"");
     if (contentBlock1) {
       const contentState = ContentState.createFromBlockArray(contentBlock1.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
       setSampleEditorState1(editorState);
     }
-    const contentBlock2 = htmlToDraft(props.output);
+    const contentBlock2 = htmlToDraft(props.question&&props.question.output?props.question.output:"");
     if (contentBlock2) {
       const contentState = ContentState.createFromBlockArray(contentBlock2.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
@@ -27,8 +27,9 @@ export default function InputOutput(props) {
 
   },[])
 
-  function toHTML() {
-    draftToHtml(convertToRaw(sampleEditorState1.getCurrentContent()));
+  function handleUpdate(data,num) {
+    num==1?props.setQuestion({...props.question,input:draftToHtml(convertToRaw(data.getCurrentContent()))})
+          :props.setQuestion({...props.question,output:draftToHtml(convertToRaw(data.getCurrentContent()))})
   }
 
   return (
@@ -41,7 +42,7 @@ export default function InputOutput(props) {
                     wrapperClassName="wrapperClassName"
                     editorClassName="editorClassName"
                     editorState={sampleEditorState1}
-                    onEditorStateChange={(editorState)=>setSampleEditorState1(editorState)}
+                    onEditorStateChange={(editorState)=>{handleUpdate(editorState,1);setSampleEditorState1(editorState)}}
                     toolbar={{
                         options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
                     }}
@@ -54,7 +55,7 @@ export default function InputOutput(props) {
                     wrapperClassName="wrapperClassName"
                     editorClassName="editorClassName"
                     editorState={sampleEditorState2}
-                    onEditorStateChange={(editorState)=>setSampleEditorState2(editorState)}
+                    onEditorStateChange={(editorState)=>{handleUpdate(editorState,2);setSampleEditorState2(editorState)}}
                     toolbar={{
                         options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
                     }}

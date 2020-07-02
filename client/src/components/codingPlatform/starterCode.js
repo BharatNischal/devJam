@@ -25,9 +25,9 @@ function StarterCode(props) {
     const [mode,setMode] = useState("javascript");
     const [theme,setTheme] = useState("monokai");
     const [fontsize,setFontsize] = useState(20);
-    
+
     function onChange(newValue) {
-        console.log("change", newValue);
+        props.setQuestion({...props.question,starterCode:newValue});
     }
 
     return (
@@ -36,7 +36,7 @@ function StarterCode(props) {
             <div className="mt-2 mx-4 mb-4  editor-wrapper" >
 
                 <div className="editor-header d-flex align-items-center justify-content-between" >
-                    
+
                     <div style={{width:"200px"}} >
                     <div className="text-left" style={{fontSize:"12px"}} >
                         <b>Select Theme</b>
@@ -50,7 +50,7 @@ function StarterCode(props) {
                         <option value="xcode">xcode</option>
                         </select>
                     </div>
-                    
+
                     </div>
                     <div>
                     <div className="text-right" style={{fontSize:"12px"}} >
@@ -80,6 +80,7 @@ function StarterCode(props) {
                 showPrintMargin={false}
                 showGutter={true}
                 highlightActiveLine={true}
+                defaultValue={props.question&&props.question.starterCode?props.question.starterCode:""}
                 width="100%"
                 />
                 <div className="editor-footer text-right" >
@@ -92,4 +93,3 @@ function StarterCode(props) {
 
 
 export default StarterCode;
-
