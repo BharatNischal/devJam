@@ -72,6 +72,12 @@
     overflow: auto;
     background-color:#fcf7f7;
 }
+.problem-section{
+    color:rgb(71, 71, 71);
+}
+.problem-section h3{
+    color:rgb(22, 22, 22);
+}
 
 
 @media (max-width:500px){
