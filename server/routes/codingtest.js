@@ -30,7 +30,7 @@ router.get('/coding/questions/published/all',middleware.isStudent,function (req,
 });
 
 // Route to make a new coding question
-router.get('/coding/question/new',function (req,res) {
+router.get('/coding/question/new',middleware.isAdmin,function (req,res) {
   db.CodingQuestion.create({})
     .then(question=>{
       res.json({success:true,question});
@@ -56,7 +56,7 @@ router.get('/coding/question/:id',function (req,res) {
 
 
 // Route to update a question
-router.put('/coding/question/:id',function (req,res) {
+router.put('/coding/question/:id',middleware.isAdmin,function (req,res) {
   db.CodingQuestion.findByIdAndUpdate(req.params.id,req.body.question)
     .then(question=>{
       res.json({success:true,question});
@@ -67,7 +67,7 @@ router.put('/coding/question/:id',function (req,res) {
 })
 
 // Route to change the status of a question
-router.put('/coding/question/:id/status',function (req,res) {
+router.put('/coding/question/:id/status',middleware.isAdmin,function (req,res) {
   db.CodingQuestion.findByIdAndUpdate(req.params.id,{status:req.body.status})
     .then(question=>{
       res.json({success:true});
@@ -78,7 +78,7 @@ router.put('/coding/question/:id/status',function (req,res) {
 })
 
 // Router to get a question along with student data
-router.get('/taketest/:id',function (req,res) {
+router.get('/taketest/:id',middleware.isStudent,function (req,res) {
   db.CodingQuestion.findById(req.params.id)
     .populate(['students.userId','students.submissions'])
     .then(question=>{
@@ -97,7 +97,7 @@ router.get('/taketest/:id',function (req,res) {
 })
 
 // Router to start the timer
-router.get('/codingtest/:id/timer',function (rq,res) {
+router.get('/codingtest/:id/timer',middleware.isStudent,function (rq,res) {
   db.CodingQuestion.findById(req.params.id)
     .populate(['students.userId','students.submissions'])
     .then(question=>{
@@ -113,27 +113,111 @@ router.get('/codingtest/:id/timer',function (rq,res) {
     })
 })
 
+// Route to submit code and get tokens
+router.post('/coding/question/:id/submission',middleware.isAdmin,function (req,res){
+    db.CodingQuestion.findById(req.params.id)
+      .then(question=>{
+
+        var postPromise=[];
+
+        question.testCases.forEach(testCase => {
+          postPromise.push(
+            axios({
+              "method":"POST",
+              "url":"https://judge0.p.rapidapi.com/submissions",
+              "headers":{
+              "content-type":"application/json",
+              "x-rapidapi-host":"judge0.p.rapidapi.com",
+              "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
+              "accept":"application/json",
+              "useQueryString":true
+              },
+              "data":{
+                "language_id":req.body.lang,
+                "source_code":req.body.sourceCode,
+              "stdin":testCase.input,
+              "expected_output":testCase.output,
+              "cpu_time_limit": req.body.timeLimit,
+              "memory_limit": req.body.memoryLimit
+              }
+              })
+          )
+          Promise.all(postPromise)
+            .then(responses=>{
+              res.json({success:true,responses})
+            })
+        });
+
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
+})
+
 //Route to create a submission when a student submit a question
-router.get('/coding/question/:id/submission',middleware.isAdmin,function (req,res) {
-
-  // Evaluate the submission
-
-  // Save in database
+router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,res) {
+  // Save in database (code and languageCode)
   db.CodingSubmission.create({...req.body.submission,userId:req.user._id,testId:req.params.id})
     .then(submission=>{
       db.CodingQuestion.findById(req.params.id)
         .then(question=>{
-          const index = question.students.findIndex(s=>s.userId.equals(req.user._id));
-          if(index!=-1){
-            question.students[index].submissions.push(submission._id);
-          }else{
-            question.students.push({
-              userId:req.user._id,
-              submissions:[submission._id]
-            })
-          }
-          question.save();
-          res.json({success:true,submission});
+
+          // Evaluate marks
+          getPromise = [];
+          req.body.responses.forEach((response,i)=>{
+            if(response.data.token){
+              console.log(response.data.token);
+            getPromise.push(
+              axios({
+                "method":"GET",
+                "url":`https://judge0.p.rapidapi.com/submissions/${response.data.token}`,
+                "headers":{
+                "content-type":"application/octet-stream",
+                "x-rapidapi-host":"judge0.p.rapidapi.com",
+                "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
+                "useQueryString":true
+                }
+                })
+            )
+            }
+            if(i==responses.length-1){
+              var results=[];
+
+              Promise.all(getPromise)
+              .then(responses=>{
+                  responses.forEach((response,i)=>{
+                    results.push(response.data);
+                    if(i==responses.length-1){
+
+                      const index = question.students.findIndex(s=>s.userId.equals(req.user._id));
+                      if(index!=-1){
+                        question.students[index].submissions.push(submission._id);
+                      }else{
+                        question.students.push({
+                          userId:req.user._id,
+                          submissions:[submission._id]
+                        })
+                      }
+                      question.save();
+                      let correct = 0;
+                      const testCases = results.map(r=>{
+                        if(r.status.id==3){
+                          correct++;
+                        }
+                        return r.status.id==3;
+                      });
+                      submission.marks = ((correct/question.testCases.length)*question.points).toFixed(2);
+                      submission.testCases = testCases;
+                      // Save marks
+                      submission.save();
+                      res.json({success:true,results:results});
+                    }
+                  });
+              })
+            }
+          })
+
+
         })
     })
     .catch(err=>{

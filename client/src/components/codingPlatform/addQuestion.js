@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext} from 'react';
 import Nav from "../profile/Nav/Nav";
 import "./codingPlatform.css";
 import Description from './description';
@@ -10,6 +10,7 @@ import Limits from './limits';
 import Solution from './Solution';
 import StarterCode from './starterCode';
 import Select from 'react-select';
+import {CurUserContext} from '../../contexts/curUser';
 
 function AddQuestion(props) {
     const [activeTab,setActiveTab] =useState("description");
@@ -18,28 +19,39 @@ function AddQuestion(props) {
     const [status,setStatus] = useState("Draft");
     const [question,setQuestion] = useState({});
     const [topic,setTopic] = useState([]);
+    const [saveAlert,setSaveAlert] = useState(false);
+    const [btnclickSave,setBtnClickSave] = useState(false);
+    const [btnclickPublish,setBtnClickPublish] = useState(false);
+    const {user} = useContext(CurUserContext);
 
 
     // Get data from database
     useEffect(()=>{
 
-      axios.get(`/coding/question/${props.match.params.id}`)
-        .then(res=>{
-          if(res.data.success){
-              setQuestion(res.data.question);
-              setStatus(res.data.question.status);
-              setTopic(res.data.question.topic?res.data.question.topic.split(" ").map(val=>({label:val,value:val})):[])
-              if(res.data.question.time&&res.data.question.time>0){
-                setIsTimed(true);
-                setTime(res.data.question.time);
-              }
-          }else{
-            console.log(res.data.msg);
-          }
-        })
-        .catch(err=>{
-          console.log(err.message);
-        })
+      if(user.loggedIn&&!user.student){
+
+        axios.get(`/coding/question/${props.match.params.id}`)
+          .then(res=>{
+            if(res.data.success){
+                setQuestion(res.data.question);
+                setStatus(res.data.question.status);
+                setTopic(res.data.question.topic?res.data.question.topic.split(" ").map(val=>({label:val,value:val})):[])
+                if(res.data.question.time&&res.data.question.time>0){
+                  setIsTimed(true);
+                  setTime(res.data.question.time);
+                }
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+
+      }else{
+        user.loggedIn?props.history.push('/login'):props.history.push('/studDash');
+      }
+
 
     },[])
 
@@ -52,8 +64,12 @@ function AddQuestion(props) {
         }
         axios.put(`/coding/question/${props.match.params.id}`,{question:newQuestion})
           .then(res=>{
+            setBtnClickSave(true);
             if(res.data.success){
               console.log("Saved");
+              setBtnClickSave(false);
+              setSaveAlert(true);
+              setTimeout(()=>{ setSaveAlert(false); },2000)
             }else{
               console.log(res.data.msg);
             }
@@ -65,10 +81,12 @@ function AddQuestion(props) {
 
     // Publishes a new Question which is then accessible to students
     function handlePublish() {
+      setBtnClickPublish(true);
       axios.put(`/coding/question/${props.match.params.id}/status`,{status:"Published"})
         .then(res=>{
           if(res.data.success){
             setStatus("Published");
+            setBtnClickPublish(false);
           }else{
             console.log(res.data.msg);
           }
@@ -81,14 +99,15 @@ function AddQuestion(props) {
     return (
         <React.Fragment>
             <Nav show={true} menu={true}/>
+            {saveAlert?<div className="custom-alert"> Question Saved</div>:null}
             <div className="bgwhiteoverlay"> </div>
             <div className="container" style={{marginTop:"120px"}} >
                 <div className="d-flex justify-content-between">
                     <h1 className="topicTitle mainH text-left text-pink">Add Question</h1>
                     <div>
 
-                        <button className="btn btn-outline-grad ml-2" onClick={handleSave}> Save </button>
-                        {status=="Draft"?<button className="btn btn-outline-grad ml-2" onClick={handlePublish}> Publish </button>:null}
+                        {btnclickSave?<div type="submit" className="btn btn-grad ml-2"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="loader"/></div>:<button className="btn btn-outline-grad ml-2" onClick={handleSave}> Save </button>}
+                        {status=="Draft"?(btnclickPublish?<div type="submit" className="btn btn-grad ml-2"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="loader"/></div>:<button className="btn btn-outline-grad ml-2" onClick={handlePublish}> Publish </button>):null}
 
 
                     </div>

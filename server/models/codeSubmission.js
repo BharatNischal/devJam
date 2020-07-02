@@ -13,7 +13,7 @@ var codingSubmissionSchema=new mongoose.Schema({
       passed:Boolean
     }],
     marks:Number,
-    code:String,
+    sourceCode:String,
     languageCode:Number,
     token:String,
     timeStamp:{
