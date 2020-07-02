@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useContext} from 'react';
 import Nav from "../../profile/Nav/Nav";
+import axios from "axios"
 import { functions } from 'firebase';
+import {CurUserContext} from '../../../contexts/curUser';
 
-const allQuestions=[
-    {title:"Find the Sum",topics:["maths"],difficulty:"easy"},
-    {title:"Balls in Container",topics:["implementation"],difficulty:"hard"},
-    {title:"find in Linked List",topics:["linked list"],difficulty:"easy"},
-    {title:"Delete Element in linked list",topics:["linked list"],difficulty:"medium"},
-    {title:"Reverse array using stack",topics:["stack","implementation"],difficulty:"medium"}
-]
+let allQuestions=[]
 
 function AllCodingQuestions(props) {
     const [focusInp,setFocusInp] = useState(false);
@@ -17,12 +13,31 @@ function AllCodingQuestions(props) {
     const [selectedTopics,setSelectedTopics] = useState([]);
     const [selectedDifficulty,setSelectedDifficulty] = useState([]);
     const [srchtxt,setSrchTxt] = useState("");
-    
+    const {user} = useContext(CurUserContext);
+
+    useEffect(()=>{
+
+      axios.get(`/coding/questions/all`)
+        .then(res=>{
+          if(res.data.success){
+            allQuestions = res.data.questions;
+            setFilteredQuestions(allQuestions);
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+
+    },[])
+
     useEffect(filteringHandler,[selectedTopics,selectedDifficulty]);
 
     useEffect(()=>{
-        setSrchResults(filteredQuestions.map(q=>true));
-        setSrchTxt("");
+      setSrchResults(filteredQuestions.map(q=>true));
+      setSrchTxt("");
+
     } ,[filteredQuestions])
 
     function srchHandler(e){
@@ -73,7 +88,7 @@ function AllCodingQuestions(props) {
         }else{
             setSelectedTopics(selectedTopics.filter(topic=>topic!=e.target.name));
         }
-        
+
 
     }
     function difficultyChangeHandler(e){
@@ -84,7 +99,43 @@ function AllCodingQuestions(props) {
         }else{
             setSelectedDifficulty(selectedDifficulty.filter(diff=>diff!=e.target.name));
         }
-        
+
+    }
+
+    // Fxn to handle Publish
+    function handlePublish(id) {
+      axios.put(`/coding/question/${id}/status`,{status:"Published"})
+        .then(res=>{
+          if(res.data.success){
+            console.log("Published");
+            allQuestions[allQuestions.findIndex(q=>q._id==id)].status = "Published";
+            setFilteredQuestions([...filteredQuestions].map(q=>{
+              if(q._id==id){
+                q.status="Published";
+              }
+              return q;
+            }));
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    }
+
+    function handleAdd() {
+      axios.get(`/coding/question/new`)
+        .then(res=>{
+          if(res.data.success){
+            props.history.push(`/addQuestion/${res.data.question._id}`)
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
     }
 
     return (
@@ -94,14 +145,14 @@ function AllCodingQuestions(props) {
             <div className="container" style={{marginTop:"120px"}} >
                 <div className="d-flex justify-content-between">
                     <h1 className="topicTitle mainH text-left text-pink">All Coding Questions</h1>
-                    
+
                     <div>
-                        <button className="btn btn-outline-grad ml-2"> Add Question </button>
+                        <button className="btn btn-outline-grad ml-2" onClick={handleAdd}> Add Question </button>
                     </div>
                 </div>
                 <div className="row my-5">
                     <div className="col-lg-8  ">
-                   
+
                         <div className={focusInp?"srch focus ml-0 mb-5":"srch ml-0 mb-5"}>
                             <input type="text" onFocus={()=>{setFocusInp(true)}} onBlur={()=>{setFocusInp(false)}} value={srchtxt} onChange={(e)=>{srchHandler(e)}}  placeholder="Type to Search Questions" ></input>
                             <span className="float-right pr-3 srchIcon"><i className="fa fa-search"></i></span>
@@ -110,23 +161,23 @@ function AllCodingQuestions(props) {
                         {filteredQuestions.map((ques,i)=>(
                             <div className={srchResults[i]?"p-3 my-3 pointer":"p-3 my-3 pointer d-none"} key={i} style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}}  >
                                 <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
-                                    <div className="pt-2 hover-pink text-left"  >
-                                        <h3 className="topicTitle d-inline mr-2" style={{fontSize:"22px"}}> {ques.title}</h3>
-                                        <i style={{fontSize:"14px",color:"#333"}} >Published</i><br/>
+                                    <div className="pt-2 hover-pink text-left"  onClick={()=>props.history.push(`/addQuestion/${ques._id}`)}>
+                                        <h3 className="topicTitle d-inline mr-2" style={{fontSize:"22px"}} > {ques.title}</h3>
+                                        <i style={{fontSize:"14px",color:"#333"}} >{ques.status}</i><br/>
                                         <span style={{fontSize:"14px",color:"#444" }} >Difficulty:  <b> {ques.difficulty} </b></span>
-                                    
+
                                     </div>
                                     <div>
-                                        <span className="hover-pink pointer" > <i className="fa fa-copy"></i> </span>
-                                        <button className="btn btn-grad ml-2" >Publish</button>
+                                        {ques.status=="Published"&&!user.student?<span className="hover-pink pointer" > <i className="fa fa-copy"></i> </span>:null}
+                                        {ques.status=="Draft"?<button className="btn btn-grad ml-2" onClick={()=>handlePublish(ques._id)}>Publish</button>:null}
                                     </div>
                                 </div>
                             </div>
                         ))}
-                    
-                        
-                        
-                        
+
+
+
+
                     </div>
                     <div className="col-lg-4  ">
                         <div className="border p-3 text-left" style={{borderRadius:"14px"}} >
@@ -177,4 +228,3 @@ function AllCodingQuestions(props) {
 
 
 export default AllCodingQuestions;
-

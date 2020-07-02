@@ -110,7 +110,6 @@ function App(props) {
             <Route path="/addQuestion/:id" exact component={AddQuestion} />
             <Route path="/codingQuestions" exact component={AllCodingQuestions} />
 
-            <Route path="/editor" exact component={Editor} />
             
 
           </Switch>

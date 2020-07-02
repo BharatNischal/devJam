@@ -29,6 +29,17 @@ router.get('/coding/questions/published/all',middleware.isStudent,function (req,
     })
 });
 
+// Route to make a new coding question
+router.get('/coding/question/new',function (req,res) {
+  db.CodingQuestion.create({})
+    .then(question=>{
+      res.json({success:true,question});
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
+
 
 // To get a specific question
 router.get('/coding/question/:id',function (req,res) {
@@ -41,17 +52,6 @@ router.get('/coding/question/:id',function (req,res) {
     })
 })
 
-
-// Route to make a new coding question
-router.post('/coding/question/new',function (req,res) {
-  db.CodingQuestion.create(req.body.question)
-    .then(question=>{
-      res.json({success:true,question});
-    })
-    .catch(err=>{
-      res.json({success:false,msg:err.message});
-    })
-})
 
 
 

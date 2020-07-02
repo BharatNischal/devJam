@@ -65,7 +65,7 @@ function AddQuestion(props) {
 
     // Publishes a new Question which is then accessible to students
     function handlePublish() {
-      axios.put(`/coding/question/${props.match.params.id}/status`)
+      axios.put(`/coding/question/${props.match.params.id}/status`,{status:"Published"})
         .then(res=>{
           if(res.data.success){
             setStatus("Published");
@@ -93,7 +93,7 @@ function AddQuestion(props) {
 
                     </div>
                 </div>
-                <div className="pl-2 text-left"> <span className="cursor-pointer p-2 pb-4" ><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/></div>
+                <div className="pl-2 text-left"> <span className="cursor-pointer p-2 pb-4"><i className="fa fa-arrow-left anim-hil text-pink" onClick={()=>props.history.push('/codingQuestions')}></i> Go Back</span><br/></div>
                 <div className="row my-5" >
                     <div className="col-md-8">
                         <div className="form-group input-group ">
