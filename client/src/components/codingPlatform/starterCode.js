@@ -56,7 +56,7 @@ function StarterCode(props) {
                     <div className="text-right" style={{fontSize:"12px"}} >
                         <b>Select Language</b>
                     </div>
-                    <select className="form-control" onChange={(e)=>setMode(e.target.value)} >
+                    <select className="form-control" value={mode} onChange={(e)=>setMode(e.target.value)} >
                         <option value="java">Java</option>
                         <option value="python">Python</option>
                         <option value="javascript">Javascript</option>

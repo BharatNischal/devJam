@@ -104,12 +104,7 @@ router.get('/coding/question/:id/submission',middleware.isAdmin,function (req,re
 
 
 router.post("/submitcodingquestion/:quesId",function(req,res){
-    const testCases=[
-      {input:"World1",output:"Hello World1"},
-      {input:"World2",output:"Hello World2"},
-      {input:"World3",output:"Hello World3"},
-      {input:"World4",output:"Hello World4"}
-    ];
+    const testCases=req.body.testCases.map(tc=>({input:tc.input,output:tc.output}));
 
     var postPromise=[];
 
@@ -126,15 +121,8 @@ router.post("/submitcodingquestion/:quesId",function(req,res){
           "useQueryString":true
           },
           "data":{
-            "language_id":54,
-            "source_code":`#include <bits/stdc++.h>
-            using namespace std;
-            int main() {
-              string name;
-              cin>>name;
-              cout<<"Hello "<<name;
-              return 0;
-          }`,
+            "language_id":req.body.lang,
+            "source_code":req.body.sourceCode,
           "stdin":testCase.input,
           "expected_output":testCase.output
           }

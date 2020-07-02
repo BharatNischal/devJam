@@ -4,6 +4,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+import axios from "axios";
 
 
 // Editor languages
@@ -28,6 +29,7 @@ import "ace-builds/src-noconflict/ext-language_tools";
 
 function Solution(props) {
 
+    const langCode = {"java":62,"javascript":63,"python":71}
     const [mode,setMode] = useState("javascript");
     const [theme,setTheme] = useState("monokai");
     const [fontsize,setFontsize] = useState(20);
@@ -52,6 +54,24 @@ function Solution(props) {
     function onChange(newValue) {
         props.setQuestion({...props.question,solution:newValue});
     }
+
+    function runTestCases() {
+      if(props.question.testCases&&props.question.testCases.length>0){
+        axios.post(`/submitcodingquestion/123`,{testCases:props.question.testCases,lang:langCode[mode],sourceCode:props.question.solution})
+          .then(res=>{
+            if(res.data.success){
+              console.log(res.data.results);
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+      }
+    }
+
+
     return (
         <div>
             <h2 className="topicTitle text-pink mb-2"  ><b>Solution </b></h2>
@@ -92,7 +112,7 @@ function Solution(props) {
                     <div className="text-right" style={{fontSize:"12px"}} >
                         <b>Select Language</b>
                     </div>
-                    <select className="form-control" onChange={(e)=>setMode(e.target.value)} >
+                    <select className="form-control" value={mode} onChange={(e)=>setMode(e.target.value)} >
                         <option value="java">Java</option>
                         <option value="python">Python</option>
                         <option value="javascript">Javascript</option>
@@ -120,7 +140,7 @@ function Solution(props) {
                 defaultValue={props.question&&props.question.solution?props.question.solution:""}
                 />
                 <div className="editor-footer text-right" >
-                <button className="btn btn-outline-grad ml-2" > Run All Tests </button>
+                <button className="btn btn-outline-grad ml-2" onClick={runTestCases} > Run All Tests </button>
                 </div>
             </div>
 
