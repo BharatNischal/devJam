@@ -78,7 +78,7 @@ router.put('/coding/question/:id/status',middleware.isAdmin,function (req,res) {
 })
 
 // Router to get a question along with student data
-router.get('/taketest/:id',middleware.isStudent,function (req,res) {
+router.get('/taketest/:id',function (req,res) {
   db.CodingQuestion.findById(req.params.id)
     .populate(['students.userId','students.submissions'])
     .then(question=>{
@@ -114,13 +114,15 @@ router.get('/codingtest/:id/timer',middleware.isStudent,function (rq,res) {
 })
 
 // Route to submit code and get tokens
-router.post('/coding/question/:id/submission',middleware.isAdmin,function (req,res){
+router.post('/coding/question/:id/submission',function (req,res){
+    console.log(req.body);
     db.CodingQuestion.findById(req.params.id)
       .then(question=>{
 
         var postPromise=[];
 
         question.testCases.forEach(testCase => {
+          console.log(testCase);
           postPromise.push(
             axios({
               "method":"POST",
@@ -137,17 +139,19 @@ router.post('/coding/question/:id/submission',middleware.isAdmin,function (req,r
                 "source_code":req.body.sourceCode,
               "stdin":testCase.input,
               "expected_output":testCase.output,
-              "cpu_time_limit": req.body.timeLimit,
-              "memory_limit": req.body.memoryLimit
+              "cpu_time_limit": question.timeLimit+0.0
               }
               })
           )
-          Promise.all(postPromise)
-            .then(responses=>{
-              res.json({success:true,responses})
-            })
         });
-
+        Promise.all(postPromise)
+          .then(responses=>{
+            res.json({success:true,responses:responses.map(res=>res.data)})
+          })
+          .catch(err=>{
+            console.log(err.message);
+            res.json({success:false,msg:err.message});
+          })
       })
       .catch(err=>{
         res.json({success:false,msg:err.message});
@@ -165,12 +169,12 @@ router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,r
           // Evaluate marks
           getPromise = [];
           req.body.responses.forEach((response,i)=>{
-            if(response.data.token){
-              console.log(response.data.token);
+            if(response.token){
+              console.log(response.token);
             getPromise.push(
               axios({
                 "method":"GET",
-                "url":`https://judge0.p.rapidapi.com/submissions/${response.data.token}`,
+                "url":`https://judge0.p.rapidapi.com/submissions/${response.token}`,
                 "headers":{
                 "content-type":"application/octet-stream",
                 "x-rapidapi-host":"judge0.p.rapidapi.com",
@@ -210,7 +214,7 @@ router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,r
                       submission.testCases = testCases;
                       // Save marks
                       submission.save();
-                      res.json({success:true,results:results});
+                      res.json({success:true,results});
                     }
                   });
               })
