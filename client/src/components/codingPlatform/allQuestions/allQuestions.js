@@ -14,6 +14,8 @@ function AllCodingQuestions(props) {
     const [selectedDifficulty,setSelectedDifficulty] = useState([]);
     const [srchtxt,setSrchTxt] = useState("");
     const {user} = useContext(CurUserContext);
+    const [copyAlert,setCopyAlert] = useState(false);
+
 
     useEffect(()=>{
 
@@ -138,9 +140,22 @@ function AllCodingQuestions(props) {
         })
     }
 
+    const copyToClipBoard=function(id){
+      var textField = document.createElement('textarea')
+      textField.innerText =`${window.location.host}/livetest/${id}` ;
+      document.body.appendChild(textField);
+      textField.select();
+      document.execCommand('copy');
+      textField.remove();
+      console.log("Coppied");
+      setCopyAlert(true);
+      setTimeout(()=>{setCopyAlert(false)},2000);
+  }
+
     return (
         <React.Fragment>
             <Nav show={true} menu={true}/>
+            {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
             <div className="bgwhiteoverlay"> </div>
             <div className="container" style={{marginTop:"120px"}} >
                 <div className="d-flex justify-content-between">
@@ -168,7 +183,7 @@ function AllCodingQuestions(props) {
 
                                     </div>
                                     <div>
-                                        {ques.status=="Published"&&!user.student?<span className="hover-pink pointer" > <i className="fa fa-copy"></i> </span>:null}
+                                        {ques.status=="Published"&&!user.student?<span className="hover-pink pointer" onClick={()=>copyToClipBoard(ques._id)}> <i className="fa fa-copy"></i> </span>:null}
                                         {ques.status=="Draft"?<button className="btn btn-grad ml-2" onClick={()=>handlePublish(ques._id)}>Publish</button>:null}
                                     </div>
                                 </div>
