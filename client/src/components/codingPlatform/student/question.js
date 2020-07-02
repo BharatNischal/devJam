@@ -3,6 +3,8 @@ import {CurUserContext} from '../../../contexts/curUser';
 import axios from "axios";
 import TopBar from '../../learnerPlatform/TopBar';
 import Problem from './Problem';
+import Leaderboard from './Leaderboard';
+import Editorial from './Editorial';
 
 export default function StudentQuestion(props) {
 
@@ -124,11 +126,11 @@ export default function StudentQuestion(props) {
                 :null}
                 
                 {activeTab=="leaderboard"?
-                  <h1>leaderboard</h1>
+                  <Leaderboard/>
                 :null}
                 
                 {activeTab=="editorial"?
-                  <h1>editorial</h1>
+                  <Editorial editorial={editorial} />
                 :null}
 
               </div> 
