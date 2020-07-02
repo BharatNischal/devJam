@@ -21,6 +21,7 @@ var codingQuestionSchema=new mongoose.Schema({
     memoryLimit:Number,
     topic:String,
     difficulty:String,
+    time:Number,
     timeStamp: {
       type:Date,
       default:Date.now

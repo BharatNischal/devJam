@@ -44,14 +44,14 @@ function Limits(props) {
                     <h4 className="text-pink"> <b>Time Limit (Seconds) </b> </h4>
                     <div className="form-group input-group px-lg-4">
                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " > <i className="fa fa-clock"></i> </div>
-                      <input type="number" className="form-control"   placeholder="Enter Time" value={props.question&&props.question.timeLimit?props.question.timeLimit:5} onChange={(e)=>props.setQuestion({...props.question,timeLimit:e.target.value})}/>
+                      <input type="number" className="form-control"   placeholder="Enter Time" value={props.question&&props.question.timeLimit?props.question.timeLimit:""} onChange={(e)=>props.setQuestion({...props.question,timeLimit:e.target.value})}/>
                     </div>
                 </div>
                 <div className="col-md-6">
                     <h4 className="text-pink"> <b>Memory Limit (KB) </b> </h4>
                     <div className="form-group input-group px-lg-4">
                         <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " > <i className="fas fa-memory"></i> </div>
-                        <input type="number" className="form-control"   placeholder="Enter Memory Limit" value={props.question&&props.question.memoryLimit?props.question.memoryLimit:256} onChange={(e)=>props.setQuestion({...props.question,memoryLimit:e.target.value})} />
+                        <input type="number" className="form-control"   placeholder="Enter Memory Limit" value={props.question&&props.question.memoryLimit?props.question.memoryLimit:""} onChange={(e)=>props.setQuestion({...props.question,memoryLimit:e.target.value})} />
                     </div>
                 </div>
 

@@ -14,7 +14,7 @@ import Select from 'react-select';
 function AddQuestion(props) {
     const [activeTab,setActiveTab] =useState("description");
     const [isTimed,setIsTimed] = useState(false);
-    const [time,setTime] = useState(false);
+    const [time,setTime] = useState(0);
     const [status,setStatus] = useState("Draft");
     const [question,setQuestion] = useState({});
     const [topic,setTopic] = useState([]);
@@ -29,6 +29,10 @@ function AddQuestion(props) {
               setQuestion(res.data.question);
               setStatus(res.data.question.status);
               setTopic(res.data.question.topic?res.data.question.topic.split(" ").map(val=>({label:val,value:val})):[])
+              if(res.data.question.time&&res.data.question.time>0){
+                setIsTimed(true);
+                setTime(res.data.question.time);
+              }
           }else{
             console.log(res.data.msg);
           }
@@ -43,6 +47,9 @@ function AddQuestion(props) {
     function handleSave() {
         const newQuestion = {...question};
         newQuestion.topic = topic.map(t=>(t.value)).join(" ");
+        if(isTimed){
+          newQuestion.time = time;
+        }
         axios.put(`/coding/question/${props.match.params.id}`,{question:newQuestion})
           .then(res=>{
             if(res.data.success){
@@ -120,14 +127,14 @@ function AddQuestion(props) {
                     <div className="col-md-4">
                         <div className="form-group input-group px-lg-4">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-1 f-20 " ><b> Points </b></div>
-                            <input type="number" className="form-control"   placeholder="Enter Points" value={question&&question.points?question.points:0} onChange={(e)=>setQuestion({...question,points:e.target.value})} />
+                            <input type="number" className="form-control"   placeholder="Enter Points" value={question&&question.points?question.points:""} onChange={(e)=>setQuestion({...question,points:e.target.value})} />
                         </div>
                         <div className="text-left px-lg-4">
                             <div className="custom-control custom-checkbox d-inline" >
-                                <input type="checkbox" className="custom-control-input" id="customCheck1" checked={isTimed} onChange={(e)=> setIsTimed(e.target.checked)} />
+                                <input type="checkbox" className="custom-control-input" id="customCheck1" checked={isTimed} onChange={(e)=>setIsTimed(e.target.checked)} />
                                 <label className="custom-control-label" htmlFor="customCheck1">Timed</label>
                             </div>
-                            {isTimed?<input type="number" value={question&&question.time?question.time:0} onChange={(e)=>setQuestion({...question,time:e.target.value})}  className="form-control d-inline" placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
+                            {isTimed?<input type="number" value={time} onChange={(e)=>setTime(e.target.value)}  className="form-control d-inline" placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
                         </div>
                     </div>
                 </div>
