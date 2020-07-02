@@ -38,7 +38,11 @@ var codingQuestionSchema=new mongoose.Schema({
     }],
     solution:String,
     editorial:String,
-    starterCode:String
+    editorialLang:String,
+    starterCode:[{
+      code:String,
+      lang:String
+    }]
 });
 
 module.exports=mongoose.model("codingquestion",codingQuestionSchema);
