@@ -22,7 +22,7 @@ export default function InputOutput(props) {
     if (contentBlock2) {
       const contentState = ContentState.createFromBlockArray(contentBlock2.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
-      setSampleEditorState1(editorState);
+      setSampleEditorState2(editorState);
     }
 
   },[])
