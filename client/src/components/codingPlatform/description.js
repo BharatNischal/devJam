@@ -8,17 +8,20 @@ import htmlToDraft from 'html-to-draftjs';
 export default function Description(props) {
 
   const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
+  const [temp,setTemp] = useState(false);
 
   useEffect(()=>{
-
-    const contentBlock = htmlToDraft(props.question&&props.question.description?props.question.description:"");
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      const editorState = EditorState.createWithContent(contentState);
-      setSampleEditorState(editorState);
+    if(props.question.description && !temp){
+      const contentBlock = htmlToDraft(props.question&&props.question.description?props.question.description:"");
+      if (contentBlock) {
+        const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+        const editorState = EditorState.createWithContent(contentState);
+        setSampleEditorState(editorState);
+      }
+      setTemp(true);
     }
 
-  },[])
+  },[props.question])
 
   function handleUpdate(data) {
       props.setQuestion({...props.question,description:draftToHtml(convertToRaw(data.getCurrentContent()))});

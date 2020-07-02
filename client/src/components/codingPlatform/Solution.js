@@ -148,23 +148,24 @@ function Solution(props) {
                 defaultValue={props.question&&props.question.solution?props.question.solution:""}
                 />
                 <div className="editor-footer text-right" >
+                <span className="float-left">Use <b>Run All Tests</b> to get idea of <b>Time and memory limit</b> for your testcases and set them accordingly</span>
                 <button className="btn btn-outline-grad ml-2" onClick={runTestCases} > Run All Tests </button>
                 </div>
             </div>
           {showResults?
           <React.Fragment>
 
-            <h4 className="ml-3 mt-4" > <b>Test Results</b> </h4> 
+            <h4 className="ml-3 mt-4" > <b>Test Results</b> </h4>
             <div className="ml-4 mr-4 mb-3 row test-results-tabs" style={{flexGrow:"1"}}  >
                   <div className="col-lg-3 col-md-4 col-5 p-0" style={{maxHeight:"400px",overflow:"auto",backgroundColor:"rgb(235, 235, 235)"}} >
                       {results.map((result,i)=>(
                         <div className={result.status.id==3?(activeResult==i?"p-3 test-tab text-success active":"p-3 test-tab text-success"):(activeResult==i?"p-3 test-tab text-danger active":"p-3 test-tab text-danger")}
                              onClick={()=>setActiveResult(i)}
-                        > 
+                        >
                           <b> Test Case #{i+1}  {result.status.id==3?(<i className="fa fa-check"></i>):(<i className="fa fa-close"></i>)} </b>
                         </div>
                       ))}
-                     
+
                   </div>
                   <div className="col-lg-9 col-md-8 col-7 p-0 text-left" style={{maxHeight:"400px",overflow:"auto"}} >
                       <div className="p-3" >
@@ -183,7 +184,7 @@ function Solution(props) {
                             {results[activeResult].status.description}
                           </div>
                         </div>
-                        {results[activeResult].stderr? 
+                        {results[activeResult].stderr?
                           <div className="mb-2 text-danger">
                             <b>Error </b><br/>
                             <p className="resulttxt " > {results[activeResult].stderr} </p>
@@ -211,7 +212,7 @@ function Solution(props) {
           </React.Fragment>
           :null}
 
-          
+
 
 
 

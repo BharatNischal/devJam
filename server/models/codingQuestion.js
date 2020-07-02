@@ -46,7 +46,9 @@ var codingQuestionSchema=new mongoose.Schema({
       submissions:[{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'codesubmission'
-      }]
+      }],
+      startTime:Date,
+      maxMarks:Number
     }],
     solution:String,
     editorial:String,

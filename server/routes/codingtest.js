@@ -77,9 +77,48 @@ router.put('/coding/question/:id/status',function (req,res) {
     })
 })
 
+// Router to get a question along with student data
+router.get('/taketest/:id',function (req,res) {
+  db.CodingQuestion.findById(req.params.id)
+    .populate(['students.userId','students.submissions'])
+    .then(question=>{
+        const index = question.students.findIndex(s=>s.userId.equals(req.user._id));
+        if(index!=-1){
+          res.json({success:true,question,userIndex:index});
+        }else{
+          question.students.push({userId:req.user._id});
+          question.save();
+          res.json({success:true,question,userIndex:question.students.length})
+        }
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
 
-//Route to save a submission
+// Router to start the timer
+router.get('/codingtest/:id/timer',function (rq,res) {
+  db.CodingQuestion.findById(req.params.id)
+    .populate(['students.userId','students.submissions'])
+    .then(question=>{
+      const index = question.students.findIndex(s=>s.userId.equals(req.user._id));
+      if(index!=-1){
+        question.students[index].startTime = new Date();
+        question.save();
+        res.json({success:true});
+      }
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
+
+//Route to create a submission when a student submit a question
 router.get('/coding/question/:id/submission',middleware.isAdmin,function (req,res) {
+
+  // Evaluate the submission
+
+  // Save in database
   db.CodingSubmission.create({...req.body.submission,userId:req.user._id,testId:req.params.id})
     .then(submission=>{
       db.CodingQuestion.findById(req.params.id)
