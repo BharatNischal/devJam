@@ -20,7 +20,7 @@ var codingQuestionSchema=new mongoose.Schema({
     timeLimit:Number,
     memoryLimit:Number,
     topic:String,
-    difficulty:Number,
+    difficulty:String,
     timeStamp: {
       type:Date,
       default:Date.now
@@ -36,7 +36,8 @@ var codingQuestionSchema=new mongoose.Schema({
       }]
     }],
     solution:String,
-    editorial:String
+    editorial:String,
+    starterCode:String
 });
 
 module.exports=mongoose.model("codingquestion",codingQuestionSchema);

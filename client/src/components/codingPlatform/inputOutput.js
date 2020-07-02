@@ -12,13 +12,13 @@ export default function InputOutput(props) {
 
   useEffect(()=>{
 
-    const contentBlock1 = htmlToDraft(props.question&&props.question.input?props.question.input:"");
+    const contentBlock1 = htmlToDraft(props.question&&props.question.inputFormat?props.question.inputFormat:"");
     if (contentBlock1) {
       const contentState = ContentState.createFromBlockArray(contentBlock1.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
       setSampleEditorState1(editorState);
     }
-    const contentBlock2 = htmlToDraft(props.question&&props.question.output?props.question.output:"");
+    const contentBlock2 = htmlToDraft(props.question&&props.question.outputFormat?props.question.outputFormat:"");
     if (contentBlock2) {
       const contentState = ContentState.createFromBlockArray(contentBlock2.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
@@ -28,8 +28,8 @@ export default function InputOutput(props) {
   },[])
 
   function handleUpdate(data,num) {
-    num==1?props.setQuestion({...props.question,input:draftToHtml(convertToRaw(data.getCurrentContent()))})
-          :props.setQuestion({...props.question,output:draftToHtml(convertToRaw(data.getCurrentContent()))})
+    num==1?props.setQuestion({...props.question,inputFormat:draftToHtml(convertToRaw(data.getCurrentContent()))})
+          :props.setQuestion({...props.question,outputFormat:draftToHtml(convertToRaw(data.getCurrentContent()))})
   }
 
   return (

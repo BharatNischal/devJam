@@ -17,6 +17,8 @@ function AddQuestion(props) {
     const [time,setTime] = useState(false);
     const [status,setStatus] = useState("Draft");
     const [question,setQuestion] = useState({});
+    const [topic,setTopic] = useState([]);
+
 
     // Get data from database
     useEffect(()=>{
@@ -26,6 +28,7 @@ function AddQuestion(props) {
           if(res.data.success){
               setQuestion(res.data.question);
               setStatus(res.data.question.status);
+              setTopic(res.data.question.topic?res.data.question.topic.split(" ").map(val=>({label:val,value:val})):[])
           }else{
             console.log(res.data.msg);
           }
@@ -38,7 +41,9 @@ function AddQuestion(props) {
 
     // Save the progress
     function handleSave() {
-        axios.put(`/coding/question/${props.match.params.id}`,{})
+        const newQuestion = {...question};
+        newQuestion.topic = topic.map(t=>(t.value)).join(" ");
+        axios.put(`/coding/question/${props.match.params.id}`,{question:newQuestion})
           .then(res=>{
             if(res.data.success){
               console.log("Saved");
@@ -76,7 +81,7 @@ function AddQuestion(props) {
                     <div>
                         <span className="h3" style={{position:"relative", top:"5px" }}  > <i className="fa fa-eye  hover-pink pointer" ></i></span>
 
-                        <button className="btn btn-outline-grad ml-2" > Save </button>
+                        <button className="btn btn-outline-grad ml-2" onClick={handleSave}> Save </button>
                         <button className="btn btn-outline-grad ml-2" onClick={handlePublish}> Publish </button>
 
 
@@ -95,7 +100,8 @@ function AddQuestion(props) {
                                 <Select
                                     options={[{value:"Algo",label:"Algo"},{value:"Algo1",label:"Algo1"},{value:"Algo2",label:"Algo2"}]}
                                     isMulti
-                                    onChange={(e)=>{console.log(e)}}
+                                    value={topic}
+                                    onChange={(e)=>setTopic(e)}
 
                                 />
                             </div>

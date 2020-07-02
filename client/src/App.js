@@ -105,8 +105,8 @@ function App(props) {
             <Route path="/learner/courses/" exact component={Course} />
             <Route path="/course/:id" exact component={CreateCourse} />
             <Route path="/publish/course/:id" exact component={PublishCourse} />
-            
-            <Route path="/addQuestion" exact component={AddQuestion} />
+
+            <Route path="/addQuestion/:id" exact component={AddQuestion} />
 
             <Route path="/editor" exact component={Editor} />
 

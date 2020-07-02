@@ -29,14 +29,14 @@ export default function Description(props) {
         <h2 className="topicTitle text-pink mb-2"  ><b>Description</b></h2>
 
         <Editor
-            toolbarClassName="toolbarClassName"
-            wrapperClassName="wrapperClassName"
-            editorClassName="editorClassName"
-            editorState={sampleEditorState}
-            onEditorStateChange={(editorState)=>{handleUpdate(editorState);setSampleEditorState(editorState)}}
-            toolbar={{
-                options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
-            }}
+          toolbarClassName="toolbarClassName"
+          wrapperClassName="wrapperClassName"
+          editorClassName="editorClassName"
+          editorState={sampleEditorState}
+          onEditorStateChange={(editorState)=>{handleUpdate(editorState);setSampleEditorState(editorState)}}
+          toolbar={{
+              options: ['inline', 'blockType', 'list', 'textAlign', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
+          }}
         />
 
     </React.Fragment>

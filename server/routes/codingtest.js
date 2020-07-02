@@ -33,7 +33,7 @@ router.get('/coding/questions/published/all',middleware.isStudent,function (req,
 // To get a specific question
 router.get('/coding/question/:id',function (req,res) {
   db.CodingQuestion.findById(req.params.id).populate(['students.userId','students.submissionId'])
-    then(question=>{
+    .then(question=>{
       res.json({success:true,question});
     })
     .catch(err=>{
@@ -44,7 +44,7 @@ router.get('/coding/question/:id',function (req,res) {
 
 // Route to make a new coding question
 router.post('/coding/question/new',function (req,res) {
-  db.CodingQuestion.create({})
+  db.CodingQuestion.create(req.body.question)
     .then(question=>{
       res.json({success:true,question});
     })
@@ -141,7 +141,7 @@ router.post("/submitcodingquestion/:quesId",function(req,res){
           })
       )
     });
-    
+
     var getPromise=[];
 
     Promise.all(postPromise)
@@ -170,7 +170,7 @@ router.post("/submitcodingquestion/:quesId",function(req,res){
                 responses.forEach((response,i)=>{
                   results.push(response.data);
                   if(i==responses.length-1){
-                    res.json({success:true,results:results});      
+                    res.json({success:true,results:results});
                   }
                 });
             })
@@ -182,11 +182,11 @@ router.post("/submitcodingquestion/:quesId",function(req,res){
       console.log("POST Promise",err);
     });
 
-   
 
- 
-    
-      
-  
+
+
+
+
+
 });
 module.exports = router;
