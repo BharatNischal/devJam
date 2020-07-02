@@ -30,7 +30,7 @@ router.get('/coding/questions/published/all',middleware.isStudent,function (req,
 });
 
 // Route to make a new coding question
-router.get('/coding/question/new',function (req,res) {
+router.get('/coding/question/new',middleware.isAdmin,function (req,res) {
   db.CodingQuestion.create({})
     .then(question=>{
       res.json({success:true,question});
@@ -56,7 +56,7 @@ router.get('/coding/question/:id',function (req,res) {
 
 
 // Route to update a question
-router.put('/coding/question/:id',function (req,res) {
+router.put('/coding/question/:id',middleware.isAdmin,function (req,res) {
   db.CodingQuestion.findByIdAndUpdate(req.params.id,req.body.question)
     .then(question=>{
       res.json({success:true,question});
@@ -67,7 +67,7 @@ router.put('/coding/question/:id',function (req,res) {
 })
 
 // Route to change the status of a question
-router.put('/coding/question/:id/status',function (req,res) {
+router.put('/coding/question/:id/status',middleware.isAdmin,function (req,res) {
   db.CodingQuestion.findByIdAndUpdate(req.params.id,{status:req.body.status})
     .then(question=>{
       res.json({success:true});
@@ -78,7 +78,7 @@ router.put('/coding/question/:id/status',function (req,res) {
 })
 
 // Router to get a question along with student data
-router.get('/taketest/:id',function (req,res) {
+router.get('/taketest/:id',middleware.isStudent,function (req,res) {
   db.CodingQuestion.findById(req.params.id)
     .populate(['students.userId','students.submissions'])
     .then(question=>{
@@ -97,7 +97,7 @@ router.get('/taketest/:id',function (req,res) {
 })
 
 // Router to start the timer
-router.get('/codingtest/:id/timer',function (rq,res) {
+router.get('/codingtest/:id/timer',middleware.isStudent,function (rq,res) {
   db.CodingQuestion.findById(req.params.id)
     .populate(['students.userId','students.submissions'])
     .then(question=>{
@@ -114,7 +114,7 @@ router.get('/codingtest/:id/timer',function (rq,res) {
 })
 
 //Route to create a submission when a student submit a question
-router.get('/coding/question/:id/submission',middleware.isAdmin,function (req,res) {
+router.get('/coding/question/:id/submission',middleware.isStudent,function (req,res) {
 
   // Evaluate the submission
 

@@ -19,18 +19,25 @@ function AllCodingQuestions(props) {
 
     useEffect(()=>{
 
-      axios.get(`/coding/questions/all`)
-        .then(res=>{
-          if(res.data.success){
-            allQuestions = res.data.questions;
-            setFilteredQuestions(allQuestions);
-          }else{
-            console.log(res.data.msg);
-          }
-        })
-        .catch(err=>{
-          console.log(err.message);
-        })
+      if(user.loggedIn){
+
+        axios.get(`/coding/questions/all`)
+          .then(res=>{
+            if(res.data.success){
+              allQuestions = res.data.questions;
+              setFilteredQuestions(allQuestions);
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+
+
+      }else{
+        props.history.push('/login');
+      }
 
     },[])
 

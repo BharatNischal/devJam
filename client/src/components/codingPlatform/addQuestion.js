@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext} from 'react';
 import Nav from "../profile/Nav/Nav";
 import "./codingPlatform.css";
 import Description from './description';
@@ -10,6 +10,7 @@ import Limits from './limits';
 import Solution from './Solution';
 import StarterCode from './starterCode';
 import Select from 'react-select';
+import {CurUserContext} from '../../contexts/curUser';
 
 function AddQuestion(props) {
     const [activeTab,setActiveTab] =useState("description");
@@ -21,29 +22,36 @@ function AddQuestion(props) {
     const [saveAlert,setSaveAlert] = useState(false);
     const [btnclickSave,setBtnClickSave] = useState(false);
     const [btnclickPublish,setBtnClickPublish] = useState(false);
-
+    const {user} = useContext(CurUserContext);
 
 
     // Get data from database
     useEffect(()=>{
 
-      axios.get(`/coding/question/${props.match.params.id}`)
-        .then(res=>{
-          if(res.data.success){
-              setQuestion(res.data.question);
-              setStatus(res.data.question.status);
-              setTopic(res.data.question.topic?res.data.question.topic.split(" ").map(val=>({label:val,value:val})):[])
-              if(res.data.question.time&&res.data.question.time>0){
-                setIsTimed(true);
-                setTime(res.data.question.time);
-              }
-          }else{
-            console.log(res.data.msg);
-          }
-        })
-        .catch(err=>{
-          console.log(err.message);
-        })
+      if(user.loggedIn&&!user.student){
+
+        axios.get(`/coding/question/${props.match.params.id}`)
+          .then(res=>{
+            if(res.data.success){
+                setQuestion(res.data.question);
+                setStatus(res.data.question.status);
+                setTopic(res.data.question.topic?res.data.question.topic.split(" ").map(val=>({label:val,value:val})):[])
+                if(res.data.question.time&&res.data.question.time>0){
+                  setIsTimed(true);
+                  setTime(res.data.question.time);
+                }
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+
+      }else{
+        user.loggedIn?props.history.push('/login'):props.history.push('/studDash');
+      }
+
 
     },[])
 
