@@ -44,6 +44,7 @@ import Editor from './components/codingSystem/editor';
 import AllCodingQuestions from './components/codingPlatform/allQuestions/allQuestions';
 import StudentQuestion from './components/codingPlatform/student/question';
 import UIQuestion from './components/codingPlatform/UI/uiQuestion';
+import AddUIQuestion from './components/codingPlatform/UI/AddQuestion';
 axios.defaults.withCredentials = true;
 
 function App(props) {
@@ -114,7 +115,7 @@ function App(props) {
             <Route path="/coding/question/:id" exact component={StudentQuestion} />
 
             <Route path="/coding/uiquestion/:id" exact component={UIQuestion} />
-
+            <Route path="/admin/uiquestion/:id" exact component={AddUIQuestion} />
             
 
           </Switch>
