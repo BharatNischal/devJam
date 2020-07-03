@@ -57,6 +57,7 @@ function AddQuestion(props) {
 
     // Save the progress
     function handleSave() {
+        setBtnClickSave(true);
         const newQuestion = {...question};
         newQuestion.topic = topic.map(t=>(t.value)).join(" ");
         if(isTimed){
@@ -64,7 +65,6 @@ function AddQuestion(props) {
         }
         axios.put(`/coding/question/${props.match.params.id}`,{question:newQuestion})
           .then(res=>{
-            setBtnClickSave(true);
             if(res.data.success){
               console.log("Saved");
               setBtnClickSave(false);

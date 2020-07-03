@@ -168,6 +168,18 @@ function UIQuestion(props) {
         });
     }
 
+    function handleSubmit() {
+
+    }
+
+    function secondsToHms(d) {
+      d = Number(d);
+      var h = Math.floor(d / 3600);
+      var m = Math.floor(d % 3600 / 60);
+      var s = Math.floor(d % 3600 % 60);
+      return `${h}:${m}:${s}`;
+  }
+
 
     return (
         <React.Fragment>
@@ -175,13 +187,13 @@ function UIQuestion(props) {
             <div>
                 <span className="h2 ml-2 pointer"> <i className="fa fa-arrow-left"></i> </span>
                 <h2 className="d-inline" >
-                    <b> Question Title </b>
+                    <b> {question.title} </b>
                 </h2>
             </div>
             <div className="pointer h2 ">
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowLeaderboardAlert(true)}> <b>Leaderboard</b> </button>
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowSubmisssionAler(true)} > <b>Submissions</b> </button>
-                <button className="btn-outline-grad btn mr-3" onClick={()=>domImgHandler()} > Submit</button>
+                {allowed?<button className="btn-outline-grad btn mr-3" onClick={()=>domImgHandler()} > Submit</button>:<span>Time Out</span>}
                 {!isDynamic?<i className="fas fa-cog " onClick={()=>setShowSettings(true)}></i>:null}
             </div>
         </div>
