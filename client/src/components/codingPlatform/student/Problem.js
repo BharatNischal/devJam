@@ -30,6 +30,9 @@ function Problem(props) {
     const [fontsize,setFontsize] = useState(20);
 
     const [showResults,setShowResults] = useState(false);
+    const [showCustomResult,setShowCustomResult] = useState(false);
+    const [customResult,setCustomResult] = useState({stderr:"",stdout:""});
+
     const [results,setResults] = useState([]);
     const [activeResult,setActiveResult] = useState(0);
     const [tests,setTests] = useState([]);
@@ -37,7 +40,6 @@ function Problem(props) {
 
     const [customInput,setCustomeInput] = useState({add:false,value:""});
     function onChange(newValue) {
-          console.log(newValue);
           const index = props.starterCode.findIndex(sc=>sc.lang==mode);
           if(index!=-1){
             const newCode = [...props.starterCode];
@@ -51,7 +53,7 @@ function Problem(props) {
 
     function handleEvaluate(responses,type) {
       const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
-      axios.post(`/coding/question/${props.match.params.id}/evaluation`,{lang:langCode[mode],sourceCode,responses})
+      axios.post(`/coding/question/${props.match.params.id}/evaluation`,{lang:langCode[mode],sourceCode,responses,type})
         .then(res=>{
           if(res.data.success){
             console.log(res.data.results);
@@ -76,6 +78,7 @@ function Problem(props) {
 
     function handleRun(type) {
         setShowResults(false);
+        setShowCustomResult(false);
         const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
         axios.post(`/coding/question/${props.match.params.id}/submission`,{lang:langCode[mode],sourceCode,type})
           .then(res=>{
@@ -90,6 +93,38 @@ function Problem(props) {
             console.log(err.message);
           })
     }
+
+    function handleCustomInput() {
+      setShowCustomResult(false);
+      const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
+      axios.post(`/submit/custom/testcase`,{lang:langCode[mode],sourceCode,input:customInput.value})
+        .then(res=>{
+          if(res.data.success){
+            setCustomResult(res.data.result);
+            setShowCustomResult(true);
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    }
+
+    function secondsToHms(d) {
+      d = Number(d);
+      var h = Math.floor(d / 3600);
+      var m = Math.floor(d % 3600 / 60);
+      var s = Math.floor(d % 3600 % 60);
+      return `${h}:${m}:${s}`;
+  }
+
+  function onFocus() {
+    if(!props.started){
+      props.startTimer();
+      props.setStarted(true);
+    }
+  }
 
     return (
         <React.Fragment>
@@ -147,9 +182,9 @@ function Problem(props) {
                         </div>
 
                         </div>
-                        <h4 className="text-center text-pink p-2 " style={{backgroundColor:"#f1f1f1" ,borderRadius:"12px", border:"1px solid #bbb" }}  >
-                            <b>01:23:54</b>
-                        </h4>
+                        {props.time?<h4 className="text-center text-pink p-2 " style={{backgroundColor:"#f1f1f1" ,borderRadius:"12px", border:"1px solid #bbb" }}  >
+                            <b>{props.started?(props.timer<0?secondsToHms(0):secondsToHms(props.timer)):secondsToHms(props.time*60)}</b>
+                        </h4>:null}
                         <div style={{width:"150px"}}>
                         <div className="text-right" style={{fontSize:"12px"}} >
                             <b>Select Language</b>
@@ -177,16 +212,17 @@ function Problem(props) {
                     placeholder="Write your code here"
                     fontSize={+fontsize}
                     onChange={onChange}
+                    onFocus={onFocus}
                     showPrintMargin={false}
                     showGutter={true}
                     highlightActiveLine={true}
                     width="100%"
                     value={props.starterCode&&props.starterCode.findIndex(sc=>sc.lang==mode)!=-1?props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code:""}
                     />
-                    <div className="editor-footer text-right" >
+                  {props.allowed?<div className="editor-footer text-right" >
                         <button className="btn btn-outline-grad ml-2" onClick={()=>handleRun("run")}> Run  </button>
                         <button className="btn btn-outline-grad ml-2" onClick={()=>handleRun("submit")}> Submit </button>
-                    </div>
+                    </div>:<p className="text-right mr-2"> <b> Cannot Submit anymore, Your Time Finished</b></p>}
                 </div>
                 <div className="pl-5 mt-3 d-flex">
                     <div className="custom-control custom-checkbox " >
@@ -196,6 +232,7 @@ function Problem(props) {
                     {customInput.add?
                         <div className="ml-3 ">
                             <textarea className="form-control" rows="4" value={customInput.value} onChange={(e)=>setCustomeInput({...customInput,value:e.target.value})} ></textarea>
+                            <button className="btn btn-outline-grad" onClick={handleCustomInput}>Run Custom Input</button>
                         </div>
                     :null}
                 </div>
@@ -267,6 +304,27 @@ function Problem(props) {
                 </div>
             </React.Fragment>
             :null}
+            {showCustomResult?
+              <React.Fragment>
+                  {customResult.stderr?
+                  <div className="mb-2 text-danger">
+                      <b>Error </b><br/>
+                      <p className="resulttxt " > {customResult.stderr} </p>
+                  </div>
+                  :
+                  <React.Fragment>
+                  <div className="mb-2">
+                      <b>Input</b><br/>
+                      <p className="resulttxt" > {customInput.value } </p>
+                  </div>
+                  <div className="mb-2">
+                      <b>Output </b><br/>
+                      <p className="resulttxt" > {customResult.stdout} </p>
+                  </div>
+
+                  </React.Fragment>
+                  }
+              </React.Fragment>:null}
         </React.Fragment>
     )
 }
