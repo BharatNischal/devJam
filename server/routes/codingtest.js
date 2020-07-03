@@ -120,8 +120,14 @@ router.post('/coding/question/:id/submission',function (req,res){
       .then(question=>{
 
         var postPromise=[];
+        var tests=[]
+        if(req.body.type=="run"){
+          tests = question.testCases.filter(tc=>!tc.hidden)
+        }else{
+          tests = question.testCases;
+        }
 
-        question.testCases.forEach(testCase => {
+        tests.forEach(testCase => {
           console.log(testCase);
           postPromise.push(
             axios({
@@ -202,7 +208,6 @@ router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,r
                           submissions:[submission._id]
                         })
                       }
-                      question.save();
                       let correct = 0;
                       const testCases = results.map(r=>{
                         if(r.status.id==3){
@@ -212,6 +217,8 @@ router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,r
                       });
                       const marks = ((correct/question.testCases.length)*question.points).toFixed(2);
                       const TestCases = testCases;
+                      question.students[index].maxMarks = Math.max(marks,question.students[index].maxMarks?question.students[index].maxMarks:0)
+                      question.save();
                       // Save marks
                       console.log(submission);
                       db.CodingSubmission.findByIdAndUpdate(submission._id,{marks,TestCases})
@@ -306,11 +313,22 @@ router.post("/submitcodingquestion/:quesId",function(req,res){
       console.log("POST Promise",err);
     });
 
-
-
-
-
-
-
 });
+
+router.get('/leaderboard/question/:id',function (req,res) {
+  db.CodingQuestion.findById(req.params.id)
+    .populate('students.userId')
+    .then(question=>{
+      const students = question.students.slice();
+      students.sort(function (first,second) {
+        return second.maxMarks?second.maxMarks:0-first.maxMarks?first.maxMarks:0
+      })
+      res.json({success:true,students});
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
+
+
 module.exports = router;

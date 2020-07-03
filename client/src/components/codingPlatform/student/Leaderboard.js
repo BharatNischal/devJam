@@ -1,6 +1,30 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
+import {withRouter} from 'react-router-dom';
+import axios from 'axios';
 
 function Leaderboard(props) {
+
+
+  const [students,setStudents] = useState([]);
+
+  useEffect(()=>{
+
+    axios.get(`/leaderboard/question/${props.match.params.id}`)
+      .then(res=>{
+        if(res.data.success){
+          setStudents(res.data.students);
+          console.log(res.data.students);
+        }else{
+          console.log(res.data.msg);
+        }
+      })
+      .catch(err=>{
+        console.log(err.message);
+      })
+
+  },[])
+
+
     return (
         <div className="p-3">
             <h3><b> Leaderboard </b></h3><hr/>
@@ -14,73 +38,14 @@ function Leaderboard(props) {
                     </tr>
                     </thead>
                     <tbody>
+                      {students.map((stu,i)=>(
                         <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Manjot Singh</td>
-                            <td>30</td>
+                            <td>{i+1}</td>
+                            <td>{stu.userId.name}</td>
+                            <td>{stu.maxMarks?stu.maxMarks:0}</td>
                         </tr>
 
-                    
+                      ))}
 
                     </tbody>
                 </table>
@@ -90,5 +55,4 @@ function Leaderboard(props) {
 }
 
 
-export default Leaderboard;
-
+export default withRouter(Leaderboard);

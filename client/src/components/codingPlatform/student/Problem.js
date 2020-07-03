@@ -32,6 +32,8 @@ function Problem(props) {
     const [showResults,setShowResults] = useState(false);
     const [results,setResults] = useState([]);
     const [activeResult,setActiveResult] = useState(0);
+    const [tests,setTests] = useState([]);
+    const [points,setPoints] = useState(0);
 
     const [customInput,setCustomeInput] = useState({add:false,value:""});
     function onChange(newValue) {
@@ -47,13 +49,21 @@ function Problem(props) {
 
     }
 
-    function handleEvaluate(responses) {
+    function handleEvaluate(responses,type) {
       const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
       axios.post(`/coding/question/${props.match.params.id}/evaluation`,{lang:langCode[mode],sourceCode,responses})
         .then(res=>{
           if(res.data.success){
             console.log(res.data.results);
             setResults(res.data.results);
+            if(type=="run"){
+              setTests(props.testCases.filter(tc=>!tc.hidden));
+            }else{
+              setTests(props.testCases);
+              const correct = res.data.results.filter(r=>r.status.id==3).length;
+              setPoints(((correct/props.testCases.length)*props.question.points).toFixed(2));
+              console.log(((correct/props.testCases.length)*props.question.points).toFixed(2));
+            }
             setShowResults(true);
           }else{
             console.log(res.data.msg);
@@ -64,14 +74,14 @@ function Problem(props) {
         })
     }
 
-    function handleRun() {
+    function handleRun(type) {
         setShowResults(false);
         const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
-        axios.post(`/coding/question/${props.match.params.id}/submission`,{lang:langCode[mode],sourceCode})
+        axios.post(`/coding/question/${props.match.params.id}/submission`,{lang:langCode[mode],sourceCode,type})
           .then(res=>{
             if(res.data.success){
               console.log(res.data.responses);
-              setTimeout(()=>handleEvaluate(res.data.responses),5000);
+              setTimeout(()=>handleEvaluate(res.data.responses,type),5000);
             }else{
               console.log(res.data.msg);
             }
@@ -174,8 +184,8 @@ function Problem(props) {
                     value={props.starterCode&&props.starterCode.findIndex(sc=>sc.lang==mode)!=-1?props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code:""}
                     />
                     <div className="editor-footer text-right" >
-                        <button className="btn btn-outline-grad ml-2" onClick={handleRun}> Run  </button>
-                        <button className="btn btn-outline-grad ml-2" onClick={console.log("submit")}> Submit </button>
+                        <button className="btn btn-outline-grad ml-2" onClick={()=>handleRun("run")}> Run  </button>
+                        <button className="btn btn-outline-grad ml-2" onClick={()=>handleRun("submit")}> Submit </button>
                     </div>
                 </div>
                 <div className="pl-5 mt-3 d-flex">
@@ -233,11 +243,11 @@ function Problem(props) {
                                 <React.Fragment>
                                 <div className="mb-2">
                                     <b>Input</b><br/>
-                                    <p className="resulttxt" > {props.question.testCases[activeResult].input } </p>
+                                    <p className="resulttxt" > {tests[activeResult].input } </p>
                                 </div>
                                 <div className="mb-2">
                                     <b>Expected Output </b><br/>
-                                    <p className="resulttxt" > {props.question.testCases[activeResult].output } </p>
+                                    <p className="resulttxt" > {tests[activeResult].output } </p>
                                 </div>
                                 <div className="mb-2">
                                     <b>Your Output </b><br/>
