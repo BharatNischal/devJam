@@ -30,6 +30,9 @@ function Problem(props) {
     const [fontsize,setFontsize] = useState(20);
 
     const [showResults,setShowResults] = useState(false);
+    const [showCustomResult,setShowCustomResult] = useState(false);
+    const [customResult,setCustomResult] = useState({stderr:"",stdout:""});
+
     const [results,setResults] = useState([]);
     const [activeResult,setActiveResult] = useState(0);
     const [tests,setTests] = useState([]);
@@ -37,7 +40,6 @@ function Problem(props) {
 
     const [customInput,setCustomeInput] = useState({add:false,value:""});
     function onChange(newValue) {
-          console.log(newValue);
           const index = props.starterCode.findIndex(sc=>sc.lang==mode);
           if(index!=-1){
             const newCode = [...props.starterCode];
@@ -76,6 +78,7 @@ function Problem(props) {
 
     function handleRun(type) {
         setShowResults(false);
+        setShowCustomResult(false);
         const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
         axios.post(`/coding/question/${props.match.params.id}/submission`,{lang:langCode[mode],sourceCode,type})
           .then(res=>{
@@ -92,11 +95,13 @@ function Problem(props) {
     }
 
     function handleCustomInput() {
+      setShowCustomResult(false);
       const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
       axios.post(`/submit/custom/testcase`,{lang:langCode[mode],sourceCode,input:customInput.value})
         .then(res=>{
           if(res.data.success){
-            console.log(res.data.result);
+            setCustomResult(res.data.result);
+            setShowCustomResult(true);
           }else{
             console.log(res.data.msg);
           }
@@ -112,6 +117,13 @@ function Problem(props) {
       var m = Math.floor(d % 3600 / 60);
       var s = Math.floor(d % 3600 % 60);
       return `${h}:${m}:${s}`;
+  }
+
+  function onFocus() {
+    if(!props.started){
+      props.startTimer();
+      props.setStarted(true);
+    }
   }
 
     return (
@@ -200,7 +212,7 @@ function Problem(props) {
                     placeholder="Write your code here"
                     fontSize={+fontsize}
                     onChange={onChange}
-                    onFocus={()=>{props.started?console.log(""):props.setStarted(true);props.startTimer()}}
+                    onFocus={onFocus}
                     showPrintMargin={false}
                     showGutter={true}
                     highlightActiveLine={true}
@@ -220,7 +232,7 @@ function Problem(props) {
                     {customInput.add?
                         <div className="ml-3 ">
                             <textarea className="form-control" rows="4" value={customInput.value} onChange={(e)=>setCustomeInput({...customInput,value:e.target.value})} ></textarea>
-                            <button onClick={handleCustomInput}>Run Custom Input</button>
+                            <button className="btn btn-outline-grad" onClick={handleCustomInput}>Run Custom Input</button>
                         </div>
                     :null}
                 </div>
@@ -292,6 +304,27 @@ function Problem(props) {
                 </div>
             </React.Fragment>
             :null}
+            {showCustomResult?
+              <React.Fragment>
+                  {customResult.stderr?
+                  <div className="mb-2 text-danger">
+                      <b>Error </b><br/>
+                      <p className="resulttxt " > {customResult.stderr} </p>
+                  </div>
+                  :
+                  <React.Fragment>
+                  <div className="mb-2">
+                      <b>Input</b><br/>
+                      <p className="resulttxt" > {customInput.value } </p>
+                  </div>
+                  <div className="mb-2">
+                      <b>Output </b><br/>
+                      <p className="resulttxt" > {customResult.stdout} </p>
+                  </div>
+
+                  </React.Fragment>
+                  }
+              </React.Fragment>:null}
         </React.Fragment>
     )
 }
