@@ -10,14 +10,16 @@ import Submission from './submission/submission';
 export default function StudentQuestion(props) {
 
   const [mySubmissions,setMySubmissions] = useState([]);
-  const [question,setQuestion] = useState({title:"",description:"<div> this is <b>description</b>  </div>",constraints:"",inputFormat:"<p> Single Line of String Input. For Ex : </p> <code>Manjot</code> ", outputFormat:"",sample:"",testCases:[],points:0});
+  const [question,setQuestion] = useState({title:"",description:"",constraints:"",inputFormat:"", outputFormat:"",sample:"",testCases:[],points:0});
   const [limits,setLimits] = useState({timeLimit:0,memoryLimit:0})
   const [editorial,setEditorial] = useState({solution:"",editorial:"",editorialLang:"javascript"})
-  const [students,setStudents] = useState([]);
   const [starterCode,setStarterCode] = useState([])
   const [testCases,setTestCases] = useState([])
   const {user} = useContext(CurUserContext);
   const [timer,setTimer] = useState(0); //Time in seconds
+  const [allowed,setAllowed] = useState(true);
+  const [started,setStarted] = useState(false)
+  const [time,setTime] = useState(null);
   const timerRef = useRef(null);
   let timeLeft=0;
 
@@ -25,57 +27,65 @@ export default function StudentQuestion(props) {
   const [activeTab,setActiveTab] = useState("problem");
 
   useEffect(()=>{
+    if(user.loggedIn){
 
-    axios.get(`/taketest/${props.match.params.id}`)
-      .then(res=>{
-        if(res.data.success){
-          console.log(res.data.question);
+      axios.get(`/taketest/${props.match.params.id}`)
+        .then(res=>{
+          if(res.data.success){
+            console.log(res.data.question);
 
-          setStudents(res.data.question.students);
-          setTestCases(res.data.question.testCases)
+            setTestCases(res.data.question.testCases)
 
-          // user has already started the test yet
-          if(res.data.question.time && res.data.question.students[res.data.userIndex].startTime){
+            // user has already started the test yet
+            setTime(res.data.question.time);
+            if(res.data.question.time && res.data.question.students[res.data.userIndex].startTime){
 
-            // Timer
-            const curtime = new Date();
-            const starttime = new Date(res.data.question.students[res.data.userIndex].startTime);
-            let timeDiff = Math.floor((curtime.getTime()-starttime.getTime())/1000);
-            timeLeft = res.data.question.time*60-timeDiff;
-            if(timeLeft<=0){
-              // Test is over
-              props.history.push('/test/finished');
-            }else{
-              timerRef.current =setInterval(()=>{
-                setTimer(--timeLeft)
-              },1000);
+              // Timer
+              setStarted(true);
+              const curtime = new Date();
+              const starttime = new Date(res.data.question.students[res.data.userIndex].startTime);
+              let timeDiff = Math.floor((curtime.getTime()-starttime.getTime())/1000);
+              timeLeft = res.data.question.time*60-timeDiff;
+              if(timeLeft<=0){
+                // Test is over
+                setAllowed(false);
+              }else{
+                timerRef.current =setInterval(()=>{
+                  setTimer(--timeLeft)
+                },1000);
+              }
             }
+
+            const {title,description,constraints,outputFormat,sample,points,time} = res.data.question;
+            setQuestion({title,description,constraints,outputFormat,sample,points,time});
+
+            const {timeLimit,memoryLimit} = res.data.question;
+            setLimits({timeLimit,memoryLimit});
+
+            const {solution,editorial,editorialLang} = res.data.question;
+            setEditorial({solution,editorial,editorialLang});
+
+            setStarterCode(res.data.question.starterCode);
+
+          }else{
+            console.log(res.data.msg);
           }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
 
-          const {title,description,constraints,outputFormat,sample,points,time} = res.data.question;
-          setQuestion({title,description,constraints,outputFormat,sample,points,time});
+    }else{
+      props.history.push('/login');
+    }
 
-          const {timeLimit,memoryLimit} = res.data.question;
-          setLimits({timeLimit,memoryLimit});
-
-          const {solution,editorial,editorialLang} = res.data.question;
-          setEditorial({solution,editorial,editorialLang});
-
-          setStarterCode(res.data.question.starterCode);
-
-        }else{
-          console.log(res.data.msg);
-        }
-      })
-      .catch(err=>{
-        console.log(err.message);
-      })
 
   },[])
 
 
   function startTimer() {
-    axios.get(`/codingtest/:id/timer`)
+    console.log("start timer called");
+    axios.get(`/codingtest/${props.match.params.id}/timer`)
       .then(res=>{
         if(res.data.success){
           console.log("success");
@@ -86,7 +96,7 @@ export default function StudentQuestion(props) {
       .catch(err=>{
         console.log(err.message);
       })
-      timeLeft = question.time;
+      timeLeft = question.time*60;
       timerRef.current =setInterval(()=>{
         setTimer(--timeLeft)
       },1000);
@@ -95,7 +105,7 @@ export default function StudentQuestion(props) {
   useEffect(()=>{
     if(timer<0){
       clearInterval(timerRef.current);
-      props.history.push('/test/finished');
+      setAllowed(false);
     }
   },[timer])
 
@@ -121,7 +131,7 @@ export default function StudentQuestion(props) {
               </div>
               <div className="tabCont p-3">
                 {activeTab=="problem"?
-                  <Problem question={question} starterCode={starterCode} setStarterCode={setStarterCode} testCases={testCases}/>
+                  <Problem time={time} allowed={allowed} question={question} starterCode={starterCode} setStarterCode={setStarterCode} testCases={testCases} startTimer={startTimer} started={started} setStarted={setStarted} timer={timer}/>
 
                 :null}
 

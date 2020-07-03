@@ -106,6 +106,14 @@ function Problem(props) {
         })
     }
 
+    function secondsToHms(d) {
+      d = Number(d);
+      var h = Math.floor(d / 3600);
+      var m = Math.floor(d % 3600 / 60);
+      var s = Math.floor(d % 3600 % 60);
+      return `${h}:${m}:${s}`;
+  }
+
     return (
         <React.Fragment>
             <section className="mb-4 problem-section" >
@@ -162,9 +170,9 @@ function Problem(props) {
                         </div>
 
                         </div>
-                        <h4 className="text-center text-pink p-2 " style={{backgroundColor:"#f1f1f1" ,borderRadius:"12px", border:"1px solid #bbb" }}  >
-                            <b>01:23:54</b>
-                        </h4>
+                        {props.time?<h4 className="text-center text-pink p-2 " style={{backgroundColor:"#f1f1f1" ,borderRadius:"12px", border:"1px solid #bbb" }}  >
+                            <b>{props.started?secondsToHms(props.timer):secondsToHms(props.time*60)}</b>
+                        </h4>:null}
                         <div style={{width:"150px"}}>
                         <div className="text-right" style={{fontSize:"12px"}} >
                             <b>Select Language</b>
@@ -192,16 +200,17 @@ function Problem(props) {
                     placeholder="Write your code here"
                     fontSize={+fontsize}
                     onChange={onChange}
+                    onFocus={()=>{props.started?console.log(""):props.setStarted(true);props.startTimer()}}
                     showPrintMargin={false}
                     showGutter={true}
                     highlightActiveLine={true}
                     width="100%"
                     value={props.starterCode&&props.starterCode.findIndex(sc=>sc.lang==mode)!=-1?props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code:""}
                     />
-                    <div className="editor-footer text-right" >
+                  {props.allowed?<div className="editor-footer text-right" >
                         <button className="btn btn-outline-grad ml-2" onClick={()=>handleRun("run")}> Run  </button>
                         <button className="btn btn-outline-grad ml-2" onClick={()=>handleRun("submit")}> Submit </button>
-                    </div>
+                    </div>:<p className="text-right mr-2"> <b> Cannot Submit anymore, Your Time Finished</b></p>}
                 </div>
                 <div className="pl-5 mt-3 d-flex">
                     <div className="custom-control custom-checkbox " >

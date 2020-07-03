@@ -97,7 +97,7 @@ router.get('/taketest/:id',function (req,res) {
 })
 
 // Router to start the timer
-router.get('/codingtest/:id/timer',middleware.isStudent,function (rq,res) {
+router.get('/codingtest/:id/timer',middleware.isStudent,function (req,res) {
   db.CodingQuestion.findById(req.params.id)
     .populate(['students.userId','students.submissions'])
     .then(question=>{
