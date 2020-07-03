@@ -56,8 +56,8 @@ export default function StudentQuestion(props) {
               }
             }
 
-            const {title,description,constraints,outputFormat,sample,points,time} = res.data.question;
-            setQuestion({title,description,constraints,outputFormat,sample,points,time});
+            const {title,description,constraints,inputFormat,outputFormat,sample,points,time} = res.data.question;
+            setQuestion({title,description,constraints,inputFormat,outputFormat,sample,points,time});
 
             const {timeLimit,memoryLimit} = res.data.question;
             setLimits({timeLimit,memoryLimit});
