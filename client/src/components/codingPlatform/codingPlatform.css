@@ -78,7 +78,24 @@
 .problem-section h3{
     color:rgb(22, 22, 22);
 }
+.submissionRowContent{
+    height:520px;
+    animation: expand 0.7s linear ;
+    overflow: auto;
+    padding:20px;
+    padding-left: 30px;
+    background-color: #e6e6e6;
 
+}
+
+@keyframes expand{
+    0%{
+        height:0px;
+    }
+    100%{
+        height:520px;
+    }
+}
 
 @media (max-width:500px){
     .tabs .tabH{

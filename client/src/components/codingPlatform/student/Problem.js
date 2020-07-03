@@ -122,7 +122,7 @@ function Problem(props) {
 
                     <div className="editor-header d-flex align-items-center justify-content-between" >
 
-                        <div style={{width:"200px"}} >
+                        <div style={{width:"150px"}} >
                         <div className="text-left" style={{fontSize:"12px"}} >
                             <b>Select Theme</b>
                             <select onChange={(e)=>setTheme(e.target.value)} className="form-control" >
@@ -137,7 +137,10 @@ function Problem(props) {
                         </div>
 
                         </div>
-                        <div>
+                        <h4 className="text-center text-pink p-2 " style={{backgroundColor:"#f1f1f1" ,borderRadius:"12px", border:"1px solid #bbb" }}  >
+                            <b>01:23:54</b>
+                        </h4>
+                        <div style={{width:"150px"}}>
                         <div className="text-right" style={{fontSize:"12px"}} >
                             <b>Select Language</b>
                         </div>
