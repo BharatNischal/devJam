@@ -10,7 +10,24 @@ function Submission(props) {
       {points:40,html:`<div> <p> Hello World 1 </p> </div>`, css:`div{background-color:red;}`,js:`console.log("hello 1")`},
       {points:30,html:`<div> <p> Hello World 2</p> </div>`, css:`div{background-color:red;}`,js:`console.log("hello 2")`},
     ]);
-   
+
+   useEffect(()=>{
+
+     axios.get(`/submissions/frontendquestion/${props.match.params.id}`)
+       .then(res=>{
+         if(res.data.success){
+           console.log(res.data.submissions);
+           setSubmissions(res.data.submissions);
+         }else{
+           console.log(res.data.msg);
+         }
+       })
+       .catch(err=>{
+         console.log(err.message);
+       })
+
+
+   },[])
 
 
     return (

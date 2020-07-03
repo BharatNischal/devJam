@@ -37,6 +37,7 @@ function Problem(props) {
     const [activeResult,setActiveResult] = useState(0);
     const [tests,setTests] = useState([]);
     const [points,setPoints] = useState(0);
+    const [loading,setLoading] = useState(false);
 
     const [customInput,setCustomeInput] = useState({add:false,value:""});
     function onChange(newValue) {
@@ -70,6 +71,7 @@ function Problem(props) {
           }else{
             console.log(res.data.msg);
           }
+          setLoading(false);
         })
         .catch(err=>{
           console.log(err.message);
@@ -78,6 +80,7 @@ function Problem(props) {
 
     function handleRun(type) {
         setShowResults(false);
+        setLoading(true);
         setShowCustomResult(false);
         const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
         axios.post(`/coding/question/${props.match.params.id}/submission`,{lang:langCode[mode],sourceCode,type})
@@ -95,6 +98,7 @@ function Problem(props) {
     }
 
     function handleCustomInput() {
+      setLoading(true);
       setShowCustomResult(false);
       const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
       axios.post(`/submit/custom/testcase`,{lang:langCode[mode],sourceCode,input:customInput.value})
@@ -105,6 +109,7 @@ function Problem(props) {
           }else{
             console.log(res.data.msg);
           }
+          setLoading(false);
         })
         .catch(err=>{
           console.log(err.message);
@@ -237,6 +242,7 @@ function Problem(props) {
                     :null}
                 </div>
             </section>
+            {loading?<img src="https://wpamelia.com/wp-content/uploads/2018/11/ezgif-2-6d0b072c3d3f.gif" alt="centered image" style={{width:"400px",textAlign:"center"}}/>:null}
             {showResults?
             <React.Fragment>
 

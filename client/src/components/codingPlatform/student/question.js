@@ -99,10 +99,12 @@ export default function StudentQuestion(props) {
       .catch(err=>{
         console.log(err.message);
       })
-      timeLeft = question.time*60;
-      timerRef.current =setInterval(()=>{
-        setTimer(--timeLeft)
-      },1000);
+      if(question.time&&question.time>0){
+        timeLeft = question.time*60;
+        timerRef.current =setInterval(()=>{
+          setTimer(--timeLeft)
+        },1000);
+      }
   }
 
   useEffect(()=>{
