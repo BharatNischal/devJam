@@ -1,0 +1,22 @@
+.mainGrid{
+    display:grid;
+    height:100vh;
+    padding-top: 72px;
+    gap: 6px;
+    background-color: rgb(121, 110, 110);
+}
+.tabLayoutMain{
+    background-color: white;
+}
+.uisectionHeading{
+    background-color: rgb(10, 10, 10);
+    color: white;
+    top:0;
+    width:100%;
+    z-index: 20;
+    position: absolute;
+
+}
+.uiSectionWrapper{
+    position: relative;
+}

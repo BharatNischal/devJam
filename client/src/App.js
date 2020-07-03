@@ -43,6 +43,7 @@ import AddQuestion from './components/codingPlatform/addQuestion';
 import Editor from './components/codingSystem/editor';
 import AllCodingQuestions from './components/codingPlatform/allQuestions/allQuestions';
 import StudentQuestion from './components/codingPlatform/student/question';
+import UIQuestion from './components/codingPlatform/UI/uiQuestion';
 axios.defaults.withCredentials = true;
 
 function App(props) {
@@ -111,6 +112,8 @@ function App(props) {
             <Route path="/addQuestion/:id" exact component={AddQuestion} />
             <Route path="/codingQuestions" exact component={AllCodingQuestions} />
             <Route path="/coding/question/:id" exact component={StudentQuestion} />
+
+            <Route path="/coding/uiquestion/:id" exact component={UIQuestion} />
 
             
 
