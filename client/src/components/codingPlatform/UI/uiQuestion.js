@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect,useContext} from 'react';
 import "./ui.css";
-import {CurUserContext} from '../../../contexts/curUser';
+import Layout1 from "./Layout1";
 import AceEditor from "react-ace";
+import Alert from "../../ui/alert/alert";
+import {CurUserContext} from '../../../contexts/curUser';
 import axios from 'axios';
 
 // Editor languages
+import "ace-builds/src-noconflict/snippets/javascript";
+import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/snippets/html";
 import "ace-builds/src-noconflict/mode-html";
 import "ace-builds/src-noconflict/snippets/css";
@@ -12,10 +16,14 @@ import "ace-builds/src-noconflict/mode-css";
 
 
 import "ace-builds/src-noconflict/theme-monokai";
+import Layout2 from './Layout2';
+import Submission from './submission/submission';
+import Leaderboard from './Leaderboard';
 
 function UIQuestion(props) {
     const [html, setHtml] = useState("<!-- Write Body Of HTML page Only -->");
     const [css, setCss] = useState("");
+    const [js, setJs] = useState(null);
 
     const [activeTab,setActiveTab] = useState("description");
     const [layout, setLayout] = useState(3);
@@ -27,6 +35,9 @@ function UIQuestion(props) {
     const [time,setTime] = useState(null);
     const [maxScore,setMaxScore] = useState(0);
     const {user} = useContext(CurUserContext);
+    const [isDynamic, setIsDynamic] = useState(false);
+    const [showLeaderboardAlert, setShowLeaderboardAlert] = useState(false);
+    const [showSubmisssionAler, setShowSubmisssionAler] = useState(false);
 
     const iframe = useRef(null);
     const timerRef = useRef(null);
@@ -98,7 +109,7 @@ function UIQuestion(props) {
           </head>
           <body>
             ${html}
-
+            <script> ${isDynamic?js:""} </script>
           </body>
           </html>
         `;
@@ -156,17 +167,32 @@ function UIQuestion(props) {
                 </h2>
             </div>
             <div className="pointer h2 ">
-                <i className="fas fa-cog " onClick={()=>setShowSettings(true)}></i>
+                <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowLeaderboardAlert(true)}> <b>Leaderboard</b> </button>
+                <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowSubmisssionAler(true)} > <b>Submissions</b> </button>
+                <button className="btn-outline-grad btn mr-3" > Submit</button>
+                {!isDynamic?<i className="fas fa-cog " onClick={()=>setShowSettings(true)}></i>:null}
             </div>
         </div>
+        {showSubmisssionAler?
+            <Alert style={{maxWidth:"90%"}} cancel={()=>setShowSubmisssionAler(false)} >
+                <Submission/>
+
+            </Alert>
+        :null}
+        {showLeaderboardAlert?
+            <Alert style={{maxWidth:"90%"}} cancel={()=>setShowLeaderboardAlert(false)}>
+                <Leaderboard/>
+            </Alert>
+        :null}
+
         {showSettings?
         <React.Fragment>
             <div className="d-backdrop" onClick={()=>setShowSettings(false)}></div>
             <div className="dropdown " style={{width:"200px",height:"250px"}}>
-            <h3 className="my-3"> <b>Set Layout</b> </h3>
-            <div className="mt-2"><button className="btn-outline-grad btn ml-2" onClick={()=>{setLayout(1);setCss(css+" ")}} > Layout 1 </button></div>
-            <div className="mt-2"><button className="btn-outline-grad btn ml-2" onClick={()=>{setLayout(2);setCss(css+" ")}} > Layout 2 </button></div>
-            <div className="mt-2"><button className="btn-outline-grad btn ml-2" onClick={()=>{setLayout(3);setCss(css+" ")}} > Layout 3 </button></div>
+                <h3 className="my-3"> <b>Set Layout</b> </h3>
+                <div className="mt-2"><button className={layout==1?"btn-grad btn ml-2" :"btn-outline-grad btn ml-2" } onClick={()=>{setLayout(1);setCss(css+" ")}} > Layout 1 </button></div>
+                <div className="mt-2"><button className={layout==2?"btn-grad btn ml-2" :"btn-outline-grad btn ml-2" } onClick={()=>{setLayout(2);setCss(css+" ")}} > Layout 2 </button></div>
+                <div className="mt-2"><button className={layout==3?"btn-grad btn ml-2" :"btn-outline-grad btn ml-2" } onClick={()=>{setLayout(3);setCss(css+" ")}} > Layout 3 </button></div>
 
             </div>
         </React.Fragment>
@@ -174,152 +200,22 @@ function UIQuestion(props) {
 
         <div className="bgwhiteoverlay" ></div>
 
-        {layout==1?
-            <div className="mainGrid ui" style={{gridTemplateRows:"1fr 1fr 1fr",gridTemplateColumns:"1fr 1fr 1fr"}} >
-                <div className=" bg-white" style={{gridRow:"1/3"}} > <h3>Description</h3> </div>
-                <div className=" bg-success uiSectionWrapper " style={{gridRow:"1/3"}} >
-                    <h3 className="uisectionHeading"> <b> HTML </b> </h3>
-                    <div style={{paddingTop:"35px",height:"100%"}}>
-
-                        <AceEditor
-                            mode={"html"}
-                            theme={"monokai"}
-                            name="UNIQUE_ID_OF_DIV"
-                            editorProps={{ $blockScrolling: true }}
-                            setOptions={{
-                                enableBasicAutocompletion: true,
-                                enableLiveAutocompletion: true,
-                                enableSnippets: true,
-                                showLineNumbers: true,
-                            }}
-                            placeholder="Code Will be here"
-                            fontSize={18}
-                            showPrintMargin={false}
-                            showGutter={true}
-                            highlightActiveLine={true}
-                            width="100%"
-                            style={{height:"100%"}}
-                            onChange={(newValue)=>setHtml(newValue)}
-                            defaultValue={html}
-
-
-                        />
-                    </div>
-                </div>
-                <div className=" bg-primary uiSectionWrapper " style={{gridColumn:"1/3"}} >
-                    <h3 className="uisectionHeading text-left pl-2"> <b> CSS</b> </h3>
-                    <div style={{paddingTop:"35px",height:"100%"}}>
-
-                        <AceEditor
-                            mode={"css"}
-                            theme={"monokai"}
-                            name="cssEditor"
-                            editorProps={{ $blockScrolling: true }}
-                            setOptions={{
-                                enableBasicAutocompletion: true,
-                                enableLiveAutocompletion: true,
-                                enableSnippets: true,
-                                showLineNumbers: true,
-                            }}
-                            placeholder="Write your CSS code here"
-                            fontSize={18}
-                            showPrintMargin={false}
-                            showGutter={true}
-                            highlightActiveLine={true}
-                            width="100%"
-
-                            style={{height:"100%"}}
-                            onChange={(newValue)=>setCss(newValue)}
-                            defaultValue={css}
-
-
-                        />
-                    </div>
-                </div>
-                <div className=" bg-white" style={{gridColumn:"3/4",gridRow:"1/4"}} >
-                    <iframe style={{width:"100%",height:"100%"}} ref={iframe} >
-                    </iframe>
-                </div>
-            </div>
+        {layout==1 && !isDynamic ?
+            <Layout1 iframe={iframe} html={html} css={css} setHtml={setHtml} setCss={setCss} />
         :null}
 
-        {layout==2?
-            <div className="mainGrid ui" style={{gridTemplateRows:"1fr 1fr",gridTemplateColumns:"1fr 1fr 1fr"}} >
-                <div className="bg-white" > <h3>Description</h3> </div>
-                <div className=" bg-success uiSectionWrapper " >
-                    <h3 className="uisectionHeading"> <b> HTML </b> </h3>
-                    <div style={{paddingTop:"35px",height:"100%"}}>
-
-                        <AceEditor
-                            mode={"html"}
-                            theme={"monokai"}
-                            name="UNIQUE_ID_OF_DIV"
-                            editorProps={{ $blockScrolling: true }}
-                            setOptions={{
-                                enableBasicAutocompletion: true,
-                                enableLiveAutocompletion: true,
-                                enableSnippets: true,
-                                showLineNumbers: true,
-                            }}
-                            placeholder="Code Will be here"
-                            fontSize={18}
-                            showPrintMargin={false}
-                            showGutter={true}
-                            highlightActiveLine={true}
-                            width="100%"
-
-                            style={{height:"100%"}}
-                            onChange={(newValue)=>setHtml(newValue)}
-                            defaultValue={html}
-
-
-                        />
-                    </div>
-                </div>
-                <div className=" bg-primary uiSectionWrapper">
-                    <h3 className="uisectionHeading"> <b> CSS</b> </h3>
-                    <div style={{paddingTop:"35px",height:"100%"}}>
-
-                        <AceEditor
-                            mode={"css"}
-                            theme={"monokai"}
-                            name="cssEditor"
-                            editorProps={{ $blockScrolling: true }}
-                            setOptions={{
-                                enableBasicAutocompletion: true,
-                                enableLiveAutocompletion: true,
-                                enableSnippets: true,
-                                showLineNumbers: true,
-                            }}
-                            placeholder="Write your CSS code here"
-                            fontSize={18}
-                            showPrintMargin={false}
-                            showGutter={true}
-                            highlightActiveLine={true}
-                            width="100%"
-
-                            style={{height:"100%"}}
-                            onChange={(newValue)=>setCss(newValue)}
-                            defaultValue={css}
-
-
-                        />
-                    </div>
-                </div>
-                <div className=" bg-white" style={{gridColumn:"1/4"}} >
-                    <iframe style={{width:"100%",height:"100%"}} ref={iframe} >
-                    </iframe>
-                </div>
-            </div>
+        {layout==2 && !isDynamic?
+            <Layout2 iframe={iframe} html={html} css={css} setHtml={setHtml} setCss={setCss} />
         :null}
 
-        {layout==3?
+        {layout==3 || isDynamic?
             <div className="mainGrid ui" style={{gridTemplateRows:"1fr",gridTemplateColumns:"1fr 1fr"}} >
                 <div className="tabLayoutMain" style={{position:"relative"}}>
                     <div className=" tabs d-flex " style={{height:"50px",position:"absolute",top:"0",width:"100%",borderBottom:"1px solid #e1e1e1" }}>
                         <div className={activeTab=="description"?" active tab px-3 py-2":"tab px-3 py-2 " } onClick={()=>setActiveTab("description")} > <b>Description</b> </div>
                         <div className={activeTab=="HTML"?" active tab px-3 py-2":"tab px-3 py-2" } onClick={()=>setActiveTab("HTML")} > <b>HTML</b> </div>
                         <div className={activeTab=="CSS"?" active tab px-3 py-2":"tab px-3 py-2" } onClick={()=>setActiveTab("CSS")} > <b>CSS</b> </div>
+                        {isDynamic?<div className={activeTab=="JS"?" active tab px-3 py-2":"tab px-3 py-2" } onClick={()=>setActiveTab("JS")} > <b>JS</b> </div>:null}
                     </div>
                     <div className="uitabCont  text-left " style={{height:"100%",paddingTop:"50px"}} >
                         {activeTab=="description"?
@@ -375,6 +271,32 @@ function UIQuestion(props) {
 
                                 onChange={(newValue)=>setCss(newValue)}
                                 defaultValue={css}
+
+
+                            />
+                        :null}
+                        {activeTab=="JS"?
+                            <AceEditor
+                                mode={"javascript"}
+                                theme={"monokai"}
+                                name="tabsjsDIV"
+                                editorProps={{ $blockScrolling: true }}
+                                setOptions={{
+                                    enableBasicAutocompletion: true,
+                                    enableLiveAutocompletion: true,
+                                    enableSnippets: true,
+                                    showLineNumbers: true,
+                                }}
+                                placeholder="Write Javascript Here"
+                                fontSize={18}
+                                showPrintMargin={false}
+                                showGutter={true}
+                                highlightActiveLine={true}
+                                width="100%"
+                                height="100%"
+
+                                onChange={(newValue)=>setJs(newValue)}
+                                defaultValue={js}
 
 
                             />
