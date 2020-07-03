@@ -20,6 +20,8 @@ export default function StudentQuestion(props) {
   const [allowed,setAllowed] = useState(true);
   const [started,setStarted] = useState(false)
   const [time,setTime] = useState(null);
+  const [maxScore,setMaxScore] = useState(0);
+  const [editorialAlert,setEditorialAlert] = useState(false);
   const timerRef = useRef(null);
   let timeLeft=0;
 
@@ -38,6 +40,7 @@ export default function StudentQuestion(props) {
 
             // user has already started the test yet
             setTime(res.data.question.time);
+            setMaxScore(res.data.question.students[res.data.userIndex].maxMarks?res.data.question.students[res.data.userIndex].maxMarks:0);
             if(res.data.question.time && res.data.question.students[res.data.userIndex].startTime){
 
               // Timer
@@ -114,11 +117,12 @@ export default function StudentQuestion(props) {
       <TopBar/>
       <div className="bgwhiteoverlay"> </div>
       <div className="container-fluid" style={{marginTop:"100px"}} >
+        {editorialAlert?<div className="custom-alert"> You need to get full marks to unlock the Editorial </div>:null}
         <div className=" p-3 text-left m-4  shadow" style={{borderRadius:"18px",backgroundColor:"rgb(255, 235, 249)"}}>
             <h2 className="topicTitle mainH text-left text-pink" >
                     {question.title}
             </h2>
-                <span className="cursor-pointer p-2 pb-4" ><i className="fa fa-arrow-left anim-hil text-pink"></i> Go Back</span><br/>
+                <span className="cursor-pointer p-2 pb-4" ><i className="fa fa-arrow-left anim-hil text-pink" onClick={()=>props.history.push('/codingQuestions')}></i> Go Back</span><br/>
         </div>
         <div className="row">
           <div className="col-lg-9 p-3 ml-4">
@@ -127,7 +131,7 @@ export default function StudentQuestion(props) {
                 <div className={activeTab=="problem"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("problem")} > Problem </div>
                 <div className={activeTab=="submissions"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("submissions")} > Submissions </div>
                 <div className={activeTab=="leaderboard"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("leaderboard")} > Leaderboard </div>
-                <div className={activeTab=="editorial"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("editorial")} > Editorial </div>
+                <div className={activeTab=="editorial"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>{maxScore==question.points?setActiveTab("editorial"):setEditorialAlert(true);setTimeout(()=>{setEditorialAlert(false)},2000)}} > Editorial </div>
               </div>
               <div className="tabCont p-3">
                 {activeTab=="problem"?

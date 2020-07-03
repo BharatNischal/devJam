@@ -91,7 +91,7 @@ function AllCodingQuestions(props) {
             //Topic filtering
             if(selectedTopics.length>0){
                 var topicFiltering=false;
-                for(let i=0;i<ques.topics.length;i++){
+                for(let i=0;i<ques.topics?ques.topics.length:0;i++){
                     if(selectedTopics.includes(ques.topics[i])){
                         topicFiltering=true;
                         break;
@@ -195,7 +195,7 @@ function AllCodingQuestions(props) {
                     <h1 className="topicTitle mainH text-left text-pink">All Coding Questions</h1>
 
                     <div>
-                        <button className="btn btn-outline-grad ml-2" onClick={handleAdd}> Add Question </button>
+                        {!user.student?<button className="btn btn-outline-grad ml-2" onClick={handleAdd}> Add Question </button>:null}
                     </div>
                 </div>
                 <div className="row my-5">
@@ -248,24 +248,36 @@ function AllCodingQuestions(props) {
                             <hr/>
                             <h6><b>Topics</b></h6>
                             <div className="custom-control custom-checkbox " >
-                                <input type="checkbox" className="custom-control-input" name="linked list" onChange={(e)=>topicChangeHandler(e)} id="linkListCheck1" />
+                                <input type="checkbox" className="custom-control-input" name="Linked List" onChange={(e)=>topicChangeHandler(e)} id="linkListCheck1" />
                                 <label className="custom-control-label" htmlFor="linkListCheck1">Linked List</label>
                             </div>
                             <div className="custom-control custom-checkbox " >
-                                <input type="checkbox" className="custom-control-input" name="maths" onChange={(e)=>topicChangeHandler(e)} id="mathCheck1" />
+                                <input type="checkbox" className="custom-control-input" name="Maths" onChange={(e)=>topicChangeHandler(e)} id="mathCheck1" />
                                 <label className="custom-control-label" htmlFor="mathCheck1">Maths</label>
                             </div>
                             <div className="custom-control custom-checkbox " >
-                                <input type="checkbox" className="custom-control-input" name="stack" onChange={(e)=>topicChangeHandler(e)} id="stackCheck1" />
+                                <input type="checkbox" className="custom-control-input" name="Stack" onChange={(e)=>topicChangeHandler(e)} id="stackCheck1" />
                                 <label className="custom-control-label" htmlFor="stackCheck1">Stacks</label>
                             </div>
                             <div className="custom-control custom-checkbox " >
-                                <input type="checkbox" className="custom-control-input" name="implementation" onChange={(e)=>topicChangeHandler(e)} id="implementationCheck1" />
+                                <input type="checkbox" className="custom-control-input" name="Queue" onChange={(e)=>topicChangeHandler(e)} id="queueCheck1" />
+                                <label className="custom-control-label" htmlFor="queueCheck1">Queue</label>
+                            </div>
+                            <div className="custom-control custom-checkbox " >
+                                <input type="checkbox" className="custom-control-input" name="Implementation" onChange={(e)=>topicChangeHandler(e)} id="implementationCheck1" />
                                 <label className="custom-control-label" htmlFor="implementationCheck1">Implementation</label>
                             </div>
                             <div className="custom-control custom-checkbox " >
-                                <input type="checkbox" className="custom-control-input" name="trees" onChange={(e)=>topicChangeHandler(e)} id="treesCheck1" />
+                                <input type="checkbox" className="custom-control-input" name="Trees" onChange={(e)=>topicChangeHandler(e)} id="treesCheck1" />
                                 <label className="custom-control-label" htmlFor="treesCheck1">Trees</label>
+                            </div>
+                            <div className="custom-control custom-checkbox " >
+                                <input type="checkbox" className="custom-control-input" name="Graph" onChange={(e)=>topicChangeHandler(e)} id="graphCheck1" />
+                                <label className="custom-control-label" htmlFor="graphCheck1">Graph</label>
+                            </div>
+                            <div className="custom-control custom-checkbox " >
+                                <input type="checkbox" className="custom-control-input" name="Others" onChange={(e)=>topicChangeHandler(e)} id="othersCheck1" />
+                                <label className="custom-control-label" htmlFor="othersCheck1">Others</label>
                             </div>
                         </div>
                     </div>

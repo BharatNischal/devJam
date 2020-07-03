@@ -1,4 +1,5 @@
 import React,{useEffect,useState} from 'react'
+import Testcase from './testcase';
 
 export default function TestCases(props) {
 
@@ -51,25 +52,7 @@ export default function TestCases(props) {
         {props.question&&props.question.testCases?
           props.question.testCases.map((tc,i)=>(
 
-          <div className=" mb-3" key={i}>
-              <h5>  Test Case #{i+1} {tc.hidden?<i className="fa fa-lock text-pink ml-2 "></i>:null}</h5>
-              <div className=" row">
-                  <div className="col-md-6">
-                      <h6>Input</h6>
-                      <div className="form-group">
-                          <textarea className="form-control" rows="3" disabled={true} >{tc.input?tc.input:""}</textarea>
-                      </div>
-                  </div>
-                  <div className="col-md-6">
-                      <h6> Output</h6>
-                      <div className="form-group">
-                          <textarea className="form-control" rows="3" disabled={true}>{tc.output?tc.output:""}</textarea>
-                      </div>
-                  </div>
-
-              </div>
-
-          </div>
+            <Testcase tc={tc} i={i} question={props.question} setQuestion={props.setQuestion}/>
 
         )):null}
 
