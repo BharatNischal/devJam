@@ -211,13 +211,14 @@ function AllCodingQuestions(props) {
                                 <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
                                     <div className="pt-2 hover-pink text-left"  onClick={()=>handleClick(ques._id)}>
                                         <h3 className="topicTitle d-inline mr-2" style={{fontSize:"22px"}} > {ques.title}</h3>
-                                        <i style={{fontSize:"14px",color:"#333"}} >{ques.status}</i><br/>
+                                        {!user.student?<i style={{fontSize:"14px",color:"#333"}} >{ques.status}</i>:null}<br/>
                                         <span style={{fontSize:"14px",color:"#444" }} >Difficulty:  <b> {ques.difficulty} </b></span>
 
                                     </div>
                                     <div>
                                         {ques.status=="Published"&&!user.student?<span className="hover-pink pointer" onClick={()=>copyToClipBoard(ques._id)}> <i className="fa fa-copy"></i> </span>:null}
                                         {ques.status=="Draft"?<button className="btn btn-grad ml-2" onClick={()=>handlePublish(ques._id)}>Publish</button>:null}
+                                        {user.student?<button className="btn btn-grad ml-2" onClick={()=>handleClick(ques._id)}> Solve </button>:null}
                                     </div>
                                 </div>
                             </div>
