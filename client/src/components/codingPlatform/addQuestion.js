@@ -123,7 +123,7 @@ function AddQuestion(props) {
                             <div className="mr-2 text-left" style={{width:"100px"}} > <b> Select Topics </b> </div>
                             <div style={{minWidth:"200px"}}>
                                 <Select
-                                    options={[{value:"Algo",label:"Algo"},{value:"Algo1",label:"Algo1"},{value:"Algo2",label:"Algo2"}]}
+                                    options={[{value:"Linked List",label:"Linked List"},{value:"Maths",label:"Maths"},{value:"Stacks",label:"Stacks"},{value:"Queue",label:"Queue"},{value:"Implementation",label:"Implementation"},{value:"Trees",label:"Trees"},{value:"Graph",label:"Graph"},{value:"Others",label:"Others"}]}
                                     isMulti
                                     value={topic}
                                     onChange={(e)=>setTopic(e)}
