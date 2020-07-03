@@ -183,7 +183,7 @@ function Problem(props) {
 
                         </div>
                         {props.time?<h4 className="text-center text-pink p-2 " style={{backgroundColor:"#f1f1f1" ,borderRadius:"12px", border:"1px solid #bbb" }}  >
-                            <b>{props.started?secondsToHms(props.timer):secondsToHms(props.time*60)}</b>
+                            <b>{props.started?(props.timer<0?secondsToHms(0):secondsToHms(props.timer)):secondsToHms(props.time*60)}</b>
                         </h4>:null}
                         <div style={{width:"150px"}}>
                         <div className="text-right" style={{fontSize:"12px"}} >
