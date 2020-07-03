@@ -161,7 +161,7 @@ router.post('/coding/question/:id/submission',function (req,res){
 //Route to create a submission when a student submit a question
 router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,res) {
   // Save in database (code and languageCode)
-  db.CodingSubmission.create({...req.body.submission,userId:req.user._id,testId:req.params.id})
+  db.CodingSubmission.create({sourceCode:req.body.sourceCode,languageCode:req.body.lang,userId:req.user._id,testId:req.params.id})
     .then(submission=>{
       db.CodingQuestion.findById(req.params.id)
         .then(question=>{
@@ -184,7 +184,7 @@ router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,r
                 })
             )
             }
-            if(i==responses.length-1){
+            if(i==req.body.responses.length-1){
               var results=[];
 
               Promise.all(getPromise)
@@ -210,13 +210,22 @@ router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,r
                         }
                         return r.status.id==3;
                       });
-                      submission.marks = ((correct/question.testCases.length)*question.points).toFixed(2);
-                      submission.testCases = testCases;
+                      const marks = ((correct/question.testCases.length)*question.points).toFixed(2);
+                      const TestCases = testCases;
                       // Save marks
-                      submission.save();
-                      res.json({success:true,results});
+                      console.log(submission);
+                      db.CodingSubmission.findByIdAndUpdate(submission._id,{marks,TestCases})
+                        .then(sub=>{
+                            res.json({success:true,results});
+                        })
+                        .catch(err=>{
+                          res.json({success:false,msg:err.message});
+                        })
                     }
                   });
+              })
+              .catch(err=>{
+                res.json({success:false,msg:err.message});
               })
             }
           })

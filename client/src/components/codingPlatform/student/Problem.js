@@ -53,6 +53,8 @@ function Problem(props) {
         .then(res=>{
           if(res.data.success){
             console.log(res.data.results);
+            setResults(res.data.results);
+            setShowResults(true);
           }else{
             console.log(res.data.msg);
           }
@@ -63,6 +65,7 @@ function Problem(props) {
     }
 
     function handleRun() {
+        setShowResults(false);
         const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
         axios.post(`/coding/question/${props.match.params.id}/submission`,{lang:langCode[mode],sourceCode})
           .then(res=>{
@@ -216,7 +219,7 @@ function Problem(props) {
                                 {results[activeResult].status.description}
                             </div>
                             </div>
-                            {!props.question.testCases[activeResult].hidden?
+                            {!props.testCases[activeResult].hidden?
                             <React.Fragment>
                                 {results[activeResult].stderr?
                                 <div className="mb-2 text-danger">

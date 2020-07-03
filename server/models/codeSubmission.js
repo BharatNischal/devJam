@@ -14,7 +14,7 @@ var codingSubmissionSchema=new mongoose.Schema({
     }],
     marks:Number,
     sourceCode:String,
-    languageCode:Number,
+    languageCode:String,
     token:String,
     timeStamp:{
       type:Date,
