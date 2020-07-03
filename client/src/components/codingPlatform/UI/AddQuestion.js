@@ -13,6 +13,7 @@ function AddUIQuestion(props) {
     const [status,setStatus] = useState("Draft");
     const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
     const [img,setImg] = useState(null);
+    const [isTimed,setIsTimed] = useState(false);
 
     //UI STATES
     const [btnclickSave,setBtnClickSave] = useState(false);
@@ -43,6 +44,13 @@ function AddUIQuestion(props) {
                         <div className="form-group input-group ">
                             <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3 pt-2 f-20 " ><i className="fa fa-pencil" ></i></div>
                             <input type="text" className="form-control"   placeholder="Enter Question Title"  />
+                        </div>
+                        <div className="text-left px-lg-4">
+                            <div className="custom-control custom-checkbox d-inline" >
+                                <input type="checkbox" className="custom-control-input" id="customCheck1" checked={isTimed} onChange={(e)=>setIsTimed(e.target.checked)} />
+                                <label className="custom-control-label" htmlFor="customCheck1">Timed</label>
+                            </div>
+                            {isTimed?<input type="number" className="form-control d-inline" placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
                         </div>
                     </div>
                     <div className="col-md-4">
