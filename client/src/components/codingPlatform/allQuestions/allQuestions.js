@@ -166,7 +166,7 @@ function AllCodingQuestions(props) {
 
     const copyToClipBoard=function(id){
       var textField = document.createElement('textarea')
-      textField.innerText =`${window.location.host}/livetest/${id}` ;
+      textField.innerText =`${window.location.host}/coding/question/${id}` ;
       document.body.appendChild(textField);
       textField.select();
       document.execCommand('copy');
@@ -174,6 +174,15 @@ function AllCodingQuestions(props) {
       console.log("Coppied");
       setCopyAlert(true);
       setTimeout(()=>{setCopyAlert(false)},2000);
+  }
+
+  function handleClick(id) {
+    console.log("Is student",user);
+    if(user.student){
+      props.history.push(`/coding/question/${id}`);
+    }else{
+      props.history.push(`/addQuestion/${id}`)
+    }
   }
 
     return (
@@ -200,7 +209,7 @@ function AllCodingQuestions(props) {
                         {filteredQuestions.map((ques,i)=>(
                             <div className={srchResults[i]?"p-3 my-3 pointer":"p-3 my-3 pointer d-none"} key={i} style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}}  >
                                 <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
-                                    <div className="pt-2 hover-pink text-left"  onClick={()=>props.history.push(`/addQuestion/${ques._id}`)}>
+                                    <div className="pt-2 hover-pink text-left"  onClick={()=>handleClick(ques._id)}>
                                         <h3 className="topicTitle d-inline mr-2" style={{fontSize:"22px"}} > {ques.title}</h3>
                                         <i style={{fontSize:"14px",color:"#333"}} >{ques.status}</i><br/>
                                         <span style={{fontSize:"14px",color:"#444" }} >Difficulty:  <b> {ques.difficulty} </b></span>
