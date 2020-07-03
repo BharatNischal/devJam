@@ -22,7 +22,7 @@ function UIQuestion(props) {
     const iframe = useRef(null);
 
     useEffect(()=>{
-        
+
         if(iframe.current.contentDocument){
             console.log(iframe);
         const document = iframe.current.contentDocument;
@@ -54,7 +54,7 @@ function UIQuestion(props) {
     return (
         <React.Fragment>
         <div className="topBar text-white">
-            <div> 
+            <div>
                 <span className="h2 ml-2 pointer"> <i className="fa fa-arrow-left"></i> </span>
                 <h2 className="d-inline" >
                     <b> Question Title </b>
@@ -69,24 +69,24 @@ function UIQuestion(props) {
             <div className="d-backdrop" onClick={()=>setShowSettings(false)}></div>
             <div className="dropdown " style={{width:"200px",height:"250px"}}>
             <h3 className="my-3"> <b>Set Layout</b> </h3>
-            <div className="mt-2"><button className="btn-outline-grad btn ml-2" onClick={()=>setLayout(1)} > Layout 1 </button></div>
-            <div className="mt-2"><button className="btn-outline-grad btn ml-2" onClick={()=>setLayout(2)} > Layout 2 </button></div>
-            <div className="mt-2"><button className="btn-outline-grad btn ml-2" onClick={()=>setLayout(3)} > Layout 3 </button></div>
-                
+            <div className="mt-2"><button className="btn-outline-grad btn ml-2" onClick={()=>{setLayout(1);setCss(css+" ")}} > Layout 1 </button></div>
+            <div className="mt-2"><button className="btn-outline-grad btn ml-2" onClick={()=>{setLayout(2);setCss(css+" ")}} > Layout 2 </button></div>
+            <div className="mt-2"><button className="btn-outline-grad btn ml-2" onClick={()=>{setLayout(3);setCss(css+" ")}} > Layout 3 </button></div>
+
             </div>
-        </React.Fragment>    
+        </React.Fragment>
         :null}
-        
+
         <div className="bgwhiteoverlay" ></div>
 
         {layout==1?
             <div className="mainGrid ui" style={{gridTemplateRows:"1fr 1fr 1fr",gridTemplateColumns:"1fr 1fr 1fr"}} >
                 <div className=" bg-white" style={{gridRow:"1/3"}} > <h3>Description</h3> </div>
-                <div className=" bg-success uiSectionWrapper " style={{gridRow:"1/3"}} > 
+                <div className=" bg-success uiSectionWrapper " style={{gridRow:"1/3"}} >
                     <h3 className="uisectionHeading"> <b> HTML </b> </h3>
                     <div style={{paddingTop:"35px",height:"100%"}}>
 
-                        <AceEditor   
+                        <AceEditor
                             mode={"html"}
                             theme={"monokai"}
                             name="UNIQUE_ID_OF_DIV"
@@ -102,21 +102,20 @@ function UIQuestion(props) {
                             showPrintMargin={false}
                             showGutter={true}
                             highlightActiveLine={true}
-                            width="100%" 
-                            
+                            width="100%"
                             style={{height:"100%"}}
                             onChange={(newValue)=>setHtml(newValue)}
                             defaultValue={html}
-                            
+
 
                         />
                     </div>
                 </div>
-                <div className=" bg-primary uiSectionWrapper " style={{gridColumn:"1/3"}} > 
+                <div className=" bg-primary uiSectionWrapper " style={{gridColumn:"1/3"}} >
                     <h3 className="uisectionHeading text-left pl-2"> <b> CSS</b> </h3>
                     <div style={{paddingTop:"35px",height:"100%"}}>
 
-                        <AceEditor   
+                        <AceEditor
                             mode={"css"}
                             theme={"monokai"}
                             name="cssEditor"
@@ -132,19 +131,19 @@ function UIQuestion(props) {
                             showPrintMargin={false}
                             showGutter={true}
                             highlightActiveLine={true}
-                            width="100%" 
-                            
+                            width="100%"
+
                             style={{height:"100%"}}
                             onChange={(newValue)=>setCss(newValue)}
                             defaultValue={css}
-                            
+
 
                         />
                     </div>
                 </div>
                 <div className=" bg-white" style={{gridColumn:"3/4",gridRow:"1/4"}} >
                     <iframe style={{width:"100%",height:"100%"}} ref={iframe} >
-                    </iframe> 
+                    </iframe>
                 </div>
             </div>
         :null}
@@ -152,11 +151,11 @@ function UIQuestion(props) {
         {layout==2?
             <div className="mainGrid ui" style={{gridTemplateRows:"1fr 1fr",gridTemplateColumns:"1fr 1fr 1fr"}} >
                 <div className="bg-white" > <h3>Description</h3> </div>
-                <div className=" bg-success uiSectionWrapper " > 
+                <div className=" bg-success uiSectionWrapper " >
                     <h3 className="uisectionHeading"> <b> HTML </b> </h3>
                     <div style={{paddingTop:"35px",height:"100%"}}>
 
-                        <AceEditor   
+                        <AceEditor
                             mode={"html"}
                             theme={"monokai"}
                             name="UNIQUE_ID_OF_DIV"
@@ -172,21 +171,21 @@ function UIQuestion(props) {
                             showPrintMargin={false}
                             showGutter={true}
                             highlightActiveLine={true}
-                            width="100%" 
-                            
+                            width="100%"
+
                             style={{height:"100%"}}
                             onChange={(newValue)=>setHtml(newValue)}
                             defaultValue={html}
-                            
+
 
                         />
                     </div>
                 </div>
-                <div className=" bg-primary uiSectionWrapper"> 
+                <div className=" bg-primary uiSectionWrapper">
                     <h3 className="uisectionHeading"> <b> CSS</b> </h3>
                     <div style={{paddingTop:"35px",height:"100%"}}>
 
-                        <AceEditor   
+                        <AceEditor
                             mode={"css"}
                             theme={"monokai"}
                             name="cssEditor"
@@ -202,19 +201,19 @@ function UIQuestion(props) {
                             showPrintMargin={false}
                             showGutter={true}
                             highlightActiveLine={true}
-                            width="100%" 
-                            
+                            width="100%"
+
                             style={{height:"100%"}}
                             onChange={(newValue)=>setCss(newValue)}
                             defaultValue={css}
-                            
+
 
                         />
                     </div>
                 </div>
-                <div className=" bg-white" style={{gridColumn:"1/4"}} > 
+                <div className=" bg-white" style={{gridColumn:"1/4"}} >
                     <iframe style={{width:"100%",height:"100%"}} ref={iframe} >
-                    </iframe> 
+                    </iframe>
                 </div>
             </div>
         :null}
@@ -234,7 +233,7 @@ function UIQuestion(props) {
                             </div>
                         :null}
                         {activeTab=="HTML"?
-                            <AceEditor   
+                            <AceEditor
                                 mode={"html"}
                                 theme={"monokai"}
                                 name="UNIQUE_ID_OF_DIV"
@@ -250,13 +249,13 @@ function UIQuestion(props) {
                                 showPrintMargin={false}
                                 showGutter={true}
                                 highlightActiveLine={true}
-                                width="100%" 
+                                width="100%"
                                 height="100%"
-                                
+
                                 onChange={(newValue)=>setHtml(newValue)}
                                 defaultValue={html}
-                                
-        
+
+
                             />
                         :null}
                         {activeTab=="CSS"?
@@ -276,21 +275,21 @@ function UIQuestion(props) {
                                 showPrintMargin={false}
                                 showGutter={true}
                                 highlightActiveLine={true}
-                                width="100%" 
+                                width="100%"
                                 height="100%"
-                                
+
                                 onChange={(newValue)=>setCss(newValue)}
                                 defaultValue={css}
-                                
+
 
                             />
                         :null}
                     </div>
                 </div>
-                
-                <div className=" bg-white"  > 
+
+                <div className=" bg-white"  >
                     <iframe style={{width:"100%",height:"100%"}} ref={iframe} >
-                    </iframe> 
+                    </iframe>
                 </div>
             </div>
         :null}
@@ -300,4 +299,3 @@ function UIQuestion(props) {
 
 
 export default UIQuestion
-
