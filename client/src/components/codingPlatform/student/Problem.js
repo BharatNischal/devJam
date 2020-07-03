@@ -51,7 +51,7 @@ function Problem(props) {
 
     function handleEvaluate(responses,type) {
       const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
-      axios.post(`/coding/question/${props.match.params.id}/evaluation`,{lang:langCode[mode],sourceCode,responses})
+      axios.post(`/coding/question/${props.match.params.id}/evaluation`,{lang:langCode[mode],sourceCode,responses,type})
         .then(res=>{
           if(res.data.success){
             console.log(res.data.results);
@@ -89,6 +89,21 @@ function Problem(props) {
           .catch(err=>{
             console.log(err.message);
           })
+    }
+
+    function handleCustomInput() {
+      const sourceCode = props.starterCode[props.starterCode.findIndex(sc=>sc.lang==mode)].code;
+      axios.post(`/submit/custom/testcase`,{lang:langCode[mode],sourceCode,input:customInput.value})
+        .then(res=>{
+          if(res.data.success){
+            console.log(res.data.result);
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
     }
 
     return (
@@ -196,6 +211,7 @@ function Problem(props) {
                     {customInput.add?
                         <div className="ml-3 ">
                             <textarea className="form-control" rows="4" value={customInput.value} onChange={(e)=>setCustomeInput({...customInput,value:e.target.value})} ></textarea>
+                            <button onClick={handleCustomInput}>Run Custom Input</button>
                         </div>
                     :null}
                 </div>

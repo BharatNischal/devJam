@@ -18,14 +18,14 @@ function Row(props) {
     return (
         <React.Fragment>
             <div className="row py-3" style={{borderBottom:"1px solid #c1c1c1"}} >
-                <div className="col-1"> {props.index || 1} </div>
-                <div className="col-4"> {props.language || "Javascript"} </div>
-                <div className="col-4"> {props.points ||40} </div>
+                <div className="col-1"> {props.index} </div>
+                <div className="col-4"> {props.language} </div>
+                <div className="col-4"> {props.points} </div>
     <div className="col-3 pointer hover-pink" onClick={()=>setViewCode(!viewCode)} > <b> {viewCode?"Hide":"View"} Code</b>  </div>
-              
+
             </div>
             {viewCode?
-            <div className="submissionRowContent" >   
+            <div className="submissionRowContent" >
                     <AceEditor
                         mode={props.language||"javascript"}
                         theme={"monokai"}
@@ -42,7 +42,7 @@ function Row(props) {
                         showPrintMargin={false}
                         showGutter={true}
                         highlightActiveLine={true}
-                        width="70%" 
+                        width="70%"
                         height="460px"
                         style={{borderRadius:"14px",boxShadow:"0px 4px 12px #0000008a"}}
                         defaultValue={props.code}
@@ -51,11 +51,10 @@ function Row(props) {
                     />
                 </div>
                 :null}
-            
+
         </React.Fragment>
 
     )
 }
 
 export default Row
-

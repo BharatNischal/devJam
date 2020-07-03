@@ -167,6 +167,37 @@ router.post('/coding/question/:id/submission',function (req,res){
 //Route to create a submission when a student submit a question
 router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,res) {
   // Save in database (code and languageCode)
+  if(req.body.type=="run"){
+    let getPromise=[];
+    req.body.responses.forEach((response,i)=>{
+      if(response.token){
+        console.log(response.token);
+          getPromise.push(
+            axios({
+              "method":"GET",
+              "url":`https://judge0.p.rapidapi.com/submissions/${response.token}`,
+              "headers":{
+              "content-type":"application/octet-stream",
+              "x-rapidapi-host":"judge0.p.rapidapi.com",
+              "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
+              "useQueryString":true
+              }
+              })
+          )
+      }
+      if(i==req.body.responses.length-1){
+        var results=[];
+
+        Promise.all(getPromise)
+        .then(responses=>{
+            res.json({success:true,results:responses.map(resp=>resp.data)})
+        })
+        .catch(err=>{
+          res.json({success:false,msg:err.message});
+        })
+      }
+    })
+  }else{
   db.CodingSubmission.create({sourceCode:req.body.sourceCode,languageCode:req.body.lang,userId:req.user._id,testId:req.params.id})
     .then(submission=>{
       db.CodingQuestion.findById(req.params.id)
@@ -217,11 +248,12 @@ router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,r
                       });
                       const marks = ((correct/question.testCases.length)*question.points).toFixed(2);
                       const TestCases = testCases;
+                      console.log("marks",marks);
                       question.students[index].maxMarks = Math.max(marks,question.students[index].maxMarks?question.students[index].maxMarks:0)
                       question.save();
                       // Save marks
                       console.log(submission);
-                      db.CodingSubmission.findByIdAndUpdate(submission._id,{marks,TestCases})
+                      db.CodingSubmission.findByIdAndUpdate(submission._id,{marks:marks,TestCases:TestCases})
                         .then(sub=>{
                             res.json({success:true,results});
                         })
@@ -243,12 +275,55 @@ router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,r
     .catch(err=>{
       res.json({success:false,msg:err.message});
     })
+  }
 })
 
 
+router.post('/submit/custom/testcase',function (req,res) {
+  console.log("input",req.body.input);
+  axios({
+    "method":"POST",
+    "url":"https://judge0.p.rapidapi.com/submissions",
+    "headers":{
+    "content-type":"application/json",
+    "x-rapidapi-host":"judge0.p.rapidapi.com",
+    "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
+    "accept":"application/json",
+    "useQueryString":true
+    },
+    "data":{
+      "language_id":req.body.lang,
+      "source_code":req.body.sourceCode,
+      "stdin":req.body.input,
+    }
+    })
+    .then(response=>{
+      setTimeout(()=>{
+        axios({
+          "method":"GET",
+          "url":`https://judge0.p.rapidapi.com/submissions/${response.data.token}`,
+          "headers":{
+          "content-type":"application/octet-stream",
+          "x-rapidapi-host":"judge0.p.rapidapi.com",
+          "x-rapidapi-key":"645aff6160msh4ef1fb0de5086abp1d2e75jsn3f5f6f56c58a",
+          "useQueryString":true
+          }
+          })
+          .then(result=>{
+            res.json({success:true,result:result.data});
+          })
+          .catch(err=>{
+            res.json({success:false,msg:err.message});
+          })
+      },3000)
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
+
 router.post("/submitcodingquestion/:quesId",function(req,res){
     const testCases=req.body.testCases.map(tc=>({input:tc.input,output:tc.output}));
-
     var postPromise=[];
 
     testCases.forEach(testCase => {
