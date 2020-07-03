@@ -195,7 +195,7 @@ function AllCodingQuestions(props) {
                     <h1 className="topicTitle mainH text-left text-pink">All Coding Questions</h1>
 
                     <div>
-                        <button className="btn btn-outline-grad ml-2" onClick={handleAdd}> Add Question </button>
+                        {!user.student?<button className="btn btn-outline-grad ml-2" onClick={handleAdd}> Add Question </button>:null}
                     </div>
                 </div>
                 <div className="row my-5">
