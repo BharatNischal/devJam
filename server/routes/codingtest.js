@@ -88,7 +88,7 @@ router.get('/taketest/:id',function (req,res) {
         }else{
           question.students.push({userId:req.user._id});
           question.save();
-          res.json({success:true,question,userIndex:question.students.length})
+          res.json({success:true,question,userIndex:question.students.length-1})
         }
     })
     .catch(err=>{
