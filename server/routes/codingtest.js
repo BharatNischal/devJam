@@ -330,5 +330,17 @@ router.get('/leaderboard/question/:id',function (req,res) {
     })
 })
 
+router.get('/submissions/question/:id',function (req,res) {
+  db.CodingQuestion.findById(req.params.id)
+    .populate('students.submissions')
+    .then(question=>{
+      const user = question.students.filter(st=>req.user._id.equals(st.userId))
+      res.json({success:true,submissions:user[0].submissions?user[0].submissions:[]});
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message});
+    })
+})
+
 
 module.exports = router;

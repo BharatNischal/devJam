@@ -1,7 +1,31 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
+import {withRouter} from 'react-router-dom';
 import Row from './row';
+import axios from "axios";
 
 function Submission(props) {
+
+    const [submissions,setSubmissions] = useState([]);
+    const language = {71:"python",62:"java",63:"javascript"};
+
+    useEffect(()=>{
+
+      axios.get(`/submissions/question/${props.match.params.id}`)
+        .then(res=>{
+          if(res.data.success){
+            console.log(res.data.submissions);
+            setSubmissions(res.data.submissions);
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+
+    },[])
+
+
     return (
         <div className="p-3" >
             <h3 className="mb-3" ><b> Your Submissions </b></h3>
@@ -12,15 +36,13 @@ function Submission(props) {
                     <div className="col-4"> <b>Points</b>  </div>
                     <div className="col-3"> </div>
                 </div>
-                <Row/>
-                <Row index={2} language={"python"} points={30} code={`print("Hello World")`} />
-                <Row/>
-                <Row/>
-                <Row/>
-                
+                {submissions.map((sub,i)=>(
+                  <Row index={i+1} language={language[sub.languageCode]} points={sub.marks} code={sub.sourceCode} />
+                ))}
+
             </div>
         </div>
     )
 }
 
-export default Submission;
+export default withRouter(Submission);
