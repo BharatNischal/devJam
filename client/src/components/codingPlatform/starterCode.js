@@ -28,7 +28,7 @@ function StarterCode(props) {
 
 
     useEffect(()=>{
-      if(!props.question.starterCode){
+      if(!props.question.starterCode||props.question.starterCode.length==0){
         props.setQuestion({...props.question,starterCode:[{
           lang:"javascript",
           code:`'use strict';
@@ -123,7 +123,7 @@ if __name__ == '__main__':
         <div>
             <h2 className="topicTitle text-pink mb-2"  ><b>Starter Code </b></h2>
             <p>
-              Add <b>Arguments</b> to function and take <b>input</b> for these arguments in <b>main method</b> and pass that to <b>calling function</b>. Do this for <b>each language</b> and don't forget to click Save Button on top.       
+              Add <b>Arguments</b> to function and take <b>input</b> for these arguments in <b>main method</b> and pass that to <b>calling function</b>. Do this for <b>each language</b> and don't forget to click Save Button on top.
             </p>
             <div className="mt-2 mx-4 mb-4  editor-wrapper" >
 
@@ -143,7 +143,7 @@ if __name__ == '__main__':
                         </select>
                     </div>
                     </div>
-                    
+
                     <div style={{width:"200px"}}>
                     <div className="text-right" style={{fontSize:"12px"}} >
                         <b>Select Language</b>
