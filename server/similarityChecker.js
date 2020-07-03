@@ -1,16 +1,17 @@
 const deepai = require('deepai'); // OR include deepai.min.js as a script tag in your HTML
 const          express = require('express'),
                 app = express();
+const fs = require('fs');
 deepai.setApiKey('3d0a52e5-8f98-4c55-a854-c37b3cda545a');
 
 try{
-  (async function() {
-      var resp = await deepai.callStandardApi("image-similarity", {
-              image1: "https://www.pexels.com/photo/blue-bmw-sedan-near-green-lawn-grass-170811/",
-              image2: "https://www.pexels.com/photo/blue-bmw-sedan-near-green-lawn-grass-170811/",
-      });
-      console.log(resp);
-  })()
+(async function() {
+    var resp = await deepai.callStandardApi("image-similarity", {
+            image1: "https://firebasestorage.googleapis.com/v0/b/devjam-cb9e8.appspot.com/o/images%2F1593799019960Screenshot%20from%202020-07-03%2012-35-05.png?alt=media&token=225aff14-eab3-47c7-8f7d-c60f4ea9e495",
+            image2: "https://firebasestorage.googleapis.com/v0/b/devjam-cb9e8.appspot.com/o/images%2F1593799019960Screenshot%20from%202020-07-03%2012-35-05.png?alt=media&token=225aff14-eab3-47c7-8f7d-c60f4ea9e495",
+    });
+    console.log(resp);
+})()
 }
 catch(err){
   console.log(err.message);
