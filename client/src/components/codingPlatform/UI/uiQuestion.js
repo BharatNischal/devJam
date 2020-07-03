@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect,useContext} from 'react';
 import "./ui.css";
+import {CurUserContext} from '../../../contexts/curUser';
 import AceEditor from "react-ace";
+import axios from 'axios';
 
 // Editor languages
 import "ace-builds/src-noconflict/snippets/html";
@@ -18,8 +20,64 @@ function UIQuestion(props) {
     const [activeTab,setActiveTab] = useState("description");
     const [layout, setLayout] = useState(3);
     const [showSettings, setShowSettings] = useState(false);
+    const [question,setQuestion] = useState({title:"",description:"",sampleUrl:"",points:0})
+    const [timer,setTimer] = useState(0); //Time in seconds
+    const [allowed,setAllowed] = useState(true);
+    const [started,setStarted] = useState(false)
+    const [time,setTime] = useState(null);
+    const [maxScore,setMaxScore] = useState(0);
+    const {user} = useContext(CurUserContext);
 
     const iframe = useRef(null);
+    const timerRef = useRef(null);
+
+    let timeLeft = 0;
+
+    useEffect(()=>{
+      if(user.loggedIn){
+
+        axios.get(`/frontend/taketest/${props.match.params.id}`)
+          .then(res=>{
+            if(res.data.success){
+              console.log(res.data.question);
+
+              // user has already started the test yet
+              setTime(res.data.question.time);
+              const {title,description,sampleUrl,points} = res.data.question;
+              setQuestion({title,description,sampleUrl,points});
+              setMaxScore(res.data.question.students[res.data.userIndex].maxMarks?res.data.question.students[res.data.userIndex].maxMarks:0);
+              if(res.data.question.time && res.data.question.students[res.data.userIndex].startTime){
+
+                // Timer
+                setStarted(true);
+                const curtime = new Date();
+                const starttime = new Date(res.data.question.students[res.data.userIndex].startTime);
+                let timeDiff = Math.floor((curtime.getTime()-starttime.getTime())/1000);
+                timeLeft = res.data.question.time*60-timeDiff;
+                if(timeLeft<=0){
+                  // Test is over
+                  setAllowed(false);
+                }else{
+                  timerRef.current =setInterval(()=>{
+                    setTimer(--timeLeft)
+                  },1000);
+                }
+              }
+
+            }else{
+              console.log(res.data.msg);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+
+      }else{
+        props.history.push('/login');
+      }
+
+},[])
+
 
     useEffect(()=>{
 
@@ -50,6 +108,43 @@ function UIQuestion(props) {
         document.close();
         }
     },[html,css])
+
+
+    function startTimer() {
+      console.log("start timer called");
+      axios.get(`/frontendtest/${props.match.params.id}/timer`)
+        .then(res=>{
+          if(res.data.success){
+            console.log("success");
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+        if(question.time&&question.time>0){
+          timeLeft = question.time*60;
+          timerRef.current =setInterval(()=>{
+            setTimer(--timeLeft)
+          },1000);
+        }
+    }
+
+    useEffect(()=>{
+      if(timer<0){
+        clearInterval(timerRef.current);
+        setAllowed(false);
+      }
+    },[timer])
+
+    function onFocus() {
+      if(!started){
+        startTimer();
+        setStarted(true);
+      }
+    }
+
 
     return (
         <React.Fragment>
@@ -126,7 +221,7 @@ function UIQuestion(props) {
                                 enableSnippets: true,
                                 showLineNumbers: true,
                             }}
-                            placeholder="Code Will be here"
+                            placeholder="Write your CSS code here"
                             fontSize={18}
                             showPrintMargin={false}
                             showGutter={true}
@@ -196,7 +291,7 @@ function UIQuestion(props) {
                                 enableSnippets: true,
                                 showLineNumbers: true,
                             }}
-                            placeholder="Code Will be here"
+                            placeholder="Write your CSS code here"
                             fontSize={18}
                             showPrintMargin={false}
                             showGutter={true}
@@ -270,7 +365,7 @@ function UIQuestion(props) {
                                     enableSnippets: true,
                                     showLineNumbers: true,
                                 }}
-                                placeholder="Code Will be here"
+                                placeholder="Write your CSS code here"
                                 fontSize={18}
                                 showPrintMargin={false}
                                 showGutter={true}
