@@ -5,6 +5,7 @@ import AceEditor from "react-ace";
 import Alert from "../../ui/alert/alert";
 import {CurUserContext} from '../../../contexts/curUser';
 import axios from 'axios';
+import domtoimage from 'dom-to-image';
 
 // Editor languages
 import "ace-builds/src-noconflict/snippets/javascript";
@@ -155,6 +156,17 @@ function UIQuestion(props) {
         setStarted(true);
       }
     }
+    function domImgHandler(){
+        console.log(iframe.current);
+        domtoimage.toJpeg(document.getElementById(iframe.current.contentDocument.childNodes[1]), { width:"1200px" })
+        .then(function (dataUrl) {
+            var link = document.createElement('a');
+            link.download = 'my-image-name.jpeg';
+            link.href = dataUrl;
+            link.click();
+            link.remove();
+        });
+    }
 
 
     return (
@@ -169,7 +181,7 @@ function UIQuestion(props) {
             <div className="pointer h2 ">
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowLeaderboardAlert(true)}> <b>Leaderboard</b> </button>
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowSubmisssionAler(true)} > <b>Submissions</b> </button>
-                <button className="btn-outline-grad btn mr-3" > Submit</button>
+                <button className="btn-outline-grad btn mr-3" onClick={()=>domImgHandler()} > Submit</button>
                 {!isDynamic?<i className="fas fa-cog " onClick={()=>setShowSettings(true)}></i>:null}
             </div>
         </div>
