@@ -3,7 +3,9 @@ const mongoose = require("mongoose");
 const router=express.Router();
 const db=require("../models/index");
 const middleware = require("../middleware");
+const nodeHtmlToImage = require('node-html-to-image');
 const deepai = require('deepai');
+const fs= require("fs");
 deepai.setApiKey(process.env.deepai);
 
 
@@ -96,7 +98,7 @@ router.get('/frontend/taketest/:id',function (req,res) {
       res.json({success:false,msg:err.message});
     })
 })
-
+new Date().toLocaleTimeString()
 // Router to start the timer
 router.get('/frontendtest/:id/timer',middleware.isStudent,function (req,res) {
   db.FrontendQuestion.findById(req.params.id)
@@ -130,11 +132,32 @@ router.post('/frontend/question/:id/evaluation',middleware.isAdmin,function (req
               submissions:[submission._id]
             })
           }
+
+        
           // Evaluation
-          var resp = await deepai.callStandardApi("image-similarity", {
-                  image1: question.sampleUrl,
-                  // image2: ,
+          const imgName=new Date().getTime();
+          await nodeHtmlToImage({
+            output: `./${imgName}.png`,
+            html: `<html>
+            <head>
+              <style>
+              ${req.body.css}
+              </style>
+            </head>
+            <body>
+              ${req.body.html}
+            </body>
+            </html>`
           });
+            
+          var resp = await deepai.callStandardApi("image-similarity", {
+                  image1: fs.createReadStream(`./${imgName}.png`),
+                  image2: question.sampleURL
+          });
+          console.log(resp);
+          
+
+        
           const marks = resp.distance>35?0:(((35-resp.distance)/35)*question.points).toFixed(2);
           console.log("marks",marks);
           question.students[index].maxMarks = Math.max(marks,question.students[index].maxMarks?question.students[index].maxMarks:0)
