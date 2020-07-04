@@ -157,8 +157,8 @@ function UIQuestion(props) {
       }
     }
     function domImgHandler(){
-        console.log(iframe.current);
-        domtoimage.toJpeg(document.getElementById(iframe.current.contentDocument.childNodes[1]), { width:"1200px" })
+        console.log(iframe.current.contentDocument);
+        domtoimage.toJpeg(iframe.current.contentDocument, { width:"1200px" })
         .then(function (dataUrl) {
             var link = document.createElement('a');
             link.download = 'my-image-name.jpeg';
