@@ -1,4 +1,5 @@
 import React,{useEffect,useState} from 'react';
+import {withRouter} from 'react-router-dom';
 import axios from 'axios';
 
 function Leaderboard(props) {
@@ -52,4 +53,4 @@ function Leaderboard(props) {
     )
 }
 
-export default Leaderboard
+export default withRouter(Leaderboard)

@@ -5,7 +5,6 @@ import AceEditor from "react-ace";
 import Alert from "../../ui/alert/alert";
 import {CurUserContext} from '../../../contexts/curUser';
 import axios from 'axios';
-import domtoimage from 'dom-to-image';
 
 // Editor languages
 import "ace-builds/src-noconflict/snippets/javascript";
@@ -39,6 +38,7 @@ function UIQuestion(props) {
     const [isDynamic, setIsDynamic] = useState(false);
     const [showLeaderboardAlert, setShowLeaderboardAlert] = useState(false);
     const [showSubmisssionAler, setShowSubmisssionAler] = useState(false);
+    const [loading,setLoading] = useState(false);
 
     const iframe = useRef(null);
     const timerRef = useRef(null);
@@ -55,9 +55,11 @@ function UIQuestion(props) {
 
               // user has already started the test yet
               setTime(res.data.question.time);
+              console.log("time",res.data.question.time);
               const {title,description,sampleUrl,points} = res.data.question;
               setQuestion({title,description,sampleUrl,points});
               setMaxScore(res.data.question.students[res.data.userIndex].maxMarks?res.data.question.students[res.data.userIndex].maxMarks:0);
+              console.log("startTime",res.data.question.students[res.data.userIndex].startTime);
               if(res.data.question.time && res.data.question.students[res.data.userIndex].startTime){
 
                 // Timer
@@ -94,7 +96,6 @@ function UIQuestion(props) {
     useEffect(()=>{
 
         if(iframe.current.contentDocument){
-            console.log(iframe);
         const document = iframe.current.contentDocument;
         const documentContents = `
           <!DOCTYPE html>
@@ -156,20 +157,22 @@ function UIQuestion(props) {
         setStarted(true);
       }
     }
-    function domImgHandler(){
-        console.log(iframe.current.contentDocument);
-        domtoimage.toJpeg(iframe.current.contentDocument, { width:"1200px" })
-        .then(function (dataUrl) {
-            var link = document.createElement('a');
-            link.download = 'my-image-name.jpeg';
-            link.href = dataUrl;
-            link.click();
-            link.remove();
-        });
-    }
+
 
     function handleSubmit() {
-
+      setLoading(true);
+      axios.post(`/frontend/question/${props.match.params.id}/evaluation`,{html,css,js})
+        .then(res=>{
+          if(res.data.success){
+            console.log(res.data.marks);
+          }else{
+            console.log(res.data.msg);
+          }
+          setLoading(false);
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
     }
 
     function secondsToHms(d) {
@@ -190,10 +193,15 @@ function UIQuestion(props) {
                     <b> {question.title} </b>
                 </h2>
             </div>
+            <div>
+              {time?<h4 className="text-center text-pink p-2 " style={{backgroundColor:"#f1f1f1" ,borderRadius:"12px", border:"1px solid #bbb" }}  >
+                  <b>{started?(timer<0?secondsToHms(0):secondsToHms(timer)):secondsToHms(time*60)}</b>
+              </h4>:null}
+            </div>
             <div className="pointer h2 ">
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowLeaderboardAlert(true)}> <b>Leaderboard</b> </button>
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowSubmisssionAler(true)} > <b>Submissions</b> </button>
-                {allowed?<button className="btn-outline-grad btn mr-3" onClick={()=>domImgHandler()} > Submit</button>:<span>Time Out</span>}
+                {allowed?<button className="btn-outline-grad btn mr-3" onClick={handleSubmit} > Submit</button>:<span>Time Out</span>}
                 {!isDynamic?<i className="fas fa-cog " onClick={()=>setShowSettings(true)}></i>:null}
             </div>
         </div>
@@ -266,7 +274,7 @@ function UIQuestion(props) {
                                 highlightActiveLine={true}
                                 width="100%"
                                 height="100%"
-
+                                onFocus={onFocus}
                                 onChange={(newValue)=>setHtml(newValue)}
                                 defaultValue={html}
 
@@ -292,7 +300,7 @@ function UIQuestion(props) {
                                 highlightActiveLine={true}
                                 width="100%"
                                 height="100%"
-
+                                onFocus={onFocus}
                                 onChange={(newValue)=>setCss(newValue)}
                                 defaultValue={css}
 
@@ -318,7 +326,7 @@ function UIQuestion(props) {
                                 highlightActiveLine={true}
                                 width="100%"
                                 height="100%"
-
+                                onFocus={onFocus}
                                 onChange={(newValue)=>setJs(newValue)}
                                 defaultValue={js}
 
