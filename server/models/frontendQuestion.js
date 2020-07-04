@@ -29,7 +29,8 @@ var frontendQuestionSchema=new mongoose.Schema({
       }],
       startTime:Date,
       maxMarks:Number
-    }]
+    }],
+    test:String
 });
 
 module.exports=mongoose.model("frontendquestion",frontendQuestionSchema);

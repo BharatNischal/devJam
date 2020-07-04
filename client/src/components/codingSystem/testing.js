@@ -27,18 +27,8 @@ if(document.querySelector('input[type="text"]')&&document.querySelector('#contai
                 }
             }
         }
-//         Make atleast 2 items to check line through
-        if(document.querySelectorAll('.item').length==0){
-
-           document.querySelector('#container').value="Item1";
-           document.querySelector('#btn').click();
-
-            document.querySelector('#container').value="Item2";
-            document.querySelector('#btn').click();
-        }else if(document.querySelectorAll('.items').length==1){
-            document.querySelector('#container').value="Item2";
-            document.querySelector('#btn').click();
-        }
+        document.querySelector('#container').value="Item2";
+        document.querySelector('#btn').click();
 
         //     Canceling event (line-through)
         if(document.querySelectorAll('.item').length>=2){

@@ -59,8 +59,8 @@ function UIQuestion(props) {
               // user has already started the test yet
               setTime(res.data.question.time);
               setIsDynamic(res.data.question.isDynamic);
-              const {title,description,sampleUrl,points} = res.data.question;
-              setQuestion({title,description,sampleUrl,points});
+              const {title,description,sampleUrl,points,test} = res.data.question;
+              setQuestion({title,description,sampleUrl,points,test});
               setMaxScore(res.data.question.students[res.data.userIndex].maxMarks?res.data.question.students[res.data.userIndex].maxMarks:0);
               console.log("startTime",res.data.question.students[res.data.userIndex].startTime);
               if(res.data.question.time && res.data.question.students[res.data.userIndex].startTime){
@@ -114,10 +114,10 @@ function UIQuestion(props) {
           </head>
           <body>
             ${html}
+            <script>
+                ${js}
+          </script>
           </body>
-          <script>
-              ${js}
-        </script>
           </html>
         `;
 

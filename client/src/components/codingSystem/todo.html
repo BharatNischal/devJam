@@ -5,70 +5,16 @@
     <title></title>
   </head>
   <body>
-    <div id="myDIV" class="header">
-  <h2>My To Do List</h2>
-  <input type="text" id="container"  placeholder="Title...">
-  <button onclick="newElement()" class="addBtn" id="btn">Add</button>
-</div>
+    <input type="text" name="" value="" id="container">
+    <ul>
 
-<ul id="myUL">
-</ul>
+    </ul>
+    <button type="button" id="btn" name="button">Add</button>
     <script type="text/javascript">
-      var myNodelist = document.getElementsByTagName("LI");
-var i;
-for (i = 0; i < myNodelist.length; i++) {
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  myNodelist[i].appendChild(span);
-}
-
-// Click on a close button to hide the current list item
-var close = document.getElementsByClassName("close");
-var i;
-for (i = 0; i < close.length; i++) {
-  close[i].onclick = function() {
-    var div = this.parentElement;
-    div.style.display = "none";
-  }
-}
-
-// Add a "checked" symbol when clicking on a list item
-var list = document.querySelector('ul');
-list.addEventListener('click', function(ev) {
-  if (ev.target.tagName === 'LI') {
-    ev.target.classList.toggle('checked');
-  }
-}, false);
-
-// Create a new list item when clicking on the "Add" button
-function newElement() {
-  var li = document.createElement("li");
-  li.className = "item"
-  var inputValue = document.getElementById("container").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === '') {
-    alert("You must write something!");
-  } else {
-    document.getElementById("myUL").appendChild(li);
-  }
-  document.getElementById("container").value = "";
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close del";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    }
-  }
-}
+      document.querySelector('#btn').addEventListener('click',function(){
+        document.querySelector('ul').innerHTML += `<li><div class="item">${document.querySelector('#container').value}</div><span class="del">Delete</span></li>`
+        document.querySelector('#container').value="";
+      })
     </script>
   </body>
 </html>
