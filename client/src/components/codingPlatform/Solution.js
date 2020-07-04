@@ -37,6 +37,7 @@ function Solution(props) {
     const [showResults,setShowResults] = useState(false);
     const [results,setResults] = useState([]);
     const [activeResult,setActiveResult] = useState(0);
+    const [loader,setLoader] = useState(false);
 
 
     useEffect(()=>{
@@ -61,8 +62,8 @@ function Solution(props) {
     }
 
     function runTestCases() {
+      setLoader(true);
       if(props.question.testCases&&props.question.testCases.length>0){
-        setShowResults(false);
         axios.post(`/submitcodingquestion/123`,{testCases:props.question.testCases,lang:langCode[mode],sourceCode:props.question.solution})
           .then(res=>{
             if(res.data.success){
@@ -72,6 +73,7 @@ function Solution(props) {
             }else{
               console.log(res.data.msg);
             }
+            setLoader(false);
           })
           .catch(err=>{
             console.log(err.message);
@@ -149,7 +151,7 @@ function Solution(props) {
                 />
                 <div className="editor-footer text-right" >
                 <span className="float-left">Use <b>Run All Tests</b> to get idea of <b>Time and memory limit</b> for your testcases and set them accordingly</span>
-                <button className="btn btn-outline-grad ml-2" onClick={runTestCases} > Run All Tests </button>
+                {loader?<div type="submit" className="btn btn-grad ml-2"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="loader"/></div>:<button className="btn btn-outline-grad ml-2" onClick={runTestCases} > Run All Tests </button>}
                 </div>
             </div>
           {showResults?

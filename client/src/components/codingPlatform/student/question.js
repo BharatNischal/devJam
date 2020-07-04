@@ -23,6 +23,8 @@ export default function StudentQuestion(props) {
   const [maxScore,setMaxScore] = useState(0);
   const [editorialAlert,setEditorialAlert] = useState(false);
   const timerRef = useRef(null);
+  const [marksAlert,setMarksAlert] = useState(false);
+  const [marksScored,setMarksScored] = useState(0);
   let timeLeft=0;
 
   //UI STATES
@@ -118,13 +120,17 @@ export default function StudentQuestion(props) {
     <div>
       <TopBar/>
       <div className="bgwhiteoverlay"> </div>
+        {marksAlert?<div className="custom-alert"> You Scored {marksScored} Marks </div>:null}
       <div className="container-fluid" style={{marginTop:"100px"}} >
         {editorialAlert?<div className="custom-alert"> You need to get full marks to unlock the Editorial </div>:null}
         <div className=" p-3 text-left m-4  shadow" style={{borderRadius:"18px",backgroundColor:"rgb(255, 235, 249)"}}>
             <h2 className="topicTitle mainH text-left text-pink" >
                     {question.title}
+                    <div className="px-2 px-md-3 float-right">
+                        <b className="pl-1 pl-md-2">{question.points} Points</b>
+                    </div>
             </h2>
-                <span className="cursor-pointer p-2 pb-4" ><i className="fa fa-arrow-left anim-hil text-pink" onClick={()=>props.history.push('/codingQuestions')}></i> Go Back</span><br/>
+                <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push('/codingQuestions')}><i className="fa fa-arrow-left anim-hil text-pink" ></i> Go Back</span><br/>
         </div>
         <div className="row">
           <div className="col-lg-9 p-3 ml-4">
@@ -137,7 +143,7 @@ export default function StudentQuestion(props) {
               </div>
               <div className="tabCont p-3">
                 {activeTab=="problem"?
-                  <Problem time={time} allowed={allowed} question={question} starterCode={starterCode} setStarterCode={setStarterCode} testCases={testCases} startTimer={startTimer} started={started} setStarted={setStarted} timer={timer}/>
+                  <Problem time={time} setMarksAlert={setMarksAlert} setMarksScored={setMarksScored} allowed={allowed} question={question} starterCode={starterCode} setStarterCode={setStarterCode} testCases={testCases} startTimer={startTimer} started={started} setStarted={setStarted} timer={timer}/>
 
                 :null}
 

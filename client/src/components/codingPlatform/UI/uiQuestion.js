@@ -40,6 +40,8 @@ function UIQuestion(props) {
     const [showSubmisssionAler, setShowSubmisssionAler] = useState(false);
     const [loading,setLoading] = useState(false);
     const [showLightBox,setShowLightBox] = useState(false);
+    const [marksAlert,setMarksAlert] = useState(false);
+    const [marksScored,setMarksScored] = useState(0);
 
     const iframe = useRef(null);
     const timerRef = useRef(null);
@@ -166,6 +168,9 @@ function UIQuestion(props) {
         .then(res=>{
           if(res.data.success){
             console.log(res.data.marks);
+            setMarksScored(res.data.marks?res.data.marks:0);
+            setMarksAlert(true);
+            setTimeout(()=>{setMarksAlert(false)},2000);
           }else{
             console.log(res.data.msg);
           }
@@ -192,6 +197,9 @@ function UIQuestion(props) {
                 <span className="h2 ml-2 pointer" onClick={()=>props.history.push("/uiquestions")} > <i className="fa fa-arrow-left"></i> </span>
                 <h2 className="d-inline" >
                     <b> {question.title} </b>
+                      <div className="px-2 px-md-3 float-right">
+                          <b className="pl-1 pl-md-2" style={{fontSize:"0.8em"}}>Points:{question.points}</b>
+                      </div>
                 </h2>
             </div>
             <div>
@@ -202,10 +210,11 @@ function UIQuestion(props) {
             <div className="pointer h2 ">
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowLeaderboardAlert(true)}> <b>Leaderboard</b> </button>
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowSubmisssionAler(true)} > <b>Submissions</b> </button>
-                {allowed?<button className="btn-outline-grad btn mr-3" onClick={handleSubmit} > Submit</button>:<span className="mr-2">Time Out</span>}
+                {allowed?(loading?<div type="submit" className="btn btn-grad ml-2"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="loader"/></div>:<button className="btn-outline-grad btn mr-3" onClick={handleSubmit} > Submit</button>):<span className="mr-2" style={{fontSize:"0.8em"}}>Time Out</span>}
                 {!isDynamic?<i className="fas fa-cog " onClick={()=>setShowSettings(true)}></i>:null}
             </div>
         </div>
+        {marksAlert?<div className="custom-alert"> You Scored {marksScored} Marks </div>:null}
         {showSubmisssionAler?
             <Alert style={{maxWidth:"90%"}} cancel={()=>setShowSubmisssionAler(false)} >
                 <Submission/>
@@ -235,7 +244,7 @@ function UIQuestion(props) {
 
 
         {showLightBox?
-        <div className="d-backdrop text-white" style={{backgroundColor:"rgba(0,0,0,0.6)"}} > 
+        <div className="d-backdrop text-white" style={{backgroundColor:"rgba(0,0,0,0.6)"}} >
           <div className="h1 text-right p-3"> <i className="fa fa-close pointer" onClick={()=>setShowLightBox(false)} ></i> </div>
           <div className=" text-center">
             <img src={question.sampleUrl} alt="UI Image" style={{maxWidth:"80%",maxHeight:"80vh",borderRadius:"12px",boxShadow:"0px 4px 12px #0000008a"}} />

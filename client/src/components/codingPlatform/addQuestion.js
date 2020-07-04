@@ -168,7 +168,7 @@ function AddQuestion(props) {
                                 <input type="checkbox" className="custom-control-input" id="customCheck1" checked={isTimed} onChange={(e)=>setIsTimed(e.target.checked)} />
                                 <label className="custom-control-label" htmlFor="customCheck1">Timed</label>
                             </div>
-                            {isTimed?<input type="number" value={time} onChange={(e)=>setTime(e.target.value)}  className="form-control d-inline" placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
+                            {isTimed?<input type="number" value={time?time:""} onChange={(e)=>setTime(e.target.value)}  className="form-control d-inline" placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
                         </div>
                     </div>
                 </div>
