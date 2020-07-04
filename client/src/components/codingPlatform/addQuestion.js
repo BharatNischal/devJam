@@ -128,7 +128,7 @@ function AddQuestion(props) {
 
                     </div>
                 </div>
-                <div className="pl-2 text-left"> <span className="cursor-pointer p-2 pb-4"><i className="fa fa-arrow-left anim-hil text-pink" onClick={()=>props.history.push('/codingQuestions')}></i> Go Back</span><br/></div>
+                <div className="pl-2 text-left"> <span className="cursor-pointer p-2 pb-4" onClick={()=>props.history.push('/codingQuestions')}><i className="fa fa-arrow-left anim-hil text-pink" ></i> Go Back</span><br/></div>
                 <div className="row my-5" >
                     <div className="col-md-8">
                         <div className="form-group input-group ">
