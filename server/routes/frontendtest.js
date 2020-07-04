@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 const router=express.Router();
 const db=require("../models/index");
 const middleware = require("../middleware");
+const deepai = require('deepai');
+deepai.setApiKey(process.env.deepai);
+
 
 
 // To get all the tests whether published or unpublished
@@ -117,8 +120,32 @@ router.post('/frontend/question/:id/evaluation',middleware.isAdmin,function (req
   db.FrontendSubmission.create({html:req.body.html,css:req.body.css,js:req.body.js,userId:req.user._id,testId:req.params.id})
     .then(submission=>{
       db.FrontendQuestion.findById(req.params.id)
-        .then(question=>{
-
+        .then(async question=>{
+          const index = question.students.findIndex(s=>s.userId.equals(req.user._id));
+          if(index!=-1){
+            question.students[index].submissions.push(submission._id);
+          }else{
+            question.students.push({
+              userId:req.user._id,
+              submissions:[submission._id]
+            })
+          }
+          // Evaluation
+          var resp = await deepai.callStandardApi("image-similarity", {
+                  image1: question.sampleUrl,
+                  // image2: ,
+          });
+          const marks = resp.distance>35?0:(((35-resp.distance)/35)*question.points).toFixed(2);
+          console.log("marks",marks);
+          question.students[index].maxMarks = Math.max(marks,question.students[index].maxMarks?question.students[index].maxMarks:0)
+          question.save();
+          db.FrontendSubmission.findByIdAndUpdate(submission._id,{marks:marks})
+            .then(sub=>{
+                res.json({success:true,results});
+            })
+            .catch(err=>{
+              res.json({success:false,msg:err.message});
+            })
         })
         .catch(err=>{
           res.json({success:false,msg:err.message});
