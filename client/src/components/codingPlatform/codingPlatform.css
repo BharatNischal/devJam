@@ -97,7 +97,7 @@
     }
 }
 
-@media (max-width:500px){
+@media (max-width:800px){
     .tabs .tabH{
         width: 100%;
         overflow-x: auto;

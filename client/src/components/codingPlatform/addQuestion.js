@@ -118,7 +118,7 @@ function AddQuestion(props) {
             <Nav show={true} menu={true}/>
             {saveAlert?<div className="custom-alert"> Question Saved</div>:null}
             <div className="bgwhiteoverlay"> </div>
-            <div className="container" style={{marginTop:"120px"}} >
+            <div className="container" style={{marginTop:"120px",maxWidth:"90%"}} >
                 <div className="d-flex justify-content-between">
                     <h1 className="topicTitle mainH text-left text-pink">Add Question</h1>
                     <div>
