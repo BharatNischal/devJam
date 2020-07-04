@@ -36,7 +36,7 @@ function Submission(props) {
                     <div className="col-4"> </div>
                 </div>
                 {submissions.map((sub,i)=>(
-                  <Row index={i+1}  points={sub.points} html={sub.html} css={sub.css} js={sub.js} />
+                  <Row index={i+1}  points={sub.marks} html={sub.html} css={sub.css} js={sub.js} />
                 ))}
 
             </div>
