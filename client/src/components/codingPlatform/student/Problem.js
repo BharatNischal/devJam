@@ -65,7 +65,9 @@ function Problem(props) {
               setTests(props.testCases);
               const correct = res.data.results.filter(r=>r.status.id==3).length;
               setPoints(((correct/props.testCases.length)*props.question.points).toFixed(2));
-              console.log(((correct/props.testCases.length)*props.question.points).toFixed(2));
+              props.setMarksScored(((correct/props.testCases.length)*props.question.points).toFixed(2))
+              props.setMarksAlert(true);
+              setTimeout(()=>{props.setMarksAlert(false)},3000);
             }
             setShowResults(true);
           }else{
@@ -187,7 +189,7 @@ function Problem(props) {
                         </div>
 
                         </div>
-                        {props.time?<h4 className="text-center text-pink p-2 " style={{backgroundColor:"#f1f1f1" ,borderRadius:"12px", border:"1px solid #bbb" }}  >
+                        {props.time?<h4 className="text-center text-pink p-2 " style={{backgroundColor:"#f1f1f1" ,borderRadius:"12px", border:"1px solid #bbb" }}  >Time Left
                             <b>{props.started?(props.timer<0?secondsToHms(0):secondsToHms(props.timer)):secondsToHms(props.time*60)}</b>
                         </h4>:null}
                         <div style={{width:"150px"}}>

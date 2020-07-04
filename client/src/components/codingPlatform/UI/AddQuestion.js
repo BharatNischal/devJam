@@ -167,7 +167,7 @@ function AddUIQuestion(props) {
                                 <input type="checkbox" className="custom-control-input" id="customCheck1" checked={isTimed} onChange={(e)=>setIsTimed(e.target.checked)} />
                                 <label className="custom-control-label" htmlFor="customCheck1" >Timed</label>
                             </div>
-                            {isTimed?<input type="number" className="form-control d-inline mr-3" value={time} onChange={(e)=>setTime(e.target.value)} placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
+                            {isTimed?<input type="number" className="form-control d-inline mr-3" value={time?time:""} onChange={(e)=>setTime(e.target.value)} placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
                             <div className="custom-control custom-checkbox d-inline ml-3" >
                                 <input type="checkbox" className="custom-control-input" id="customDynamicCheck1" checked={isDynamic} onChange={(e)=>setIsDynamic(e.target.checked)} />
                                 <label className="custom-control-label" htmlFor="customDynamicCheck1" ><b>Is Dynamic?</b></label>
