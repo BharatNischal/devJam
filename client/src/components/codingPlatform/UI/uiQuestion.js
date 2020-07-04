@@ -136,8 +136,8 @@ function UIQuestion(props) {
         .catch(err=>{
           console.log(err.message);
         })
-        if(question.time&&question.time>0){
-          timeLeft = question.time*60;
+        if(time&&time>0){
+          timeLeft = time*60;
           timerRef.current =setInterval(()=>{
             setTimer(--timeLeft)
           },1000);
