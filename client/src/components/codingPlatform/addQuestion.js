@@ -96,6 +96,22 @@ function AddQuestion(props) {
         })
     }
 
+    function handleUnpublish() {
+      setBtnClickPublish(true);
+      axios.put(`/coding/question/${props.match.params.id}/status`,{status:"Draft"})
+        .then(res=>{
+          if(res.data.success){
+            setStatus("Draft");
+            setBtnClickPublish(false);
+          }else{
+            console.log(res.data.msg);
+          }
+        })
+        .catch(err=>{
+          console.log(err.message);
+        })
+    }
+
     return (
         <React.Fragment>
             <Nav show={true} menu={true}/>
@@ -108,7 +124,7 @@ function AddQuestion(props) {
 
                         {btnclickSave?<div type="submit" className="btn btn-grad ml-2"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="loader"/></div>:<button className="btn btn-outline-grad ml-2" onClick={handleSave}> Save </button>}
                         {status=="Draft"?(btnclickPublish?<div type="submit" className="btn btn-grad ml-2"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="loader"/></div>:<button className="btn btn-outline-grad ml-2" onClick={handlePublish}> Publish </button>):null}
-
+                        {status=="Published"?(btnclickPublish?<div type="submit" className="btn btn-grad ml-2"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="loader"/></div>:<button className="btn btn-outline-grad ml-2" onClick={handleUnpublish}> Unpublish </button>):null}
 
                     </div>
                 </div>
