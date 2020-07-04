@@ -101,7 +101,6 @@ function AllCodingQuestions(props) {
                 }else{
                   topicFiltering=false;
                 }
-
                 boolVal= boolVal && topicFiltering;
             }else{
                 boolVal=boolVal && true;

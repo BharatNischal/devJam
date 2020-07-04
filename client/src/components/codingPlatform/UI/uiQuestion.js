@@ -114,11 +114,10 @@ function UIQuestion(props) {
           </head>
           <body>
             ${html}
-            <script> 
-            const efdbdfl=document.getElementById("hello");
-            efdbdfl.style.color="red";
-            </script>
           </body>
+          <script>
+              ${js}
+        </script>
           </html>
         `;
 
@@ -126,7 +125,7 @@ function UIQuestion(props) {
         document.write(documentContents);
         document.close();
         }
-    },[html,css])
+    },[html,css,js])
 
 
     function startTimer() {
