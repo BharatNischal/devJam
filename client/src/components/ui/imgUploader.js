@@ -8,19 +8,22 @@ function ImgUploader(props) {
    
 
     const uploadHandler = function(){
+        if (imageAsFile){
         setLoader(true);
-        storage.child(Date.now()+imageAsFile.name).put(imageAsFile).then(async function(snapshot) {
+            storage.child(Date.now()+imageAsFile.name).put(imageAsFile).then(async function(snapshot) {
 
-            await snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                console.log(downloadURL,"HERE");
-                setLoader(false);
+                await snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    console.log(downloadURL,"HERE");
+                    setLoader(false);
+                    
+                    props.update(downloadURL);
                 
-                props.update(downloadURL);
-              
-            });
-    }).catch(Err=>{
-        console.log(Err);
-    })}
+                });
+            }).catch(Err=>{
+                console.log(Err);
+            })
+        }
+    }
 
     return (
         <React.Fragment>
