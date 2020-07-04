@@ -11,6 +11,7 @@ import Solution from './Solution';
 import StarterCode from './starterCode';
 import Select from 'react-select';
 import {CurUserContext} from '../../contexts/curUser';
+import Submission from './submission/submission';
 
 function AddQuestion(props) {
     const [activeTab,setActiveTab] =useState("description");
@@ -181,6 +182,7 @@ function AddQuestion(props) {
                         <div className={activeTab=="limits"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("limits")} > Limits & Constraints </div>
                         <div className={activeTab=="solution"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("solution")} > Solution </div>
                         <div className={activeTab=="starterCode"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("starterCode")} > Starter Code </div>
+                        <div className={activeTab=="viewSubmissions"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("viewSubmissions")} > View Submissions </div>
                     </div>
                     <div className="tabCont p-3">
                         {activeTab=="description"?
@@ -203,6 +205,9 @@ function AddQuestion(props) {
                         :null}
                         {activeTab=="starterCode"?
                             <StarterCode question={question} setQuestion={setQuestion}/>
+                        :null}
+                        {activeTab=="viewSubmissions"?
+                            <Submission/>
                         :null}
                     </div>
                 </div>
