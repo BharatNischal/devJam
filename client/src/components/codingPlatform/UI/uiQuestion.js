@@ -42,6 +42,7 @@ function UIQuestion(props) {
     const [showLightBox,setShowLightBox] = useState(false);
     const [marksAlert,setMarksAlert] = useState(false);
     const [marksScored,setMarksScored] = useState(0);
+    const [evalStarted, setEvalStarted] = useState(false);
 
     const iframe = useRef(null);
     const timerRef = useRef(null);
@@ -100,6 +101,7 @@ function UIQuestion(props) {
 
         if(iframe.current.contentDocument){
         const document = iframe.current.contentDocument;
+        console.log(document.querySelector);
         const documentContents = `
           <!DOCTYPE html>
           <html lang="en">
@@ -114,10 +116,78 @@ function UIQuestion(props) {
           </head>
           <body>
             ${html}
-          </body>
+            <script>
+                ${js}
+          </script>
           <script>
-              ${js}
-        </script>
+          ${evalStarted?`
+          
+          let passed=0;
+          // If there is an input tag to start otherwise no other testing possible
+          if(document.querySelector('input[type="text"]')&&document.querySelector('#container')){
+              passed++;
+              // Buuton to add todo
+              if(document.querySelector('#btn')){
+                  passed++;
+                  // No item in start
+                  if(document.querySelectorAll('.item').length==0){
+                      passed++;
+                  //     Insertion
+                      document.querySelector('#container').value="Milk";
+                      document.querySelector('#btn').click();
+                      if(document.querySelectorAll('.item').length==1&&
+                      document.querySelectorAll('.item')[0].innerText=="Milk"){
+                          passed++;
+                      }
+                      document.querySelector('#container').value="Tomatos";
+                      document.querySelector('#btn').click();
+                  //     Deletion
+                      if(document.querySelectorAll('.del').length==2){
+                          passed++;
+                          document.querySelectorAll('.del')[1].click();
+                          if(document.querySelectorAll('.item').length==1&&
+                      document.querySelectorAll('.item')[0].innerText=="Milk"){
+                              passed++;
+                          }
+                      }
+                  }
+                  document.querySelector('#container').value="Item2";
+                  document.querySelector('#btn').click();
+          
+                  //     Canceling event (line-through)
+                  if(document.querySelectorAll('.item').length>=2){
+                      document.querySelectorAll('.item')[0].click();
+                      only1lineThrough = true;
+                      for(let i=0;i<document.querySelectorAll('.item').length;i++){
+          
+                          if(i!=0 && (document.querySelectorAll('.item')[i].style.textDecoration=="line-through"||
+                            document.querySelectorAll('.item')[i].contains(document.querySelector('strike')))
+                          ){
+                              only1lineThrough = false;
+                          }
+                          if(i==0 && !(document.querySelectorAll('.item')[i].style.textDecoration=="line-through"||
+                            document.querySelectorAll('.item')[i].contains(document.querySelector('strike')))){
+                              only1lineThrough = false;
+                            }
+                      }
+                      if(only1lineThrough){
+                          passed++;
+                      }
+                  }
+          
+              }
+          }
+          
+          var resultDiv=document.createElement("h1");
+          resultDiv.id="resultElementOfTest";
+          resultDiv.innerText=""+passed;
+          resultDiv.style.opacity="0";
+          
+          document.body.appendChild(resultDiv);
+          
+          `:null}
+          </script>          
+          </body>
           </html>
         `;
 
@@ -125,7 +195,7 @@ function UIQuestion(props) {
         document.write(documentContents);
         document.close();
         }
-    },[html,css,js])
+    },[html,css,js,evalStarted])
 
 
     function startTimer() {
@@ -155,6 +225,19 @@ function UIQuestion(props) {
         setAllowed(false);
       }
     },[timer])
+
+    useEffect(()=>{
+      if(evalStarted){
+        const evalInterval=setInterval(()=>{
+            if(iframe.current.contentDocument.body.contains(iframe.current.contentDocument.querySelector("#resultElementOfTest"))){
+              clearInterval(evalInterval);
+              alert(iframe.current.contentDocument.querySelector("#resultElementOfTest").innerText);
+            }
+            console.log("RESULT");
+            
+        },1000)
+      }
+    },[evalStarted])
 
     function onFocus() {
       if(!started){
@@ -212,6 +295,7 @@ function UIQuestion(props) {
             <div className="pointer h2 ">
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowLeaderboardAlert(true)}> <b>Leaderboard</b> </button>
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowSubmisssionAler(true)} > <b>Submissions</b> </button>
+                <button className="btn btn-outline-grad" onClick={()=>setEvalStarted(true)} > Eval </button>
                 {allowed?(loading?<div type="submit" className="btn btn-grad ml-2"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="loader"/></div>:<button className="btn-outline-grad btn mr-3" onClick={handleSubmit} > Submit</button>):<span className="mr-2" style={{fontSize:"0.8em"}}>Time Out</span>}
                 {!isDynamic?<i className="fas fa-cog " onClick={()=>setShowSettings(true)}></i>:null}
             </div>
