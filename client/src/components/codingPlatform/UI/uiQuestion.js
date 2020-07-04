@@ -112,7 +112,10 @@ function UIQuestion(props) {
           </head>
           <body>
             ${html}
-            <script> ${isDynamic?js:""} </script>
+            <script> 
+            const efdbdfl=document.getElementById("hello");
+            efdbdfl.style.color="red";
+            </script>
           </body>
           </html>
         `;
