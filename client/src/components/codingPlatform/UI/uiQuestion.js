@@ -136,8 +136,8 @@ function UIQuestion(props) {
         .catch(err=>{
           console.log(err.message);
         })
-        if(question.time&&question.time>0){
-          timeLeft = question.time*60;
+        if(time&&time>0){
+          timeLeft = time*60;
           timerRef.current =setInterval(()=>{
             setTimer(--timeLeft)
           },1000);
@@ -201,7 +201,7 @@ function UIQuestion(props) {
             <div className="pointer h2 ">
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowLeaderboardAlert(true)}> <b>Leaderboard</b> </button>
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowSubmisssionAler(true)} > <b>Submissions</b> </button>
-                {allowed?<button className="btn-outline-grad btn mr-3" onClick={handleSubmit} > Submit</button>:<span>Time Out</span>}
+                {allowed?<button className="btn-outline-grad btn mr-3" onClick={handleSubmit} > Submit</button>:<span className="mr-2">Time Out</span>}
                 {!isDynamic?<i className="fas fa-cog " onClick={()=>setShowSettings(true)}></i>:null}
             </div>
         </div>
