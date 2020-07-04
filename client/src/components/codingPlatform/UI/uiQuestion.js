@@ -39,6 +39,7 @@ function UIQuestion(props) {
     const [showLeaderboardAlert, setShowLeaderboardAlert] = useState(false);
     const [showSubmisssionAler, setShowSubmisssionAler] = useState(false);
     const [loading,setLoading] = useState(false);
+    const [showLightBox,setShowLightBox] = useState(false);
 
     const iframe = useRef(null);
     const timerRef = useRef(null);
@@ -232,12 +233,22 @@ function UIQuestion(props) {
 
         <div className="bgwhiteoverlay" ></div>
 
+
+        {showLightBox?
+        <div className="d-backdrop text-white" style={{backgroundColor:"rgba(0,0,0,0.6)"}} > 
+          <div className="h1 text-right p-3"> <i className="fa fa-close pointer" onClick={()=>setShowLightBox(false)} ></i> </div>
+          <div className=" text-center">
+            <img src={question.sampleUrl} alt="UI Image" style={{maxWidth:"80%",maxHeight:"80vh",borderRadius:"12px",boxShadow:"0px 4px 12px #0000008a"}} />
+          </div>
+        </div>
+        :null}
+
         {layout==1 && !isDynamic ?
-            <Layout1 iframe={iframe} html={html} css={css} setHtml={setHtml} setCss={setCss} />
+            <Layout1 iframe={iframe} html={html} description={question.description} img={question.sampleUrl} css={css} setHtml={setHtml} setCss={setCss} />
         :null}
 
         {layout==2 && !isDynamic?
-            <Layout2 iframe={iframe} html={html} css={css} setHtml={setHtml} setCss={setCss} />
+            <Layout2 iframe={iframe} html={html} description={question.description} img={question.sampleUrl} css={css} setHtml={setHtml} setCss={setCss} />
         :null}
 
         {layout==3 || isDynamic?
@@ -251,8 +262,15 @@ function UIQuestion(props) {
                     </div>
                     <div className="uitabCont  text-left " style={{height:"100%",paddingTop:"50px"}} >
                         {activeTab=="description"?
-                            <div className="p-2">
-                                <h2>Description</h2>
+                            <div className="p-2" style={{overflow:"auto"}} >
+                                <h3><b>Description</b></h3>
+                                <hr/>
+                                <div className="p-3">
+                                  <div>
+                                    <img src={question.sampleUrl} alt="UI Image" style={{width:"100%",borderRadius:"12px",boxShadow:"0px 4px 12px #0000008a",cursor:"zoom-in"}} onClick={()=>setShowLightBox(true)} />
+                                  </div>
+                                </div>
+                                <div className="p-2" dangerouslySetInnerHTML={{__html:question.description}} />
                             </div>
                         :null}
                         {activeTab=="HTML"?
