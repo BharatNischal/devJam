@@ -91,12 +91,14 @@ function AllCodingQuestions(props) {
             //Topic filtering
             if(selectedTopics.length>0){
                 var topicFiltering=false;
-                for(let i=0;i<ques.topics?ques.topics.length:0;i++){
-                    if(selectedTopics.includes(ques.topics[i])){
-                        topicFiltering=true;
-                        break;
-                    }
+
+                for(let i=0;i<selectedTopics.length;i++){
+                  if(ques.topic.includes(selectedTopics[i])){
+                    topicFiltering=true;
+                    break;
+                  }
                 }
+
                 boolVal= boolVal && topicFiltering;
             }else{
                 boolVal=boolVal && true;
