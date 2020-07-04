@@ -25,7 +25,7 @@ function AddUIQuestion(props) {
     const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
     const [img,setImg] = useState(null);
     const [isTimed,setIsTimed] = useState(false);
-    const [isDynamic,setIsDynamic] = useState(false);
+    // const [isDynamic,setIsDynamic] = useState(false);
     const {user} = useContext(CurUserContext);
     const [test,setTest] = useState("");
 
@@ -35,7 +35,7 @@ function AddUIQuestion(props) {
     const [saveAlert,setSaveAlert] = useState(false);
     const [activeTab, setActiveTab] = useState("description");
     const [showImgUploader, setShowImgUploader] = useState(false);
-    const [question,setQuestion] = useState({title:"",description:"",sampleUrl:"",points:0});
+    const [question,setQuestion] = useState({title:"",description:"",sampleUrl:"",points:0,test:""});
     const [status,setStatus] = useState("Draft");
     const [time,setTime] = useState(0);
 
@@ -49,9 +49,6 @@ function AddUIQuestion(props) {
             if(res.data.success){
                 setQuestion(res.data.question);
                 setStatus(res.data.question.status);
-                if(res.data.question.isDynamic){
-                  setIsDynamic(true);
-                }
                 if(res.data.question.time&&res.data.question.time>0){
                   setIsTimed(true);
                   setTime(res.data.question.time);
@@ -77,7 +74,7 @@ function AddUIQuestion(props) {
     },[])
 
     function handleUpdate(data) {
-        setQuestion({...question,description:draftToHtml(convertToRaw(data.getCurrentContent())),isDynamic:isDynamic});
+        setQuestion({...question,description:draftToHtml(convertToRaw(data.getCurrentContent()))});
     }
 
     // Save the progress
@@ -170,7 +167,7 @@ function AddUIQuestion(props) {
                             </div>
                             {isTimed?<input type="number" className="form-control d-inline mr-3" value={time?time:""} onChange={(e)=>setTime(e.target.value)} placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
                             <div className="custom-control custom-checkbox d-inline ml-3" >
-                                <input type="checkbox" className="custom-control-input" id="customDynamicCheck1" checked={isDynamic} onChange={(e)=>setIsDynamic(e.target.checked)} />
+                                <input type="checkbox" className="custom-control-input" id="customDynamicCheck1" checked={question.isDynamic} onChange={(e)=>setQuestion({...question,isDynamic:e.target.checked})} />
                                 <label className="custom-control-label" htmlFor="customDynamicCheck1" ><b>Is Dynamic?</b></label>
                             </div>
                         </div>
@@ -186,7 +183,7 @@ function AddUIQuestion(props) {
                     <div className="d-flex tabH" style={{flexGrow:"1"}}>
                         <div className={activeTab=="description"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("description")} > Description </div>
                         <div className={activeTab=="leaderboard"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("leaderboard")} > View Submissions </div>
-                        {isDynamic?<div className={activeTab=="test"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("test")} > Test </div>:null}
+                        {question.isDynamic?<div className={activeTab=="test"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("test")} > Test </div>:null}
 
                     </div>
                     <div className="tabCont p-3">
@@ -212,11 +209,11 @@ function AddUIQuestion(props) {
                             </React.Fragment>
                         :null}
                         {activeTab=="leaderboard"?
-                            
+
                             <Submission/>
                         :null}
 
-                        {activeTab=="test" && isDynamic?
+                        {activeTab=="test" && question.isDynamic?
                           <React.Fragment>
                             <h3><b>Test</b></h3>
                             <p>This Test will be used to evaluate student marks, these tests will be written in javascript's <b>Chai and Moocha</b> packages.</p>
@@ -239,8 +236,8 @@ function AddUIQuestion(props) {
                             width="60%"
                             height="450px"
                             style={{borderRadius:"14px",boxShadow:"0px 4px 12px #0000008a",marginLeft:"14px"}}
-                            defaultValue={question.test||null}
-                            onChange={(newVal)=>setTest(newVal)}
+                            value={question.test}
+                            onChange={(newVal)=>setQuestion({...question,test:newVal})}
 
                             />
                           </React.Fragment>
