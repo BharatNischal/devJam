@@ -17,6 +17,7 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/snippets/javascript";
 
 import "ace-builds/src-noconflict/theme-monokai";
+import Submission from './adminSubmissions/submission';
 
 
 
@@ -184,7 +185,7 @@ function AddUIQuestion(props) {
                 <div className="tabs mb-5">
                     <div className="d-flex tabH" style={{flexGrow:"1"}}>
                         <div className={activeTab=="description"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("description")} > Description </div>
-                        <div className={activeTab=="leaderboard"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("leaderboard")} > Leaderboard </div>
+                        <div className={activeTab=="leaderboard"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("leaderboard")} > View Submissions </div>
                         {isDynamic?<div className={activeTab=="test"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("test")} > Test </div>:null}
 
                     </div>
@@ -211,7 +212,8 @@ function AddUIQuestion(props) {
                             </React.Fragment>
                         :null}
                         {activeTab=="leaderboard"?
-                            <h1>Leaderboard</h1>
+                            
+                            <Submission/>
                         :null}
 
                         {activeTab=="test" && isDynamic?
