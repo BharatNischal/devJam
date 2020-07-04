@@ -65,6 +65,12 @@ const Nav =(props)=>{
                                 <li className="nav-item ">
                                     <Link className="nav-link" to="/createProfile">Create Profile</Link>
                                 </li>
+                                <li className="nav-item ">
+                                    <Link className="nav-link" to="/codingQuestions">Programming</Link>
+                                </li>
+                                <li className="nav-item ">
+                                    <Link className="nav-link" to="/uiQuestions">Frontend</Link>
+                                </li>
                                 {user.superAdmin?(
                                     <li className="nav-item ">
                                         <Link className="nav-link" to="/adminDashboard">Dashboard</Link>
