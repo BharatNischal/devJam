@@ -55,7 +55,7 @@ function UIQuestion(props) {
 
               // user has already started the test yet
               setTime(res.data.question.time);
-              console.log("time",res.data.question.time);
+              setIsDynamic(res.data.question.isDynamic);
               const {title,description,sampleUrl,points} = res.data.question;
               setQuestion({title,description,sampleUrl,points});
               setMaxScore(res.data.question.students[res.data.userIndex].maxMarks?res.data.question.students[res.data.userIndex].maxMarks:0);
@@ -188,7 +188,7 @@ function UIQuestion(props) {
         <React.Fragment>
         <div className="topBar text-white">
             <div>
-                <span className="h2 ml-2 pointer"> <i className="fa fa-arrow-left"></i> </span>
+                <span className="h2 ml-2 pointer" onClick={()=>props.history.push("/uiquestions")} > <i className="fa fa-arrow-left"></i> </span>
                 <h2 className="d-inline" >
                     <b> {question.title} </b>
                 </h2>
