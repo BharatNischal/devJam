@@ -38,6 +38,7 @@ function Layout1(props) {
                             highlightActiveLine={true}
                             width="100%"
                             style={{height:"100%"}}
+                            onFocus={props.onFocus}
                             onChange={(newValue)=>props.setHtml(newValue)}
                             defaultValue={props.html}
 
@@ -66,7 +67,7 @@ function Layout1(props) {
                             showGutter={true}
                             highlightActiveLine={true}
                             width="100%"
-
+                            onFocus={props.onFocus}
                             style={{height:"100%"}}
                             onChange={(newValue)=>props.setCss(newValue)}
                             defaultValue={props.css}
@@ -86,4 +87,3 @@ function Layout1(props) {
 
 
 export default Layout1;
-

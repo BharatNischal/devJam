@@ -5,11 +5,7 @@ import axios from "axios";
 
 function Submission(props) {
 
-    const [submissions,setSubmissions] = useState([
-      {points:50,html:`<div> <p> Hello World </p> </div>`, css:`div{background-color:red;}`,js:`console.log("hello")`},
-      {points:40,html:`<div> <p> Hello World 1 </p> </div>`, css:`div{background-color:red;}`,js:`console.log("hello 1")`},
-      {points:30,html:`<div> <p> Hello World 2</p> </div>`, css:`div{background-color:red;}`,js:`console.log("hello 2")`},
-    ]);
+    const [submissions,setSubmissions] = useState([]);
 
    useEffect(()=>{
 
