@@ -249,7 +249,7 @@ router.get('/frontend/submissions/all/test/:id',function (req,res) {
     db.FrontendQuestion.findById(req.params.id)
       .populate(['students.submissions','students.userId'])
       .then(question=>{
-        res.json({success:true,question});
+        res.json({success:true,submissions:question.students});
       })
       .catch(err=>{
         res.json({success:false,msg:err.message});
