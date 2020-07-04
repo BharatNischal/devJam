@@ -2,6 +2,7 @@ import React,{useState, useContext, useEffect} from 'react';
 import Nav from "../../profile/Nav/Nav";
 import {CurUserContext} from '../../../contexts/curUser';
 import axios from "axios";
+import TopBar from '../../learnerPlatform/TopBar';
 
 let allQuestions=[];
 function AllQuestions(props) {
@@ -153,7 +154,8 @@ function AllQuestions(props) {
 
     return (
         <React.Fragment>
-        <Nav show={true} menu={true}/>
+        
+        {user.student?<TopBar/> :<Nav show={true} menu={true}/>}
         {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
         <div className="bgwhiteoverlay"> </div>
         <div className="container" style={{marginTop:"120px"}} >

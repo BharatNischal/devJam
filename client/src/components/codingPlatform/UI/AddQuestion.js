@@ -9,12 +9,24 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 
+import AceEditor from "react-ace";
+
+// Editor languages
+
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/snippets/javascript";
+
+import "ace-builds/src-noconflict/theme-monokai";
+
+
 
 function AddUIQuestion(props) {
     const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
     const [img,setImg] = useState(null);
     const [isTimed,setIsTimed] = useState(false);
+    const [isDynamic,setIsDynamic] = useState(false);
     const {user} = useContext(CurUserContext);
+    const [test,setTest] = useState("");
 
     //UI STATES
     const [btnclickSave,setBtnClickSave] = useState(false);
@@ -36,6 +48,9 @@ function AddUIQuestion(props) {
             if(res.data.success){
                 setQuestion(res.data.question);
                 setStatus(res.data.question.status);
+                if(res.data.question.isDynamic){
+                  setIsDynamic(true);
+                }
                 if(res.data.question.time&&res.data.question.time>0){
                   setIsTimed(true);
                   setTime(res.data.question.time);
@@ -61,7 +76,7 @@ function AddUIQuestion(props) {
     },[])
 
     function handleUpdate(data) {
-        setQuestion({...question,description:draftToHtml(convertToRaw(data.getCurrentContent()))});
+        setQuestion({...question,description:draftToHtml(convertToRaw(data.getCurrentContent())),isDynamic:isDynamic});
     }
 
     // Save the progress
@@ -131,11 +146,15 @@ function AddUIQuestion(props) {
                             <input type="text" className="form-control" value={question&&question.title?question.title:""} onChange={(e)=>setQuestion({...question,title:e.target.value})}  placeholder="Enter Question Title"  />
                         </div>
                         <div className="text-left px-lg-4">
-                            <div className="custom-control custom-checkbox d-inline" >
+                            <div className="custom-control custom-checkbox d-inline mr-2" >
                                 <input type="checkbox" className="custom-control-input" id="customCheck1" checked={isTimed} onChange={(e)=>setIsTimed(e.target.checked)} />
                                 <label className="custom-control-label" htmlFor="customCheck1" >Timed</label>
                             </div>
-                            {isTimed?<input type="number" className="form-control d-inline" value={time} onChange={(e)=>setTime(e.target.value)} placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
+                            {isTimed?<input type="number" className="form-control d-inline mr-3" value={time} onChange={(e)=>setTime(e.target.value)} placeholder="Minutes" style={{width:"100px",marginLeft:"10px",height:"25px"}} />:null}
+                            <div className="custom-control custom-checkbox d-inline ml-3" >
+                                <input type="checkbox" className="custom-control-input" id="customDynamicCheck1" checked={isDynamic} onChange={(e)=>setIsDynamic(e.target.checked)} />
+                                <label className="custom-control-label" htmlFor="customDynamicCheck1" ><b>Is Dynamic?</b></label>
+                            </div>
                         </div>
                     </div>
                     <div className="col-md-4">
@@ -149,7 +168,8 @@ function AddUIQuestion(props) {
                     <div className="d-flex tabH" style={{flexGrow:"1"}}>
                         <div className={activeTab=="description"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("description")} > Description </div>
                         <div className={activeTab=="leaderboard"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("leaderboard")} > Leaderboard </div>
-
+                        {isDynamic?<div className={activeTab=="test"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("test")} > Test </div>:null}
+                        
                     </div>
                     <div className="tabCont p-3">
                         {activeTab=="description"?
@@ -175,6 +195,36 @@ function AddUIQuestion(props) {
                         :null}
                         {activeTab=="leaderboard"?
                             <h1>Leaderboard</h1>
+                        :null}
+
+                        {activeTab=="test" && isDynamic?
+                          <React.Fragment>
+                            <h3><b>Test</b></h3>
+                            <p>This Test will be used to evaluate student marks, these tests will be written in javascript's <b>Chai and Moocha</b> packages.</p>
+                            <AceEditor
+                            mode={"javascript"}
+                            theme={"monokai"}
+                            name="htmlSubDiv"
+                            editorProps={{ $blockScrolling: true }}
+                            setOptions={{
+                                enableBasicAutocompletion: true,
+                                enableLiveAutocompletion: true,
+                                enableSnippets: true,
+                                showLineNumbers: true,
+                            }}
+                            placeholder="Write Mocha and chai tests here for this question"
+                            fontSize={18}
+                            showPrintMargin={false}
+                            showGutter={true}
+                            highlightActiveLine={true}
+                            width="60%"
+                            height="450px"
+                            style={{borderRadius:"14px",boxShadow:"0px 4px 12px #0000008a",marginLeft:"14px"}}
+                            defaultValue={question.test||null}
+                            onChange={(newVal)=>setTest(newVal)}
+
+                            />
+                          </React.Fragment>
                         :null}
 
                     </div>
