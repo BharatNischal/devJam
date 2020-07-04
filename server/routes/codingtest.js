@@ -417,5 +417,15 @@ router.get('/submissions/question/:id',function (req,res) {
     })
 })
 
+router.get('/coding/submissions/all/test/:id',function (req,res) {
+    db.CodingQuestion.findById(req.params.id)
+      .populate(['students.submissions','students.userId'])
+      .then(question=>{
+        res.json({success:true,submissions:question.students});
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
+})
 
 module.exports = router;

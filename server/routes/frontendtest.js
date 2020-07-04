@@ -184,7 +184,7 @@ router.post('/frontend/question/:id/evaluation',middleware.isAdmin,function (req
                     .then(resp=>{
                       console.log(resp);
 
-                      const marks = resp.output.distance>35?0:(((35-resp.output.distance)/35)*question.points).toFixed(2);
+                      const marks = resp.output.distance>40?0:(((40-resp.output.distance)/40)*question.points).toFixed(2);
                       console.log("marks",marks);
                       question.students[index].maxMarks = Math.max(marks,question.students[index].maxMarks?question.students[index].maxMarks:0)
                       question.save();
@@ -243,6 +243,17 @@ router.get('/submissions/frontendquestion/:id',function (req,res) {
     .catch(err=>{
       res.json({success:false,msg:err.message});
     })
+})
+
+router.get('/frontend/submissions/all/test/:id',function (req,res) {
+    db.FrontendQuestion.findById(req.params.id)
+      .populate(['students.submissions','students.userId'])
+      .then(question=>{
+        res.json({success:true,submissions:question.students});
+      })
+      .catch(err=>{
+        res.json({success:false,msg:err.message});
+      })
 })
 
 function saveImageToDisk(url,imgName) {
