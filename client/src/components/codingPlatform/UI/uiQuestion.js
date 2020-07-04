@@ -114,8 +114,10 @@ function UIQuestion(props) {
           </head>
           <body>
             ${html}
-            <script> ${isDynamic?js:""} </script>
           </body>
+          <script>
+              ${js}
+        </script>
           </html>
         `;
 
@@ -123,7 +125,7 @@ function UIQuestion(props) {
         document.write(documentContents);
         document.close();
         }
-    },[html,css])
+    },[html,css,js])
 
 
     function startTimer() {
