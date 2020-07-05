@@ -166,8 +166,8 @@ function UIQuestion(props) {
         const evalInterval=setInterval(()=>{
             if(iframe.current.contentDocument.body.contains(iframe.current.contentDocument.querySelector("#resultElementOfTest"))){
               clearInterval(evalInterval);
-              alert(iframe.current.contentDocument.querySelector("#resultElementOfTest").innerText);
-              axios.post(`/frontend/question/${props.match.params.id}/evaluation/dynamic`)
+              // alert(iframe.current.contentDocument.querySelector("#resultElementOfTest").innerText);
+              axios.post(`/frontend/question/${props.match.params.id}/evaluation/dynamic`,{html,css,js,points:iframe.current.contentDocument.querySelector("#resultElementOfTest").innerText})
                 .then(res=>{
                   if(res.data.success){
                     setMarksScored(res.data.marks);
