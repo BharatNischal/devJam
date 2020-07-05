@@ -244,7 +244,16 @@ function AddUIQuestion(props) {
                             width="60%"
                             height="450px"
                             style={{borderRadius:"14px",boxShadow:"0px 4px 12px #0000008a",marginLeft:"14px"}}
-                            value={question.test}
+                            value={question.test?question.test:`passed=0;
+  // Write your tests here
+
+  var resultDiv=document.createElement("h1");
+  resultDiv.id="resultElementOfTest";
+  resultDiv.innerText=""+passed;
+  resultDiv.style.opacity="0";
+
+  document.body.appendChild(resultDiv);`}
+
                             onChange={(newVal)=>setQuestion({...question,test:newVal})}
 
                             />
