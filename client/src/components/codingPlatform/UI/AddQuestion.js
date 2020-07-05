@@ -195,7 +195,7 @@ function AddUIQuestion(props) {
 
                                     {!question.sampleUrl?<button className="btn btn-outline-grad ml-4 mt-2" onClick={()=>setShowImgUploader(true)} > Add Image <i className="fa fa-img"></i> </button>
                                     :
-                                    <img src={question.sampleUrl} alt="UI Image" style={{width:"400px",borderRadius:"12px",boxShadow:"0px 4px 12px #0000008a"}} />}
+                                    <div style={{position:"relative"}}><span className="closeImg fa fa-times-circle-o " onClick={()=>setQuestion({...question,sampleUrl:null}) } ></span><img src={question.sampleUrl} alt="UI Image" style={{width:"400px",borderRadius:"12px",boxShadow:"0px 4px 12px #0000008a"}} /></div>}
                                 </div>
                                 <Editor
                                 toolbarClassName="toolbarClassName"
