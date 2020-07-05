@@ -53,7 +53,7 @@ const LoginForm = (props)=>{
                   setBtnClick(false);
                   console.log(res.data.user);
                   setUser({loggedIn:true,superAdmin:res.data.user.superAdmin,name:res.data.user.name,profilePic:res.data.user.profilePic,student:res.data.user.student,username:res.data.user.username,notifications:res.data.user.notifications});
-                  res.data.user.student?props.history.push("/home"):props.history.push("/profiles");
+                  res.data.user.student?props.history.push("/home"):props.history.push("/home");
                 },1000);
               }
             })

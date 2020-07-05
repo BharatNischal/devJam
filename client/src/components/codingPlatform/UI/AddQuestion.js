@@ -35,7 +35,7 @@ function AddUIQuestion(props) {
     const [saveAlert,setSaveAlert] = useState(false);
     const [activeTab, setActiveTab] = useState("description");
     const [showImgUploader, setShowImgUploader] = useState(false);
-    const [question,setQuestion] = useState({title:"",description:"",sampleUrl:"",points:0,test:""});
+    const [question,setQuestion] = useState({title:"",description:"",sampleUrl:"",points:0,test:"",checks:""});
     const [status,setStatus] = useState("Draft");
     const [time,setTime] = useState(0);
 
@@ -216,7 +216,14 @@ function AddUIQuestion(props) {
                         {activeTab=="test" && question.isDynamic?
                           <React.Fragment>
                             <h3><b>Test</b></h3>
-                            <p>This Test will be used to evaluate student marks, these tests will be written in javascript's <b>Chai and Moocha</b> packages.</p>
+                            <div className="d-flex justify-content-between">
+                              <p style={{width:"60%"}} >This Test will be used to evaluate student marks, these tests will be written in javascript's. Checks are No. Tests that are performed on ui. Please Ensure Value Of Checks is equal to of tests performed by admin.  </p>
+                              <div className="form-group input-group px-lg-4" style={{width:"300px"}} >
+                                  <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3  pt-2 " style={{height:"40px"}} ><b> Checks </b></div>
+                                  <input type="number" className="form-control" value={question&&question.checks?question.checks:""} onChange={(e)=>setQuestion({...question,checks:e.target.value})} min="1" placeholder="Enter Total Checks" style={{height:"40px"}} />
+                              </div>
+                            </div>
+                            
                             <AceEditor
                             mode={"javascript"}
                             theme={"monokai"}
