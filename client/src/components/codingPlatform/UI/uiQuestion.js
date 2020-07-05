@@ -172,7 +172,7 @@ function UIQuestion(props) {
 
     function handleSubmit() {
       setLoading(true);
-      
+
       if(isDynamic){
         setEvalStarted(true);
         setTimeout(()=>{
@@ -417,9 +417,12 @@ function UIQuestion(props) {
                     </div>
                 </div>
 
-                <div className=" bg-white"  >
+                <div className=" bg-white" style={{position:"relative"}} >
                     <iframe style={{width:"100%",height:"100%"}} ref={iframe} >
                     </iframe>
+                    {evalStarted?<div style={{ width:"100%",height:"100%",zIndex:"10",backgroundColor:"#e1e1e1",position:"absolute",top:"0" }} >
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/f1055231234507.564a1d234bfb6.gif" style={{width:"250px",marginTop:"40%"}} />
+                    </div>:null}
                 </div>
             </div>
         :null}
