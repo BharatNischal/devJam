@@ -25,6 +25,7 @@ Learner's Portal | [click to see](#learners-portal)
 Marking System on Admin Portal | [click to see](#marking-system-on-admin-portal)
 Testing System | [click to see](#Testing-System)
 Course System | [click to see](#Course-System)
+Coding System | [click to see](#Coding-System)
 
 ## How To Run ?
   To Know functionality of this project there are two ways you can either view deployed version or run it locally.  
@@ -146,3 +147,35 @@ Sr. No. | Path | Description
  5. Student avatars are provided in the marks and submission page.
  6. The navigation to the different pages in the webapp is made very easy. Links and back buttons are added in every page and are placed in such a way that the user can find them easily.
  7. For filtering and sorting we have stick to the client side, so this will save the time to give a request to database about a query -> Sorting data -> Send the response data.
+
+
+## Coding System
+The finals are going to involve allowing admins to create coding challenges that can be attempted by learners - focused on python, java, and javascript accepted as solutions. The system should provide instructions on how an admin can create coding challenges and have a points system. The learner portal should then have a challenges page that allows students to click on attempt the challenges that were created by the admins. A points system should be included to reflect their marks.
+
+#### Routes
+Sr. No. | Path | Description
+ --------|------|------------
+ 1.| /codingQuestions | This Route will show all competitive coding questions.
+ 2.| /compCoding/question/:id | This Route opens a test page for student where student can attempt the competitive coding question and get results. In this page the student can view the leaderboard, submissions and editorial part.
+ 3.| /addQuestion/:id | This route edit the competitive coding question for admins. They can publish and unpublish questions from here.
+ 4.| /home | This route is a dashboard for both students and admins and can go to relevent page from there. 
+ 5.| /uiquestions | This route shows all frontend based questions.
+ 6.| /coding/uiquestion/:id | This Route opens a test page for student where student can attempt the frontend coding question and get results. In this page the student can view submissions.
+ 7.| /admin/uiquestion/:id | This route edit the frontend coding question for admins. They can publish and unpublish questions from here.
+ 
+ ### Extras 
+ - __AutoComplete & shortcuts in Code Editor__
+ - __Themes in Code Editor__
+ - __Navigation__: The navigation to the different pages in the webapp is made very easy. Links and back buttons are added in every page and are placed in such a way that the user can find them easily.
+ - __LeaderBoard for every question__
+ - __Different Layouts in frontend test__
+ - __AI based frontend Evaluation__
+ - __Visible and hidden test cases __: The design of the database model is designed in such a way that the data is fetched from database without any complex queries and complex constraints to join the collections. In our case the data is stored in a very convinient way and we just need to populate the data.
+ - __Fast Filering and Sorting__: For filtering and sorting we have stick to the client side, so this will save the time to give a request to database about a query -> Sorting data -> Send the response data.
+ The client side JS handles the Sorting and Filtering thus saving time.
+ 
+ ### Note
+ In coding questions the Run button will only test visible test cases and will not give any marks. Please submit the code to run through all test cases and save submission
+
+### Video link for final week submission
+https://drive.google.com/file/d/1hX7Rl03VCL5uUnqf56dbIGJ4RkUJRAS5/view
