@@ -231,7 +231,7 @@ router.post('/frontend/question/:id/evaluation/dynamic',function (req,res) {
               submissions:[submission._id]
             })
           }
-          const marks = ((req.body.points/question.points)*question.points).toFixed(2);
+          const marks = ((req.body.points/question.checks)*question.points).toFixed(2);
           question.students[index].maxMarks=Math.max(question.students[index].maxMarks?question.students[index].maxMarks:0,marks);
           question.save();
           db.FrontendSubmission.findByIdAndUpdate(submission._id,{marks})

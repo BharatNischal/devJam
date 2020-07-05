@@ -31,7 +31,7 @@ var frontendQuestionSchema=new mongoose.Schema({
       maxMarks:Number
     }],
     test:String,
-    points:{
+    checks:{
       type:Number,
       default:1
     }
