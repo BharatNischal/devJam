@@ -81,6 +81,7 @@ function AddUIQuestion(props) {
     function handleSave() {
         setBtnClickSave(true);
         const newQuestion = {...question};
+        newQuestion.status = status;
         if(isTimed){
           newQuestion.time = time;
         }
@@ -223,7 +224,7 @@ function AddUIQuestion(props) {
                                   <input type="number" className="form-control" value={question&&question.checks?question.checks:""} onChange={(e)=>setQuestion({...question,checks:e.target.value})} min="1" placeholder="Enter Total Checks" style={{height:"40px"}} />
                               </div>
                             </div>
-                            
+
                             <AceEditor
                             mode={"javascript"}
                             theme={"monokai"}
