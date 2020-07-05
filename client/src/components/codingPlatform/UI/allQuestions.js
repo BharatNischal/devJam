@@ -178,9 +178,9 @@ function AllQuestions(props) {
 
                         <div className={srchResults[i]?"p-3 my-3 pointer":"p-3 my-3 pointer d-none"}  style={{position:"relative",borderRadius:"20px", boxShadow:"0px 4px  10px rgba(0,0,0,0.3)"}}  >
                             <div className="align-center" style={{ display:"flex" , justifyContent:"space-between" }} >
-                                <div className="pt-2 hover-pink text-left" >
-                                    <h3 className="topicTitle d-inline mr-2" style={{fontSize:"22px"}} onClick={()=>handleClick(ques._id)} >{ques.title}</h3>
-                                    <i style={{fontSize:"14px",color:"#333"}} > {ques.status?ques.status:null}</i><br/>
+                                <div className="pt-2 hover-pink text-left" onClick={()=>handleClick(ques._id)} >
+                                    <h3 className="topicTitle d-inline mr-2" style={{fontSize:"22px"}} >{ques.title}</h3>
+                                    {!user.student?<i style={{fontSize:"14px",color:"#333"}} > {ques.status?ques.status:null}</i>:null}<br/>
                                     <span style={{fontSize:"14px",color:"#444" }} >Type:  <b> {ques.isDynamic?"Dynamic":"Static"} </b></span>
 
                                 </div>

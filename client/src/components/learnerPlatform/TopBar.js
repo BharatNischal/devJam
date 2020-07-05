@@ -33,7 +33,7 @@ const TopBar = (props)=>{
     return(
         <React.Fragment>
         <div className="topBar">
-            <Link to="/studDash" ><h1 >LrnrHub</h1></Link>
+            <Link to="/home" ><h1 >LrnrHub</h1></Link>
             <div>
                 <span className="mr-2 "> <Link to="/codingQuestions" className="text-white"> <b>Programming</b> </Link> </span>
                 <span className="mr-2 "> <Link to="/uiQuestions" className="text-white"> <b>Frontend</b> </Link> </span>
