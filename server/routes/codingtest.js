@@ -60,7 +60,7 @@ router.get('/coding/question/new',middleware.isAdmin,function (req,res) {
 
 
 // To get a specific question
-router.get('/coding/question/:id',function (req,res) {
+router.get('/coding/question/:id',middleware.isAdmin,function (req,res) {
   db.CodingQuestion.findById(req.params.id).populate(['students.userId','students.submissionId'])
     .then(question=>{
       res.json({success:true,question});
@@ -96,7 +96,7 @@ router.put('/coding/question/:id/status',middleware.isAdmin,function (req,res) {
 })
 
 // Router to get a question along with student data
-router.get('/taketest/:id',function (req,res) {
+router.get('/taketest/:id',middleware.isAdmin,function (req,res) {
   db.CodingQuestion.findById(req.params.id)
     .populate(['students.userId','students.submissions'])
     .then(question=>{
@@ -132,7 +132,7 @@ router.get('/codingtest/:id/timer',middleware.isStudent,function (req,res) {
 })
 
 // Route to submit code and get tokens
-router.post('/coding/question/:id/submission',function (req,res){
+router.post('/coding/question/:id/submission',middleware.isAdmin,function (req,res){
     console.log(req.body);
     db.CodingQuestion.findById(req.params.id)
       .then(question=>{
@@ -297,7 +297,7 @@ router.post('/coding/question/:id/evaluation',middleware.isAdmin,function (req,r
 })
 
 
-router.post('/submit/custom/testcase',function (req,res) {
+router.post('/submit/custom/testcase',middleware.isAdmin,function (req,res) {
   console.log("input",req.body.input);
   axios({
     "method":"POST",
@@ -340,7 +340,7 @@ router.post('/submit/custom/testcase',function (req,res) {
     })
 })
 
-router.post("/submitcodingquestion/:quesId",function(req,res){
+router.post("/submitcodingquestion/:quesId",middleware.isAdmin,function(req,res){
     const testCases=req.body.testCases.map(tc=>({input:tc.input,output:tc.output}));
     var postPromise=[];
 
@@ -408,7 +408,7 @@ router.post("/submitcodingquestion/:quesId",function(req,res){
 
 });
 
-router.get('/leaderboard/question/:id',function (req,res) {
+router.get('/leaderboard/question/:id',middleware.isAdmin,function (req,res) {
   db.CodingQuestion.findById(req.params.id)
     .populate('students.userId')
     .then(question=>{

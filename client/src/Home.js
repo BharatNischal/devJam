@@ -1,4 +1,4 @@
-import React,{useContext} from 'react';
+import React,{useContext,useEffect} from 'react';
 import Nav from './components/profile/Nav/Nav';
 import {CurUserContext} from "./contexts/curUser";
 import TopBar from './components/learnerPlatform/TopBar';
@@ -7,7 +7,17 @@ import TopBar from './components/learnerPlatform/TopBar';
 // import content from "./homeImages/Group 10.png";
 
 function Home(props) {
+
     const {setUser,user} = useContext(CurUserContext);
+
+    useEffect(()=>{
+
+      if(!user.loggedIn){
+        props.history.push('/login');
+      }
+
+    },[])
+
     return (
         <React.Fragment>
             {user.student?
@@ -40,7 +50,7 @@ function Home(props) {
                         <h2> Tests </h2>
                         <div className="overlay"></div>
                     </div>
-                    
+
                 </div>
             </div>
         </React.Fragment>
