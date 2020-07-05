@@ -172,6 +172,7 @@ function UIQuestion(props) {
 
     function handleSubmit() {
       setLoading(true);
+      
       if(isDynamic){
         setEvalStarted(true);
         setTimeout(()=>{
