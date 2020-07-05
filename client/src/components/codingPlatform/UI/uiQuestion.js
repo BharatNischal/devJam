@@ -161,48 +161,6 @@ function UIQuestion(props) {
       }
     },[timer])
 
-    useEffect(()=>{
-      if(evalStarted){
-       setTimeout(()=>{
-            if(iframe.current.contentDocument.body.contains(iframe.current.contentDocument.querySelector("#resultElementOfTest"))){
-              // alert(iframe.current.contentDocument.querySelector("#resultElementOfTest").innerText);
-              axios.post(`/frontend/question/${props.match.params.id}/evaluation/dynamic`,{html,css,js,checks:iframe.current.contentDocument.querySelector("#resultElementOfTest").innerText})
-                .then(res=>{
-                  if(res.data.success){
-                    setMarksScored(res.data.marks);
-                  }else{
-                    console.log(res.data.msg);
-                  }
-                  setEvalStarted(false);
-                  setLoading(false);
-                  setMarksAlert(true);
-                  setTimeout(()=>{setMarksAlert(false)},3000);
-                })
-                .catch(err=>{
-                  console.log(err.message);
-                })
-            }else{
-              axios.post(`/frontend/question/${props.match.params.id}/evaluation/dynamic`,{html,css,js,checks:0})
-                .then(res=>{
-                  if(res.data.success){
-                    setMarksScored(res.data.marks);
-                  }else{
-                    console.log(res.data.msg);
-                  }
-                  setEvalStarted(false);
-                  setLoading(false);
-                  setMarksAlert(true);
-                  setTimeout(()=>{setMarksAlert(false)},3000);
-                })
-                .catch(err=>{
-                  console.log(err.message);
-                })
-            }
-            console.log("RESULT");
-
-        },3000)
-      }
-    },[evalStarted])
 
     function onFocus() {
       if(!started){
@@ -216,6 +174,45 @@ function UIQuestion(props) {
       setLoading(true);
       if(isDynamic){
         setEvalStarted(true);
+        setTimeout(()=>{
+             if(iframe.current.contentDocument.body.contains(iframe.current.contentDocument.querySelector("#resultElementOfTest"))){
+               // alert(iframe.current.contentDocument.querySelector("#resultElementOfTest").innerText);
+               axios.post(`/frontend/question/${props.match.params.id}/evaluation/dynamic`,{html,css,js,checks:+iframe.current.contentDocument.querySelector("#resultElementOfTest").innerText})
+                 .then(res=>{
+                   if(res.data.success){
+                     setMarksScored(res.data.marks);
+                     console.log(res.data.marks);
+                   }else{
+                     console.log(res.data.msg);
+                   }
+                   setEvalStarted(false);
+                   setLoading(false);
+                   setMarksAlert(true);
+                   setTimeout(()=>{setMarksAlert(false)},3000);
+                 })
+                 .catch(err=>{
+                   console.log(err.message);
+                 })
+             }else{
+               axios.post(`/frontend/question/${props.match.params.id}/evaluation/dynamic`,{html,css,js,checks:0})
+                 .then(res=>{
+                   if(res.data.success){
+                     setMarksScored(res.data.marks);
+                   }else{
+                     console.log(res.data.msg);
+                   }
+                   setEvalStarted(false);
+                   setLoading(false);
+                   setMarksAlert(true);
+                   setTimeout(()=>{setMarksAlert(false)},3000);
+                 })
+                 .catch(err=>{
+                   console.log(err.message);
+                 })
+             }
+             console.log("RESULT");
+
+         },3000)
       }else{
         axios.post(`/frontend/question/${props.match.params.id}/evaluation`,{html,css,js})
           .then(res=>{
