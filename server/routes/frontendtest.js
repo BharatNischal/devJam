@@ -31,7 +31,7 @@ const upload = multer({
 
 
 // To get all the tests whether published or unpublished
-router.get('/frontend/questions/all',function (req,res) {
+router.get('/frontend/questions/all',middleware.isAdmin,function (req,res) {
   db.FrontendQuestion.find({})
     .then(questions=>{
       res.json({success:true,questions});
@@ -120,7 +120,7 @@ router.put('/frontend/question/:id/status',middleware.isAdmin,function (req,res)
 })
 
 // Router to get a question when user starts a question
-router.get('/frontend/taketest/:id',function (req,res) {
+router.get('/frontend/taketest/:id',middleware.isStudent,function (req,res) {
   db.FrontendQuestion.findById(req.params.id)
     .then(question=>{
         const index = question.students.findIndex(s=>s.userId.equals(req.user._id));
@@ -238,7 +238,7 @@ router.post('/frontend/question/:id/evaluation',middleware.isAdmin,function (req
     })
 })
 
-router.post('/frontend/question/:id/evaluation/dynamic',function (req,res) {
+router.post('/frontend/question/:id/evaluation/dynamic',middleware.isStudent,function (req,res) {
   db.FrontendSubmission.create({html:req.body.html,css:req.body.css,js:req.body.js,userId:req.user._id,testId:req.params.id})
     .then(submission=>{
       db.FrontendQuestion.findById(req.params.id)
@@ -273,7 +273,7 @@ router.post('/frontend/question/:id/evaluation/dynamic',function (req,res) {
     })
 })
 
-router.get('/leaderboard/frontendquestion/:id',function (req,res) {
+router.get('/leaderboard/frontendquestion/:id',middleware.isAdmin,function (req,res) {
   db.FrontendQuestion.findById(req.params.id)
     .populate('students.userId')
     .then(question=>{
@@ -288,7 +288,7 @@ router.get('/leaderboard/frontendquestion/:id',function (req,res) {
     })
 })
 
-router.get('/submissions/frontendquestion/:id',function (req,res) {
+router.get('/submissions/frontendquestion/:id',middleware.isAdmin,function (req,res) {
   db.FrontendQuestion.findById(req.params.id)
     .populate('students.submissions')
     .then(question=>{
@@ -300,7 +300,7 @@ router.get('/submissions/frontendquestion/:id',function (req,res) {
     })
 })
 
-router.get('/frontend/submissions/all/test/:id',function (req,res) {
+router.get('/frontend/submissions/all/test/:id',middleware.isAdmin,function (req,res) {
     db.FrontendQuestion.findById(req.params.id)
       .populate(['students.submissions','students.userId'])
       .then(question=>{
