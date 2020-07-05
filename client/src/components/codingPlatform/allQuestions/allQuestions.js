@@ -24,7 +24,7 @@ function AllCodingQuestions(props) {
       if(user.loggedIn){
 
         if(user.student){
-          
+
           axios.get(`/coding/questions/published/all`)
             .then(res=>{
               if(res.data.success){
@@ -183,7 +183,7 @@ function AllCodingQuestions(props) {
 
     const copyToClipBoard=function(id){
       var textField = document.createElement('textarea')
-      textField.innerText =`${window.location.host}/coding/question/${id}` ;
+      textField.innerText =`${window.location.host}/compCoding/question/${id}` ;
       document.body.appendChild(textField);
       textField.select();
       document.execCommand('copy');
@@ -196,7 +196,7 @@ function AllCodingQuestions(props) {
   function handleClick(id) {
     console.log("Is student",user);
     if(user.student){
-      props.history.push(`/coding/question/${id}`);
+      props.history.push(`/compCoding/question/${id}`);
     }else{
       props.history.push(`/addQuestion/${id}`)
     }

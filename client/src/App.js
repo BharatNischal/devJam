@@ -114,12 +114,12 @@ function App(props) {
 
             <Route path="/addQuestion/:id" exact component={AddQuestion} />
             <Route path="/codingQuestions" exact component={AllCodingQuestions} />
-            <Route path="/coding/question/:id" exact component={StudentQuestion} />
+            <Route path="/compCoding/question/:id" exact component={StudentQuestion} />
 
             <Route path="/coding/uiquestion/:id" exact component={UIQuestion} />
             <Route path="/admin/uiquestion/:id" exact component={AddUIQuestion} />
             <Route path="/uiquestions" exact component={AllQuestions} />
-            
+
             <Route path="/home" exact component={Home} />
           </Switch>
           )}
