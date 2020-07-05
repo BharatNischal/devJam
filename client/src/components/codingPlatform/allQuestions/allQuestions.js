@@ -10,6 +10,7 @@ let allQuestions=[]
 function AllCodingQuestions(props) {
     const [focusInp,setFocusInp] = useState(false);
     const [filteredQuestions,setFilteredQuestions] = useState(allQuestions);
+    const [totalPoints, setTotalPoints] = useState(0);
     const [srchResults,setSrchResults] = useState(allQuestions.map(q=>true));
     const [selectedTopics,setSelectedTopics] = useState([]);
     const [selectedDifficulty,setSelectedDifficulty] = useState([]);
@@ -23,7 +24,7 @@ function AllCodingQuestions(props) {
       if(user.loggedIn){
 
         if(user.student){
-
+          
           axios.get(`/coding/questions/published/all`)
             .then(res=>{
               if(res.data.success){
@@ -36,6 +37,17 @@ function AllCodingQuestions(props) {
             .catch(err=>{
               console.log(err.message);
             })
+
+          axios.get("/coding/questions/totalPoints")
+            .then(res=>{
+                if(res.data.success){
+                    setTotalPoints(res.data.total)
+                }else{
+                    console.log(res.data.msg);
+                }
+            }).catch(err=>{
+                console.log(err.message);
+            });
         }else{
 
           axios.get(`/coding/questions/all`)
@@ -194,7 +206,7 @@ function AllCodingQuestions(props) {
         <React.Fragment>
             {user.student?<TopBar/>
             :<Nav show={true} menu={true}/>}
-            
+
             {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
             <div className="bgwhiteoverlay"> </div>
             <div className="container" style={{marginTop:"120px"}} >
@@ -202,7 +214,12 @@ function AllCodingQuestions(props) {
                     <h1 className="topicTitle mainH text-left text-pink">All Coding Questions</h1>
 
                     <div>
-                        {!user.student?<button className="btn btn-outline-grad ml-2" onClick={handleAdd}> Add Question </button>:null}
+                        {!user.student?<button className="btn btn-outline-grad ml-2" onClick={handleAdd}> Add Question </button>:
+                          <React.Fragment>
+                            <div className="p-2 bg-grad h4 d-inline-block mb-1  text-white" style={{borderRadius:"8px"}} > {totalPoints} </div>
+                            <br/><span><b>Total Coding Points</b></span>
+                          </React.Fragment>
+                        }
                     </div>
                 </div>
                 <div className="row my-5">

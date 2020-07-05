@@ -8,6 +8,7 @@ let allQuestions=[];
 function AllQuestions(props) {
     const [focusInp, setFocusInp] = useState(false);
     const [copyAlert, setCopyAlert] = useState(false);
+    const [totalPoints, setTotalPoints] = useState(0);
     const [filteredQuestions,setFilteredQuestions] = useState(allQuestions);
     const [srchResults,setSrchResults] = useState(allQuestions.map(q=>true));
     const [selectedTypes,setSelectedTypes] = useState([]);
@@ -15,12 +16,13 @@ function AllQuestions(props) {
     const {user} = useContext(CurUserContext);
 
 
+
     useEffect(()=>{
 
     if(user.loggedIn){
 
         if(user.student){
-
+        
         axios.get(`/frontend/questions/published/all`)
             .then(res=>{
             if(res.data.success){
@@ -32,7 +34,17 @@ function AllQuestions(props) {
             })
             .catch(err=>{
             console.log(err.message);
-            })
+            });
+        axios.get("/frontend/questions/totalPoints")
+        .then(res=>{
+            if(res.data.success){
+                setTotalPoints(res.data.total)
+            }else{
+                console.log(res.data.msg);
+            }
+        }).catch(err=>{
+            console.log(err.message);
+        })
         }else{
 
         axios.get(`/frontend/questions/all`)
@@ -160,10 +172,14 @@ function AllQuestions(props) {
         <div className="bgwhiteoverlay"> </div>
         <div className="container" style={{marginTop:"120px"}} >
             <div className="d-flex justify-content-between">
-                <h1 className="topicTitle mainH text-left text-pink">All UI Questions</h1>
-
+                
+                    <h1 className="topicTitle mainH text-left text-pink">All UI Questions</h1> 
                 <div>
-                    {!user.student?<button className="btn btn-outline-grad ml-2" onClick={handleAdd}> Add Question </button>:null}
+                    {!user.student?<button className="btn btn-outline-grad ml-2" onClick={handleAdd}> Add Question </button>:
+                    <React.Fragment>
+                         <div className="p-2 bg-grad h4 d-inline-block mb-1  text-white" style={{borderRadius:"8px"}} > {totalPoints} </div>
+                        <br/><span><b>Total Frontend Points</b></span>
+                    </React.Fragment>}
                 </div>
             </div>
             <div className="row my-5">

@@ -17,6 +17,24 @@ router.get('/coding/questions/all',middleware.isAdmin,function (req,res) {
     })
 });
 
+router.get("/coding/questions/totalPoints",middleware.isStudent,function(req,res){
+  var total=0;
+  db.CodingQuestion.find({})
+  .then(questions=>{
+    questions.forEach(question=>{
+      const foundInd=question.students.findIndex(s=>s.userId.equals(req.user._id));
+      if(foundInd!=-1){
+        total +=question.students[foundInd].maxMarks?question.students[foundInd].maxMarks:0;
+      }
+    });
+    console.log(total);
+    res.json({success:true,total:total});
+
+  }).catch(err=>{
+    res.json({success:false,msg:err.message});
+  });
+})
+
 
 // To get all the tests which are published
 router.get('/coding/questions/published/all',middleware.isStudent,function (req,res) {
