@@ -23,6 +23,7 @@ function AddQuestion(props) {
     const [saveAlert,setSaveAlert] = useState(false);
     const [btnclickSave,setBtnClickSave] = useState(false);
     const [btnclickPublish,setBtnClickPublish] = useState(false);
+    const [loading,setLoading] = useState(false);
     const {user} = useContext(CurUserContext);
 
 
@@ -30,9 +31,11 @@ function AddQuestion(props) {
     useEffect(()=>{
 
       if(user.loggedIn&&!user.student){
+        setLoading(true);
 
         axios.get(`/coding/question/${props.match.params.id}`)
           .then(res=>{
+            
             if(res.data.success){
                 setQuestion(res.data.question);
                 setStatus(res.data.question.status);
@@ -44,8 +47,10 @@ function AddQuestion(props) {
             }else{
               console.log(res.data.msg);
             }
+            setLoading(false);
           })
           .catch(err=>{
+            setLoading(false);
             console.log(err.message);
           })
 
@@ -117,6 +122,7 @@ function AddQuestion(props) {
     return (
         <React.Fragment>
             <Nav show={true} menu={true}/>
+            {loading?<div className="d-backdrop text-center " style={{backgroundColor:"white"}} > <img   src="https://wpamelia.com/wp-content/uploads/2018/11/ezgif-2-6d0b072c3d3f.gif" alt="centered image" style={{width:"400px",textAlign:"center",marginTop:"200px"}}/> </div>:null}
             {saveAlert?<div className="custom-alert"> Question Saved</div>:null}
             <div className="bgwhiteoverlay"> </div>
             <div className="container" style={{marginTop:"120px",maxWidth:"90%"}} >

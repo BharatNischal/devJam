@@ -17,14 +17,15 @@ function AllCodingQuestions(props) {
     const [srchtxt,setSrchTxt] = useState("");
     const {user} = useContext(CurUserContext);
     const [copyAlert,setCopyAlert] = useState(false);
-
+    const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
 
       if(user.loggedIn){
 
         if(user.student){
-
+          setLoading(true);
+          
           axios.get(`/coding/questions/published/all`)
             .then(res=>{
               if(res.data.success){
@@ -33,8 +34,10 @@ function AllCodingQuestions(props) {
               }else{
                 console.log(res.data.msg);
               }
+              setLoading(false);
             })
             .catch(err=>{
+              setLoading(false);
               console.log(err.message);
             })
 
@@ -49,7 +52,7 @@ function AllCodingQuestions(props) {
                 console.log(err.message);
             });
         }else{
-
+          setLoading(true);
           axios.get(`/coding/questions/all`)
             .then(res=>{
               if(res.data.success){
@@ -58,8 +61,10 @@ function AllCodingQuestions(props) {
               }else{
                 console.log(res.data.msg);
               }
+              setLoading(false);
             })
             .catch(err=>{
+              setLoading(false);
               console.log(err.message);
             })
         }
@@ -204,6 +209,7 @@ function AllCodingQuestions(props) {
 
     return (
         <React.Fragment>
+            {loading?<div className="d-backdrop text-center " style={{backgroundColor:"white"}} > <img   src="https://wpamelia.com/wp-content/uploads/2018/11/ezgif-2-6d0b072c3d3f.gif" alt="centered image" style={{width:"400px",textAlign:"center",marginTop:"200px"}}/> </div>:null}
             {user.student?<TopBar/>
             :<Nav show={true} menu={true}/>}
 

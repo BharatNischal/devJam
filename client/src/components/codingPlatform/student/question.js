@@ -25,6 +25,8 @@ export default function StudentQuestion(props) {
   const timerRef = useRef(null);
   const [marksAlert,setMarksAlert] = useState(false);
   const [marksScored,setMarksScored] = useState(0);
+
+  const [loading,setLoading] = useState(false);
   let timeLeft=0;
 
   //UI STATES
@@ -33,6 +35,7 @@ export default function StudentQuestion(props) {
   useEffect(()=>{
     if(user.loggedIn){
 
+      setLoading(true);
       axios.get(`/taketest/${props.match.params.id}`)
         .then(res=>{
           if(res.data.success){
@@ -75,8 +78,10 @@ export default function StudentQuestion(props) {
           }else{
             console.log(res.data.msg);
           }
+          setLoading(false);
         })
         .catch(err=>{
+          setLoading(false);
           console.log(err.message);
         })
 
@@ -119,6 +124,7 @@ export default function StudentQuestion(props) {
   return (
     <div>
       <TopBar/>
+      {loading?<div className="d-backdrop text-center " style={{backgroundColor:"white"}} > <img   src="https://wpamelia.com/wp-content/uploads/2018/11/ezgif-2-6d0b072c3d3f.gif" alt="centered image" style={{width:"400px",textAlign:"center",marginTop:"200px"}}/> </div>:null}
       <div className="bgwhiteoverlay"> </div>
         {marksAlert?<div className="custom-alert"> You Scored {marksScored} Marks </div>:null}
       <div className="container-fluid" style={{marginTop:"100px"}} >

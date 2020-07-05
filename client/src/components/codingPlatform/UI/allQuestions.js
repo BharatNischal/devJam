@@ -14,13 +14,14 @@ function AllQuestions(props) {
     const [selectedTypes,setSelectedTypes] = useState([]);
     const [srchtxt,setSrchTxt] = useState("");
     const {user} = useContext(CurUserContext);
+    const [loading, setLoading] = useState(false);
 
 
 
     useEffect(()=>{
 
     if(user.loggedIn){
-
+        setLoading(true);
         if(user.student){
         
         axios.get(`/frontend/questions/published/all`)
@@ -31,9 +32,11 @@ function AllQuestions(props) {
             }else{
                 console.log(res.data.msg);
             }
+            setLoading(false);
             })
             .catch(err=>{
             console.log(err.message);
+            setLoading(false);
             });
         axios.get("/frontend/questions/totalPoints")
         .then(res=>{
@@ -42,7 +45,9 @@ function AllQuestions(props) {
             }else{
                 console.log(res.data.msg);
             }
+            setLoading(false);
         }).catch(err=>{
+            setLoading(false);
             console.log(err.message);
         })
         }else{
@@ -55,9 +60,11 @@ function AllQuestions(props) {
             }else{
                 console.log(res.data.msg);
             }
+            setLoading(false);
             })
             .catch(err=>{
             console.log(err.message);
+            setLoading(false);
             })
         }
 
@@ -166,7 +173,7 @@ function AllQuestions(props) {
 
     return (
         <React.Fragment>
-        
+        {loading?<div className="d-backdrop text-center " style={{backgroundColor:"white"}} > <img   src="https://wpamelia.com/wp-content/uploads/2018/11/ezgif-2-6d0b072c3d3f.gif" alt="centered image" style={{width:"400px",textAlign:"center",marginTop:"200px"}}/> </div>:null}
         {user.student?<TopBar/> :<Nav show={true} menu={true}/>}
         {copyAlert?<div className="custom-alert"> Link Coppied to Clibard </div>:null}
         <div className="bgwhiteoverlay"> </div>
