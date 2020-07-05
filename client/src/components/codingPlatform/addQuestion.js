@@ -60,6 +60,7 @@ function AddQuestion(props) {
     function handleSave() {
         setBtnClickSave(true);
         const newQuestion = {...question};
+        newQuestion.status = status;
         newQuestion.topic = topic.map(t=>(t.value)).join(" ");
         if(isTimed){
           newQuestion.time = time;
