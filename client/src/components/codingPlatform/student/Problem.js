@@ -36,7 +36,7 @@ function Problem(props) {
     const [results,setResults] = useState([]);
     const [activeResult,setActiveResult] = useState(0);
     const [tests,setTests] = useState([]);
-    const [points,setPoints] = useState(0);
+    // const [points,setPoints] = useState(0);
     const [loading,setLoading] = useState(false);
 
     const [customInput,setCustomeInput] = useState({add:false,value:""});
@@ -64,7 +64,7 @@ function Problem(props) {
             }else{
               setTests(props.testCases);
               const correct = res.data.results.filter(r=>r.status.id==3).length;
-              setPoints(((correct/props.testCases.length)*props.question.points).toFixed(2));
+              // setPoints(((correct/props.testCases.length)*props.question.points).toFixed(2));
               props.setMarksScored(((correct/props.testCases.length)*props.question.points).toFixed(2))
               props.setMarksAlert(true);
               setTimeout(()=>{props.setMarksAlert(false)},3000);
@@ -164,8 +164,8 @@ function Problem(props) {
                 <h3><b> Constraints </b></h3>
                 <hr/>
                 <div className="pl-2" dangerouslySetInnerHTML={{__html:props.question.constraints}} ></div>
-                <div className="pl-2 my-2"> <b> <i className="fas fa-memory"></i>  Memory Limit (KB):  </b> 760 </div>
-                <div className="pl-2 my-2" > <b>  <i className="fa fa-clock"></i>  Time Limit (sec): </b> 2 </div>
+                <div className="pl-2 my-2"> <b> <i className="fas fa-memory"></i>  Memory Limit (KB):  </b> {props.limits.memoryLimit} </div>
+                <div className="pl-2 my-2" > <b>  <i className="fa fa-clock"></i>  Time Limit (sec): </b> {props.limits.timeLimit} </div>
             </section>
             <section className="mb-4 mt-3" >
                 <h3> <b>Code</b> </h3><hr/>

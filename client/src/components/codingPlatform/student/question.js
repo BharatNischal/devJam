@@ -145,11 +145,11 @@ export default function StudentQuestion(props) {
                 <div className={activeTab=="problem"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("problem")} > Problem </div>
                 <div className={activeTab=="submissions"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("submissions")} > Submissions </div>
                 <div className={activeTab=="leaderboard"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>setActiveTab("leaderboard")} > Leaderboard </div>
-                <div className={activeTab=="editorial"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>{maxScore==question.points?setActiveTab("editorial"):setEditorialAlert(true);setTimeout(()=>{setEditorialAlert(false)},2000)}} > Editorial </div>
+                <div className={activeTab=="editorial"?"tab px-3 p-2 active":"tab px-3 p-2"} onClick={()=>{+maxScore==question.points||question.points==marksScored?setActiveTab("editorial"):setEditorialAlert(true);setTimeout(()=>{setEditorialAlert(false)},2000)}} > Editorial </div>
               </div>
               <div className="tabCont p-3">
                 {activeTab=="problem"?
-                  <Problem time={time} setMarksAlert={setMarksAlert} setMarksScored={setMarksScored} allowed={allowed} question={question} starterCode={starterCode} setStarterCode={setStarterCode} testCases={testCases} startTimer={startTimer} started={started} setStarted={setStarted} timer={timer}/>
+                  <Problem time={time} setMarksAlert={setMarksAlert} setMarksScored={setMarksScored} allowed={allowed} question={question} starterCode={starterCode} setStarterCode={setStarterCode} testCases={testCases} startTimer={startTimer} started={started} setStarted={setStarted} timer={timer} limits={limits}/>
 
                 :null}
 
