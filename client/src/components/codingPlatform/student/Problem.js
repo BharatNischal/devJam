@@ -36,7 +36,7 @@ function Problem(props) {
     const [results,setResults] = useState([]);
     const [activeResult,setActiveResult] = useState(0);
     const [tests,setTests] = useState([]);
-    const [points,setPoints] = useState(0);
+    // const [points,setPoints] = useState(0);
     const [loading,setLoading] = useState(false);
 
     const [customInput,setCustomeInput] = useState({add:false,value:""});
@@ -64,7 +64,7 @@ function Problem(props) {
             }else{
               setTests(props.testCases);
               const correct = res.data.results.filter(r=>r.status.id==3).length;
-              setPoints(((correct/props.testCases.length)*props.question.points).toFixed(2));
+              // setPoints(((correct/props.testCases.length)*props.question.points).toFixed(2));
               props.setMarksScored(((correct/props.testCases.length)*props.question.points).toFixed(2))
               props.setMarksAlert(true);
               setTimeout(()=>{props.setMarksAlert(false)},3000);
