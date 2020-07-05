@@ -263,7 +263,6 @@ function UIQuestion(props) {
             <div className="pointer h2 ">
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowLeaderboardAlert(true)}> <b>Leaderboard</b> </button>
                 <button className="btn text-white py-2 mr-3 topbarLink " onClick={()=>setShowSubmisssionAler(true)} > <b>Submissions</b> </button>
-                <button className="btn btn-outline-grad" onClick={()=>setEvalStarted(true)} > Eval </button>
                 {allowed?(loading?<div type="submit" className="btn btn-grad ml-2"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="loader"/></div>:<button className="btn-outline-grad btn mr-3" onClick={handleSubmit} > Submit</button>):<span className="mr-2" style={{fontSize:"0.8em"}}>Time Out</span>}
                 {!isDynamic?<i className="fas fa-cog " onClick={()=>setShowSettings(true)}></i>:null}
             </div>
