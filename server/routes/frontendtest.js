@@ -167,7 +167,10 @@ router.post('/frontend/question/:id/evaluation',middleware.isAdmin,function (req
               <body>
                 ${req.body.html}
               </body>
-              </html>`
+              </html>`,
+              puppeteerArgs:{
+                args:['--no-sandbox','--disable-setuid-sandbox',]
+              }
             })
             .then(temp=>{
 
