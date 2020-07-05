@@ -143,7 +143,7 @@ export default function StudentQuestion(props) {
               </div>
               <div className="tabCont p-3">
                 {activeTab=="problem"?
-                  <Problem time={time} setMarksAlert={setMarksAlert} setMarksScored={setMarksScored} allowed={allowed} question={question} starterCode={starterCode} setStarterCode={setStarterCode} testCases={testCases} startTimer={startTimer} started={started} setStarted={setStarted} timer={timer}/>
+                  <Problem time={time} setMarksAlert={setMarksAlert} setMarksScored={setMarksScored} allowed={allowed} question={question} starterCode={starterCode} setStarterCode={setStarterCode} testCases={testCases} startTimer={startTimer} started={started} setStarted={setStarted} timer={timer} limits={limits}/>
 
                 :null}
 
