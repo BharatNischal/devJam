@@ -28,7 +28,7 @@ function UIQuestion(props) {
     const [activeTab,setActiveTab] = useState("description");
     const [layout, setLayout] = useState(3);
     const [showSettings, setShowSettings] = useState(false);
-    const [question,setQuestion] = useState({title:"",description:"",sampleUrl:"",points:0})
+    const [question,setQuestion] = useState({title:"",description:"",sampleUrl:"",points:0,test:""})
     const [timer,setTimer] = useState(0); //Time in seconds
     const [allowed,setAllowed] = useState(true);
     const [started,setStarted] = useState(false)
@@ -120,73 +120,8 @@ function UIQuestion(props) {
                 ${js}
           </script>
           <script>
-          ${evalStarted?`
-          
-          let passed=0;
-          // If there is an input tag to start otherwise no other testing possible
-          if(document.querySelector('input[type="text"]')&&document.querySelector('#container')){
-              passed++;
-              // Buuton to add todo
-              if(document.querySelector('#btn')){
-                  passed++;
-                  // No item in start
-                  if(document.querySelectorAll('.item').length==0){
-                      passed++;
-                  //     Insertion
-                      document.querySelector('#container').value="Milk";
-                      document.querySelector('#btn').click();
-                      if(document.querySelectorAll('.item').length==1&&
-                      document.querySelectorAll('.item')[0].innerText=="Milk"){
-                          passed++;
-                      }
-                      document.querySelector('#container').value="Tomatos";
-                      document.querySelector('#btn').click();
-                  //     Deletion
-                      if(document.querySelectorAll('.del').length==2){
-                          passed++;
-                          document.querySelectorAll('.del')[1].click();
-                          if(document.querySelectorAll('.item').length==1&&
-                      document.querySelectorAll('.item')[0].innerText=="Milk"){
-                              passed++;
-                          }
-                      }
-                  }
-                  document.querySelector('#container').value="Item2";
-                  document.querySelector('#btn').click();
-          
-                  //     Canceling event (line-through)
-                  if(document.querySelectorAll('.item').length>=2){
-                      document.querySelectorAll('.item')[0].click();
-                      only1lineThrough = true;
-                      for(let i=0;i<document.querySelectorAll('.item').length;i++){
-          
-                          if(i!=0 && (document.querySelectorAll('.item')[i].style.textDecoration=="line-through"||
-                            document.querySelectorAll('.item')[i].contains(document.querySelector('strike')))
-                          ){
-                              only1lineThrough = false;
-                          }
-                          if(i==0 && !(document.querySelectorAll('.item')[i].style.textDecoration=="line-through"||
-                            document.querySelectorAll('.item')[i].contains(document.querySelector('strike')))){
-                              only1lineThrough = false;
-                            }
-                      }
-                      if(only1lineThrough){
-                          passed++;
-                      }
-                  }
-          
-              }
-          }
-          
-          var resultDiv=document.createElement("h1");
-          resultDiv.id="resultElementOfTest";
-          resultDiv.innerText=""+passed;
-          resultDiv.style.opacity="0";
-          
-          document.body.appendChild(resultDiv);
-          
-          `:null}
-          </script>          
+          ${evalStarted?question.test:""}
+          </script>
           </body>
           </html>
         `;
@@ -232,9 +167,24 @@ function UIQuestion(props) {
             if(iframe.current.contentDocument.body.contains(iframe.current.contentDocument.querySelector("#resultElementOfTest"))){
               clearInterval(evalInterval);
               alert(iframe.current.contentDocument.querySelector("#resultElementOfTest").innerText);
+              axios.post(`/frontend/question/${props.match.params.id}/evaluation/dynamic`)
+                .then(res=>{
+                  if(res.data.success){
+                    setMarksScored(res.data.marks);
+                  }else{
+                    console.log(res.data.msg);
+                  }
+                  setEvalStarted(false);
+                  setLoading(false);
+                  setMarksAlert(true);
+                  setTimeout(()=>{setMarksAlert(false)},3000);
+                })
+                .catch(err=>{
+                  console.log(err.message);
+                })
             }
             console.log("RESULT");
-            
+
         },1000)
       }
     },[evalStarted])
@@ -249,21 +199,25 @@ function UIQuestion(props) {
 
     function handleSubmit() {
       setLoading(true);
-      axios.post(`/frontend/question/${props.match.params.id}/evaluation`,{html,css,js})
-        .then(res=>{
-          if(res.data.success){
-            console.log(res.data.marks);
-            setMarksScored(res.data.marks?res.data.marks:0);
-            setMarksAlert(true);
-            setTimeout(()=>{setMarksAlert(false)},2000);
-          }else{
-            console.log(res.data.msg);
-          }
-          setLoading(false);
-        })
-        .catch(err=>{
-          console.log(err.message);
-        })
+      if(isDynamic){
+        setEvalStarted(true);
+      }else{
+        axios.post(`/frontend/question/${props.match.params.id}/evaluation`,{html,css,js})
+          .then(res=>{
+            if(res.data.success){
+              console.log(res.data.marks);
+              setMarksScored(res.data.marks?res.data.marks:0);
+              setMarksAlert(true);
+              setTimeout(()=>{setMarksAlert(false)},2000);
+            }else{
+              console.log(res.data.msg);
+            }
+            setLoading(false);
+          })
+          .catch(err=>{
+            console.log(err.message);
+          })
+      }
     }
 
     function secondsToHms(d) {
@@ -287,6 +241,7 @@ function UIQuestion(props) {
                       </div>
                 </h2>
             </div>
+            {marksAlert?<div className="custom-alert"> You Scored {marksScored} Marks </div>:null}
             <div>
               {time?<h4 className="text-center text-pink p-2 " style={{backgroundColor:"#f1f1f1" ,borderRadius:"12px", border:"1px solid #bbb" }}  >
                   <b>{started?(timer<0?secondsToHms(0):secondsToHms(timer)):secondsToHms(time*60)}</b>

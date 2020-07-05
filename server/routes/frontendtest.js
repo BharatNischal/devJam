@@ -217,6 +217,39 @@ router.post('/frontend/question/:id/evaluation',middleware.isAdmin,function (req
     })
 })
 
+router.post('/frontend/question/:id/evaluation/dynamic',function (req,res) {
+  db.FrontendSubmission.create({html:req.body.html,css:req.body.css,js:req.body.js,userId:req.user._id,testId:req.params.id})
+    .then(submission=>{
+      db.FrontendQuestion.findById(req.params.id)
+        .then(question=>{
+          const index = question.students.findIndex(s=>s.userId.equals(req.user._id));
+          if(index!=-1){
+            question.students[index].submissions.push(submission._id);
+          }else{
+            question.students.push({
+              userId:req.user._id,
+              submissions:[submission._id]
+            })
+          }
+          const marks = ((req.body.points/question.points)*question.points).toFixed(2);
+          question.students[index].maxMarks=Math.max(question.students[index].maxMarks?question.students[index].maxMarks:0,marks);
+          question.save();
+          db.FrontendSubmission.findByIdAndUpdate(submission._id,{marks})
+            .then(sub=>{
+              res.json({success:true,marks})
+            })
+            .catch(err=>{
+              res.json({success:false,msg:err.message})
+            })
+        })
+        .catch(err=>{
+          res.json({success:false,msg:err.message})
+        })
+    })
+    .catch(err=>{
+      res.json({success:false,msg:err.message})
+    })
+})
 
 router.get('/leaderboard/frontendquestion/:id',function (req,res) {
   db.FrontendQuestion.findById(req.params.id)
@@ -255,6 +288,8 @@ router.get('/frontend/submissions/all/test/:id',function (req,res) {
         res.json({success:false,msg:err.message});
       })
 })
+
+
 
 function saveImageToDisk(url,imgName) {
   return new Promise(function(resolve,reject){

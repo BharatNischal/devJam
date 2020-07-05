@@ -30,7 +30,11 @@ var frontendQuestionSchema=new mongoose.Schema({
       startTime:Date,
       maxMarks:Number
     }],
-    test:String
+    test:String,
+    points:{
+      type:Number,
+      default:1
+    }
 });
 
 module.exports=mongoose.model("frontendquestion",frontendQuestionSchema);
