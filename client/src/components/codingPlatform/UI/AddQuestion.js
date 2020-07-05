@@ -25,6 +25,7 @@ function AddUIQuestion(props) {
     const [sampleEditorState,setSampleEditorState] = useState(EditorState.createEmpty());
     const [img,setImg] = useState(null);
     const [isTimed,setIsTimed] = useState(false);
+    const [loading, setLoading] = useState(false);
     // const [isDynamic,setIsDynamic] = useState(false);
     const {user} = useContext(CurUserContext);
     const [test,setTest] = useState("");
@@ -44,6 +45,7 @@ function AddUIQuestion(props) {
 
       if(user.loggedIn&&!user.student){
 
+        setLoading(true);
         axios.get(`/frontend/question/${props.match.params.id}`)
           .then(res=>{
             if(res.data.success){
@@ -62,9 +64,11 @@ function AddUIQuestion(props) {
             }else{
               console.log(res.data.msg);
             }
+            setLoading(false);
           })
           .catch(err=>{
             console.log(err.message);
+            setLoading(false);
           })
 
       }else{
@@ -137,6 +141,7 @@ function AddUIQuestion(props) {
 
     return (
         <React.Fragment>
+            {loading?<div className="d-backdrop text-center " style={{backgroundColor:"white"}} > <img   src="https://wpamelia.com/wp-content/uploads/2018/11/ezgif-2-6d0b072c3d3f.gif" alt="centered image" style={{width:"400px",textAlign:"center",marginTop:"200px"}}/> </div>:null}
             {showImgUploader?<ImgUploader update={(url)=>{setShowImgUploader(false); setQuestion({...question,sampleUrl:url})}}  cancel={()=>setShowImgUploader(false)}  />:null}
 
             <Nav show={true} menu={true}/>
@@ -218,7 +223,14 @@ function AddUIQuestion(props) {
                           <React.Fragment>
                             <h3><b>Test</b></h3>
                             <div className="d-flex justify-content-between">
-                              <p style={{width:"60%"}} >This Test will be used to evaluate student marks, these tests will be written in javascript's. Checks are No. Tests that are performed on ui. Please Ensure Value Of Checks is equal to of tests performed by admin.  </p>
+
+                              {/* instruction */}
+                              <div style={{width:"60%"}} >
+                                <p >This Test will be used to evaluate student marks, these tests will be written in vanilla javascript. <b>Checks</b> are No. of Tests that are performed on ui and must be written on input present in <i className="fa fa-arrow-right"></i> right side  . Please Ensure <b> Value Of Checks </b> is equal to of tests performed by admin.   </p>
+                                <h5><b> Instructions to write Test:  </b></h5>
+                                <p > <b>Dont Remove starter code, </b> and the <b>passed</b> variable has no. of passed test cases, just make sure if test is passed you are incrementing passed using <b> passed++ </b> or any other functionaly similar operation.   </p>
+                              </div>
+
                               <div className="form-group input-group px-lg-4" style={{width:"300px"}} >
                                   <div className="input-group-prepend rounded bg-grad text-white pl-3 pr-3  pt-2 " style={{height:"40px"}} ><b> Checks </b></div>
                                   <input type="number" className="form-control" value={question&&question.checks?question.checks:""} onChange={(e)=>setQuestion({...question,checks:e.target.value})} min="1" placeholder="Enter Total Checks" style={{height:"40px"}} />

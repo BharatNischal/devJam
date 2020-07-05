@@ -169,7 +169,7 @@ function Problem(props) {
             </section>
             <section className="mb-4 mt-3" >
                 <h3> <b>Code</b> </h3><hr/>
-                <p> <b>Complete Function inside editor </b> </p>
+                <p> <b> For the <b>timed tests</b> when you <b>click the editor</b> timer will start and you can make submissions before time is over.  </b> </p>
                 <div className="mt-2 mx-4   editor-wrapper" >
 
                     <div className="editor-header d-flex align-items-center justify-content-between" >
