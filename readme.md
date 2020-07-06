@@ -175,7 +175,8 @@ Sr. No. | Path | Description
  The client side JS handles the Sorting and Filtering thus saving time.
  
  ### Note
- In coding questions the Run button will only test visible test cases and will not give any marks. Please submit the code to run through all test cases and save submission
+ In coding questions the Run button will only test visible test cases and will not give any marks. Please submit the code to run through all test cases and save submission.
+ If a person started a test but don't submit anything his name will be shown on leaderboard and not on submissions because the student has attempted the test
 
 ### Video link for final week submission
 https://drive.google.com/file/d/1hX7Rl03VCL5uUnqf56dbIGJ4RkUJRAS5/view
