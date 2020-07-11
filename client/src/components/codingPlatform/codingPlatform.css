@@ -1,0 +1,106 @@
+
+.tabs .tab{
+    background-color: #F4F4F4;
+    border:1px solid #E1E0E0;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.tabs .tab.active,.tabs .tab:hover{
+    background: #FFFFFF;
+    box-shadow: -1px -2px 6px rgba(0, 0, 0, 0.25);
+    border: 1px solid transparent;
+}
+.tabs .tabCont{
+    min-height: 500px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.25);
+    border-radius: 0px 32px 32px 32px;
+    text-align: left;
+}
+.wrapperClassName{
+    max-width: 800px;
+    margin:10px;
+    border-radius: 18px;
+    min-height: 500px;
+    border: 1px solid #e4e4e4;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+    
+}
+.constraintWrapper{
+    max-width: 800px;
+    margin:10px;
+    border-radius: 18px;
+    min-height: 250px;
+    border: 1px solid #e4e4e4;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+}
+.constraintWrapper .editorClassName{
+    padding:10px;
+} 
+.wrapperClassName .editorClassName{
+    padding:10px;
+}
+.test-tab{
+    background-color: rgb(235, 235, 235);
+    cursor: pointer;
+}
+.test-results-tabs{
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0px 2px 8px #0000004d;
+}
+.test-tab.active,.test-tab:hover{
+    background-color: white;
+    box-shadow: 0px 0px 8px #00000070;
+    
+}
+.result-pill,.resulttxt{
+    border:1px solid #b1aeae;
+    background-color: rgb(236, 236, 236);
+    border-radius: 8px;
+}
+.resulttxt{
+    padding:5px;
+    min-height: 20px;
+    max-height: 120px;
+    overflow: auto;
+    background-color:#fcf7f7;
+}
+.problem-section{
+    color:rgb(71, 71, 71);
+}
+.problem-section h3{
+    color:rgb(22, 22, 22);
+}
+.submissionRowContent{
+    height:520px;
+    animation: expand 0.7s linear ;
+    overflow: auto;
+    padding:20px;
+    padding-left: 30px;
+    background-color: #e6e6e6;
+
+}
+
+@keyframes expand{
+    0%{
+        height:0px;
+    }
+    100%{
+        height:520px;
+    }
+}
+
+@media (max-width:800px){
+    .tabs .tabH{
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: visible;
+    }
+}

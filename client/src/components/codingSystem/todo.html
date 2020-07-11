@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <input type="text" name="" value="" id="container">
+    <ul>
+
+    </ul>
+    <button type="button" id="btn" name="button">Add</button>
+    <script type="text/javascript">
+    function deleteFunction(){
+      this.remove();
+    }
+
+      document.querySelector('#btn').addEventListener('click',function(){
+        document.querySelector('ul').innerHTML += `<li><div class="item" onclick="this.style.textDecoration='line-through'" >${document.querySelector('#container').value}</div><span class="del" onclick="this.parentNode.remove()" >Delete</span></li>`
+        document.querySelector('#container').value="";
+      })
+    </script>
+  </body>
+</html>

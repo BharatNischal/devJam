@@ -3,21 +3,27 @@ import { storage } from '../../firebase';
 
 function ImgUploader(props) {
     const [imageAsFile,setImgAsFile] = useState(null);
+    const [loader, setLoader] = useState(false)
 
    
 
     const uploadHandler = function(){
-        storage.child(Date.now()+imageAsFile.name).put(imageAsFile).then(async function(snapshot) {
+        if (imageAsFile){
+        setLoader(true);
+            storage.child(Date.now()+imageAsFile.name).put(imageAsFile).then(async function(snapshot) {
 
-            await snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                console.log(downloadURL,"HERE");
+                await snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    console.log(downloadURL,"HERE");
+                    setLoader(false);
+                    
+                    props.update(downloadURL);
                 
-                props.update(downloadURL);
-              
-            });
-    }).catch(Err=>{
-        console.log(Err);
-    })}
+                });
+            }).catch(Err=>{
+                console.log(Err);
+            })
+        }
+    }
 
     return (
         <React.Fragment>
@@ -37,7 +43,7 @@ function ImgUploader(props) {
                  </div>
                  <div className="mb-3 text-center" >
                     <button className="splBtn btn btn-outline-cancel mr-2" onClick={props.cancel}> Cancel </button>
-                    <button className="splBtn btn btn-outline-grad mr-2" onClick={uploadHandler}> Upload </button>
+                    {loader?<div type="submit" className="btn btn-grad px-3 ml-2"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" className="loader"/></div>: <button className="splBtn btn btn-outline-grad mr-2" onClick={uploadHandler}> Upload </button>}
                  </div>
                  
              </div>

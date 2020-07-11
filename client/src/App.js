@@ -38,7 +38,15 @@ import Courses from './components/courses/courses';
 import CreateCourse from './components/courses/createCourse';
 import PublishCourse from './components/courses/publishCourse'
 import Course from './components/courses/learnerPlatform/course';
+import AddQuestion from './components/codingPlatform/addQuestion';
 
+import Editor from './components/codingSystem/editor';
+import AllCodingQuestions from './components/codingPlatform/allQuestions/allQuestions';
+import StudentQuestion from './components/codingPlatform/student/question';
+import UIQuestion from './components/codingPlatform/UI/uiQuestion';
+import AddUIQuestion from './components/codingPlatform/UI/AddQuestion';
+import AllQuestions from './components/codingPlatform/UI/allQuestions';
+import Home from './Home';
 axios.defaults.withCredentials = true;
 
 function App(props) {
@@ -103,8 +111,16 @@ function App(props) {
             <Route path="/learner/courses/" exact component={Course} />
             <Route path="/course/:id" exact component={CreateCourse} />
             <Route path="/publish/course/:id" exact component={PublishCourse} />
-            
 
+            <Route path="/addQuestion/:id" exact component={AddQuestion} />
+            <Route path="/codingQuestions" exact component={AllCodingQuestions} />
+            <Route path="/compCoding/question/:id" exact component={StudentQuestion} />
+
+            <Route path="/coding/uiquestion/:id" exact component={UIQuestion} />
+            <Route path="/admin/uiquestion/:id" exact component={AddUIQuestion} />
+            <Route path="/uiquestions" exact component={AllQuestions} />
+
+            <Route path="/home" exact component={Home} />
           </Switch>
           )}
 

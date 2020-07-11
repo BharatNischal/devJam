@@ -20,6 +20,8 @@ const          express = require('express'),
          TestRoutes = require("./routes/test"),
          QuestionRoutes = require("./routes/questions"),
             AuthRoutes = require("./routes/auth"),
+            codingRoutes = require("./routes/codingtest"),
+            FrontendRoutes = require('./routes/frontendtest')
             CourseRoutes = require("./routes/course");
 
 require("./timedAlert");
@@ -63,6 +65,7 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.mail_client_secret,
     callbackURL: process.env.NODE_ENV === 'production'?"http://devjam-code-swat.herokuapp.com/auth/google/redirect":`http://localhost:8080/auth/google/redirect`
   },
+
   function(accessToken, refreshToken, profile, done) {
        db.User.findOne({googleId:profile.id})
        .then(async function(foundUser){
@@ -176,6 +179,12 @@ app.use("/",QuestionRoutes);
 
 // Courses Routes
 app.use("/",CourseRoutes);
+
+// Coding Routes
+app.use("/",codingRoutes);
+
+// Frontend Routes
+app.use("/",FrontendRoutes);
 
 const redirectHost=process.env.NODE_ENV === 'production'?"":"http://localhost:3000";
 

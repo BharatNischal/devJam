@@ -26,3 +26,7 @@ module.exports.Notification = require("./notification");
 module.exports.Question = require("./question");
 module.exports.Course = require("./course");
 module.exports.GEvent = require("./genericEvent");
+module.exports.CodingQuestion = require("./codingQuestion");
+module.exports.CodingSubmission = require("./codeSubmission");
+module.exports.FrontendQuestion = require("./frontendQuestion");
+module.exports.FrontendSubmission = require("./frontendSubmission");

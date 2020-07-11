@@ -9,20 +9,20 @@ const Nav =(props)=>{
 
     // Used for checking login status
     const {user,setUser} = useContext(CurUserContext);
-    useEffect(()=>{
-      axios.get("/curUser")
-        .then(res=>{
-            if(res.data.user){
-              setUser({loggedIn:true,superAdmin:res.data.user.superAdmin});
-            }else{
-              setUser({loggedIn:false,superAdmin:false});
-            }
-        })
-        .catch(err=>{
-          setUser({loggedIn:false,superAdmin:false});
-          props.history.push("/login");
-        })
-    },[]);
+    // useEffect(()=>{
+    //   axios.get("/curUser")
+    //     .then(res=>{
+    //         if(res.data.user){
+    //           setUser({loggedIn:true,superAdmin:res.data.user.superAdmin});
+    //         }else{
+    //           setUser({loggedIn:false,superAdmin:false});
+    //         }
+    //     })
+    //     .catch(err=>{
+    //       setUser({loggedIn:false,superAdmin:false});
+    //     //   props.history.push("/login");
+    //     })
+    // },[]);
 
     // Logs out user and redirects to login page
     const handleLogout = ()=>{
@@ -64,6 +64,12 @@ const Nav =(props)=>{
                                 </li>
                                 <li className="nav-item ">
                                     <Link className="nav-link" to="/createProfile">Create Profile</Link>
+                                </li>
+                                <li className="nav-item ">
+                                    <Link className="nav-link" to="/codingQuestions">Programming</Link>
+                                </li>
+                                <li className="nav-item ">
+                                    <Link className="nav-link" to="/uiQuestions">Frontend</Link>
                                 </li>
                                 {user.superAdmin?(
                                     <li className="nav-item ">
