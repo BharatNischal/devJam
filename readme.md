@@ -74,6 +74,9 @@ Coding System | [click to see](#Coding-System)
  4.| /editProfile/:name/:id | This Route is used to editProfile Of particular developer.
  5.| /profile/:name/:id | This is profile of particular developer & this link can be shared.
  6.| /adminDashboard | This is accessible to only super admin and can be used to create new admins.   
+ 
+ #### Deliverables for the week
+ [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Warmup%20week.pdf?alt=media&token=8b8a986f-273b-4a6e-8bd0-f96956272589)
 
 ## Adding Content
 This is component that we have to develop in week 1 and 2. This component help admins to add content in this platform. This component is only visible to admins. In content We have different topics and topics can have multiple videos and deliverables. USP of this component is its UI & UX which includes loaders, draggable sorting, sidebar, etc.
@@ -85,6 +88,9 @@ This is component that we have to develop in week 1 and 2. This component help a
  3.| /deliverable/:id | This route is used in editing and adding deliverable.
  4.| /video/:id | This route is used in editing and adding videos.
  
+ #### Deliverables for the week
+ [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Week%201%20%26%202.pdf?alt=media&token=5172ac1b-a3cd-4811-9257-49abcfafd5b9)
+ 
  ## Learners Portal
  This Functionality will allow signup students from google, github or by email and In this they can see content added by admin and also submit the submission in form of zip.
  #### Routes
@@ -95,6 +101,9 @@ This is component that we have to develop in week 1 and 2. This component help a
  
  ### Bonus
  - __Video Should Not Downloaded from Inspector__: We Added Server Side logic to enusre we are not exposing cloud link of video to end user even if he inspects the video element. The detailed explanation of our logic is in drive document. [Click here to view](https://docs.google.com/document/d/1i5CRbXbxZtEYLbJvpbzy4RHniOUgp-PKbD1IHW_tUHA/edit?usp=sharing)
+ 
+ #### Deliverables for the week
+ [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Week%204_%20Learners%20Portal.pdf?alt=media&token=5ef88557-8764-45d8-8ba7-4a6f56908d2d)
  
  ## Marking System on Admin Portal
 The admin portal will now be used to view each of the students deliverable submissions and allow them to be marked. These will in turn be seen by the learner themselves.
@@ -115,6 +124,9 @@ The admin portal will now be used to view each of the students deliverable submi
  - __Database Model Design__: The design of the database model is designed in such a way that the data is fetched from database without any complex queries and complex constraints to join the collections. In our case the data is stored in a very convinient way and we just need to populate the data.
  - __Fast Filering and Sorting__: For filtering and sorting we have stick to the client side, so this will save the time to give a request to database about a query -> Sorting data -> Send the response data.
  The client side JS handles the Sorting and Filtering thus saving time.
+
+#### Deliverables for the week
+ [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Week%205.pdf?alt=media&token=8838b37b-84a7-4b99-a805-5fb21b24329e)
 
 ## Testing System
 The main deliverable for this week revolves around creating a testing system that enables the admin to create a test & publish it to specific students. The students can login, take the test and their submissions will be autograded. The admin can then provide feedback that is viewable by the student themselves. 
@@ -148,6 +160,8 @@ Sr. No. | Path | Description
  6. The navigation to the different pages in the webapp is made very easy. Links and back buttons are added in every page and are placed in such a way that the user can find them easily.
  7. For filtering and sorting we have stick to the client side, so this will save the time to give a request to database about a query -> Sorting data -> Send the response data.
 
+#### Deliverables for the week
+ [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Week%206.pdf?alt=media&token=9849c7c4-adc6-4808-8f01-9a1e76c26a00)
 
 ## Coding System
 The finals are going to involve allowing admins to create coding challenges that can be attempted by learners - focused on python, java, and javascript accepted as solutions. The system should provide instructions on how an admin can create coding challenges and have a points system. The learner portal should then have a challenges page that allows students to click on attempt the challenges that were created by the admins. A points system should be included to reflect their marks.
@@ -177,6 +191,9 @@ Sr. No. | Path | Description
  ### Note
  In coding questions the Run button will only test visible test cases and will not give any marks. Please submit the code to run through all test cases and save submission.
  If a person started a test but don't submit anything his name will be shown on leaderboard and not on submissions because the student has attempted the test
+
+#### Deliverables for the week
+ [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Week%207%20(finals).pdf?alt=media&token=e5d05469-fdc8-45eb-920e-ad0b233e325a)
 
 ### Video link for final week submission
 https://drive.google.com/file/d/1hX7Rl03VCL5uUnqf56dbIGJ4RkUJRAS5/view
