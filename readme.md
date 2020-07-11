@@ -75,7 +75,7 @@ Coding System | [click to see](#Coding-System)
  5.| /profile/:name/:id | This is profile of particular developer & this link can be shared.
  6.| /adminDashboard | This is accessible to only super admin and can be used to create new admins.   
  
- #### Deliverables for the week
+ ### Deliverables for the week
  [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Warmup%20week.pdf?alt=media&token=8b8a986f-273b-4a6e-8bd0-f96956272589)
 
 ## Adding Content
@@ -88,7 +88,7 @@ This is component that we have to develop in week 1 and 2. This component help a
  3.| /deliverable/:id | This route is used in editing and adding deliverable.
  4.| /video/:id | This route is used in editing and adding videos.
  
- #### Deliverables for the week
+ ### Deliverables for the week
  [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Week%201%20%26%202.pdf?alt=media&token=5172ac1b-a3cd-4811-9257-49abcfafd5b9)
  
  ## Learners Portal
@@ -102,7 +102,7 @@ This is component that we have to develop in week 1 and 2. This component help a
  ### Bonus
  - __Video Should Not Downloaded from Inspector__: We Added Server Side logic to enusre we are not exposing cloud link of video to end user even if he inspects the video element. The detailed explanation of our logic is in drive document. [Click here to view](https://docs.google.com/document/d/1i5CRbXbxZtEYLbJvpbzy4RHniOUgp-PKbD1IHW_tUHA/edit?usp=sharing)
  
- #### Deliverables for the week
+ ### Deliverables for the week
  [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Week%204_%20Learners%20Portal.pdf?alt=media&token=5ef88557-8764-45d8-8ba7-4a6f56908d2d)
  
  ## Marking System on Admin Portal
@@ -125,7 +125,7 @@ The admin portal will now be used to view each of the students deliverable submi
  - __Fast Filering and Sorting__: For filtering and sorting we have stick to the client side, so this will save the time to give a request to database about a query -> Sorting data -> Send the response data.
  The client side JS handles the Sorting and Filtering thus saving time.
 
-#### Deliverables for the week
+### Deliverables for the week
  [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Week%205.pdf?alt=media&token=8838b37b-84a7-4b99-a805-5fb21b24329e)
 
 ## Testing System
@@ -160,7 +160,7 @@ Sr. No. | Path | Description
  6. The navigation to the different pages in the webapp is made very easy. Links and back buttons are added in every page and are placed in such a way that the user can find them easily.
  7. For filtering and sorting we have stick to the client side, so this will save the time to give a request to database about a query -> Sorting data -> Send the response data.
 
-#### Deliverables for the week
+### Deliverables for the week
  [Click to view](https://firebasestorage.googleapis.com/v0/b/zaio-corporate-platform.appspot.com/o/task_files%2F%23DevJam%20Week%206.pdf?alt=media&token=9849c7c4-adc6-4808-8f01-9a1e76c26a00)
 
 ## Coding System
