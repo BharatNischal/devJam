@@ -1,5 +1,5 @@
 # DevJam Project by Team Code S.W.A.T
-This is project which we are making during Devjam Competition organized by zaio. This Project has various Components that are given in particular weeks of competition. Complete Description of each component will be given Below.
+This is the project which we made during Devjam Competition organized by Zaio and which won the Championship. This Project has various Components that were given in particular weeks of competition. Complete Description of each component is given Below.
 
 ## Contributors:
 
