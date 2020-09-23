@@ -197,3 +197,7 @@ Sr. No. | Path | Description
 
 ### Video link for final week submission
 https://drive.google.com/file/d/1hX7Rl03VCL5uUnqf56dbIGJ4RkUJRAS5/view
+
+### Admin credentials
+username: nischalbharat4819@gmail.com
+password: 12345678
