@@ -1,6 +1,7 @@
 # DevJam Project by Team Code S.W.A.T
 This is the project which we made during Devjam Competition organized by Zaio and we won the Championship award and $2500. This Project has various Components that were given in particular weeks of competition. Complete Description of each component is given Below.
 
+
 ## Contributors:
 
   Name | Github | LinkedIn
