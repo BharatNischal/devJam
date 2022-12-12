@@ -5,8 +5,8 @@
   "main": "package.json",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client && npm install --prefix server && node server/app.js",
-    "build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client && npm install --prefix server"
+    "start":"node server/app.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client && npm install --prefix server"
   },
   "repository": {
     "type": "git",
